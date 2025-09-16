@@ -7,8 +7,9 @@
 #include "stdafx.h"
 
 namespace basecross{
+	class Player : public Object {
 
-
+	};
 }
 //end basecross
 
