@@ -11,7 +11,9 @@
 #include "Scene.h"
 #include "GameStage.h"
 #include "Character.h"
-#include "Player.h"
 #include "Object.h"
-
-
+#include "Player.h"
+#include "Managers.h"
+#include "GimmickManager.h"
+#include "MunakataStage.h"
+#include "Map.h"
