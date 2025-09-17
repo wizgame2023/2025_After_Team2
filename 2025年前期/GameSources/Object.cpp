@@ -10,6 +10,10 @@ namespace basecross{
 
 	void Object::OnCreate() {
 		m_Transform = GetComponent<Transform>();
+		//‰Šú‰»
+		m_Transform->SetPosition(Vec3());
+		m_Transform->SetRotation(Vec3());
+		m_Transform->SetScale(Vec3(1.0f));
 	}
 	void Object::OnUpdate() {
 
