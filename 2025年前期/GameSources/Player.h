@@ -14,6 +14,7 @@ namespace basecross{
 		AABB m_MoveArea;	//ˆÚ“®”ÍˆÍ
 		bool m_IsTarget;	//–Ú•W’n“_‚ÉŒü‚©‚¤‚©
 
+
 		shared_ptr<PNTStaticDraw> m_Draw;
 	public:
 		MoveSphere(const shared_ptr<Stage>& ptr, float speed, Vec3 velocity);
