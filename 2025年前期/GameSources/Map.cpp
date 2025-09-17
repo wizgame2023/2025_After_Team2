@@ -13,10 +13,27 @@ namespace basecross{
 		m_ColorTable = { Col4(1,0,0,1),Col4(0,1,0,1),Col4(0,0,1,1),Col4(1,1,0,1),Col4(1,0,1,1) };
 	}
 	void Map::OnUpdate() {
-		
+		auto device = App::GetApp()->GetInputDevice().GetControlerVec()[0];
+		if (device.bConnected) {
+			if (device.wPressedButtons & XINPUT_GAMEPAD_DPAD_RIGHT) {
+				m_SelectColorIndex++;
+				m_SelectColorIndex = min(m_ColorTable.size() - 1, m_SelectColorIndex);
+			}
+			if (device.wPressedButtons & XINPUT_GAMEPAD_DPAD_LEFT) {
+				m_SelectColorIndex--;
+				m_SelectColorIndex = max(0, m_SelectColorIndex);
+			}
+			HighlightBox(m_ColorTable[m_SelectColorIndex]);
+
+			if (device.wPressedButtons & XINPUT_GAMEPAD_A) {
+				PutGimmick(0, m_ColorTable[m_SelectColorIndex]);
+			}
+		}
 	}
 
 	void Map::Load() {
+		int maxHeight = -100;
+
 		for (int i = 0; i < 5; i++) {
 			m_Map.push_back({});
 			for (int j = 0; j < 5; j++) {
@@ -24,15 +41,18 @@ namespace basecross{
 				Col4 color = m_ColorTable[colorRnd];
 
 				int height = rand() % 5;
-
-				auto box = GetStage()->AddGameObject<TempBox>(Vec3(j, -5.0f, i), color);
+				if (maxHeight < height) {
+					maxHeight = height;
+				}
+				auto box = GetStage()->AddGameObject<TempBox>(Vec3(j, m_GroundHeight, i), color);
 				box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
 
-				m_Map[i].push_back({ color,height,Vec3(j, -5.0f, i),box,nullptr });
-
-				
+				m_Map[i].push_back({ color,height,Vec3(j, m_GroundHeight, i),box,nullptr });
 			}
 		}
+
+		m_MapHeight = maxHeight;
+		m_CenterY = m_GroundHeight + static_cast<float>(maxHeight) / 2.0f;
 	}
 
 	void Map::HighlightBox(Col4 color) {
