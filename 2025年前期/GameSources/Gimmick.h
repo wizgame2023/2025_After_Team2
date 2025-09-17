@@ -10,6 +10,7 @@ namespace basecross
 {
 	class Gimmicks : public Object
 	{
+		shared_ptr<PNTStaticDraw> m_Draw;
 
 	public:
 		enum class Objects

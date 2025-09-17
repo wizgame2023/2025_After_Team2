@@ -18,4 +18,5 @@
 #include "GimmickManager.h"
 #include "Gimmick.h"
 #include "MunakataStage.h"
+#include "OkawaraStage.h"
 #include "Map.h"
