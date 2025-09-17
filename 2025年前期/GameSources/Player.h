@@ -11,6 +11,7 @@ namespace basecross{
 		float m_Speed;	//移動速度
 		Vec3 m_Velocity;	//進行方向
 		Vec3 m_TargetPosition;	//目標地点
+		AABB m_MoveArea;	//移動範囲
 		bool m_IsTarget;	//目標地点に向かうか
 
 		shared_ptr<PNTStaticDraw> m_Draw;
@@ -22,6 +23,7 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
+		Vec3 LimitArea(Vec3 position);
 		void SetVelocity(Vec3 velocity) {
 			m_Velocity = velocity;
 		}
@@ -32,6 +34,13 @@ namespace basecross{
 		void SetTarget(Vec3 position) {
 			m_TargetPosition = position;
 			m_IsTarget = true;
+		}
+		void SetMoveArea(AABB aabb) {
+			m_MoveArea = aabb;
+		}
+
+		AABB GetMoveArea() const{
+			return m_MoveArea;
 		}
 	};
 }

@@ -48,8 +48,45 @@ namespace basecross{
 			m_Velocity = m_Velocity.normalize();
 			position += m_Velocity * m_Speed * elapsed;
 		}
-
+		
+		position = LimitArea(position);
 		SetPosition(position);
+	}
+
+	Vec3 MoveSphere::LimitArea(Vec3 position) {
+		Vec3 scale = GetScale();
+
+		float up = position.y + scale.y;
+		float down = position.y - scale.y;
+		float right = position.x + scale.x;
+		float left = position.x - scale.x;
+		float front = position.z - scale.z;
+		float back = position.z - scale.z;
+
+		if (up > m_MoveArea.m_Max.y) {
+			position.y = m_MoveArea.m_Max.y - scale.y;
+			m_IsTarget = false;
+		}
+		if (down < m_MoveArea.m_Min.y) {
+			position.y = m_MoveArea.m_Min.y + scale.y;
+			m_IsTarget = false;
+		}
+
+		if (right > m_MoveArea.m_Max.x) {
+			position.x = m_MoveArea.m_Max.x - scale.x;
+		}
+		if (left < m_MoveArea.m_Min.x) {
+			position.x = m_MoveArea.m_Min.x + scale.x;
+		}
+
+		if (front > m_MoveArea.m_Max.z) {
+			position.z = m_MoveArea.m_Max.z - scale.z;
+		}
+		if (back < m_MoveArea.m_Min.z) {
+			position.z = m_MoveArea.m_Min.z + scale.z;
+		}
+
+		return position;
 	}
 }
 //end basecross
