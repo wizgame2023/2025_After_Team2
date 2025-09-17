@@ -20,13 +20,13 @@ namespace basecross{
 		Vec3 GetPosition() const{
 			return m_Transform->GetPosition();
 		}
-		void SetPosition(Vec3& position) {
+		void SetPosition(Vec3 position) {
 			m_Transform->SetPosition(position);
 		}
 		Vec3 GetRotation() const{
 			return m_Transform->GetRotation();
 		}
-		void SetRotation(Vec3& rotation) {
+		void SetRotation(Vec3 rotation) {
 			m_Transform->SetRotation(rotation);
 		}
 		Vec3 GetForward() const{
@@ -35,7 +35,7 @@ namespace basecross{
 		Vec3 GetScale() const{
 			return m_Transform->GetScale();
 		}
-		void SetScale(Vec3& scale) {
+		void SetScale(Vec3 scale) {
 			m_Transform->SetScale(scale);
 		}
 		
