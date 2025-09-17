@@ -7,23 +7,46 @@
 #include "Project.h"
 
 namespace basecross {
+
+	void MStage::CreateViewLight() {
+		const Vec3 eye(0.0f, 5.0f, -5.0f);
+		const Vec3 at(0.0f);
+		auto PtrView = CreateView<SingleView>();
+		//ビューのカメラの設定
+		auto PtrCamera = ObjectFactory::Create<MainCamera>(XM_PI);
+		PtrView->SetCamera(PtrCamera);
+		PtrCamera->SetEye(eye);
+		PtrCamera->SetAt(at);
+		//マルチライトの作成
+		auto PtrMultiLight = CreateLight<MultiLight>();
+		//デフォルトのライティングを指定
+		PtrMultiLight->SetDefaultLighting();
+	}
+
 	void MStage::OnCreate() {
 		try {
 			GameStage::OnCreate();
 
-			auto sphere = AddGameObject<MoveSphere>(2.0f,Vec3(0.0f,0.0f,1.0f));
-			sphere->SetPosition(Vec3(0.0f,-4.0f,0.0f));
-			sphere->SetVelocity(Vec3(0.0f, 0.0f, 0.0f));
+			CreateViewLight();
+			m_Sphere = AddGameObject<MoveSphere>(2.0f,Vec3(0.0f,0.0f,1.0f));
+			m_Sphere->SetPosition(Vec3(0.0f,0.0f,0.0f));
+			m_Sphere->SetVelocity(Vec3(1.0f, 0.0f, 0.0f));
 			
 			m_StageMap = AddGameObject<Map>();
 			m_StageMap->Load();
 
 			Vec3 mapSize = m_StageMap->GetMapSize();
 
-			sphere->SetMoveArea(AABB(Vec3(0, -5.0f, 0), Vec3(mapSize.x, 5.0f, mapSize.y)));
+			m_Sphere->SetMoveArea(AABB(Vec3(-1.0f, -100.0f, -1.0f), Vec3(mapSize.x, 5.0f, mapSize.y)));
+			m_Sphere->SetUpdateActive(false);
 
-			GetView()->GetTargetCamera()->SetEye(Vec3(2.5f, 2.5f, -10.0f));
-			GetView()->GetTargetCamera()->SetAt(Vec3(2.5f, -5.0f, 2.5f));
+			auto camera = static_pointer_cast<MainCamera>(GetView()->GetTargetCamera());
+			camera->SetFixedPoint(m_StageMap);
+			//GetView()->GetTargetCamera()->SetEye(Vec3(2.5f, 2.5f, -10.0f));
+			//GetView()->GetTargetCamera()->SetAt(Vec3(2.5f, -5.0f, 2.5f));
+
+			auto a = AddGameObject<TempBox>(m_StageMap->GetMapCenter(), Col4(1, 1, 1, 1));
+			a->SetScale(Vec3(0.1f));
 		}
 		catch (...) {
 			throw;
@@ -33,19 +56,8 @@ namespace basecross {
 	void MStage::OnUpdate() {
 		auto device = App::GetApp()->GetInputDevice().GetControlerVec()[0];
 		if (device.bConnected) {
-			auto colorTable = m_StageMap->GetColorTable();
-			if (device.wPressedButtons & XINPUT_GAMEPAD_DPAD_RIGHT) {
-				m_SelectColorIndex++;
-				m_SelectColorIndex = min(colorTable.size() - 1, m_SelectColorIndex);
-			}
-			if (device.wPressedButtons & XINPUT_GAMEPAD_DPAD_LEFT) {
-				m_SelectColorIndex--;
-				m_SelectColorIndex = max(0, m_SelectColorIndex);
-			}
-			m_StageMap->HighlightBox(colorTable[m_SelectColorIndex]);
-
-			if (device.wPressedButtons & XINPUT_GAMEPAD_A) {
-				m_StageMap->PutGimmick(0, colorTable[m_SelectColorIndex]);
+			if (device.wPressedButtons & XINPUT_GAMEPAD_B) {
+				m_Sphere->SetUpdateActive(true);
 			}
 		}
 	}
