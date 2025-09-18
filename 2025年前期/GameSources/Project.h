@@ -20,3 +20,4 @@
 #include "MunakataStage.h"
 #include "Map.h"
 #include "MainCamera.h"
+#include "Sprite.h"
