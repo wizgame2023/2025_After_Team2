@@ -10,7 +10,9 @@ namespace basecross
 {
 	class Gimmicks : public Object
 	{
+		shared_ptr<PNTStaticDraw> m_Draw;
 
+		bool m_IsGoalFlag;
 	public:
 		enum class Objects
 		{
@@ -31,7 +33,8 @@ namespace basecross
 		void OnCreate() override;
 		void OnUpdate() override;
 
-
+		void Goal();
+		void IsGoalDirection(const shared_ptr<MoveSphere>& player);
 	};
 
 }
