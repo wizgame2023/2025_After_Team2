@@ -68,6 +68,7 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)OkawaraStage.h">
       <Filter>work</Filter>
+    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)GimmickHand.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MainCamera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Sprite.h" />

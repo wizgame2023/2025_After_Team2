@@ -16,6 +16,7 @@
 #include "Player.h"
 #include "Managers.h"
 #include "GimmickManager.h"
+#include "GameManager.h"
 #include "Gimmick.h"
 #include "MunakataStage.h"
 #include "OkawaraStage.h"
