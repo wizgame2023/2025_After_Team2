@@ -10,7 +10,8 @@ namespace basecross{
 
 	Gimmicks::Gimmicks(const shared_ptr<Stage>& ptrStage, Objects obj) :
 	Object(ptrStage),
-	m_Obj(obj)
+	m_Obj(obj),
+	m_IsGoalFlag(false)
 		
 	{
 	}
@@ -26,8 +27,8 @@ namespace basecross{
 		switch (m_Obj)
 		{
 		case basecross::Gimmicks::Objects::Goal:
-			m_Draw->SetMeshResource(L"DEFAULT_CUBE");
-			m_Draw->SetDiffuse(Col4(1, 0, 0, 0));
+			m_Draw->SetMeshResource(L"DEFAULT_CYLINDER");
+			m_Draw->SetDiffuse(Col4(1, 0, 0, 1));
 			break;
 		case basecross::Gimmicks::Objects::SetPlayer:
 			break;
@@ -46,6 +47,31 @@ namespace basecross{
 		auto stage = GetStage();
 		if (dynamic_pointer_cast<GameStage>(stage) == nullptr) return;
 
+		switch (m_Obj)
+		{
+		case basecross::Gimmicks::Objects::Goal:
+			Goal();
+			break;
+		case basecross::Gimmicks::Objects::SetPlayer:
+			break;
+		case basecross::Gimmicks::Objects::CourseCorrection:
+			break;
+		case basecross::Gimmicks::Objects::Upper:
+			break;
+		default:
+			break;
+		}
+	}
+
+
+	void Gimmicks::Goal()
+	{
+		if (m_IsGoalFlag) return; //ƒS[ƒ‹‚µ‚Ä‚¢‚½‚ç
+
+		auto stage = GetStage();
+
+		Vec3 forward = GetForward().normalize();
+		Vec3 pos = GetPosition();
 		auto gameObjectVec = stage->GetGameObjectVec();
 		for (auto& obj : gameObjectVec)
 		{
@@ -53,17 +79,25 @@ namespace basecross{
 			if (!player) continue;
 
 			Vec3 playerPos = player->GetComponent<Transform>()->GetPosition();
-			Vec3 dist = playerPos - GetPosition();
+			Vec3 dist = playerPos - pos;
 
-			float distance = dist.length();
-			float rot = GetForward().normalize().dot(dist.normalize());
+			float distanceSq = dist.lengthSqr();
+			float rot = forward.dot(dist.normalize());
 
-			if (m_Obj == Objects::Goal && distance < 0.1f && rot > 0.95f)
+			if (distanceSq < (0.1f * 0.1f) && rot > 0.95f)
 			{
-				player->SetVelocity(Vec3(0.0f)); // “®‚«‚ğ~‚ß‚é
-				//IsGoal(); // ƒS[ƒ‹‰‰o‚È‚Ç
+				IsGoalDirection(player); // ƒS[ƒ‹‰‰o‚È‚Ç
+				m_IsGoalFlag = true;
+				break; //ˆê‘Ì‚Å‚àƒS[ƒ‹‚µ‚½‚çI—¹;
 			}
 		}
+
+	}
+
+	void Gimmicks::IsGoalDirection(const shared_ptr<MoveSphere>& player)
+	{
+		player->SetVelocity(Vec3(0.0f)); // “®‚«‚ğ~‚ß‚é
+
 	}
 }
 //end basecross
