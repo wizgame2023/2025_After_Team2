@@ -15,11 +15,11 @@ namespace basecross{
 	void Map::OnUpdate() {
 		auto device = App::GetApp()->GetInputDevice().GetControlerVec()[0];
 		if (device.bConnected) {
-			if (device.wPressedButtons & XINPUT_GAMEPAD_DPAD_RIGHT) {
+			if (device.wPressedButtons & XINPUT_GAMEPAD_DPAD_UP) {
 				m_SelectColorIndex++;
 				m_SelectColorIndex = min(m_ColorTable.size() - 1, m_SelectColorIndex);
 			}
-			if (device.wPressedButtons & XINPUT_GAMEPAD_DPAD_LEFT) {
+			if (device.wPressedButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
 				m_SelectColorIndex--;
 				m_SelectColorIndex = max(0, m_SelectColorIndex);
 			}
