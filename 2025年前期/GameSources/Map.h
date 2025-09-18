@@ -53,6 +53,8 @@ namespace basecross{
 
 		//引数にはギミックのオブジェクト
 		void PutGimmick(int i,Col4 color);
+
+		shared_ptr<Gimmicks> RecoverGimmick(Col4 color);
 	};
 
 

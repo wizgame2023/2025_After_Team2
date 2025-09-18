@@ -22,12 +22,20 @@ namespace basecross {
 		//デフォルトのライティングを指定
 		PtrMultiLight->SetDefaultLighting();
 	}
+	void MStage::CreateResorce() {
+		auto& app = App::GetApp();
 
+		wstring path = app->GetDataDirWString();
+		wstring uiPath = path + L"UI/";
+
+		app->RegisterTexture(L"TEMP_GIMMICK", uiPath + L"testGimmick.png");
+	}
 	void MStage::OnCreate() {
 		try {
 			GameStage::OnCreate();
 
 			CreateViewLight();
+			CreateResorce();
 			m_Sphere = AddGameObject<MoveSphere>(2.0f,Vec3(0.0f,0.0f,1.0f));
 			m_Sphere->SetPosition(Vec3(0.0f,0.0f,0.0f));
 			m_Sphere->SetVelocity(Vec3(1.0f, 0.0f, 0.0f));
@@ -42,11 +50,14 @@ namespace basecross {
 
 			auto camera = static_pointer_cast<MainCamera>(GetView()->GetTargetCamera());
 			camera->SetFixedPoint(m_StageMap);
-			//GetView()->GetTargetCamera()->SetEye(Vec3(2.5f, 2.5f, -10.0f));
-			//GetView()->GetTargetCamera()->SetAt(Vec3(2.5f, -5.0f, 2.5f));
 
-			auto a = AddGameObject<TempBox>(m_StageMap->GetMapCenter(), Col4(1, 1, 1, 1));
-			a->SetScale(Vec3(0.1f));
+			m_Hand = AddGameObject<GimmickHand>();
+			/*m_Hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Goal));
+			m_Hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::SetPlayer));
+			m_Hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Upper));
+			m_Hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Upper));
+			m_Hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Upper));*/
+			//AddGameObject<Sprite>(L"TEMP_GIMMICK", Vec3(0.0f,-200.0f,0.0f), Vec2(200, 300));
 		}
 		catch (...) {
 			throw;
@@ -59,6 +70,9 @@ namespace basecross {
 			if (device.wPressedButtons & XINPUT_GAMEPAD_B) {
 				m_Sphere->SetUpdateActive(true);
 			}
+		}
+		if (m_Hand->IsEmpty()) {
+			m_Sphere->SetUpdateActive(true);
 		}
 	}
 

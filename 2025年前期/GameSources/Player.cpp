@@ -13,7 +13,7 @@ namespace basecross{
 		m_Speed(speed),
 		m_Velocity(velocity),
 		m_TargetPosition(Vec3()),
-		m_IsTarget(false)
+		m_IsTarget(false),m_IsActive(true)
 	{}
 
 	void MoveSphere::OnCreate() {
@@ -54,6 +54,8 @@ namespace basecross{
 	}
 
 	Vec3 MoveSphere::LimitArea(Vec3 position) {
+
+		bool isActive = true;
 		Vec3 scale = GetScale();
 
 		float up = position.y + scale.y;
@@ -62,7 +64,7 @@ namespace basecross{
 		float left = position.x - scale.x;
 		float front = position.z - scale.z;
 		float back = position.z - scale.z;
-
+		
 		if (up > m_MoveArea.m_Max.y) {
 			position.y = m_MoveArea.m_Max.y - scale.y;
 			m_IsTarget = false;
@@ -74,17 +76,23 @@ namespace basecross{
 
 		if (right > m_MoveArea.m_Max.x) {
 			position.x = m_MoveArea.m_Max.x - scale.x;
+			isActive = false;
 		}
 		if (left < m_MoveArea.m_Min.x) {
 			position.x = m_MoveArea.m_Min.x + scale.x;
+			isActive = false;
 		}
 
 		if (front > m_MoveArea.m_Max.z) {
 			position.z = m_MoveArea.m_Max.z - scale.z;
+			isActive = false;
 		}
 		if (back < m_MoveArea.m_Min.z) {
 			position.z = m_MoveArea.m_Min.z + scale.z;
+			isActive = false;
 		}
+
+		m_IsActive = isActive;
 
 		return position;
 	}

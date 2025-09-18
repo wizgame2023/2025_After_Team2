@@ -21,3 +21,5 @@
 #include "OkawaraStage.h"
 #include "Map.h"
 #include "MainCamera.h"
+#include "Sprite.h"
+#include "GimmickHand.h"
