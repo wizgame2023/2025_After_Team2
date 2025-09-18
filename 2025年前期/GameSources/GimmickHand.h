@@ -38,6 +38,11 @@ namespace basecross{
 			m_Hand.push_back(gimmicks);
 			m_HandSprite.push_back(GetStage()->AddGameObject<GimmickCard>());
 		}
+
+		/// <summary>
+		/// 選択中のカードのデータを取得・手札から削除
+		/// </summary>
+		/// <returns></returns>
 		shared_ptr<Gimmicks> Use();
 
 		/// <summary>

@@ -33,7 +33,6 @@ namespace basecross{
 
 	void Map::Load() {
 		int maxHeight = -100;
-
 		for (int i = 0; i < 5; i++) {
 			m_Map.push_back({});
 			for (int j = 0; j < 5; j++) {
@@ -85,7 +84,22 @@ namespace basecross{
 			}
 		}
 	}
-
+	shared_ptr<Gimmicks> Map::RecoverGimmick(Col4 color) {
+		shared_ptr<Gimmicks> gimmick = nullptr;
+		for (auto& mapVec : m_Map) {
+			for (auto& map : mapVec) {
+				if (color == map.m_Color) {
+					//‚·‚Å‚ÉÝ’u‚µ‚Ä‚¢‚é‚È‚ç”j‰ó
+					if (map.m_TempGimmick != nullptr) {
+						GetStage()->RemoveGameObject<TempBox>(map.m_TempGimmick);
+						
+						map.m_TempGimmick = nullptr;
+					}
+				}
+			}
+		}
+		return gimmick;
+	}
 
 	void TempBox::OnCreate() {
 		Object::OnCreate();
@@ -94,7 +108,9 @@ namespace basecross{
 
 		auto draw = AddComponent<PNTStaticDraw>();
 		draw->SetMeshResource(L"DEFAULT_CUBE");
+		m_Color.w = 0.5f;
 		draw->SetDiffuse(m_Color);
+		
 	}
 }
 //end basecross

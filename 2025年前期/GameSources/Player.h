@@ -13,7 +13,7 @@ namespace basecross{
 		Vec3 m_TargetPosition;	//目標地点
 		AABB m_MoveArea;	//移動範囲
 		bool m_IsTarget;	//目標地点に向かうか
-
+		bool m_IsActive;	//移動中か
 
 		shared_ptr<PNTStaticDraw> m_Draw;
 	public:
@@ -42,6 +42,10 @@ namespace basecross{
 
 		AABB GetMoveArea() const{
 			return m_MoveArea;
+		}
+
+		bool GetIsActive()const {
+			return m_IsActive;
 		}
 	};
 }

@@ -52,11 +52,11 @@ namespace basecross {
 			camera->SetFixedPoint(m_StageMap);
 
 			m_Hand = AddGameObject<GimmickHand>();
-			m_Hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Goal));
+			/*m_Hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Goal));
 			m_Hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::SetPlayer));
 			m_Hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Upper));
 			m_Hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Upper));
-			m_Hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Upper));
+			m_Hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Upper));*/
 			//AddGameObject<Sprite>(L"TEMP_GIMMICK", Vec3(0.0f,-200.0f,0.0f), Vec2(200, 300));
 		}
 		catch (...) {
@@ -70,6 +70,9 @@ namespace basecross {
 			if (device.wPressedButtons & XINPUT_GAMEPAD_B) {
 				m_Sphere->SetUpdateActive(true);
 			}
+		}
+		if (m_Hand->IsEmpty()) {
+			m_Sphere->SetUpdateActive(true);
 		}
 	}
 
