@@ -14,10 +14,6 @@ namespace basecross {
 	//	ゲームステージクラス
 	//--------------------------------------------------------------------------------------
 	class MStage : public GameStage {
-		shared_ptr<Map> m_StageMap;
-		shared_ptr<MoveSphere> m_Sphere;
-		shared_ptr<GimmickHand> m_Hand;
-
 		void CreateViewLight();
 		void CreateResorce();
 	public:

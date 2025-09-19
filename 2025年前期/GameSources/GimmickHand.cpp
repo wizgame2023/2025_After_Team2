@@ -25,8 +25,8 @@ namespace basecross{
 
 		for (int i = 0; i < m_HandSprite.size(); i++) {
 			auto card = m_HandSprite[i]->GetCardSprite();
-			card->SetSize(Vec2(200, 300));
-			Vec2 cardHalfScale = card->GetSize() * 0.25f;
+			card->SetSize(m_CardSize);
+			Vec2 cardHalfScale = m_CardSize * 0.25f;
 
 			Vec3 offset = Vec3(i * cardHalfScale.x, 0.0f, 0.0f);
 

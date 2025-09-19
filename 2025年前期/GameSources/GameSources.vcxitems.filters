@@ -72,6 +72,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)GimmickHand.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MainCamera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Sprite.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -98,9 +101,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Object.cpp">
       <Filter>Base</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)GimmickManager.cpp">
-      <Filter>Manager\Gimmick</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)MunakataStage.cpp">
       <Filter>work</Filter>
     </ClCompile>
@@ -119,5 +119,8 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)GimmickHand.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MainCamera.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Sprite.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)GameManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
