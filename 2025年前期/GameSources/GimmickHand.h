@@ -26,6 +26,7 @@ namespace basecross{
 		vector<shared_ptr<Gimmicks>> m_Hand;
 		vector<shared_ptr<GimmickCard>> m_HandSprite;
 
+		Vec2 m_CardSize;
 		int m_SelectIndex;
 	public:
 		GimmickHand(const shared_ptr<Stage>& ptr) : Object(ptr),m_SelectIndex(0){}
@@ -33,6 +34,10 @@ namespace basecross{
 
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
+
+		void SetCardSize(Vec2 size) {
+			m_CardSize = size;
+		}
 
 		void Add(shared_ptr<Gimmicks> gimmicks) {
 			m_Hand.push_back(gimmicks);
