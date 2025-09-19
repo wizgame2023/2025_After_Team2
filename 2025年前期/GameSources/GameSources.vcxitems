@@ -39,7 +39,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)GameStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Gimmick.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GimmickHand.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)GimmickManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)GameManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)InputManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MainCamera.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MunakataStage.cpp" />
