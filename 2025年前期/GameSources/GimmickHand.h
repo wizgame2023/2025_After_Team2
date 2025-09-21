@@ -9,9 +9,15 @@
 namespace basecross{
 
 	class GimmickCard : public Object {
+		static map<Gimmicks::Objects, wstring> m_CoverTexKeys;
 		shared_ptr<Sprite> m_Card;
+		shared_ptr<Sprite> m_CoverSprite;
+
+		Gimmicks::Objects m_Type;
 	public:
-		GimmickCard(const shared_ptr<Stage>& ptr) : Object(ptr){}
+		GimmickCard(const shared_ptr<Stage>& ptr,const Gimmicks::Objects type) : Object(ptr), m_Type(type){}
+		GimmickCard(const shared_ptr<Stage>& ptr) : GimmickCard(ptr, Gimmicks::Objects::None) {}
+
 		virtual ~GimmickCard(){}
 
 		virtual void OnCreate()override;
@@ -20,10 +26,12 @@ namespace basecross{
 		shared_ptr<Sprite> GetCardSprite() {
 			return m_Card;
 		}
+
+		void SetCover(Gimmicks::Objects type);
 	};
 
 	class GimmickHand : public Object {
-		vector<shared_ptr<Gimmicks>> m_Hand;
+		vector<Gimmicks::Objects> m_Hand;
 		vector<shared_ptr<GimmickCard>> m_HandSprite;
 
 		Vec2 m_CardSize;
@@ -47,16 +55,16 @@ namespace basecross{
 		/// 手札を追加する
 		/// </summary>
 		/// <param name="gimmicks">追加するギミック</param>
-		void Add(shared_ptr<Gimmicks> gimmicks) {
+		void Add(Gimmicks::Objects gimmicks) {
 			m_Hand.push_back(gimmicks);
-			m_HandSprite.push_back(GetStage()->AddGameObject<GimmickCard>());
+			m_HandSprite.push_back(GetStage()->AddGameObject<GimmickCard>(gimmicks));
 		}
 
 		/// <summary>
 		/// 選択中のカードのデータを取得・手札から削除
 		/// </summary>
 		/// <returns></returns>
-		shared_ptr<Gimmicks> Use();
+		Gimmicks::Objects Use();
 
 		/// <summary>
 		/// 指定した番号のカードを選択

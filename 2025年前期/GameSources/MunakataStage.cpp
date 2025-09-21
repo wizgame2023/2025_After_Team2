@@ -29,9 +29,14 @@ namespace basecross {
 		wstring uiPath = path + L"UI/";
 
 		app->RegisterTexture(L"TEMP_GIMMICK", uiPath + L"testGimmick.png");
+		app->RegisterTexture(L"TEMP_GIMMICK_GOAL", uiPath + L"testGoal.png");
+		app->RegisterTexture(L"TEMP_GIMMICK_PLAYER", uiPath + L"testSetPl.png");
+		app->RegisterTexture(L"TEMP_GIMMICK_UPPER", uiPath + L"testUpper.png");
+		app->RegisterTexture(L"TEMP_GIMMICK_COURSE", uiPath + L"testCoruse.png");
 	}
 	void MStage::OnCreate() {
 		try {
+			GameManager::GetInstance().Reset();
 			GameStage::OnCreate();
 
 			CreateViewLight();
@@ -53,11 +58,11 @@ namespace basecross {
 
 			auto hand = AddGameObject<GimmickHand>();
 			hand->SetCardSize(Vec2(200, 300));
-			hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Goal));
-			hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::SetPlayer));
-			hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Upper));
-			hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Upper));
-			hand->Add(AddGameObject<Gimmicks>(Gimmicks::Objects::Upper));
+			hand->Add(Gimmicks::Objects::Goal);
+			hand->Add(Gimmicks::Objects::SetPlayer);
+			hand->Add(Gimmicks::Objects::Upper);
+			hand->Add(Gimmicks::Objects::Upper);
+			hand->Add(Gimmicks::Objects::Upper);
 
 			GameManager::GetInstance().SetHand(hand);
 			GameManager::GetInstance().AddSphere(player);
@@ -70,7 +75,7 @@ namespace basecross {
 	}
 
 	void MStage::OnUpdate() {
-
+		GameManager::GetInstance().Update();
 	}
 
 }

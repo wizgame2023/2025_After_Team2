@@ -16,6 +16,7 @@ namespace basecross
 	public:
 		enum class Objects
 		{
+			None,
 			Goal,
 			SetPlayer,
 			CourseCorrection,

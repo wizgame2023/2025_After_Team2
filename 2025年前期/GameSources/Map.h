@@ -14,6 +14,7 @@ namespace basecross{
 		Vec3 m_Position;
 
 		shared_ptr<TempBox> m_Temp;
+		Gimmicks::Objects m_GimmickType;
 		shared_ptr<TempBox> m_TempGimmick;
 	};
 	class Map : public Object {
@@ -45,6 +46,10 @@ namespace basecross{
 		vector<Col4> GetColorTable() {
 			return m_ColorTable;
 		}
+		Col4 GetSelectColor() {
+			if (m_SelectColorIndex >= m_ColorTable.size()) return Col4(0, 0, 0, 0);
+			return m_ColorTable[m_SelectColorIndex];
+		}
 		void SetGroundHeight(float height) {
 			m_GroundHeight = height;
 		}
@@ -52,9 +57,9 @@ namespace basecross{
 		void HighlightBox(Col4 color);
 
 		//引数にはギミックのオブジェクト
-		void PutGimmick(int i,Col4 color);
+		void PutGimmick(Gimmicks::Objects type);
 
-		shared_ptr<Gimmicks> RecoverGimmick(Col4 color);
+		Gimmicks::Objects RecoverGimmick();
 	};
 
 
