@@ -21,6 +21,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)GimmickHand.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GimmickManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)InputManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Json.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MainCamera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Managers.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MunakataStage.h" />
@@ -41,6 +42,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)GimmickHand.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)InputManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Json.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MainCamera.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MunakataStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Object.cpp" />

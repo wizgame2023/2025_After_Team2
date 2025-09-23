@@ -18,6 +18,8 @@ namespace basecross{
 		shared_ptr<GimmickHand> m_Hand;
 
 		shared_ptr<Map> m_Map;
+
+		float m_Tick;
 	public:
 		/// <summary>
 		/// “o˜^‚³‚ê‚Ä‚¢‚éî•ñ‚ğ‰Šú‰»‚·‚é
