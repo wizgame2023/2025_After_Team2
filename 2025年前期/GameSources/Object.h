@@ -8,7 +8,9 @@
 
 namespace basecross{
 	class Object : public GameObject {
+	protected:
 		shared_ptr<Transform> m_Transform;
+		shared_ptr<GameStage> m_Stage;
 
 	public:
 		Object(const shared_ptr<Stage>& ptr) : GameObject(ptr){}

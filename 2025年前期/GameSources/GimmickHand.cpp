@@ -52,11 +52,11 @@ namespace basecross{
 			Vec3 offset = Vec3(i * cardHalfScale.x, 0.0f, 0.0f);
 
 			if (i == m_SelectIndex) {
-				//card->SetLayer(1);
+				//‘I‘ð
 				offset += Vec3(0.0f, cardHalfScale.y, 0.0f);
 			}
 			else {
-				//card->SetLayer(0);
+				//–¢‘I‘ð
 			}
 
 			card->ScreenAnchor(Anchor::BottomLeft, offset);
@@ -64,7 +64,6 @@ namespace basecross{
 	}
 	Gimmicks::Objects GimmickHand::Use() {
 		auto card = m_Hand[m_SelectIndex];
-		//GetStage()->RemoveGameObject<GimmickCard>(m_HandSprite[m_SelectIndex]);
 		m_HandSprite[m_SelectIndex]->Remove();
 		m_Hand.erase(m_Hand.begin() + m_SelectIndex);
 		m_HandSprite.erase(m_HandSprite.begin() + m_SelectIndex);
