@@ -75,7 +75,7 @@ namespace basecross{
 		auto gameObjectVec = stage->GetGameObjectVec();
 		for (auto& obj : gameObjectVec)
 		{
-			auto player = dynamic_pointer_cast<MoveSphere>(obj);
+			auto player = dynamic_pointer_cast<MoveBall>(obj);
 			if (!player) continue;
 
 			Vec3 playerPos = player->GetComponent<Transform>()->GetPosition();
@@ -94,7 +94,7 @@ namespace basecross{
 
 	}
 
-	void Gimmicks::IsGoalDirection(const shared_ptr<MoveSphere>& player)
+	void Gimmicks::IsGoalDirection(const shared_ptr<MoveBall>& player)
 	{
 		player->SetVelocity(Vec3(0.0f)); // “®‚«‚ðŽ~‚ß‚é
 

@@ -8,7 +8,7 @@
 
 namespace basecross {
 	class Map;
-	class MoveSphere;
+	class MoveBall;
 	class GimmickHand;
 	//--------------------------------------------------------------------------------------
 	//	ゲームステージクラス

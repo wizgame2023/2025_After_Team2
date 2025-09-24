@@ -8,7 +8,7 @@
 
 namespace basecross{
 
-	MoveSphere::MoveSphere(const shared_ptr<Stage>& ptr, float speed, Vec3 velocity) :
+	MoveBall::MoveBall(const shared_ptr<Stage>& ptr, float speed, Vec3 velocity) :
 		Object(ptr),
 		m_Speed(speed),
 		m_Velocity(velocity),
@@ -16,14 +16,14 @@ namespace basecross{
 		m_IsTarget(false),m_IsActive(true)
 	{}
 
-	void MoveSphere::OnCreate() {
+	void MoveBall::OnCreate() {
 		Object::OnCreate();
 
 		m_Draw = AddComponent<PNTStaticDraw>();
 		m_Draw->SetMeshResource(L"DEFAULT_SPHERE");
 		m_Draw->SetDiffuse(Col4(1, 1, 1, 1));
 	}
-	void MoveSphere::OnUpdate() {
+	void MoveBall::OnUpdate() {
 		float elapsed = App::GetApp()->GetElapsedTime();
 
 		Vec3 position = GetPosition();
@@ -53,7 +53,7 @@ namespace basecross{
 		SetPosition(position);
 	}
 
-	Vec3 MoveSphere::LimitArea(Vec3 position) {
+	Vec3 MoveBall::LimitArea(Vec3 position) {
 
 		bool isActive = true;
 		Vec3 scale = GetScale();
