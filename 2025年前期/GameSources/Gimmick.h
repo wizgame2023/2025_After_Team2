@@ -35,7 +35,7 @@ namespace basecross
 		void OnUpdate() override;
 
 		void Goal();
-		void IsGoalDirection(const shared_ptr<MoveSphere>& player);
+		void IsGoalDirection(const shared_ptr<MoveBall>& player);
 	};
 
 }

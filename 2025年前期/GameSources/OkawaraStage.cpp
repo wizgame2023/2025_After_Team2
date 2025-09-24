@@ -14,7 +14,7 @@ namespace basecross
 		{
 			GameStage::OnCreate();
 
-			auto sphere = AddGameObject<MoveSphere>(2.0f,Vec3(0.0f,0.0f,1.0f));
+			auto sphere = AddGameObject<MoveBall>(2.0f,Vec3(0.0f,0.0f,1.0f));
 			sphere->SetTarget(sphere->GetPosition() + Vec3(0.0f, 1.0f, 0.0f));
 			sphere->SetVelocity(Vec3(1.0f, 0.0f, 0.0f));
 			

@@ -41,7 +41,7 @@ namespace basecross {
 
 			CreateViewLight();
 			CreateResorce();
-			auto player = AddGameObject<MoveSphere>(2.0f,Vec3(0.0f,0.0f,1.0f));
+			auto player = AddGameObject<MoveBall>(2.0f,Vec3(0.0f,0.0f,1.0f));
 			player->SetPosition(Vec3(0.0f,0.0f,0.0f));
 			player->SetVelocity(Vec3(1.0f, 0.0f, 0.0f));
 			
