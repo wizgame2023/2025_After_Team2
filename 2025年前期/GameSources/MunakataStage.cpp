@@ -65,7 +65,7 @@ namespace basecross {
 			hand->Add(Gimmicks::Objects::Upper);
 
 			GameManager::GetInstance().SetHand(hand);
-			GameManager::GetInstance().AddSphere(player);
+			GameManager::GetInstance().AddBall(player);
 			GameManager::GetInstance().SetMap(stageMap);
 			//AddGameObject<Sprite>(L"TEMP_GIMMICK", Vec3(0.0f,-200.0f,0.0f), Vec2(200, 300));
 		}

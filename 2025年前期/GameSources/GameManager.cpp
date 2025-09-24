@@ -10,7 +10,7 @@ namespace basecross{
 
 	void GameManager::Update() {
 		if (m_Hand->IsEmpty()) {
-			for (auto& sphere : m_Spheres) {
+			for (auto& sphere : m_Balls) {
 				//プレイヤーを稼働開始
 				sphere->SetUpdateActive(true);
 			}

@@ -1478,7 +1478,7 @@ namespace basecross {
 	}
 
 
-	shared_ptr<PsSphere> BasePhysics::AddSphere(const PsSphereParam& param, uint16_t index) {
+	shared_ptr<PsSphere> BasePhysics::AddBall(const PsSphereParam& param, uint16_t index) {
 		if (ps::numRigidBodies >= NUM_RIGIDBODIES) {
 			throw BaseException(
 				L"これ以上物理オブジェクトを増やせません",

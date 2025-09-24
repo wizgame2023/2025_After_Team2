@@ -1114,7 +1114,7 @@ namespace basecross {
 		@return	オブジェクトのポインタ（バックアップはしないので呼び出し側で保存すること）
 		*/
 		//--------------------------------------------------------------------------------------
-		virtual shared_ptr<PsSphere> AddSphere(const PsSphereParam& param,uint16_t index = UINT16_MAX);
+		virtual shared_ptr<PsSphere> AddBall(const PsSphereParam& param,uint16_t index = UINT16_MAX);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	単体のカプセルの追加

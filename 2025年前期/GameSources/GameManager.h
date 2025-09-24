@@ -13,7 +13,7 @@ namespace basecross{
 		friend class SingletonBase<GameManager>;
 		GameManager() = default;
 
-		vector<shared_ptr<MoveBall>> m_Spheres;
+		vector<shared_ptr<MoveBall>> m_Balls;
 
 		shared_ptr<GimmickHand> m_Hand;
 
@@ -25,7 +25,7 @@ namespace basecross{
 		/// 登録されている情報を初期化する
 		/// </summary>
 		void Reset() {
-			m_Spheres.clear();
+			m_Balls.clear();
 			m_Hand = nullptr;
 			m_Map = nullptr;
 		}
@@ -34,16 +34,16 @@ namespace basecross{
 		/// プレイヤーを登録
 		/// </summary>
 		/// <param name="sphere">プレイヤー</param>
-		void AddSphere(const shared_ptr<MoveBall> sphere) {
-			m_Spheres.push_back(sphere);
+		void AddBall(const shared_ptr<MoveBall> sphere) {
+			m_Balls.push_back(sphere);
 		}
 
 		/// <summary>
 		/// プレイヤーの情報を取得
 		/// </summary>
 		/// <returns>プレイヤーデータ</returns>
-		vector<shared_ptr<MoveBall>> GetSpheres()const {
-			return m_Spheres;
+		vector<shared_ptr<MoveBall>> GetBalls()const {
+			return m_Balls;
 		}
 
 		/// <summary>
