@@ -62,7 +62,7 @@ namespace basecross{
 		/// <param name="gimmicks">’Ç‰Á‚·‚éƒMƒ~ƒbƒN</param>
 		void Add(Gimmicks::Objects gimmicks) {
 			m_Hand.push_back(gimmicks);
-			m_HandSprite.push_back(GetStage()->AddGameObject<GimmickCard>(gimmicks));
+			m_HandSprite.push_back(m_Stage->AddGameObject<GimmickCard>(gimmicks));
 		}
 
 		/// <summary>

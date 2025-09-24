@@ -12,7 +12,7 @@ namespace basecross{
 	void GimmickCard::OnCreate() {
 		Object::OnCreate();
 
-		m_Card = GetStage()->AddGameObject<Sprite>(L"TEMP_GIMMICK",Vec3(0.0f),Vec2(),Anchor::Left);
+		m_Card = m_Stage->AddGameObject<Sprite>(L"TEMP_GIMMICK",Vec3(0.0f),Vec2(),Anchor::Left);
 
 		m_CoverTexKeys[Gimmicks::Objects::Goal] = L"TEMP_GIMMICK_GOAL";
 		m_CoverTexKeys[Gimmicks::Objects::SetPlayer] = L"TEMP_GIMMICK_PLAYER";
@@ -35,7 +35,7 @@ namespace basecross{
 		}
 	}
 	void GimmickCard::SetCover(Gimmicks::Objects type) {
-		m_CoverSprite = GetStage()->AddGameObject<Sprite>(m_CoverTexKeys[type], Vec3(0.0f), Vec2(), Anchor::Center);
+		m_CoverSprite = m_Stage->AddGameObject<Sprite>(m_CoverTexKeys[type], Vec3(0.0f), Vec2(), Anchor::Center);
 		m_Type = type;
 	}
 	void GimmickHand::OnCreate() {

@@ -39,7 +39,7 @@ namespace basecross{
 				if (maxHeight < height) {
 					maxHeight = height;
 				}
-				auto box = GetStage()->AddGameObject<TempBox>(Vec3(j, m_GroundHeight, i), color);
+				auto box = m_Stage->AddGameObject<TempBox>(Vec3(j, m_GroundHeight, i), color);
 				box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
 
 				m_Map[i].push_back({ color,height,Vec3(j, m_GroundHeight, i),box,Gimmicks::Objects::None,nullptr });
@@ -74,9 +74,9 @@ namespace basecross{
 				if (color == map.m_Color) {
 					//‚·‚Å‚ÉÝ’u‚µ‚Ä‚¢‚é‚È‚ç”j‰ó
 					if (map.m_TempGimmick != nullptr) {
-						GetStage()->RemoveGameObject<TempBox>(map.m_TempGimmick);
+						m_Stage->RemoveGameObject<TempBox>(map.m_TempGimmick);
 					}
-					map.m_TempGimmick = GetStage()->AddGameObject<TempBox>(
+					map.m_TempGimmick = m_Stage->AddGameObject<TempBox>(
 						map.m_Position + Vec3(0.0f, map.m_Height, 0.0f),
 						Col4(map.m_Color.x, map.m_Color.y, map.m_Color.z, 0.5f));
 
@@ -94,7 +94,7 @@ namespace basecross{
 				if (color == map.m_Color) {
 					//‚·‚Å‚ÉÝ’u‚µ‚Ä‚¢‚é‚È‚ç”j‰ó
 					if (map.m_TempGimmick != nullptr) {
-						GetStage()->RemoveGameObject<TempBox>(map.m_TempGimmick);
+						m_Stage->RemoveGameObject<TempBox>(map.m_TempGimmick);
 						
 						map.m_TempGimmick = nullptr;
 						
