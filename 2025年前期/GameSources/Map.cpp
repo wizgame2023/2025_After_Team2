@@ -58,7 +58,10 @@ namespace basecross{
 				if (color == map.m_Color) {
 					draw->SetDiffuse(map.m_Color - Col4(0.3f,0.3f,0.3f,0));
 				}
-				else {
+				else if (map.m_TempGimmick) {
+					draw->SetDiffuse(map.m_Color + Col4(0.6f, 0.6f, 0.6f, 0.0f));
+				}
+				else{
 					draw->SetDiffuse(map.m_Color);
 				}
 			}
@@ -85,7 +88,7 @@ namespace basecross{
 	}
 	Gimmicks::Objects Map::RecoverGimmick() {
 		Col4 color = m_ColorTable[m_SelectColorIndex];
-		Gimmicks::Objects type;
+		Gimmicks::Objects type = Gimmicks::Objects::None;
 		for (auto& mapVec : m_Map) {
 			for (auto& map : mapVec) {
 				if (color == map.m_Color) {

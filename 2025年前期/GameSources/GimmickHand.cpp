@@ -64,9 +64,13 @@ namespace basecross{
 	}
 	Gimmicks::Objects GimmickHand::Use() {
 		auto card = m_Hand[m_SelectIndex];
-		GetStage()->RemoveGameObject<GimmickCard>(m_HandSprite[m_SelectIndex]);
+		//GetStage()->RemoveGameObject<GimmickCard>(m_HandSprite[m_SelectIndex]);
+		m_HandSprite[m_SelectIndex]->Remove();
 		m_Hand.erase(m_Hand.begin() + m_SelectIndex);
 		m_HandSprite.erase(m_HandSprite.begin() + m_SelectIndex);
+		if (m_SelectIndex >= m_Hand.size()) {
+			m_SelectIndex = m_Hand.size() - 1;
+		}
 		return card;
 	}
 }

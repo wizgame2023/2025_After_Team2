@@ -23,6 +23,11 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
+		void Remove() {
+			GetStage()->RemoveGameObject<Sprite>(m_Card);
+			GetStage()->RemoveGameObject<Sprite>(m_CoverSprite);
+			GetStage()->RemoveGameObject<GimmickCard>(GetThis<GimmickCard>());
+		}
 		shared_ptr<Sprite> GetCardSprite() {
 			return m_Card;
 		}
