@@ -8,11 +8,8 @@
 
 namespace basecross{
 
-	Gimmicks::Gimmicks(const shared_ptr<Stage>& ptrStage, Objects obj) :
-	Object(ptrStage),
-	m_Obj(obj),
-	m_IsGoalFlag(false)
-		
+	Gimmicks::Gimmicks(const shared_ptr<Stage>& ptrStage) :
+	Object(ptrStage)	
 	{
 	}
 
@@ -23,81 +20,113 @@ namespace basecross{
 	void Gimmicks::OnCreate()
 	{
 		Object::OnCreate();
-
-		switch (m_Obj)
-		{
-		case basecross::Gimmicks::Objects::Goal:
-			m_Draw->SetMeshResource(L"DEFAULT_CYLINDER");
-			m_Draw->SetDiffuse(Col4(1, 0, 0, 1));
-			break;
-		case basecross::Gimmicks::Objects::SetPlayer:
-			break;
-		case basecross::Gimmicks::Objects::CourseCorrection:
-			break;
-		case basecross::Gimmicks::Objects::Upper:
-			break;
-		default:
-			break;
-		}
-
 	}
 
-	void Gimmicks::OnUpdate()
+	void Gimmicks::Begin()
 	{
-		auto stage = GetStage();
-		if (dynamic_pointer_cast<GameStage>(stage) == nullptr) return;
+		Object::OnCreate();
 
-		switch (m_Obj)
-		{
-		case basecross::Gimmicks::Objects::Goal:
-			Goal();
-			break;
-		case basecross::Gimmicks::Objects::SetPlayer:
-			break;
-		case basecross::Gimmicks::Objects::CourseCorrection:
-			break;
-		case basecross::Gimmicks::Objects::Upper:
-			break;
-		default:
-			break;
-		}
 	}
-
-
-	void Gimmicks::Goal()
+	void Gimmicks::Update()
 	{
-		if (m_IsGoalFlag) return; //ƒS[ƒ‹‚µ‚Ä‚¢‚½‚ç
-
-		auto stage = GetStage();
-
-		Vec3 forward = GetForward().normalize();
-		Vec3 pos = GetPosition();
-		auto gameObjectVec = stage->GetGameObjectVec();
-		for (auto& obj : gameObjectVec)
+		auto playerVec = GameManager::GetInstance().GetBalls();
+		auto pos = GetPosition();
+		for (auto& ball : playerVec)
 		{
-			auto player = dynamic_pointer_cast<MoveBall>(obj);
-			if (!player) continue;
-
-			Vec3 playerPos = player->GetComponent<Transform>()->GetPosition();
-			Vec3 dist = playerPos - pos;
-
-			float distanceSq = dist.lengthSqr();
-			float rot = forward.dot(dist.normalize());
-
-			if (distanceSq < (0.1f * 0.1f) && rot > 0.95f)
+			auto player = dynamic_pointer_cast<MoveCube>(ball);
+			if (player)
 			{
-				IsGoalDirection(player); // ƒS[ƒ‹‰‰o‚È‚Ç
-				m_IsGoalFlag = true;
-				break; //ˆê‘Ì‚Å‚àƒS[ƒ‹‚µ‚½‚çI—¹;
+				Vec3 dist = player->GetPosition() - pos;
+				float distanceSq = dist.lengthSqr();
+
+				if (distanceSq < (0.1f * 0.1f))
+				{
+					m_Cube = player;
+					break;
+				}
+				else
+				{
+					continue;
+				}
+			}
+			else
+			{
+				continue;
 			}
 		}
-
 	}
 
-	void Gimmicks::IsGoalDirection(const shared_ptr<MoveBall>& player)
+	void Gimmicks::End()
 	{
-		player->SetVelocity(Vec3(0.0f)); // “®‚«‚ðŽ~‚ß‚é
+	}
 
+	void Gimmicks::GimmickDelete()
+	{
+		m_Stage->RemoveGameObject<Gimmicks>(GetThis<Gimmicks>());
+	}
+
+
+
+	GimmickGoal::GimmickGoal(const shared_ptr<Stage>& ptrStage) :
+		Gimmicks(ptrStage)
+	{
+	}
+	GimmickGoal::~GimmickGoal()
+	{
+	}
+	
+	void GimmickGoal::OnCreate()
+	{
+		Gimmicks::OnCreate();
+	}
+
+	void GimmickGoal::Begin()
+	{
+		Gimmicks::Begin();
+	}
+	void GimmickGoal::Update()
+	{
+		Gimmicks::Update();
+
+		if (m_Cube)
+		{
+			GameManager::GetInstance().DrawGoalEffect();
+
+			m_Cube = nullptr;
+
+		}
+	}
+
+
+	GimmickSetPlayer::GimmickSetPlayer(const shared_ptr<Stage>& ptrStage) :
+		Gimmicks(ptrStage)
+	{
+	}
+	GimmickSetPlayer::~GimmickSetPlayer()
+	{
+	}
+
+	void GimmickSetPlayer::OnCreate()
+	{
+		Gimmicks::OnCreate();
+	}
+	void GimmickSetPlayer::Begin()
+	{
+		Gimmicks::Begin();
+		if (m_Cube)
+		{
+			m_Stage->AddGameObject<MoveCube>();
+			
+			auto pos = GetPosition();
+
+			m_Cube->SetPosition(pos);
+			m_Cube->SetVelocity(m_Velocity);
+			m_Cube = nullptr;
+		}
+	}
+	void GimmickSetPlayer::Update()
+	{
+		Gimmicks::Update();
 	}
 }
 //end basecross
