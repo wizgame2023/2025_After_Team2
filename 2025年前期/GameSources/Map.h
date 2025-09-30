@@ -54,6 +54,21 @@ namespace basecross{
 			m_GroundHeight = height;
 		}
 
+		bool CheckPutGimmick() {
+			Col4 color = m_ColorTable[m_SelectColorIndex];
+			for (auto& mapVec : m_Map) {
+				for (auto& map : mapVec) {
+					if (color == map.m_Color) {
+						//すでに設置しているなら破壊
+						if (map.m_TempGimmick != nullptr) {
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+		}
+
 		void HighlightBox(Col4 color);
 
 		//引数にはギミックのオブジェクト

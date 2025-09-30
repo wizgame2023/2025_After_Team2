@@ -23,10 +23,6 @@ namespace basecross{
 	}
 	void MoveCube::OnUpdate() {
 		if (!m_IsEffecting) {
-			int rnd = rand() % 4;
-
-			vector<Vec3> rot = { Vec3(1,0,0),Vec3(-1,0,0) ,Vec3(0,0,1) ,Vec3(0,0,-1) };
-			m_Velocity = rot[rnd];
 			return;
 		}
 
