@@ -8,34 +8,52 @@
 
 namespace basecross
 {
+	enum class GimmickObjects
+	{
+		None,
+		Goal,
+		SetPlayer,
+		CourseCorrection,
+		Upper
+	};
+
 	class Gimmicks : public Object
 	{
-		shared_ptr<PNTStaticDraw> m_Draw;
-
-		bool m_IsGoalFlag;
-	public:
-		enum class Objects
-		{
-			None,
-			Goal,
-			SetPlayer,
-			CourseCorrection,
-			Upper
-		};
-
-	private:
-		Objects m_Obj;
-
+	protected:
+		shared_ptr<MoveCube> m_Cube;
 
 	public:
-		Gimmicks(const shared_ptr<Stage>& ptrStage, Objects obj);
+		Gimmicks(const shared_ptr<Stage>& ptrStage);
 		~Gimmicks();
 
-		void OnCreate() override;
-		void OnUpdate() override;
+		virtual void OnCreate();
+		virtual void Begin();
+		virtual void Update();
+		virtual void End();
+		virtual void GimmickDelete();
 
-		void Goal();
-		void IsGoalDirection(const shared_ptr<MoveBall>& player);
+		virtual GimmickObjects GetGimmickType()
+		{
+			return GimmickObjects::None;
+		}
+	};
+
+	class GimmickGoal : public Gimmicks
+	{
+		bool m_IsGoalFlag;
+	public:
+
+		GimmickGoal(const shared_ptr<Stage>& ptrGimmick);
+		~GimmickGoal();
+		GimmickObjects GetGimmickType()override
+		{
+			return GimmickObjects::Goal;
+		};
+
+		virtual void OnCreate();
+		virtual void Begin();
+		virtual void Update();
+		virtual void End() {}
 	};
 
 }

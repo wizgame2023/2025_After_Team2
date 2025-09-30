@@ -59,8 +59,8 @@ namespace basecross {
 
 			auto hand = AddGameObject<GimmickHand>();
 			hand->SetCardSize(Vec2(200, 300));
-			hand->Add(Gimmicks::Objects::Goal);
-			hand->Add(Gimmicks::Objects::SetPlayer);
+			hand->Add(GimmickObjects::Goal);
+			hand->Add(GimmickObjects::SetPlayer);
 
 			GameManager::GetInstance().SetHand(hand);
 			GameManager::GetInstance().SetMap(stageMap);

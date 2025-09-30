@@ -7,19 +7,19 @@
 #include "Project.h"
 
 namespace basecross{
-	map<Gimmicks::Objects, wstring> GimmickCard::m_CoverTexKeys = {};
+	map<GimmickObjects, wstring> GimmickCard::m_CoverTexKeys = {};
 
 	void GimmickCard::OnCreate() {
 		Object::OnCreate();
 
 		m_Card = m_Stage->AddGameObject<Sprite>(L"TEMP_GIMMICK",Vec3(0.0f),Vec2(),Anchor::Left);
 
-		m_CoverTexKeys[Gimmicks::Objects::Goal] = L"TEMP_GIMMICK_GOAL";
-		m_CoverTexKeys[Gimmicks::Objects::SetPlayer] = L"TEMP_GIMMICK_PLAYER";
-		m_CoverTexKeys[Gimmicks::Objects::Upper] = L"TEMP_GIMMICK_UPPER";
-		m_CoverTexKeys[Gimmicks::Objects::CourseCorrection] = L"TEMP_GIMMICK_COURSE";
+		m_CoverTexKeys[GimmickObjects::Goal] = L"TEMP_GIMMICK_GOAL";
+		m_CoverTexKeys[GimmickObjects::SetPlayer] = L"TEMP_GIMMICK_PLAYER";
+		m_CoverTexKeys[GimmickObjects::Upper] = L"TEMP_GIMMICK_UPPER";
+		m_CoverTexKeys[GimmickObjects::CourseCorrection] = L"TEMP_GIMMICK_COURSE";
 		
-		if (m_Type != Gimmicks::Objects::None) {
+		if (m_Type != GimmickObjects::None) {
 			SetCover(m_Type);
 		}
 	}
@@ -34,7 +34,7 @@ namespace basecross{
 			m_CoverSprite->SetSize(coverScale);
 		}
 	}
-	void GimmickCard::SetCover(Gimmicks::Objects type) {
+	void GimmickCard::SetCover(GimmickObjects type) {
 		m_CoverSprite = m_Stage->AddGameObject<Sprite>(m_CoverTexKeys[type], Vec3(0.0f), Vec2(), Anchor::Center);
 		m_Type = type;
 	}
@@ -62,7 +62,7 @@ namespace basecross{
 			card->ScreenAnchor(Anchor::BottomLeft, offset);
 		}
 	}
-	Gimmicks::Objects GimmickHand::Use() {
+	GimmickObjects GimmickHand::Use() {
 		auto card = m_Hand[m_SelectIndex];
 		m_HandSprite[m_SelectIndex]->Remove();
 		m_Hand.erase(m_Hand.begin() + m_SelectIndex);
