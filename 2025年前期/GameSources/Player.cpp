@@ -7,6 +7,73 @@
 #include "Project.h"
 
 namespace basecross{
+	MoveCube::MoveCube(const shared_ptr<Stage>& ptr) : Object(ptr), 
+		m_IsEffecting(false),
+		m_MoveSpeed(0.0f){}
+
+	void MoveCube::OnCreate() {
+		Object::OnCreate();
+
+		m_Draw = AddComponent<PNTStaticDraw>();
+		m_Draw->SetMeshResource(L"DEFAULT_CUBE");
+		m_Draw->SetDiffuse(Col4(1, 1, 1, 1));
+
+		
+		GameManager::GetInstance().AddBall(GetThis<MoveCube>());
+	}
+	void MoveCube::OnUpdate() {
+		if (!m_IsEffecting) {
+			int rnd = rand() % 4;
+
+			vector<Vec3> rot = { Vec3(1,0,0),Vec3(-1,0,0) ,Vec3(0,0,1) ,Vec3(0,0,-1) };
+			m_Velocity = rot[rnd];
+			return;
+		}
+
+		float elapsed = App::GetApp()->GetElapsedTime();
+
+		Vec3 position = GetPosition();
+
+		switch (m_State) {
+		case MoveState::Move: {
+
+			break;
+		}
+		case MoveState::Telepote: {
+			break;
+		}
+		}
+
+		Vec3 move = (m_Target - position);
+		float distance = move.length();
+
+		Vec3 moveAmount = move.normalize() * elapsed * m_MoveSpeed;
+		//移動量が目標までの距離より大きい(目標地点を追い越す)場合は移動量を距離分に指定
+		if (moveAmount.length() > distance) {
+			moveAmount = move.normalize() * distance;
+			m_IsEffecting = false;
+		}
+		auto rot = XMMatrixRotationAxis(cross(Vec3(0, 1, 0), m_Velocity), m_RotateSpeed * elapsed);
+		auto world = m_Transform->GetWorldMatrix();
+		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
+
+		m_Transform->SetQuaternion(m_Transform->GetQuaternion() * world.quatInMatrix());
+		position += moveAmount;
+		SetPosition(position);
+	}
+	bool MoveCube::CheckArea(Vec3 position) {
+		if (position.x > m_MoveArea.m_Max.x || position.x < m_MoveArea.m_Min.x) {
+			return false;
+		}
+		if (position.y > m_MoveArea.m_Max.y || position.y < m_MoveArea.m_Min.y) {
+			return false;
+		}
+		if (position.z > m_MoveArea.m_Max.z || position.z < m_MoveArea.m_Min.z) {
+			return false;
+		}
+
+		return true;
+	}
 
 	MoveBall::MoveBall(const shared_ptr<Stage>& ptr, float speed, Vec3 velocity) :
 		Object(ptr),

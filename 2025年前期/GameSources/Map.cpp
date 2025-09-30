@@ -29,6 +29,25 @@ namespace basecross{
 
 	void Map::Load() {
 		int maxHeight = -100;
+
+		maxHeight = 0;
+
+		for (int i = 0; i < 3; i++) {
+			Col4 color;
+			if (i == 0) {
+				color = Col4(1.0f, 0.0f, 0.0f, 1.0f);
+			}
+			else if(i == 1) {
+
+			}
+			else {
+				color = Col4(0.0f, 1.0f, 0.0f, 1.0f);
+			}
+			auto box = m_Stage->AddGameObject<TempBox>(Vec3(0, m_GroundHeight - 0.5f, i), color);
+			box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
+
+		}
+
 		for (int i = 0; i < 5; i++) {
 			m_Map.push_back({});
 			for (int j = 0; j < 5; j++) {
@@ -39,7 +58,7 @@ namespace basecross{
 				if (maxHeight < height) {
 					maxHeight = height;
 				}
-				auto box = m_Stage->AddGameObject<TempBox>(Vec3(j, m_GroundHeight, i), color);
+				auto box = m_Stage->AddGameObject<TempBox>(Vec3(j, m_GroundHeight - 0.5f, i), color);
 				box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
 
 				m_Map[i].push_back({ color,height,Vec3(j, m_GroundHeight, i),box,Gimmicks::Objects::None,nullptr });

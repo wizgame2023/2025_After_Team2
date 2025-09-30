@@ -7,6 +7,73 @@
 #include "stdafx.h"
 
 namespace basecross{
+
+	enum class MoveState {
+		Telepote,
+		Move
+	};
+	class MoveCube : public Object {
+		bool m_IsEffecting;		//演出中か(移動、テレポートなど)
+		Vec3 m_TelepoteTarget;	//テレポート先
+		Vec3 m_Velocity;		//移動方向
+		Vec3 m_Target;			//通常移動先
+		AABB m_MoveArea;		//移動範囲
+
+		float m_MoveSec;		//移動時間(一マス移動にかかる時間)
+		float m_MoveSpeed;		//移動速度
+		float m_RotateSpeed;	//回転速度
+
+		MoveState m_State;		//現在の行動
+
+		shared_ptr<PNTStaticDraw> m_Draw;
+	public:
+		MoveCube(const shared_ptr<Stage>& ptr);
+		virtual ~MoveCube(){}
+
+		virtual void OnCreate()override;
+		virtual void OnUpdate()override;
+
+		bool CheckArea(Vec3 position);
+
+		void SetMoveSec(float sec) {
+			m_MoveSec = sec;
+		}
+		void SetMoveArea(AABB aabb) {
+			m_MoveArea = aabb;
+		}
+		void SetVelocity(Vec3 velocity) {
+			m_Velocity = velocity;
+		}
+		Vec3 GetVelocity()const {
+			return m_Velocity;
+		}
+
+		AABB GetMoveArea() const {
+			return m_MoveArea;
+		}
+
+		void Move() {
+			if (m_IsEffecting) return;
+			m_IsEffecting = true;
+
+			m_Target = GetPosition() + m_Velocity.normalize();
+			if (!CheckArea(m_Target)) {
+				m_IsEffecting = false;
+				m_Target = GetPosition();
+			}
+			m_MoveSpeed = (m_Target - GetPosition()).length() / m_MoveSec;
+			m_RotateSpeed = XM_PIDIV2 / m_MoveSec;
+			m_State = MoveState::Move;
+		}
+		void Telepote(Vec3 target) {
+			if (m_IsEffecting) return;
+			m_IsEffecting = true;
+
+			m_TelepoteTarget = target;
+			m_State = MoveState::Telepote;
+		}
+	};
+
 	class MoveBall : public Object {
 		float m_Speed;	//移動速度
 		Vec3 m_Velocity;	//進行方向

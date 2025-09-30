@@ -31,6 +31,14 @@ namespace basecross{
 				m_Hand->Add(m_Map->RecoverGimmick());
 			}
 		}
+
+		m_Tick += App::GetApp()->GetElapsedTime();
+		if (m_Tick <= m_UpdateTicks) return;
+
+		m_Tick = 0;
+		for (auto& cube : m_Balls) {
+			cube->Move();
+		}
 	}
 }
 //end basecross
