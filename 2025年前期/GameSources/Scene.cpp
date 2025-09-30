@@ -14,6 +14,16 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	void Scene::OnCreate(){
 		try {
+
+			auto& app = App::GetApp();
+
+			wstring path = app->GetDataDirWString() + L"Model/";
+			auto staticModel = MeshResource::CreateStaticModelMesh(path, L"Player.bmf");
+			app->RegisterResource(L"PLAYER_MD", staticModel);
+			staticModel = MeshResource::CreateStaticModelMesh(path, L"Goal.bmf");
+			app->RegisterResource(L"GOAL_MD", staticModel);
+
+
 			//ƒNƒŠƒA‚·‚éF‚ğİ’è
 			Col4 Col;
 			Col.set(31.0f / 255.0f, 30.0f / 255.0f, 71.0f / 255.0f, 255.0f / 255.0f);

@@ -12,7 +12,7 @@ namespace basecross{
 		for (auto& sphere : m_Balls) {
 			//プレイヤーを稼働開始
 			sphere->SetUpdateActive(m_Hand->IsEmpty());
-			sphere->GetComponent<PNTStaticDraw>()->SetDrawActive(m_Hand->IsEmpty());
+			//sphere->GetComponent<PNTStaticModelDraw>()->SetDrawActive(m_Hand->IsEmpty());
 		}
 		auto device = App::GetApp()->GetInputDevice().GetControlerVec()[0];
 

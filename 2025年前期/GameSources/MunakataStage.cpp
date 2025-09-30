@@ -47,16 +47,10 @@ namespace basecross {
 
 			auto player = AddGameObject<MoveCube>();
 			player->SetPosition(Vec3(0.0f,0.0f,0.0f));
-			player->SetVelocity(Vec3(0.0f, 0.0f, -1.0f));
-			player->SetMoveSec(1.0f);
+			player->SetVelocity(Vec3(1.0f, 0.0f, 0.0f));
 			
 			auto stageMap = AddGameObject<Map>();
 			stageMap->Load();
-
-			Vec3 mapSize = stageMap->GetMapSize();
-
-			player->SetMoveArea(AABB(Vec3(-1.0f, -100.0f, 0.0f), Vec3(mapSize.x - 1, 5.0f, mapSize.y)));
-			//player->SetUpdateActive(false);
 
 			auto camera = static_pointer_cast<MainCamera>(GetView()->GetTargetCamera());
 			camera->SetFixedPoint(stageMap);

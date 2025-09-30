@@ -25,7 +25,7 @@ namespace basecross{
 
 		MoveState m_State;		//åªç›ÇÃçsìÆ
 
-		shared_ptr<PNTStaticDraw> m_Draw;
+		shared_ptr<PNTStaticModelDraw> m_Draw;
 	public:
 		MoveCube(const shared_ptr<Stage>& ptr);
 		virtual ~MoveCube(){}
@@ -84,14 +84,14 @@ namespace basecross{
 
 		shared_ptr<PNTStaticDraw> m_Draw;
 	public:
-		MoveBall(const shared_ptr<Stage>& ptr, float speed, Vec3 velocity);
+		MoveBall(const shared_ptr<Stage>& ptr, float speed, Vec3 velocity): Object(ptr){}
 		MoveBall(const shared_ptr<Stage>& ptr) : MoveBall(ptr,1.0f,Vec3(1.0f,0.0f,0.0f)){}
 		virtual ~MoveBall(){}
 
-		virtual void OnCreate()override;
-		virtual void OnUpdate()override;
+		virtual void OnCreate()override{}
+		virtual void OnUpdate()override{}
 
-		Vec3 LimitArea(Vec3 position);
+		Vec3 LimitArea(Vec3 position){}
 		void SetVelocity(Vec3 velocity) {
 			m_Velocity = velocity;
 		}
