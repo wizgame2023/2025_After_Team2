@@ -8,35 +8,73 @@
 
 namespace basecross
 {
-	class Gimmicks : public Object
+	enum class GimmickObjects
 	{
-		shared_ptr<PNTStaticDraw> m_Draw;
-
-		bool m_IsGoalFlag;
-	public:
-		enum class Objects
-		{
-			None,
-			Goal,
-			SetPlayer,
-			CourseCorrection,
-			Upper
-		};
-
-	private:
-		Objects m_Obj;
-
-
-	public:
-		Gimmicks(const shared_ptr<Stage>& ptrStage, Objects obj);
-		~Gimmicks();
-
-		void OnCreate() override;
-		void OnUpdate() override;
-
-		void Goal();
-		void IsGoalDirection(const shared_ptr<MoveBall>& player);
+		None,
+		Goal,
+		SetPlayer,
+		CourseCorrection,
+		Upper
 	};
 
+	class Gimmicks : public Object
+	{
+	protected:
+		shared_ptr<MoveCube> m_Cube;
+
+	public:
+		Gimmicks(const shared_ptr<Stage>& ptrStage);
+		~Gimmicks();
+
+		virtual void OnCreate();
+		virtual void Begin();
+		virtual void Update();
+		virtual void End();
+		virtual void GimmickDelete();
+
+		virtual GimmickObjects GetGimmickType()
+		{
+			return GimmickObjects::None;
+		}
+	};
+
+	class GimmickGoal : public Gimmicks
+	{
+	public:
+
+		GimmickGoal(const shared_ptr<Stage>& ptrGimmick);
+		~GimmickGoal();
+		GimmickObjects GetGimmickType()override
+		{
+			return GimmickObjects::Goal;
+		};
+
+		virtual void OnCreate();
+		virtual void Begin();
+		virtual void Update();
+		virtual void End() {}
+	};
+
+	class GimmickSetPlayer : public Gimmicks
+	{
+		Vec3 m_Velocity;
+	public:
+		GimmickSetPlayer(const shared_ptr<Stage>& ptrGimmick);
+		~GimmickSetPlayer();
+		GimmickObjects GetGimmickType()override
+		{
+			return GimmickObjects::SetPlayer;
+		};
+
+		virtual void OnCreate();
+		virtual void Begin();
+		virtual void Update();
+		virtual void End() {}
+
+		void SetVelocity(Vec3 velocity)
+		{
+			m_Velocity = velocity;
+		}
+	};
 }
 //end basecross

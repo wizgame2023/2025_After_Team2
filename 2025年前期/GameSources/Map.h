@@ -14,7 +14,7 @@ namespace basecross{
 		Vec3 m_Position;
 
 		shared_ptr<TempBox> m_Temp;
-		Gimmicks::Objects m_GimmickType;
+		GimmickObjects m_GimmickType;
 		shared_ptr<TempBox> m_TempGimmick;
 	};
 	class Map : public Object {
@@ -72,9 +72,9 @@ namespace basecross{
 		void HighlightBox(Col4 color);
 
 		//引数にはギミックのオブジェクト
-		void PutGimmick(Gimmicks::Objects type);
+		void PutGimmick(GimmickObjects type);
 
-		Gimmicks::Objects RecoverGimmick();
+		GimmickObjects RecoverGimmick();
 	};
 
 

@@ -48,7 +48,7 @@ namespace basecross{
 			auto box = m_Stage->AddGameObject<TempBox>(Vec3(i, m_GroundHeight - 0.5f, 0), color);
 			box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
 
-			m_Map[0].push_back({ color,0,Vec3(i, m_GroundHeight, 0),box,Gimmicks::Objects::None,nullptr });
+			m_Map[0].push_back({ color,0,Vec3(i, m_GroundHeight, 0),box,GimmickObjects::None,nullptr });
 		}
 
 		/*for (int i = 0; i < 5; i++) {
@@ -64,7 +64,7 @@ namespace basecross{
 				auto box = m_Stage->AddGameObject<TempBox>(Vec3(j, m_GroundHeight - 0.5f, i), color);
 				box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
 
-				m_Map[i].push_back({ color,height,Vec3(j, m_GroundHeight, i),box,Gimmicks::Objects::None,nullptr });
+				m_Map[i].push_back({ color,height,Vec3(j, m_GroundHeight, i),box,GimmickObjects::None,nullptr });
 			}
 		}*/
 
@@ -89,7 +89,7 @@ namespace basecross{
 			}
 		}
 	}
-	void Map::PutGimmick(Gimmicks::Objects type) {
+	void Map::PutGimmick(GimmickObjects type) {
 		Col4 color = m_ColorTable[m_SelectColorIndex];
 		for (auto& mapVec : m_Map) {
 			for (auto& map : mapVec) {
@@ -108,9 +108,9 @@ namespace basecross{
 			}
 		}
 	}
-	Gimmicks::Objects Map::RecoverGimmick() {
+	GimmickObjects Map::RecoverGimmick() {
 		Col4 color = m_ColorTable[m_SelectColorIndex];
-		Gimmicks::Objects type = Gimmicks::Objects::None;
+		GimmickObjects type = GimmickObjects::None;
 		for (auto& mapVec : m_Map) {
 			for (auto& map : mapVec) {
 				if (color == map.m_Color) {
