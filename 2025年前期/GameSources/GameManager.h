@@ -15,14 +15,19 @@ namespace basecross{
 			
 		}
 
+		shared_ptr<Stage> m_Stage;
+
 		vector<shared_ptr<MoveCube>> m_Balls;
 
 		shared_ptr<GimmickHand> m_Hand;
 
 		shared_ptr<Map> m_Map;
 
+		vector<shared_ptr<Sprite>> m_EffectSprite;
+
 		float m_Tick;
 		float m_UpdateTicks;
+		bool m_IsGameClear;
 	public:
 		/// <summary>
 		/// “o˜^‚³‚ê‚Ä‚¢‚éî•ñ‚ğ‰Šú‰»‚·‚é
@@ -31,6 +36,8 @@ namespace basecross{
 			m_Balls.clear();
 			m_Hand = nullptr;
 			m_Map = nullptr;
+			m_Stage = nullptr;
+			m_IsGameClear = false;
 		}
 
 		/// <summary>
@@ -81,10 +88,28 @@ namespace basecross{
 			return m_Map;
 		}
 
+		void SetGameStage(const shared_ptr<Stage>& stage) {
+			m_Stage = stage;
+		}
+
+		bool IsClear() {
+			return m_IsGameClear;
+		}
+
 		/// <summary>
 		/// XVˆ—
 		/// </summary>
 		void Update();
+
+
+		void DrawGoalEffect();
+
+		void DeleteEffectSprite() {
+			for (int i = 0; i < m_EffectSprite.size(); i++) {
+				m_Stage->RemoveGameObject<Sprite>(m_EffectSprite[i]);
+			}
+			m_EffectSprite.clear();
+		}
 	};
 }
 //end basecross

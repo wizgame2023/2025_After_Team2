@@ -9,11 +9,10 @@
 namespace basecross{
 
 	void GameManager::Update() {
-		if (m_Hand->IsEmpty()) {
-			for (auto& sphere : m_Balls) {
-				//プレイヤーを稼働開始
-				sphere->SetUpdateActive(true);
-			}
+		for (auto& sphere : m_Balls) {
+			//プレイヤーを稼働開始
+			sphere->SetUpdateActive(m_Hand->IsEmpty());
+			sphere->GetComponent<PNTStaticDraw>()->SetDrawActive(m_Hand->IsEmpty());
 		}
 		auto device = App::GetApp()->GetInputDevice().GetControlerVec()[0];
 
@@ -24,12 +23,12 @@ namespace basecross{
 			if (device.wPressedButtons & XINPUT_GAMEPAD_DPAD_RIGHT) {
 				m_Hand->Next();
 			}
-			if (device.wPressedButtons & XINPUT_GAMEPAD_A) {
+			if (device.wPressedButtons & XINPUT_GAMEPAD_A && !m_Map->CheckPutGimmick()) {
 				m_Map->PutGimmick(m_Hand->Use());
 			}
 			if (device.wPressedButtons & XINPUT_GAMEPAD_B) {
 				m_Hand->Add(m_Map->RecoverGimmick());
-			}
+			}			
 		}
 
 		m_Tick += App::GetApp()->GetElapsedTime();
@@ -38,6 +37,16 @@ namespace basecross{
 		m_Tick = 0;
 		for (auto& cube : m_Balls) {
 			cube->Move();
+		}
+	}
+
+	void GameManager::DrawGoalEffect() {
+		auto sprite = m_Stage->AddGameObject<Sprite>(L"TEMP_GOAL_SPRITE",Vec3(), Vec2(500, 250), Anchor::Center);
+		m_EffectSprite.push_back(sprite);
+		m_IsGameClear = true;
+
+		for (auto& cube : m_Balls) {
+			cube->SetUpdateActive(false);
 		}
 	}
 }
