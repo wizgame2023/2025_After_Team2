@@ -39,7 +39,7 @@ namespace basecross{
 		m_Type = type;
 	}
 	void GimmickHand::OnCreate() {
-
+		Object::OnCreate();
 	}
 	void GimmickHand::OnUpdate() {
 		float handCount = m_HandSprite.size();

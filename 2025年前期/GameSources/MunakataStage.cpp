@@ -41,17 +41,18 @@ namespace basecross {
 
 			CreateViewLight();
 			CreateResorce();
-			auto player = AddGameObject<MoveBall>(2.0f,Vec3(0.0f,0.0f,1.0f));
+			auto player = AddGameObject<MoveCube>();
 			player->SetPosition(Vec3(0.0f,0.0f,0.0f));
 			player->SetVelocity(Vec3(1.0f, 0.0f, 0.0f));
+			player->SetMoveSec(1.0f);
 			
 			auto stageMap = AddGameObject<Map>();
 			stageMap->Load();
 
 			Vec3 mapSize = stageMap->GetMapSize();
 
-			player->SetMoveArea(AABB(Vec3(-1.0f, -100.0f, -1.0f), Vec3(mapSize.x, 5.0f, mapSize.y)));
-			player->SetUpdateActive(false);
+			player->SetMoveArea(AABB(Vec3(0.0f, -100.0f, 0.0f), Vec3(mapSize.x, 5.0f, mapSize.y)));
+			//player->SetUpdateActive(false);
 
 			auto camera = static_pointer_cast<MainCamera>(GetView()->GetTargetCamera());
 			camera->SetFixedPoint(stageMap);
@@ -60,12 +61,8 @@ namespace basecross {
 			hand->SetCardSize(Vec2(200, 300));
 			hand->Add(Gimmicks::Objects::Goal);
 			hand->Add(Gimmicks::Objects::SetPlayer);
-			hand->Add(Gimmicks::Objects::Upper);
-			hand->Add(Gimmicks::Objects::Upper);
-			hand->Add(Gimmicks::Objects::Upper);
 
 			GameManager::GetInstance().SetHand(hand);
-			GameManager::GetInstance().AddBall(player);
 			GameManager::GetInstance().SetMap(stageMap);
 			//AddGameObject<Sprite>(L"TEMP_GIMMICK", Vec3(0.0f,-200.0f,0.0f), Vec2(200, 300));
 		}
