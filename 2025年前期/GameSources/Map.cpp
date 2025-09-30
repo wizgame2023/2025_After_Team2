@@ -48,7 +48,7 @@ namespace basecross{
 			auto box = m_Stage->AddGameObject<TempBox>(Vec3(i, m_GroundHeight - 0.5f, 0), color);
 			box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
 
-			m_Map[0].push_back({ color,0,Vec3(i, m_GroundHeight, 0),box,Gimmicks::Objects::None,nullptr });
+			m_Map[0].push_back({ color,0,Vec3(i, m_GroundHeight, 0),box,GimmickObjects::None,nullptr });
 		}
 
 		/*for (int i = 0; i < 5; i++) {

@@ -40,7 +40,6 @@ namespace basecross
 
 	class GimmickGoal : public Gimmicks
 	{
-		bool m_IsGoalFlag;
 	public:
 
 		GimmickGoal(const shared_ptr<Stage>& ptrGimmick);
@@ -56,5 +55,26 @@ namespace basecross
 		virtual void End() {}
 	};
 
+	class GimmickSetPlayer : public Gimmicks
+	{
+		Vec3 m_Velocity;
+	public:
+		GimmickSetPlayer(const shared_ptr<Stage>& ptrGimmick);
+		~GimmickSetPlayer();
+		GimmickObjects GetGimmickType()override
+		{
+			return GimmickObjects::SetPlayer;
+		};
+
+		virtual void OnCreate();
+		virtual void Begin();
+		virtual void Update();
+		virtual void End() {}
+
+		void SetVelocity(Vec3 velocity)
+		{
+			m_Velocity = velocity;
+		}
+	};
 }
 //end basecross

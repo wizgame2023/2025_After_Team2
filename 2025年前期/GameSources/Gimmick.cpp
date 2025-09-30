@@ -29,14 +29,13 @@ namespace basecross{
 	}
 	void Gimmicks::Update()
 	{
-		auto gameObjectVec = m_Stage->GetGameObjectVec();
+		auto playerVec = GameManager::GetInstance().GetBalls();
 		auto pos = GetPosition();
-		for (auto& obj : gameObjectVec)
+		for (auto& ball : playerVec)
 		{
-			auto player = dynamic_pointer_cast<MoveCube>(obj);
+			auto player = dynamic_pointer_cast<MoveCube>(ball);
 			if (player)
 			{
-
 				Vec3 dist = player->GetPosition() - pos;
 				float distanceSq = dist.lengthSqr();
 
@@ -69,8 +68,7 @@ namespace basecross{
 
 
 	GimmickGoal::GimmickGoal(const shared_ptr<Stage>& ptrStage) :
-		Gimmicks(ptrStage),
-		m_IsGoalFlag(false)
+		Gimmicks(ptrStage)
 	{
 	}
 	GimmickGoal::~GimmickGoal()
@@ -92,9 +90,43 @@ namespace basecross{
 
 		if (m_Cube)
 		{
+			GameManager::GetInstance().DrawGoalEffect();
+
+			m_Cube = nullptr;
 
 		}
 	}
 
+
+	GimmickSetPlayer::GimmickSetPlayer(const shared_ptr<Stage>& ptrStage) :
+		Gimmicks(ptrStage)
+	{
+	}
+	GimmickSetPlayer::~GimmickSetPlayer()
+	{
+	}
+
+	void GimmickSetPlayer::OnCreate()
+	{
+		Gimmicks::OnCreate();
+	}
+	void GimmickSetPlayer::Begin()
+	{
+		Gimmicks::Begin();
+		if (m_Cube)
+		{
+			m_Stage->AddGameObject<MoveCube>();
+			
+			auto pos = GetPosition();
+
+			m_Cube->SetPosition(pos);
+			m_Cube->SetVelocity(m_Velocity);
+			m_Cube = nullptr;
+		}
+	}
+	void GimmickSetPlayer::Update()
+	{
+		Gimmicks::Update();
+	}
 }
 //end basecross

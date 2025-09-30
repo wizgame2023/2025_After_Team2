@@ -43,7 +43,6 @@ namespace basecross {
 
 			CreateViewLight();
 			CreateResorce();
-			GameManager::GetInstance().DrawGoalEffect();
 
 			auto player = AddGameObject<MoveCube>();
 			player->SetPosition(Vec3(0.0f,0.0f,0.0f));
