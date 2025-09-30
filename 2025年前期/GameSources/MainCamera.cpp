@@ -10,8 +10,11 @@ namespace basecross{
 
 	void MainCamera::OnCreate() {
 		m_TargetAngle.y = m_FixedAngleVirtical;
-		m_TargetAngle.x = XMConvertToRadians(0.0f);
+		m_TargetAngle.x = XMConvertToRadians(270.0f);
 		m_Angle = m_TargetAngle;
+
+		Vec3 position = CalcPosition(m_Angle.y, m_Angle.x);
+		SetEye(position);
 	}
 	void MainCamera::OnUpdate() {
 		auto& app = App::GetApp();
@@ -59,9 +62,7 @@ namespace basecross{
 		}
 
 		m_Angle += moveAmount;
-		Vec3 position = CalcPosition(m_Angle.y, m_Angle.x);//GetAt() + Vec3(cos(m_Angle.x), 0.0f, sin(m_Angle.x)) * m_ArmLength;//CalcPosition(m_Angle.y, m_Angle.x);
-		//position.x = 5.0f;
-		//position.y = 10.0f;
+		Vec3 position = CalcPosition(m_Angle.y, m_Angle.x);
 		SetEye(position);
 	}
 	Vec3 MainCamera::CalcPosition(float virticalAngle, float horizonAngle) {
@@ -85,7 +86,7 @@ namespace basecross{
 
 		m_ArmLength = max(mapSize.x, max(mapSize.y, mapSize.z)) * 2.0f;
 
-		m_Angle = Vec2(0.0f, m_FixedAngleVirtical);
+		m_Angle = Vec2(XMConvertToRadians(270.0f), m_FixedAngleVirtical);
 		SetEye(CalcPosition(m_Angle.y, m_Angle.x));
 		SetAt(center);
 	}

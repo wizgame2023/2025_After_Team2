@@ -10,7 +10,7 @@ namespace basecross{
 
 	void Map::OnCreate() {
 		Object::OnCreate();
-		m_ColorTable = { Col4(1,0,0,1),Col4(0,1,0,1),Col4(0,0,1,1),Col4(1,1,0,1),Col4(1,0,1,1) };
+		m_ColorTable = { Col4(1,0,0,1),Col4(0,1,0,1) };
 	}
 	void Map::OnUpdate() {
 		auto device = App::GetApp()->GetInputDevice().GetControlerVec()[0];
@@ -31,6 +31,7 @@ namespace basecross{
 		int maxHeight = -100;
 
 		maxHeight = 0;
+		m_Map.push_back({});
 
 		for (int i = 0; i < 3; i++) {
 			Col4 color;
@@ -38,17 +39,19 @@ namespace basecross{
 				color = Col4(1.0f, 0.0f, 0.0f, 1.0f);
 			}
 			else if(i == 1) {
-
+				color = Col4(0.0f, 0.0f, 0.0f, 0.0f);
 			}
 			else {
 				color = Col4(0.0f, 1.0f, 0.0f, 1.0f);
 			}
-			auto box = m_Stage->AddGameObject<TempBox>(Vec3(0, m_GroundHeight - 0.5f, i), color);
+
+			auto box = m_Stage->AddGameObject<TempBox>(Vec3(i, m_GroundHeight - 0.5f, 0), color);
 			box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
 
+			m_Map[0].push_back({ color,0,Vec3(i, m_GroundHeight, 0),box,Gimmicks::Objects::None,nullptr });
 		}
 
-		for (int i = 0; i < 5; i++) {
+		/*for (int i = 0; i < 5; i++) {
 			m_Map.push_back({});
 			for (int j = 0; j < 5; j++) {
 				int colorRnd = rand() % m_ColorTable.size();
@@ -63,7 +66,7 @@ namespace basecross{
 
 				m_Map[i].push_back({ color,height,Vec3(j, m_GroundHeight, i),box,Gimmicks::Objects::None,nullptr });
 			}
-		}
+		}*/
 
 		m_MapHeight = maxHeight;
 		m_CenterY = m_GroundHeight + static_cast<float>(maxHeight) / 2.0f;
@@ -93,7 +96,7 @@ namespace basecross{
 				if (color == map.m_Color) {
 					//‚·‚Å‚ÉÝ’u‚µ‚Ä‚¢‚é‚È‚ç”j‰ó
 					if (map.m_TempGimmick != nullptr) {
-						m_Stage->RemoveGameObject<TempBox>(map.m_TempGimmick);
+						continue;
 					}
 					map.m_TempGimmick = m_Stage->AddGameObject<TempBox>(
 						map.m_Position + Vec3(0.0f, map.m_Height, 0.0f),
