@@ -33,7 +33,7 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
-		bool CheckArea(Vec3 position);
+		bool CheckArea();
 
 		void SetMoveSec(float sec) {
 			m_MoveSec = sec;
@@ -56,11 +56,11 @@ namespace basecross{
 			if (m_IsEffecting) return;
 			m_IsEffecting = true;
 
-			m_Target = GetPosition() + m_Velocity.normalize();
-			if (!CheckArea(m_Target)) {
+			if (!CheckArea()) {
 				m_IsEffecting = false;
 				m_Target = GetPosition();
 			}
+			m_Target = GetPosition() + m_Velocity.normalize();
 			m_MoveSpeed = (m_Target - GetPosition()).length() / m_MoveSec;
 			m_RotateSpeed = XM_PIDIV2 / m_MoveSec;
 			m_State = MoveState::Move;

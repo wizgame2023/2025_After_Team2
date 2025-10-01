@@ -34,6 +34,7 @@ namespace basecross {
 		app->RegisterTexture(L"TEMP_GIMMICK_UPPER", uiPath + L"testUpper.png");
 		app->RegisterTexture(L"TEMP_GIMMICK_COURSE", uiPath + L"testCoruse.png");
 		app->RegisterTexture(L"TEMP_GOAL_SPRITE", uiPath + L"testGoalTxt.png");
+		app->RegisterTexture(L"TEMP_OVER_SPRITE", uiPath + L"testOver.png");
 	}
 	void MStage::OnCreate() {
 		try {
@@ -44,9 +45,9 @@ namespace basecross {
 			CreateViewLight();
 			CreateResorce();
 
-			auto player = AddGameObject<MoveCube>();
+			/*auto player = AddGameObject<MoveCube>();
 			player->SetPosition(Vec3(0.0f,0.0f,0.0f));
-			player->SetVelocity(Vec3(1.0f, 0.0f, 0.0f));
+			player->SetVelocity(Vec3(1.0f, 0.0f, 0.0f));*/
 			
 			auto stageMap = AddGameObject<Map>();
 			stageMap->Load();
@@ -70,7 +71,8 @@ namespace basecross {
 	void MStage::OnUpdate() {
 		GameManager::GetInstance().Update();
 
-		if (GameManager::GetInstance().IsClear()) {
+		if (GameManager::GetInstance().CompareState(GameState::Clear) ||
+			GameManager::GetInstance().CompareState(GameState::Over)) {
 			auto device = App::GetApp()->GetInputDevice().GetControlerVec()[0];
 
 			if (device.bConnected) {

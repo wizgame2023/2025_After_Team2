@@ -24,7 +24,7 @@ namespace basecross{
 
 	void Gimmicks::Begin()
 	{
-		Object::OnCreate();
+		//Object::OnCreate();
 
 	}
 	void Gimmicks::Update()
@@ -78,6 +78,10 @@ namespace basecross{
 	void GimmickGoal::OnCreate()
 	{
 		Gimmicks::OnCreate();
+
+		auto draw = AddComponent<PNTStaticDraw>();
+		draw->SetMeshResource(L"DEFAULT_CUBE");
+		draw->SetDiffuse(Col4(0, 1, 0, 1));
 	}
 
 	void GimmickGoal::Begin()
@@ -109,20 +113,19 @@ namespace basecross{
 	void GimmickSetPlayer::OnCreate()
 	{
 		Gimmicks::OnCreate();
+		auto draw = AddComponent<PNTStaticDraw>();
+		draw->SetMeshResource(L"DEFAULT_CUBE");
+		draw->SetDiffuse(Col4(1, 0, 0, 1));
+
 	}
 	void GimmickSetPlayer::Begin()
 	{
 		Gimmicks::Begin();
-		if (m_Cube)
-		{
-			m_Stage->AddGameObject<MoveCube>();
-			
-			auto pos = GetPosition();
+		auto player = m_Stage->AddGameObject<MoveCube>();
+		auto pos = GetPosition();
 
-			m_Cube->SetPosition(pos);
-			m_Cube->SetVelocity(m_Velocity);
-			m_Cube = nullptr;
-		}
+		player->SetPosition(pos);
+		player->SetVelocity(/*m_Velocity*/Vec3(1.0f, 0.0f, 0.0f));
 	}
 	void GimmickSetPlayer::Update()
 	{
