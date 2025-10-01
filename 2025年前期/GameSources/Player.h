@@ -14,6 +14,7 @@ namespace basecross{
 	};
 	class MoveCube : public Object {
 		bool m_IsEffecting;		//演出中か(移動、テレポートなど)
+		bool m_IsDead;			//死亡判定
 		Vec3 m_TelepoteTarget;	//テレポート先
 		Vec3 m_Velocity;		//移動方向
 		Vec3 m_Target;			//通常移動先
@@ -56,7 +57,7 @@ namespace basecross{
 			if (m_IsEffecting) return;
 			m_IsEffecting = true;
 
-			if (!CheckArea()) {
+			if (!CheckArea() || m_IsDead) {
 				m_IsEffecting = false;
 				m_Target = GetPosition();
 			}
@@ -66,12 +67,17 @@ namespace basecross{
 			m_State = MoveState::Move;
 		}
 		void Telepote(Vec3 target) {
-			if (m_IsEffecting) return;
+			if (m_IsEffecting || m_IsDead) return;
 			m_IsEffecting = true;
 
+			if (target.y < 0) {
+				target.y = 0;
+			}
 			m_TelepoteTarget = target;
 			m_State = MoveState::Telepote;
 		}
+
+		void Destroy();
 	};
 
 	class MoveBall : public Object {

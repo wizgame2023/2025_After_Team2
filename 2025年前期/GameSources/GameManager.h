@@ -61,6 +61,13 @@ namespace basecross{
 		vector<shared_ptr<MoveCube>> GetBalls()const {
 			return m_Balls;
 		}
+		void DeleteBall(shared_ptr<MoveCube>& cube) {
+			auto it = find(m_Balls.begin(), m_Balls.end(), cube);
+			if (it != m_Balls.end()) {
+				m_Balls.erase(it);
+				m_Stage->RemoveGameObject<MoveCube>(cube);
+			}
+		}
 
 		/// <summary>
 		/// ŽèŽD‚ð“o˜^
