@@ -8,12 +8,21 @@
 
 namespace basecross{
 
-	void GameManager::Update() {
+	void GameManager::Start() {
+		for (auto& mapVec : m_Map->GetMapData()) {
+			for (auto& map : mapVec) {
+				if (map.m_TempGimmick) {
+					map.m_TempGimmick->Begin();
+				}
+			}
+		}
 		for (auto& sphere : m_Balls) {
 			//プレイヤーを稼働開始
-			sphere->SetUpdateActive(m_Hand->IsEmpty());
-			sphere->GetComponent<PNTStaticDraw>()->SetDrawActive(m_Hand->IsEmpty());
+			sphere->SetUpdateActive(true);
 		}
+		m_GameState = GameState::Game;
+	}
+	void GameManager::Update() {
 		auto device = App::GetApp()->GetInputDevice().GetControlerVec()[0];
 
 		if (device.bConnected) {
@@ -25,25 +34,56 @@ namespace basecross{
 			}
 			if (device.wPressedButtons & XINPUT_GAMEPAD_A && !m_Map->CheckPutGimmick()) {
 				m_Map->PutGimmick(m_Hand->Use());
+				if (m_Hand->IsEmpty()) {
+					GameManager::GetInstance().Start();
+				}
 			}
 			if (device.wPressedButtons & XINPUT_GAMEPAD_B) {
 				m_Hand->Add(m_Map->RecoverGimmick());
 			}			
 		}
 
+		if (!CompareState(GameState::Game)) return;
+
 		m_Tick += App::GetApp()->GetElapsedTime();
 		if (m_Tick <= m_UpdateTicks) return;
 
 		m_Tick = 0;
+		for (auto& mapVec : m_Map->GetMapData()) {
+			for (auto& map : mapVec) {
+				if (map.m_TempGimmick) {
+					map.m_TempGimmick->Update();
+				}
+			}
+		}
+		//ゲームオーバー判定
+		bool isOver = true;
 		for (auto& cube : m_Balls) {
+			//一つでも動けるキューブがいたらfalse
+			if (cube->CheckArea()) isOver = false;
 			cube->Move();
 		}
+
+		if (isOver) DrawOverEffect();
 	}
 
 	void GameManager::DrawGoalEffect() {
+		if (!CompareState(GameState::Game)) return;
+		DeleteEffectSprite();
 		auto sprite = m_Stage->AddGameObject<Sprite>(L"TEMP_GOAL_SPRITE",Vec3(), Vec2(500, 250), Anchor::Center);
 		m_EffectSprite.push_back(sprite);
-		m_IsGameClear = true;
+		m_GameState = GameState::Clear;
+
+		for (auto& cube : m_Balls) {
+			cube->SetUpdateActive(false);
+		}
+	}
+	void GameManager::DrawOverEffect() {
+		if (!CompareState(GameState::Game)) return;
+		DeleteEffectSprite();
+		auto sprite = m_Stage->AddGameObject<Sprite>(L"TEMP_OVER_SPRITE", Vec3(), Vec2(500, 250), Anchor::Center);
+		m_EffectSprite.push_back(sprite);
+		m_GameState = GameState::Over;
 
 		for (auto& cube : m_Balls) {
 			cube->SetUpdateActive(false);

@@ -15,7 +15,7 @@ namespace basecross{
 
 		shared_ptr<TempBox> m_Temp;
 		GimmickObjects m_GimmickType;
-		shared_ptr<TempBox> m_TempGimmick;
+		shared_ptr<Gimmicks> m_TempGimmick;
 	};
 	class Map : public Object {
 		vector<vector<MapData>> m_Map;
@@ -35,6 +35,9 @@ namespace basecross{
 
 		void Load();
 
+		vector<vector<MapData>> GetMapData() {
+			return m_Map;
+		}
 		Vec3 GetMapCenter() {
 			Vec2 size = Vec2(static_cast<float>(m_Map[0].size() - 1), static_cast<float>(m_Map.size() - 1));
 			return Vec3(size.x / 2.0f, m_CenterY, size.x / 2.0f);
@@ -75,6 +78,14 @@ namespace basecross{
 		void PutGimmick(GimmickObjects type);
 
 		GimmickObjects RecoverGimmick();
+
+		shared_ptr<Gimmicks> CreateGimmick(GimmickObjects type) {
+			switch (type) {
+			case GimmickObjects::Goal:return m_Stage->AddGameObject<GimmickGoal>();
+			case GimmickObjects::SetPlayer: return m_Stage->AddGameObject<GimmickSetPlayer>();
+			}
+			return nullptr;
+		}
 	};
 
 

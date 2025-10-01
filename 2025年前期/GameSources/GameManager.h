@@ -9,6 +9,10 @@
 namespace basecross{
 	class GimmickHand;
 
+	enum class GameState {
+		Put,Game,Over,Clear
+	};
+
 	class GameManager : public SingletonBase<GameManager> {
 		friend class SingletonBase<GameManager>;
 		GameManager():m_Tick(0.0f),m_UpdateTicks(2.0f) {
@@ -28,6 +32,7 @@ namespace basecross{
 		float m_Tick;
 		float m_UpdateTicks;
 		bool m_IsGameClear;
+		GameState m_GameState;
 	public:
 		/// <summary>
 		/// “o˜^‚³‚ê‚Ä‚¢‚éî•ñ‚ğ‰Šú‰»‚·‚é
@@ -38,6 +43,7 @@ namespace basecross{
 			m_Map = nullptr;
 			m_Stage = nullptr;
 			m_IsGameClear = false;
+			m_GameState = GameState::Put;
 		}
 
 		/// <summary>
@@ -96,6 +102,12 @@ namespace basecross{
 			return m_IsGameClear;
 		}
 
+		bool CompareState(GameState state) {
+			return m_GameState == state;
+		}
+
+
+		void Start();
 		/// <summary>
 		/// XVˆ—
 		/// </summary>
@@ -103,6 +115,7 @@ namespace basecross{
 
 
 		void DrawGoalEffect();
+		void DrawOverEffect();
 
 		void DeleteEffectSprite() {
 			for (int i = 0; i < m_EffectSprite.size(); i++) {

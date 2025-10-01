@@ -25,7 +25,7 @@ namespace basecross{
 
 		MoveState m_State;		//åªç›ÇÃçsìÆ
 
-		shared_ptr<PNTStaticDraw> m_Draw;
+		shared_ptr<PNTStaticModelDraw> m_Draw;
 	public:
 		MoveCube(const shared_ptr<Stage>& ptr);
 		virtual ~MoveCube(){}
@@ -33,7 +33,7 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
-		bool CheckArea(Vec3 position);
+		bool CheckArea();
 
 		void SetMoveSec(float sec) {
 			m_MoveSec = sec;
@@ -56,11 +56,11 @@ namespace basecross{
 			if (m_IsEffecting) return;
 			m_IsEffecting = true;
 
-			m_Target = GetPosition() + m_Velocity.normalize();
-			if (!CheckArea(m_Target)) {
+			if (!CheckArea()) {
 				m_IsEffecting = false;
 				m_Target = GetPosition();
 			}
+			m_Target = GetPosition() + m_Velocity.normalize();
 			m_MoveSpeed = (m_Target - GetPosition()).length() / m_MoveSec;
 			m_RotateSpeed = XM_PIDIV2 / m_MoveSec;
 			m_State = MoveState::Move;
@@ -84,14 +84,14 @@ namespace basecross{
 
 		shared_ptr<PNTStaticDraw> m_Draw;
 	public:
-		MoveBall(const shared_ptr<Stage>& ptr, float speed, Vec3 velocity);
+		MoveBall(const shared_ptr<Stage>& ptr, float speed, Vec3 velocity): Object(ptr){}
 		MoveBall(const shared_ptr<Stage>& ptr) : MoveBall(ptr,1.0f,Vec3(1.0f,0.0f,0.0f)){}
 		virtual ~MoveBall(){}
 
-		virtual void OnCreate()override;
-		virtual void OnUpdate()override;
+		virtual void OnCreate()override{}
+		virtual void OnUpdate()override{}
 
-		Vec3 LimitArea(Vec3 position);
+		Vec3 LimitArea(Vec3 position){}
 		void SetVelocity(Vec3 velocity) {
 			m_Velocity = velocity;
 		}
