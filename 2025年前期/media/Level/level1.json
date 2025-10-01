@@ -1,0 +1,30 @@
+{
+  "mapSize": [ 3, 1 ],
+  "items": [
+    {
+      "id": "player",
+      "count": 1
+    },
+    {
+      "id": "goal",
+      "count": 1
+    }
+  ],
+  "map": [
+    {
+      "pos": [ 0, 0 ],
+      "color": "red",
+      "height": 0
+    },
+    {
+      "pos": [ 2, 0 ],
+      "color": "blue",
+      "height": 1
+    },
+    {
+      "pos": [ 1, 0 ],
+      "color": "red",
+      "height": 0
+    }
+  ]
+}

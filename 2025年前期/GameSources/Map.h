@@ -9,7 +9,7 @@
 namespace basecross{
 	class TempBox;
 	struct MapData {
-		Col4 m_Color;
+		wstring m_ColorStr;
 		int m_Height;
 		Vec3 m_Position;
 
@@ -23,7 +23,7 @@ namespace basecross{
 		int m_CenterY;
 		float m_GroundHeight;
 
-		vector<Col4> m_ColorTable;
+		vector<wstring> m_ColorTable;
 
 		int m_SelectColorIndex;
 	public:
@@ -46,11 +46,11 @@ namespace basecross{
 			return Vec3(static_cast<float>(m_Map[0].size()), m_MapHeight, static_cast<float>(m_Map.size()));
 		}
 
-		vector<Col4> GetColorTable() {
+		vector<wstring> GetColorTable() {
 			return m_ColorTable;
 		}
-		Col4 GetSelectColor() {
-			if (m_SelectColorIndex >= m_ColorTable.size()) return Col4(0, 0, 0, 0);
+		wstring GetSelectColor() {
+			if (m_SelectColorIndex >= m_ColorTable.size()) return L"";
 			return m_ColorTable[m_SelectColorIndex];
 		}
 		void SetGroundHeight(float height) {
@@ -58,11 +58,10 @@ namespace basecross{
 		}
 
 		bool CheckPutGimmick() {
-			Col4 color = m_ColorTable[m_SelectColorIndex];
+			wstring color = m_ColorTable[m_SelectColorIndex];
 			for (auto& mapVec : m_Map) {
 				for (auto& map : mapVec) {
-					if (color == map.m_Color) {
-						//すでに設置しているなら破壊
+					if (color == map.m_ColorStr) {
 						if (map.m_TempGimmick != nullptr) {
 							return true;
 						}
@@ -72,7 +71,7 @@ namespace basecross{
 			return false;
 		}
 
-		void HighlightBox(Col4 color);
+		void HighlightBox(const wstring& colorText);
 
 		//引数にはギミックのオブジェクト
 		void PutGimmick(GimmickObjects type);
@@ -92,12 +91,17 @@ namespace basecross{
 
 	class TempBox : public Object {
 		Vec3 m_Position;
-		Col4 m_Color;
+		wstring m_ColorStr;
+		Col4 m_DefaultColor;
 	public:
-		TempBox(const shared_ptr<Stage>& ptr,Vec3 position,Col4 color) : Object(ptr), m_Position(position),m_Color(color){}
+		TempBox(const shared_ptr<Stage>& ptr,Vec3 position, wstring color) : Object(ptr), m_Position(position),m_ColorStr(color){}
 		virtual ~TempBox(){}
 
 		virtual void OnCreate()override;
+
+		Col4 GetDefaultColor()const {
+			return m_DefaultColor;
+		}
 	};
 }
 //end basecross
