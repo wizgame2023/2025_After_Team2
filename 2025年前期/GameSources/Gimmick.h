@@ -13,11 +13,11 @@ namespace basecross
 	*/
 	enum class GimmickObjects
 	{
-		None,               //!< ギミックなし
-		Goal,               //!< ゴール地点
-		SetPlayer,          //!< プレイヤー初期配置
-		CourseCorrection,   //!< 進行方向補正
-		Upper               //!< 上昇ギミック
+		None,               // ギミックなし
+		Goal,               // ゴール地点
+		SetPlayer,          // プレイヤー初期配置
+		CourseCorrection,   // 進行方向補正
+		Upper               // 上昇ギミック
 	};
 
 	/*!
@@ -28,7 +28,8 @@ namespace basecross
 	{
 	protected:
 		shared_ptr<MoveCube> m_Cube;
-		Vec3 m_Direction; //!< 方向ベクトル
+		Vec3 m_Direction; // 方向ベクトル
+		float m_Value;  // 効果の強さなどを表す値
 
 	public:
 		/*!
@@ -85,6 +86,17 @@ namespace basecross
 		{
 			m_Direction = direction;
 		}
+
+		/*!
+		@brief ギミックの数値を設定
+		@param velocity 方向ベクトル
+		@return なし
+		*/
+		void SetValue(float value)
+		{
+			m_Value = value;
+		}
+
 	};
 
 	/*!
@@ -159,5 +171,26 @@ namespace basecross
 		virtual void End() {}
 
 	};
+
+	class GimmickUpper : public Gimmicks
+	{
+	public:
+		GimmickUpper(const shared_ptr<Stage>& ptrGimmick);
+		~GimmickUpper();
+		/*!
+		@brief ギミックの種類を取得
+		@return GimmickObjects::Upper
+		*/
+		GimmickObjects GetGimmickType() override
+		{
+			return GimmickObjects::Upper;
+		};
+		virtual void OnCreate();
+		virtual void Begin();
+		virtual void Update();
+		virtual void End() {}
+	};
+
+
 }
 //end basecross

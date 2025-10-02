@@ -94,10 +94,10 @@ namespace basecross{
 
 		if (m_Cube)
 		{
-			GameManager::GetInstance().DrawGoalEffect();
+			Vec3 pos = m_Transform->GetPosition();
 
+			m_Cube->Telepote(pos + /*Vec3(0.0f, m_Value, 0.0f)*/ Vec3(0.0f, 2.0f, 0.0f));
 			m_Cube = nullptr;
-
 		}
 	}
 
@@ -164,6 +164,39 @@ namespace basecross{
 
 			m_Cube = nullptr;
 		}
+	}
+
+	GimmickUpper::GimmickUpper(const shared_ptr<Stage>& ptrStage) :
+		Gimmicks(ptrStage)
+	{
+	}
+	GimmickUpper::~GimmickUpper()
+	{
+	}
+
+	void GimmickUpper::OnCreate()
+	{
+		Gimmicks::OnCreate();
+		auto draw = AddComponent<PNTStaticDraw>();
+		draw->SetMeshResource(L"DEFAULT_CUBE");
+		draw->SetDiffuse(Col4(1, 1, 0, 1));
+	}
+
+	void GimmickUpper::Begin()
+	{
+		Gimmicks::Begin();
+	}
+	void GimmickUpper::Update()
+	{
+		Gimmicks::Update();
+		if (m_Cube)
+		{
+			Vec3 pos = m_Transform->GetPosition();
+
+			m_Cube->Telepote(pos + /*Vec3(0.0f, m_Value, 0.0f)*/ Vec3(0.0f, 2.0f, 0.0f));
+			m_Cube = nullptr;
+		}
+
 	}
 }
 //end basecross
