@@ -24,16 +24,16 @@ namespace basecross{
 
 		Vec3 mapSize = GameManager::GetInstance().GetMap()->GetMapSize();
 
-		SetMoveArea(AABB(Vec3(-1.0f, -100.0f, 0.0f), Vec3(mapSize.x - 1, 5.0f, mapSize.y)));
+		SetMoveArea(AABB(Vec3(-1.0f, -100.0f, -1.0f), Vec3(mapSize.x, 5.0f, mapSize.z)));
 
-		SetMoveSec(1.0f);
+		SetMoveSec(0.5f);
 		GameManager::GetInstance().AddCube(GetThis<MoveCube>());
 
 		m_Sprites.push_back(m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1.0f, 1.0f, 1.0f), false));
 		m_Sprites.push_back(m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1.0f, 1.0f, 1.0f), false));
 	}
 	void MoveCube::OnUpdate() {
-		m_Velocity = Vec3(0, 0, 1);
+		m_Velocity = Vec3(-1, 0, 0);
 		//‰ñ“]Ž²
 		Vec3 side = cross(Vec3(0, 1, 0), m_Velocity.normalize());
 		float angle = XM_PIDIV2;
@@ -105,13 +105,13 @@ namespace basecross{
 	}
 	bool MoveCube::CheckArea() {
 		Vec3 position = GetPosition() + m_Velocity.normalize();
-		if (position.x > m_MoveArea.m_Max.x + 1 || position.x < m_MoveArea.m_Min.x - 1) {
+		if (position.x > m_MoveArea.m_Max.x || position.x < m_MoveArea.m_Min.x) {
 			return false;
 		}
-		if (position.y > m_MoveArea.m_Max.y + 1 || position.y < m_MoveArea.m_Min.y - 1) {
+		if (position.y > m_MoveArea.m_Max.y || position.y < m_MoveArea.m_Min.y) {
 			return false;
 		}
-		if (position.z > m_MoveArea.m_Max.z + 1 || position.z < m_MoveArea.m_Min.z - 1) {
+		if (position.z > m_MoveArea.m_Max.z || position.z < m_MoveArea.m_Min.z) {
 			return false;
 		}
 
