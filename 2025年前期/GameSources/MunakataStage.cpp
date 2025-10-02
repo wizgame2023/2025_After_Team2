@@ -27,6 +27,7 @@ namespace basecross {
 
 		wstring path = app->GetDataDirWString();
 		wstring uiPath = path + L"UI/";
+		wstring texPath = path + L"Texture/";
 
 		app->RegisterTexture(L"TEMP_GIMMICK", uiPath + L"testGimmick.png");
 		app->RegisterTexture(L"TEMP_GIMMICK_GOAL", uiPath + L"testGoal.png");
@@ -35,6 +36,7 @@ namespace basecross {
 		app->RegisterTexture(L"TEMP_GIMMICK_COURSE", uiPath + L"testCoruse.png");
 		app->RegisterTexture(L"TEMP_GOAL_SPRITE", uiPath + L"testGoalTxt.png");
 		app->RegisterTexture(L"TEMP_OVER_SPRITE", uiPath + L"testOver.png");
+		app->RegisterTexture(L"TEMP_ARROW_SPRITE", texPath + L"arrow_Orbit.png");
 	}
 	void MStage::OnCreate() {
 		try {

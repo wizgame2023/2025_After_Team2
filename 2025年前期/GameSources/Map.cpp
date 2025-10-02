@@ -30,52 +30,34 @@ namespace basecross{
 	void Map::Load() {
 		int maxHeight = -100;
 
-		//maxHeight = 0;
-		//m_Map.push_back({});
-
-		//for (int i = 0; i < 3; i++) {
-		//	Col4 color;
-		//	if (i == 0) {
-		//		color = Col4(1.0f, 0.0f, 0.0f, 1.0f);
-		//	}
-		//	else if(i == 1) {
-		//		color = Col4(0.0f, 0.0f, 0.0f, 0.0f);
-		//	}
-		//	else {
-		//		color = Col4(0.0f, 1.0f, 0.0f, 1.0f);
-		//	}
-
-		//	auto box = m_Stage->AddGameObject<TempBox>(Vec3(i, m_GroundHeight - 0.5f, 0), color);
-		//	box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
-
-		//	//m_Map[0].push_back({ color,0,Vec3(i, m_GroundHeight, 0),box,GimmickObjects::None,nullptr });
-		//}
-
 		Json mapJson;
 		mapJson.Load(App::GetApp()->GetDataDirWString() + L"Level/level1.json");
 
 		vector<int> mapSize = mapJson.At<JsonArray>(L"mapSize")->GetIntArray();
 		auto mapData = mapJson.At<JsonArray>(L"map")->GetObjectArray();
 
+		//データの初期化
 		for (int i = 0; i < mapSize[1]; i++) {
 			m_Map.push_back({});
 			for (int j = 0; j < mapSize[0]; j++) {
 				m_Map[i].push_back({ L"",0,Vec3(),nullptr,GimmickObjects::None,nullptr });
 			}
 		}
-
+		//データの読み込み
 		for (auto& data : mapData) {
 			vector<int> pos = data->At<JsonArray>(L"pos")->GetIntArray();
 			float height = data->At<JsonNumber>(L"height")->GetIntValue();
 			wstring colorStr = data->At<JsonString>(L"color")->GetValue();
+			//新しい色が来たら追加
 			if (find(m_ColorTable.begin(), m_ColorTable.end(), colorStr) == m_ColorTable.end()) {
 				m_ColorTable.push_back(colorStr);
 			}
-
+			//高さの最大値を更新
 			if (maxHeight < height) {
 				maxHeight = height;
 			}
 
+			//グリッドの生成
 			Vec3 position = Vec3(pos[0], m_GroundHeight - 0.5f, pos[1]);
 			auto box = m_Stage->AddGameObject<TempBox>(position, colorStr);
 			box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
@@ -83,6 +65,7 @@ namespace basecross{
 			MapData m = { colorStr,height,position,box,GimmickObjects::None,nullptr };
 			m_Map[pos[1]][pos[0]] = m;
 		}
+		//無色部分の生成
 		for (int i = 0; i < mapSize[1]; i++) {
 			for (int j = 0; j < mapSize[0]; j++) {
 				if (m_Map[i][j].m_ColorStr == L"") {
@@ -92,23 +75,6 @@ namespace basecross{
 				}
 			}
 		}
-
-		/*for (int i = 0; i < 5; i++) {
-			m_Map.push_back({});
-			for (int j = 0; j < 5; j++) {
-				int colorRnd = rand() % m_ColorTable.size();
-				Col4 color = m_ColorTable[colorRnd];
-
-				int height = rand() % 5;
-				if (maxHeight < height) {
-					maxHeight = height;
-				}
-				auto box = m_Stage->AddGameObject<TempBox>(Vec3(j, m_GroundHeight - 0.5f, i), color);
-				box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
-
-				m_Map[i].push_back({ color,height,Vec3(j, m_GroundHeight, i),box,GimmickObjects::None,nullptr });
-			}
-		}*/
 
 		m_MapHeight = maxHeight;
 		m_CenterY = m_GroundHeight + static_cast<float>(maxHeight) / 2.0f;

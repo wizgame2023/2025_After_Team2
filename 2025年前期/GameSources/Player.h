@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 namespace basecross{
-
+	class Board;
 	enum class MoveState {
 		Telepote,
 		Move
@@ -23,10 +23,13 @@ namespace basecross{
 		float m_MoveSec;		//移動時間(一マス移動にかかる時間)
 		float m_MoveSpeed;		//移動速度
 		float m_RotateSpeed;	//回転速度
+		float m_RotateRad;		//現在の回転角度(ラジアン)
+		float m_CurrentHeight;	//現在の高さ
 
 		MoveState m_State;		//現在の行動
 
 		shared_ptr<PNTStaticModelDraw> m_Draw;
+		vector<shared_ptr<Board>> m_Sprites;
 	public:
 		MoveCube(const shared_ptr<Stage>& ptr);
 		virtual ~MoveCube(){}
@@ -34,7 +37,27 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
+		/// <summary>
+		/// 指定された位置にスポーンさせる。
+		/// プレイヤーを出す時はこれを使う
+		/// </summary>
+		/// <param name="position">位置</param>
+		void Spawn(Vec3 position) {
+			SetPosition(position);
+			m_CurrentHeight = position.y;
+		}
+		/// <summary>
+		/// 移動先が範囲内か判定
+		/// </summary>
+		/// <returns></returns>
 		bool CheckArea();
+
+		/// <summary>
+		/// 回転中のY座標を計算
+		/// </summary>
+		/// <param name="rot">現在の回転角度</param>
+		/// <returns></returns>
+		float CalcRotatingCenterY(float rot);
 
 		void SetMoveSec(float sec) {
 			m_MoveSec = sec;
@@ -64,6 +87,7 @@ namespace basecross{
 			m_Target = GetPosition() + m_Velocity.normalize();
 			m_MoveSpeed = (m_Target - GetPosition()).length() / m_MoveSec;
 			m_RotateSpeed = XM_PIDIV2 / m_MoveSec;
+			m_RotateRad = 0;
 			m_State = MoveState::Move;
 		}
 		void Telepote(Vec3 target) {

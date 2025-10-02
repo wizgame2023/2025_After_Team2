@@ -1,6 +1,6 @@
 /*!
 @file Character.cpp
-@brief ƒLƒƒƒ‰ƒNƒ^[‚È‚ÇŽÀ‘Ì
+@brief Æ’LÆ’Æ’Æ’â€°Æ’NÆ’^Â[â€šÃˆâ€šÃ‡Å½Ã€â€˜ÃŒ
 */
 
 #include "stdafx.h"
@@ -29,7 +29,7 @@ namespace basecross{
 	}
 	void Gimmicks::Update()
 	{
-		auto playerVec = GameManager::GetInstance().GetBalls();
+		auto playerVec = GameManager::GetInstance().GetCubes();
 		auto pos = GetPosition();
 		for (auto& ball : playerVec)
 		{
@@ -124,8 +124,8 @@ namespace basecross{
 		auto player = m_Stage->AddGameObject<MoveCube>();
 		auto pos = GetPosition();
 
-		player->SetPosition(pos);
-		player->SetVelocity(/*m_Direction*/Vec3(1.0f, 0.0f, 0.0f));
+		player->Spawn(pos);
+		player->SetVelocity(/*m_Velocity*/Vec3(1.0f, 0.0f, 0.0f));
 	}
 	void GimmickSetPlayer::Update()
 	{

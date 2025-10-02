@@ -8,6 +8,10 @@
 
 namespace basecross{
 
+	void GameManager::DrawTempGimmicks() {
+		
+	}
+
 	void GameManager::Start() {
 		for (auto& mapVec : m_Map->GetMapData()) {
 			for (auto& map : mapVec) {
@@ -16,7 +20,7 @@ namespace basecross{
 				}
 			}
 		}
-		for (auto& sphere : m_Balls) {
+		for (auto& sphere : m_Cubes) {
 			//プレイヤーを稼働開始
 			sphere->SetUpdateActive(true);
 		}
@@ -43,6 +47,9 @@ namespace basecross{
 			}			
 		}
 
+
+
+		//ここから下はゲーム進行中の処理
 		if (!CompareState(GameState::Game)) return;
 
 		m_Tick += App::GetApp()->GetElapsedTime();
@@ -58,7 +65,7 @@ namespace basecross{
 		}
 		//ゲームオーバー判定
 		bool isOver = true;
-		for (auto& cube : m_Balls) {
+		for (auto& cube : m_Cubes) {
 			//一つでも動けるキューブがいたらfalse
 			if (cube->CheckArea()) isOver = false;
 			cube->Move();
@@ -74,18 +81,18 @@ namespace basecross{
 		m_EffectSprite.push_back(sprite);
 		m_GameState = GameState::Clear;
 
-		for (auto& cube : m_Balls) {
+		for (auto& cube : m_Cubes) {
 			cube->SetUpdateActive(false);
 		}
 	}
 	void GameManager::DrawOverEffect() {
 		if (!CompareState(GameState::Game)) return;
 		DeleteEffectSprite();
-		auto sprite = m_Stage->AddGameObject<Sprite>(L"TEMP_OVER_SPRITE", Vec3(), Vec2(500, 250), Anchor::Center);
-		m_EffectSprite.push_back(sprite);
+		//auto sprite = m_Stage->AddGameObject<Sprite>(L"TEMP_OVER_SPRITE", Vec3(), Vec2(500, 250), Anchor::Center);
+		//m_EffectSprite.push_back(sprite);
 		m_GameState = GameState::Over;
 
-		for (auto& cube : m_Balls) {
+		for (auto& cube : m_Cubes) {
 			cube->SetUpdateActive(false);
 		}
 	}

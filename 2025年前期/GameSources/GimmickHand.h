@@ -72,6 +72,12 @@ namespace basecross{
 		GimmickObjects Use();
 
 		/// <summary>
+		/// 選択中のカードのデータを取得
+		/// </summary>
+		/// <returns></returns>
+		GimmickObjects Get();
+
+		/// <summary>
 		/// 指定した番号のカードを選択
 		/// </summary>
 		/// <param name="index"></param>
