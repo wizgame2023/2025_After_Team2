@@ -94,13 +94,8 @@ namespace basecross{
 
 		if (m_Cube)
 		{
-			Vec3 pos = m_Transform->GetPosition();
-			Vec3 playerPos = GetPosition();
+			GameManager::GetInstance().DrawGoalEffect();
 
-			if (playerPos.y > 0)
-			{
-				m_Cube->Telepote(pos + /*Vec3(0.0f, -m_Value, 0.0f)*/ Vec3(0.0f, -1.0f, 0.0f));
-			}
 			m_Cube = nullptr;
 		}
 	}
@@ -128,7 +123,7 @@ namespace basecross{
 		auto player = m_Stage->AddGameObject<MoveCube>();
 		auto pos = GetPosition();
 
-		player->SetPosition(pos);
+		player->Spawn(pos);
 		player->SetVelocity(/*m_Velocity*/Vec3(1.0f, 0.0f, 0.0f));
 	}
 	void GimmickSetPlayer::Update()
