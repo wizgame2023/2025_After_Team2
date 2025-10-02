@@ -1,6 +1,6 @@
 /*!
 @file Character.cpp
-@brief ƒLƒƒƒ‰ƒNƒ^[‚È‚ÇÀ‘Ì
+@brief Æ’LÆ’Æ’Æ’â€°Æ’NÆ’^Â[â€šÃˆâ€šÃ‡Å½Ã€â€˜ÃŒ
 */
 
 #include "stdafx.h"
@@ -130,6 +130,40 @@ namespace basecross{
 	void GimmickSetPlayer::Update()
 	{
 		Gimmicks::Update();
+	}
+
+
+	GimmickCourseCorrection::GimmickCourseCorrection(const shared_ptr<Stage>& ptrStage) :
+		Gimmicks(ptrStage)
+	{
+	}
+	GimmickCourseCorrection::~GimmickCourseCorrection()
+	{
+	}
+
+	void GimmickCourseCorrection::OnCreate()
+	{
+		Gimmicks::OnCreate();
+		auto draw = AddComponent<PNTStaticDraw>();
+		draw->SetMeshResource(L"DEFAULT_CUBE");
+		draw->SetDiffuse(Col4(0, 0, 1, 1));
+
+	}
+
+	void GimmickCourseCorrection::Begin()
+	{
+		Gimmicks::Begin();
+	}
+
+	void GimmickCourseCorrection::Update()
+	{
+		Gimmicks::Update();
+		if (m_Cube)
+		{
+			m_Cube->SetVelocity(/*m_Direction*/Vec3(-1.0f, 0.0f, 0.0f));
+
+			m_Cube = nullptr;
+		}
 	}
 }
 //end basecross
