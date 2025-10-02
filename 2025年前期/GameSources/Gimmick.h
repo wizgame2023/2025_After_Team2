@@ -17,7 +17,8 @@ namespace basecross
 		Goal,               // ゴール地点
 		SetPlayer,          // プレイヤー初期配置
 		CourseCorrection,   // 進行方向補正
-		Upper               // 上昇ギミック
+		Upper,              // 上昇ギミック
+		Lower				// 下降ギミック
 	};
 
 	/*!
@@ -191,6 +192,24 @@ namespace basecross
 		virtual void End() {}
 	};
 
+	class GimmickLower : public Gimmicks
+	{
+	public:
+		GimmickLower(const shared_ptr<Stage>& ptrGimmick);
+		~GimmickLower();
+		/*!
+		@brief ギミックの種類を取得
+		@return GimmickObjects::Lower
+		*/
+		GimmickObjects GetGimmickType() override
+		{
+			return GimmickObjects::Lower;
+		};
+		virtual void OnCreate();
+		virtual void Begin();
+		virtual void Update();
+		virtual void End() {}
 
+	};
 }
 //end basecross
