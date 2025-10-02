@@ -88,8 +88,8 @@ namespace basecross{
 	void GameManager::DrawOverEffect() {
 		if (!CompareState(GameState::Game)) return;
 		DeleteEffectSprite();
-		//auto sprite = m_Stage->AddGameObject<Sprite>(L"TEMP_OVER_SPRITE", Vec3(), Vec2(500, 250), Anchor::Center);
-		//m_EffectSprite.push_back(sprite);
+		auto sprite = m_Stage->AddGameObject<Sprite>(L"TEMP_OVER_SPRITE", Vec3(), Vec2(500, 250), Anchor::Center);
+		m_EffectSprite.push_back(sprite);
 		m_GameState = GameState::Over;
 
 		for (auto& cube : m_Cubes) {
