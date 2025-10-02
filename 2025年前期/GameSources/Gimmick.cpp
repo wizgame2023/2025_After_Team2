@@ -125,11 +125,45 @@ namespace basecross{
 		auto pos = GetPosition();
 
 		player->SetPosition(pos);
-		player->SetVelocity(/*m_Velocity*/Vec3(1.0f, 0.0f, 0.0f));
+		player->SetVelocity(/*m_Direction*/Vec3(1.0f, 0.0f, 0.0f));
 	}
 	void GimmickSetPlayer::Update()
 	{
 		Gimmicks::Update();
+	}
+
+
+	GimmickCourseCorrection::GimmickCourseCorrection(const shared_ptr<Stage>& ptrStage) :
+		Gimmicks(ptrStage)
+	{
+	}
+	GimmickCourseCorrection::~GimmickCourseCorrection()
+	{
+	}
+
+	void GimmickCourseCorrection::OnCreate()
+	{
+		Gimmicks::OnCreate();
+		auto draw = AddComponent<PNTStaticDraw>();
+		draw->SetMeshResource(L"DEFAULT_CUBE");
+		draw->SetDiffuse(Col4(0, 0, 1, 1));
+
+	}
+
+	void GimmickCourseCorrection::Begin()
+	{
+		Gimmicks::Begin();
+	}
+
+	void GimmickCourseCorrection::Update()
+	{
+		Gimmicks::Update();
+		if (m_Cube)
+		{
+			m_Cube->SetVelocity(/*m_Direction*/Vec3(-1.0f, 0.0f, 0.0f));
+
+			m_Cube = nullptr;
+		}
 	}
 }
 //end basecross

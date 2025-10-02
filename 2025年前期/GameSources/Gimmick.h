@@ -28,6 +28,7 @@ namespace basecross
 	{
 	protected:
 		shared_ptr<MoveCube> m_Cube;
+		Vec3 m_Direction; //!< 方向ベクトル
 
 	public:
 		/*!
@@ -74,6 +75,16 @@ namespace basecross
 		{
 			return GimmickObjects::None;
 		}
+
+		/*!
+		@brief ギミックの方向を設定
+		@param velocity 方向ベクトル
+		@return なし
+		*/
+		void SetDirection(Vec3 direction)
+		{
+			m_Direction = direction;
+		}
 	};
 
 	/*!
@@ -107,7 +118,6 @@ namespace basecross
 	*/
 	class GimmickSetPlayer : public Gimmicks
 	{
-		Vec3 m_Velocity; //!< プレイヤーに与える初期速度
 
 	public:
 		GimmickSetPlayer(const shared_ptr<Stage>& ptrGimmick);
@@ -127,14 +137,27 @@ namespace basecross
 		virtual void Update();
 		virtual void End() {}
 
+	};
+
+	class GimmickCourseCorrection : public Gimmicks
+	{
+	public:
+		GimmickCourseCorrection(const shared_ptr<Stage>& ptrGimmick);
+		~GimmickCourseCorrection();
 		/*!
-		@brief プレイヤーに与える初期速度を設定
-		@param velocity 初期速度ベクトル
+		@brief ギミックの種類を取得
+		@return GimmickObjects::CourseCorrection
 		*/
-		void SetVelocity(Vec3 velocity)
+		GimmickObjects GetGimmickType() override
 		{
-			m_Velocity = velocity;
-		}
+			return GimmickObjects::CourseCorrection;
+		};
+
+		virtual void OnCreate();
+		virtual void Begin();
+		virtual void Update();
+		virtual void End() {}
+
 	};
 }
 //end basecross
