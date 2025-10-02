@@ -21,7 +21,7 @@ namespace basecross{
 
 		shared_ptr<Stage> m_Stage;
 
-		vector<shared_ptr<MoveCube>> m_Balls;
+		vector<shared_ptr<MoveCube>> m_Cubes;
 
 		shared_ptr<GimmickHand> m_Hand;
 
@@ -33,12 +33,14 @@ namespace basecross{
 		float m_UpdateTicks;
 		bool m_IsGameClear;
 		GameState m_GameState;
+
+		void DrawTempGimmicks();
 	public:
 		/// <summary>
 		/// 登録されている情報を初期化する
 		/// </summary>
 		void Reset() {
-			m_Balls.clear();
+			m_Cubes.clear();
 			m_Hand = nullptr;
 			m_Map = nullptr;
 			m_Stage = nullptr;
@@ -50,21 +52,21 @@ namespace basecross{
 		/// プレイヤーを登録
 		/// </summary>
 		/// <param name="sphere">プレイヤー</param>
-		void AddBall(const shared_ptr<MoveCube> sphere) {
-			m_Balls.push_back(sphere);
+		void AddCube(const shared_ptr<MoveCube> sphere) {
+			m_Cubes.push_back(sphere);
 		}
 
 		/// <summary>
 		/// プレイヤーの情報を取得
 		/// </summary>
 		/// <returns>プレイヤーデータ</returns>
-		vector<shared_ptr<MoveCube>> GetBalls()const {
-			return m_Balls;
+		vector<shared_ptr<MoveCube>> GetCubes()const {
+			return m_Cubes;
 		}
-		void DeleteBall(shared_ptr<MoveCube>& cube) {
-			auto it = find(m_Balls.begin(), m_Balls.end(), cube);
-			if (it != m_Balls.end()) {
-				m_Balls.erase(it);
+		void DeleteCube(shared_ptr<MoveCube>& cube) {
+			auto it = find(m_Cubes.begin(), m_Cubes.end(), cube);
+			if (it != m_Cubes.end()) {
+				m_Cubes.erase(it);
 				m_Stage->RemoveGameObject<MoveCube>(cube);
 			}
 		}

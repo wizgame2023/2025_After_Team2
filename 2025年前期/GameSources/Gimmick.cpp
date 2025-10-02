@@ -29,7 +29,7 @@ namespace basecross{
 	}
 	void Gimmicks::Update()
 	{
-		auto playerVec = GameManager::GetInstance().GetBalls();
+		auto playerVec = GameManager::GetInstance().GetCubes();
 		auto pos = GetPosition();
 		for (auto& ball : playerVec)
 		{
@@ -124,7 +124,7 @@ namespace basecross{
 		auto player = m_Stage->AddGameObject<MoveCube>();
 		auto pos = GetPosition();
 
-		player->SetPosition(pos);
+		player->Spawn(pos);
 		player->SetVelocity(/*m_Velocity*/Vec3(1.0f, 0.0f, 0.0f));
 	}
 	void GimmickSetPlayer::Update()

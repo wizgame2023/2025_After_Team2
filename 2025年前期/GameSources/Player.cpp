@@ -27,9 +27,46 @@ namespace basecross{
 		SetMoveArea(AABB(Vec3(-1.0f, -100.0f, 0.0f), Vec3(mapSize.x - 1, 5.0f, mapSize.y)));
 
 		SetMoveSec(1.0f);
-		GameManager::GetInstance().AddBall(GetThis<MoveCube>());
+		GameManager::GetInstance().AddCube(GetThis<MoveCube>());
+
+		m_Sprites.push_back(m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1.0f, 1.0f, 1.0f), false));
+		m_Sprites.push_back(m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1.0f, 1.0f, 1.0f), false));
 	}
 	void MoveCube::OnUpdate() {
+		m_Velocity = Vec3(0, 0, 1);
+		//âÒì]é≤
+		Vec3 side = cross(Vec3(0, 1, 0), m_Velocity.normalize());
+		float angle = XM_PIDIV2;
+		//âÒì]çsóÒ
+		auto rot = XMMatrixRotationAxis(side, angle);
+
+		//ç∂âEÇÃñÓàÛÇÃâÒì]
+		for (int i = 0; i < 2; i++) {
+			//é≤ÇÃï‚ê≥(îΩì]óp)
+			int correct = i == 0 ? 1 : -1;
+
+			m_Sprites[i]->RotateVector(side * correct);
+			m_Sprites[i]->GetTrans()->SetPosition(side * correct * 0.5f + GetPosition());
+
+			auto world = m_Sprites[i]->GetTrans()->GetWorldMatrix();
+			world.rotation((Quat)XMQuaternionRotationMatrix(rot));
+
+			m_Sprites[i]->GetTrans()->SetQuaternion(world.quatInMatrix());
+		}
+		//m_Sprites[0]->RotateVector(side);
+		//m_Sprites[1]->RotateVector(-side);
+
+		//m_Sprites[0]->GetTrans()->SetPosition(side * 0.5f + GetPosition());
+		//m_Sprites[1]->GetTrans()->SetPosition(-side * 0.5f + GetPosition());
+
+
+		//m_Sprites[0]->GetTrans()->SetQuaternion(world.quatInMatrix() * quat);
+
+		//world = m_Sprites[1]->GetTrans()->GetWorldMatrix();
+		//world.rotation((Quat)XMQuaternionRotationMatrix(rot));
+
+		////m_Sprites[1]->GetTrans()->SetQuaternion(world.quatInMatrix());
+
 		if (!m_IsEffecting) {
 			return;
 		}
@@ -51,16 +88,23 @@ namespace basecross{
 					Destroy();
 				}
 			}
-			auto rot = XMMatrixRotationAxis(cross(Vec3(0, 1, 0), m_Velocity), m_RotateSpeed * elapsed);
+			float rotateAmount = m_RotateSpeed * elapsed;
+			m_RotateRad += rotateAmount;
+			m_RotateRad = m_RotateRad > XM_2PI ? m_RotateRad - XM_2PI : m_RotateRad;
+			m_RotateRad = m_RotateRad < 0 ? m_RotateRad + XM_2PI : m_RotateRad;
+
+			auto rot = XMMatrixRotationAxis(cross(Vec3(0, 1, 0), m_Velocity), rotateAmount);
 			auto world = m_Transform->GetWorldMatrix();
 			world.rotation((Quat)XMQuaternionRotationMatrix(rot));
 
 			m_Transform->SetQuaternion(m_Transform->GetQuaternion() * world.quatInMatrix());
 			position += moveAmount;
+			position.y = CalcRotatingCenterY(m_RotateRad);
 			break;
 		}
 		case MoveState::Telepote: {
 			position = m_TelepoteTarget;
+			m_CurrentHeight = position.y;
 			m_IsEffecting = false;
 			break;
 		}
@@ -84,8 +128,18 @@ namespace basecross{
 		return true;
 	}
 
+	float MoveCube::CalcRotatingCenterY(float rot) {
+		//âÒì]Ç0Å`90ìxÇ…
+		while (rot > XM_PIDIV2) {
+			rot -= XM_PIDIV2;
+		}
+
+		float r = 1.0f / sqrt(2.0f);
+		return m_CurrentHeight + r * sin(XM_PIDIV4 + rot) - 0.5f;
+	}
+
 	void MoveCube::Destroy() {
-		GameManager::GetInstance().DeleteBall(GetThis<MoveCube>());
+		GameManager::GetInstance().DeleteCube(GetThis<MoveCube>());
 	}
 }
 //end basecross

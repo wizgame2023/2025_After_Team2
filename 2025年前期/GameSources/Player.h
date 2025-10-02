@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 namespace basecross{
-
+	class Board;
 	enum class MoveState {
 		Telepote,
 		Move
@@ -23,10 +23,13 @@ namespace basecross{
 		float m_MoveSec;		//移動時間(一マス移動にかかる時間)
 		float m_MoveSpeed;		//移動速度
 		float m_RotateSpeed;	//回転速度
+		float m_RotateRad;		//現在の回転角度(ラジアン)
+		float m_CurrentHeight;	//現在の高さ
 
 		MoveState m_State;		//現在の行動
 
 		shared_ptr<PNTStaticModelDraw> m_Draw;
+		vector<shared_ptr<Board>> m_Sprites;
 	public:
 		MoveCube(const shared_ptr<Stage>& ptr);
 		virtual ~MoveCube(){}
@@ -34,7 +37,13 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
+		void Spawn(Vec3 position) {
+			SetPosition(position);
+			m_CurrentHeight = position.y;
+		}
+
 		bool CheckArea();
+		float CalcRotatingCenterY(float rot);
 
 		void SetMoveSec(float sec) {
 			m_MoveSec = sec;

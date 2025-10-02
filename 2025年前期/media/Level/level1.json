@@ -1,5 +1,5 @@
 {
-  "mapSize": [ 3, 1 ],
+  "mapSize": [ 3, 3 ],
   "items": [
     {
       "id": "player",
@@ -12,7 +12,7 @@
   ],
   "map": [
     {
-      "pos": [ 0, 0 ],
+      "pos": [ 0, 2 ],
       "color": "red",
       "height": 0
     },

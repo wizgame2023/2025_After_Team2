@@ -1317,11 +1317,24 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
+		void RotateVector(Vec3 vec) {
+			Mat4x4 rotMatrix = static_cast<Mat4x4>(XMMatrixLookAtLH(Vec3(0, 0, 0), -vec, Vec3(0,1,0)));
+			rotMatrix = inverse(rotMatrix);
+			Quat Qt = rotMatrix.quatInMatrix();
+			Qt.normalize();
+
+			m_Trans->SetQuaternion(Qt);
+
+		}
+
 		void SetOffset(Vec3 offset) {
 			m_Offset = offset;
 		}
 		shared_ptr<PNTStaticDraw> GetDraw() {
 			return m_Draw;
+		}
+		shared_ptr<Transform> GetTrans() {
+			return m_Trans;
 		}
 		void SetColor(Col4 color) {
 			m_Draw->SetDiffuse(color);
