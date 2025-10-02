@@ -37,12 +37,26 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
+		/// <summary>
+		/// 指定された位置にスポーンさせる。
+		/// プレイヤーを出す時はこれを使う
+		/// </summary>
+		/// <param name="position">位置</param>
 		void Spawn(Vec3 position) {
 			SetPosition(position);
 			m_CurrentHeight = position.y;
 		}
-
+		/// <summary>
+		/// 移動先が範囲内か判定
+		/// </summary>
+		/// <returns></returns>
 		bool CheckArea();
+
+		/// <summary>
+		/// 回転中のY座標を計算
+		/// </summary>
+		/// <param name="rot">現在の回転角度</param>
+		/// <returns></returns>
 		float CalcRotatingCenterY(float rot);
 
 		void SetMoveSec(float sec) {
@@ -73,6 +87,7 @@ namespace basecross{
 			m_Target = GetPosition() + m_Velocity.normalize();
 			m_MoveSpeed = (m_Target - GetPosition()).length() / m_MoveSec;
 			m_RotateSpeed = XM_PIDIV2 / m_MoveSec;
+			m_RotateRad = 0;
 			m_State = MoveState::Move;
 		}
 		void Telepote(Vec3 target) {

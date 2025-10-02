@@ -53,19 +53,6 @@ namespace basecross{
 
 			m_Sprites[i]->GetTrans()->SetQuaternion(world.quatInMatrix());
 		}
-		//m_Sprites[0]->RotateVector(side);
-		//m_Sprites[1]->RotateVector(-side);
-
-		//m_Sprites[0]->GetTrans()->SetPosition(side * 0.5f + GetPosition());
-		//m_Sprites[1]->GetTrans()->SetPosition(-side * 0.5f + GetPosition());
-
-
-		//m_Sprites[0]->GetTrans()->SetQuaternion(world.quatInMatrix() * quat);
-
-		//world = m_Sprites[1]->GetTrans()->GetWorldMatrix();
-		//world.rotation((Quat)XMQuaternionRotationMatrix(rot));
-
-		////m_Sprites[1]->GetTrans()->SetQuaternion(world.quatInMatrix());
 
 		if (!m_IsEffecting) {
 			return;
@@ -89,17 +76,20 @@ namespace basecross{
 				}
 			}
 			float rotateAmount = m_RotateSpeed * elapsed;
-			m_RotateRad += rotateAmount;
-			m_RotateRad = m_RotateRad > XM_2PI ? m_RotateRad - XM_2PI : m_RotateRad;
-			m_RotateRad = m_RotateRad < 0 ? m_RotateRad + XM_2PI : m_RotateRad;
+			if (rotateAmount >= XM_PIDIV2 - m_RotateRad) {
+				rotateAmount = XM_PIDIV2 - m_RotateRad;
+			}
+			//90“xˆÈã‚Í‰ñ“]‚³‚¹‚È‚¢
+			if (m_RotateRad >= XM_PIDIV2) rotateAmount = 0;
 
-			auto rot = XMMatrixRotationAxis(cross(Vec3(0, 1, 0), m_Velocity), rotateAmount);
+			rot = XMMatrixRotationAxis(side, rotateAmount);
 			auto world = m_Transform->GetWorldMatrix();
 			world.rotation((Quat)XMQuaternionRotationMatrix(rot));
 
 			m_Transform->SetQuaternion(m_Transform->GetQuaternion() * world.quatInMatrix());
 			position += moveAmount;
 			position.y = CalcRotatingCenterY(m_RotateRad);
+			m_RotateRad += rotateAmount;
 			break;
 		}
 		case MoveState::Telepote: {
