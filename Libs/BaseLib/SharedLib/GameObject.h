@@ -790,7 +790,7 @@ namespace basecross {
 	//--------------------------------------------------------------------------------------
 	struct ParticleSprite {
 		bool m_Active;				//アクティブかどうか
-		bsm::Col4 m_Color;				//色（透けさせる場合はaを0にする）
+		bsm::Col4 m_ColorStr;				//色（透けさせる場合はaを0にする）
 		bsm::Vec2 m_LocalScale;		//ローカルスケーリング（Zは1.0固定）		
 		bsm::Quat m_LocalQt;		//ローカル回転。手動のときのみ使用
 		bsm::Vec3 m_LocalPos;			//ローカル位置
@@ -799,7 +799,7 @@ namespace basecross {
 		bsm::Vec3 m_Velocity;			//速度(必要に応じて使用)
 		ParticleSprite() :
 			m_Active(true),
-			m_Color(1.0f, 1.0f, 1.0f, 1.0f),
+			m_ColorStr(1.0f, 1.0f, 1.0f, 1.0f),
 			m_LocalScale(1.0f, 1.0f),
 			m_LocalQt(),
 			m_LocalPos(0, 0, 0),
@@ -809,7 +809,7 @@ namespace basecross {
 		{}
 		void Reflesh() {
 			m_Active = true;
-			m_Color = bsm::Col4(1.0f, 1.0f, 1.0f, 1.0f);
+			m_ColorStr = bsm::Col4(1.0f, 1.0f, 1.0f, 1.0f);
 			m_LocalScale = bsm::Vec2(1.0f, 1.0f);
 			m_LocalQt.identity();
 			m_LocalPos = bsm::Vec3(0, 0, 0);

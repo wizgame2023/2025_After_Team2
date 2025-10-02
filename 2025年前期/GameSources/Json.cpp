@@ -240,7 +240,8 @@ namespace basecross{
 		//最後のキーを追加
 		if (!key.empty()) keys.push_back(key);
 
-		if (keys.size() == 0) throw BaseException(L"キーが不正です",L"keys.size() == 0",L"JsonHelper::SplitKey(const wstring&)");
+		if (keys.size() == 0) 
+			throw BaseException(L"キーが不正です",L"keys.size() == 0",L"JsonHelper::SplitKey(const wstring&)");
 
 		return keys;
 	}
