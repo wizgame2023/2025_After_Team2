@@ -31,9 +31,15 @@ namespace basecross{
 
 		m_Sprites.push_back(m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1.0f, 1.0f, 1.0f), false));
 		m_Sprites.push_back(m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1.0f, 1.0f, 1.0f), false));
+
+		/*m_Velocity = Vec3(0, 0, 1);
+		Vec3 side = cross(Vec3(0, 1, 0), m_Velocity.normalize());
+
+		m_Sprites[0]->RotateVector(side);
+		m_Sprites[1]->RotateVector(-side);*/
 	}
 	void MoveCube::OnUpdate() {
-		m_Velocity = Vec3(-1, 0, 0);
+		m_Velocity = Vec3(0, 0, -1);
 		//‰ñ“]Ž²
 		Vec3 side = cross(Vec3(0, 1, 0), m_Velocity.normalize());
 		float angle = XM_PIDIV2;
@@ -46,12 +52,13 @@ namespace basecross{
 			int correct = i == 0 ? 1 : -1;
 
 			m_Sprites[i]->RotateVector(side * correct);
+
 			m_Sprites[i]->GetTrans()->SetPosition(side * correct * 0.5f + GetPosition());
 
 			auto world = m_Sprites[i]->GetTrans()->GetWorldMatrix();
 			world.rotation((Quat)XMQuaternionRotationMatrix(rot));
 
-			m_Sprites[i]->GetTrans()->SetQuaternion(world.quatInMatrix());
+			m_Sprites[i]->GetTrans()->SetQuaternion(m_Sprites[i]->GetTrans()->GetQuaternion() * world.quatInMatrix());
 		}
 
 		if (!m_IsEffecting) {
