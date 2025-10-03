@@ -5,16 +5,18 @@
 
 #pragma once
 #include "stdafx.h"
-
+#include "GimmickHand.h"
 namespace basecross{
 	class TempBox;
+
+
 	struct MapData {
 		wstring m_ColorStr;
 		int m_Height;
 		Vec3 m_Position;
 
 		shared_ptr<TempBox> m_Temp;
-		GimmickObjects m_GimmickType;
+		shared_ptr<CardData> m_GimmickType;
 		shared_ptr<Gimmicks> m_TempGimmick;
 	};
 	class Map : public Object {
@@ -74,16 +76,27 @@ namespace basecross{
 		void HighlightBox(const wstring& colorText);
 
 		//引数にはギミックのオブジェクト
-		void PutGimmick(GimmickObjects type);
+		void PutGimmick(shared_ptr<CardData>& type);
 
-		GimmickObjects RecoverGimmick();
+		shared_ptr<CardData> RecoverGimmick();
 
-		shared_ptr<Gimmicks> CreateGimmick(GimmickObjects type) {
-			switch (type) {
-			case GimmickObjects::Goal:return m_Stage->AddGameObject<GimmickGoal>();
-			case GimmickObjects::SetPlayer: return m_Stage->AddGameObject<GimmickSetPlayer>();
+		shared_ptr<Gimmicks> CreateGimmick(shared_ptr<CardData>& type) {
+			shared_ptr<Gimmicks> gimmick;
+			switch (type->GetType()) {
+			case GimmickObjects::Goal: {
+				gimmick = m_Stage->AddGameObject<GimmickGoal>();
+				auto card = dynamic_pointer_cast<GoalCard>(type);
+				if (card) gimmick->SetDirection(card->m_Direction);
+				break;
 			}
-			return nullptr;
+			case GimmickObjects::SetPlayer: {
+				gimmick = m_Stage->AddGameObject<GimmickSetPlayer>();
+				auto card = dynamic_pointer_cast<PlayerCard>(type);
+				if (card) gimmick->SetDirection(card->m_Velocity);
+				break;
+			}
+			}
+			return gimmick;
 		}
 	};
 

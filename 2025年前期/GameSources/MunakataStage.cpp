@@ -59,8 +59,12 @@ namespace basecross {
 
 			auto hand = AddGameObject<GimmickHand>();
 			hand->SetCardSize(Vec2(200, 300));
-			hand->Add(GimmickObjects::Goal);
-			hand->Add(GimmickObjects::SetPlayer);
+			//hand->Add(make_shared<GoalCard>());
+			//hand->Add(make_shared<PlayerCard>());
+			Json json;
+			json.Load(App::GetApp()->GetDataDirWString() + L"Level/level1.json");
+
+			hand->LoadHands(json.At<JsonArray>(L"items"));
 
 			GameManager::GetInstance().SetHand(hand);
 			GameManager::GetInstance().SetMap(stageMap);

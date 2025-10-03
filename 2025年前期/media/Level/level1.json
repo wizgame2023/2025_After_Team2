@@ -3,11 +3,13 @@
   "items": [
     {
       "id": "player",
-      "count": 1
+      "count": 1,
+      "direction" :  "west"
     },
     {
       "id": "goal",
-      "count": 1
+      "count": 1,
+      "direction": "east"
     }
   ],
   "map": [

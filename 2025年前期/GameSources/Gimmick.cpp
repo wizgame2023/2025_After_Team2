@@ -1,6 +1,6 @@
 /*!
 @file Character.cpp
-@brief ƒLƒƒƒ‰ƒNƒ^[‚È‚ÇŽÀ‘Ì
+@brief ?L???��?N?^?[??????�e?
 */
 
 #include "stdafx.h"
@@ -124,7 +124,7 @@ namespace basecross{
 		auto pos = GetPosition();
 
 		player->Spawn(pos);
-		player->SetVelocity(/*m_Velocity*/Vec3(1.0f, 0.0f, 0.0f));
+		player->SetVelocity(/*m_Velocity*//*Vec3(1.0f, 0.0f, 0.0f)*/m_Direction);
 	}
 	void GimmickSetPlayer::Update()
 	{

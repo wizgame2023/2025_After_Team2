@@ -5,6 +5,9 @@
 
 #pragma once
 #include "stdafx.h"
+#include "Json.h"
+#include "Card.h"
+#include "Sprite.h"
 
 namespace basecross{
 
@@ -13,10 +16,10 @@ namespace basecross{
 		shared_ptr<Sprite> m_Card;
 		shared_ptr<Sprite> m_CoverSprite;
 
-		GimmickObjects m_Type;
+		shared_ptr<CardData> m_Type;
 	public:
-		GimmickCard(const shared_ptr<Stage>& ptr,const GimmickObjects type) : Object(ptr), m_Type(type){}
-		GimmickCard(const shared_ptr<Stage>& ptr) : GimmickCard(ptr, GimmickObjects::None) {}
+		GimmickCard(const shared_ptr<Stage>& ptr,const shared_ptr<CardData>& type) : Object(ptr), m_Type(type){}
+		GimmickCard(const shared_ptr<Stage>& ptr) : GimmickCard(ptr, make_shared<CardData>()) {}
 
 		virtual ~GimmickCard(){}
 
@@ -36,7 +39,7 @@ namespace basecross{
 	};
 
 	class GimmickHand : public Object {
-		vector<GimmickObjects> m_Hand;
+		vector<shared_ptr<CardData>> m_Hand;
 		vector<shared_ptr<GimmickCard>> m_HandSprite;
 
 		Vec2 m_CardSize;
@@ -47,6 +50,8 @@ namespace basecross{
 
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
+
+		void LoadHands(shared_ptr<JsonArray>& items);
 
 		/// <summary>
 		/// カードの描画サイズを設定
@@ -60,7 +65,7 @@ namespace basecross{
 		/// 手札を追加する
 		/// </summary>
 		/// <param name="gimmicks">追加するギミック</param>
-		void Add(GimmickObjects gimmicks) {
+		void Add(const shared_ptr<CardData>& gimmicks) {
 			m_Hand.push_back(gimmicks);
 			m_HandSprite.push_back(m_Stage->AddGameObject<GimmickCard>(gimmicks));
 		}
@@ -69,13 +74,13 @@ namespace basecross{
 		/// 選択中のカードのデータを取得・手札から削除
 		/// </summary>
 		/// <returns></returns>
-		GimmickObjects Use();
+		shared_ptr<CardData> Use();
 
 		/// <summary>
 		/// 選択中のカードのデータを取得
 		/// </summary>
 		/// <returns></returns>
-		GimmickObjects Get();
+		shared_ptr<CardData> Get();
 
 		/// <summary>
 		/// 指定した番号のカードを選択

@@ -131,7 +131,6 @@ namespace basecross
 	*/
 	class GimmickSetPlayer : public Gimmicks
 	{
-
 	public:
 		GimmickSetPlayer(const shared_ptr<Stage>& ptrGimmick);
 		~GimmickSetPlayer();

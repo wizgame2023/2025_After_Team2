@@ -81,6 +81,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Json.h">
       <Filter>Json</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Card.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -131,5 +132,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Json.cpp">
       <Filter>Json</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Card.cpp" />
   </ItemGroup>
 </Project>

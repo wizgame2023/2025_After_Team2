@@ -35,12 +35,11 @@ namespace basecross{
 
 		vector<int> mapSize = mapJson.At<JsonArray>(L"mapSize")->GetIntArray();
 		auto mapData = mapJson.At<JsonArray>(L"map")->GetObjectArray();
-
 		//データの初期化
 		for (int i = 0; i < mapSize[1]; i++) {
 			m_Map.push_back({});
 			for (int j = 0; j < mapSize[0]; j++) {
-				m_Map[i].push_back({ L"",0,Vec3(),nullptr,GimmickObjects::None,nullptr });
+				m_Map[i].push_back({ L"",0,Vec3(),nullptr,nullptr,nullptr });
 			}
 		}
 		//データの読み込み
@@ -62,7 +61,7 @@ namespace basecross{
 			auto box = m_Stage->AddGameObject<TempBox>(position, colorStr);
 			box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
 
-			MapData m = { colorStr,height,position,box,GimmickObjects::None,nullptr };
+			MapData m = { colorStr,height,position,box,nullptr,nullptr};
 			m_Map[pos[1]][pos[0]] = m;
 		}
 		//無色部分の生成
@@ -97,7 +96,7 @@ namespace basecross{
 			}
 		}
 	}
-	void Map::PutGimmick(GimmickObjects type) {
+	void Map::PutGimmick(shared_ptr<CardData>& type) {
 		wstring color = m_ColorTable[m_SelectColorIndex];
 		for (auto& mapVec : m_Map) {
 			for (auto& map : mapVec) {
@@ -112,13 +111,14 @@ namespace basecross{
 					map.m_TempGimmick->SetScale(Vec3(0.5f, 0.5f, 0.5f));
 					map.m_GimmickType = type;
 
+					//ここから設置する数値を設定予定
 				}
 			}
 		}
 	}
-	GimmickObjects Map::RecoverGimmick() {
+	shared_ptr<CardData> Map::RecoverGimmick() {
 		wstring color = m_ColorTable[m_SelectColorIndex];
-		GimmickObjects type = GimmickObjects::None;
+		shared_ptr<CardData> type;
 		for (auto& mapVec : m_Map) {
 			for (auto& map : mapVec) {
 				if (color == map.m_ColorStr) {
