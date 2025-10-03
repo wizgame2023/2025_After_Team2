@@ -111,7 +111,6 @@ namespace basecross{
 					map.m_TempGimmick->SetScale(Vec3(0.5f, 0.5f, 0.5f));
 					map.m_GimmickType = type;
 
-					//‚±‚±‚©‚çİ’u‚·‚é”’l‚ğİ’è—\’è
 				}
 			}
 		}

@@ -95,6 +95,12 @@ namespace basecross{
 				if (card) gimmick->SetDirection(card->m_Velocity);
 				break;
 			}
+			case GimmickObjects::CourseCorrection: {
+				gimmick = m_Stage->AddGameObject<GimmickCourseCorrection>();
+				auto card = dynamic_pointer_cast<CourseCard>(type);
+				if (card) gimmick->SetDirection(card->m_Direction);
+				break;
+			}
 			}
 			return gimmick;
 		}
