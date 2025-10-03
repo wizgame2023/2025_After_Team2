@@ -131,9 +131,9 @@ namespace basecross{
 
 	void MoveCube::Destroy() {
 		for (int i = 0; i < 2; i++) {
-			//m_Stage->RemoveGameObject<Board>(m_Sprites[i]);
+			m_Stage->RemoveGameObject<Board>(m_Sprites[i]);
 		}
-		//m_Sprites.clear();
+		m_Sprites.clear();
 		GameManager::GetInstance().DeleteCube(GetThis<MoveCube>());
 	}
 }

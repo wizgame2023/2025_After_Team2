@@ -79,9 +79,14 @@ namespace basecross{
 	{
 		Gimmicks::OnCreate();
 
-		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
+		auto draw = AddComponent<PNTStaticModelDraw>();
+		draw->SetMeshResource(L"GOAL_MD");
 		draw->SetDiffuse(Col4(0, 1, 0, 1));
+
+		Mat4x4 mat;
+		mat.affineTransformation(Vec3(0.9f), Vec3(), Vec3(), Vec3(0.0f, -0.9f, 0.0f));
+		draw->SetMeshToTransformMatrix(mat);
+
 	}
 
 	void GimmickGoal::Begin()
