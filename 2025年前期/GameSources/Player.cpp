@@ -32,14 +32,8 @@ namespace basecross{
 		m_Sprites.push_back(m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1.0f, 1.0f, 1.0f), false));
 		m_Sprites.push_back(m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1.0f, 1.0f, 1.0f), false));
 
-		/*m_Velocity = Vec3(0, 0, 1);
-		Vec3 side = cross(Vec3(0, 1, 0), m_Velocity.normalize());
-
-		m_Sprites[0]->RotateVector(side);
-		m_Sprites[1]->RotateVector(-side);*/
 	}
 	void MoveCube::OnUpdate() {
-		m_Velocity = Vec3(0, 0, -1);
 		//‰ñ“]Ž²
 		Vec3 side = cross(Vec3(0, 1, 0), m_Velocity.normalize());
 		float angle = XM_PIDIV2;
@@ -136,6 +130,10 @@ namespace basecross{
 	}
 
 	void MoveCube::Destroy() {
+		for (int i = 0; i < 2; i++) {
+			//m_Stage->RemoveGameObject<Board>(m_Sprites[i]);
+		}
+		//m_Sprites.clear();
 		GameManager::GetInstance().DeleteCube(GetThis<MoveCube>());
 	}
 }

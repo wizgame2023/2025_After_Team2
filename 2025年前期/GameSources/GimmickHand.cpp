@@ -19,8 +19,8 @@ namespace basecross{
 		m_CoverTexKeys[GimmickObjects::Upper] = L"TEMP_GIMMICK_UPPER";
 		m_CoverTexKeys[GimmickObjects::CourseCorrection] = L"TEMP_GIMMICK_COURSE";
 		
-		if (m_Type != GimmickObjects::None) {
-			SetCover(m_Type);
+		if (m_Type->GetType() != GimmickObjects::None) {
+			SetCover(m_Type->GetType());
 		}
 	}
 	void GimmickCard::OnUpdate() {
@@ -36,7 +36,7 @@ namespace basecross{
 	}
 	void GimmickCard::SetCover(GimmickObjects type) {
 		m_CoverSprite = m_Stage->AddGameObject<Sprite>(m_CoverTexKeys[type], Vec3(0.0f), Vec2(), Anchor::Center);
-		m_Type = type;
+		//m_Type = type;
 	}
 	void GimmickHand::OnCreate() {
 		Object::OnCreate();
@@ -62,7 +62,25 @@ namespace basecross{
 			card->ScreenAnchor(Anchor::BottomLeft, offset);
 		}
 	}
-	GimmickObjects GimmickHand::Use() {
+	void GimmickHand::LoadHands(shared_ptr<JsonArray>& items) {
+		auto itemArray = items->GetObjectArray();
+		for (auto& item : itemArray) {
+			auto id = item->At<JsonString>(L"id")->GetValue();
+			auto count = item->At<JsonNumber>(L"count")->GetIntValue();
+
+			shared_ptr<CardData> card;
+			if (id == L"player") {
+				card = make_shared<PlayerCard>();
+			}
+			else if (id == L"goal") {
+				card = make_shared<GoalCard>();
+			}
+			card->Load(item);
+
+			Add(card);
+		}
+	}
+	shared_ptr<CardData> GimmickHand::Use() {
 		auto card = Get();
 		m_HandSprite[m_SelectIndex]->Remove();
 		m_Hand.erase(m_Hand.begin() + m_SelectIndex);
@@ -72,7 +90,7 @@ namespace basecross{
 		}
 		return card;
 	}
-	GimmickObjects GimmickHand::Get() {
+	shared_ptr<CardData> GimmickHand::Get() {
 		return m_Hand[m_SelectIndex];
 	}
 }

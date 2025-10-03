@@ -5,10 +5,10 @@
 
 #pragma once
 #include "stdafx.h"
-
+#include "Sprite.h"
 namespace basecross{
 	class GimmickHand;
-
+	
 	enum class GameState {
 		Put,Game,Over,Clear
 	};
@@ -29,6 +29,8 @@ namespace basecross{
 
 		vector<shared_ptr<Sprite>> m_EffectSprite;
 
+		map<wstring, Vec3> m_DirectionMap;
+
 		float m_Tick;
 		float m_UpdateTicks;
 		bool m_IsGameClear;
@@ -46,6 +48,11 @@ namespace basecross{
 			m_Stage = nullptr;
 			m_IsGameClear = false;
 			m_GameState = GameState::Put;
+
+			m_DirectionMap[L"south"] = Vec3(0, 0, -1);
+			m_DirectionMap[L"north"] = Vec3(0, 0, 1);
+			m_DirectionMap[L"east"] = Vec3(1, 0, 0);
+			m_DirectionMap[L"west"] = Vec3(-1, 0, 0);
 		}
 
 		/// <summary>
@@ -115,6 +122,9 @@ namespace basecross{
 			return m_GameState == state;
 		}
 
+		Vec3 DirectionStrToVec(const wstring& str) {
+			return m_DirectionMap[str];
+		}
 
 		void Start();
 		/// <summary>

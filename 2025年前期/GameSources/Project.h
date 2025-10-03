@@ -25,3 +25,4 @@
 #include "GimmickManager.h"
 #include "GameManager.h"
 #include "Json.h"
+#include "Card.h"

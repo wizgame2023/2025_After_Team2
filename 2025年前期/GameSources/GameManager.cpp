@@ -72,6 +72,7 @@ namespace basecross{
 		}
 
 		if (isOver) DrawOverEffect();
+		
 	}
 
 	void GameManager::DrawGoalEffect() {
