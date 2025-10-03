@@ -123,7 +123,7 @@ namespace basecross{
 		auto pos = GetPosition();
 
 		player->Spawn(pos);
-		player->SetVelocity(/*m_Velocity*//*Vec3(1.0f, 0.0f, 0.0f)*/m_Direction);
+		player->SetVelocity(/*Vec3(1.0f, 0.0f, 0.0f)*/m_Value);
 	}
 	void GimmickSetPlayer::Update()
 	{
@@ -158,21 +158,21 @@ namespace basecross{
 		Gimmicks::Update();
 		if (m_Cube)
 		{
-			m_Cube->SetVelocity(/*m_Direction*/Vec3(-1.0f, 0.0f, 0.0f));
+			m_Cube->SetVelocity(/*m_Value*/Vec3(-1.0f, 0.0f, 0.0f));
 
 			m_Cube = nullptr;
 		}
 	}
 
-	GimmickUpper::GimmickUpper(const shared_ptr<Stage>& ptrStage) :
+	GimmickTeleporter::GimmickTeleporter(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage)
 	{
 	}
-	GimmickUpper::~GimmickUpper()
+	GimmickTeleporter::~GimmickTeleporter()
 	{
 	}
 
-	void GimmickUpper::OnCreate()
+	void GimmickTeleporter::OnCreate()
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
@@ -180,59 +180,23 @@ namespace basecross{
 		draw->SetDiffuse(Col4(1, 1, 0, 1));
 	}
 
-	void GimmickUpper::Begin()
+	void GimmickTeleporter::Begin()
 	{
 		Gimmicks::Begin();
 	}
-	void GimmickUpper::Update()
+	void GimmickTeleporter::Update()
 	{
 		Gimmicks::Update();
 		if (m_Cube)
 		{
 			Vec3 pos = m_Transform->GetPosition();
 
-			m_Cube->Telepote(pos + /*Vec3(0.0f, m_Value, 0.0f)*/ Vec3(0.0f, 1.0f, 0.0f));
+			m_Cube->Telepote(pos + /*m_Value*/ Vec3(0.0f, 1.0f, 0.0f));
 			m_Cube = nullptr;
 		}
 
 	}
 
-	GimmickLower::GimmickLower(const shared_ptr<Stage>& ptrStage) :
-		Gimmicks(ptrStage)
-	{
-	}
-	GimmickLower::~GimmickLower()
-	{
-	}
-
-	void GimmickLower::OnCreate()
-	{
-		Gimmicks::OnCreate();
-		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
-		draw->SetDiffuse(Col4(1, 0, 1, 1));
-	}
-
-	void GimmickLower::Begin()
-	{
-		Gimmicks::Begin();
-	}
-	void GimmickLower::Update()
-	{
-		Gimmicks::Update();
-		if (m_Cube)
-		{
-			Vec3 pos = m_Transform->GetPosition();
-			Vec3 playerPos = GetPosition();
-
-			if (playerPos.y > 0)
-			{
-				m_Cube->Telepote(pos + /*Vec3(0.0f, -m_Value, 0.0f)*/ Vec3(0.0f, -1.0f, 0.0f));
-			}
-			m_Cube = nullptr;
-		}
-
-	}
 
 
 	GimmickKiller::GimmickKiller(const shared_ptr<Stage>& ptrStage) :
