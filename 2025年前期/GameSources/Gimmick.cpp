@@ -79,9 +79,14 @@ namespace basecross{
 	{
 		Gimmicks::OnCreate();
 
-		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
+		auto draw = AddComponent<PNTStaticModelDraw>();
+		draw->SetMeshResource(L"GOAL_MD");
 		draw->SetDiffuse(Col4(0, 1, 0, 1));
+
+		Mat4x4 mat;
+		mat.affineTransformation(Vec3(0.9f), Vec3(), Vec3(), Vec3(0.0f, -0.9f, 0.0f));
+		draw->SetMeshToTransformMatrix(mat);
+
 	}
 
 	void GimmickGoal::Begin()
@@ -158,7 +163,7 @@ namespace basecross{
 		Gimmicks::Update();
 		if (m_Cube)
 		{
-			m_Cube->SetVelocity(/*m_Direction*/Vec3(-1.0f, 0.0f, 0.0f));
+			m_Cube->SetVelocity(m_Direction);
 
 			m_Cube = nullptr;
 		}

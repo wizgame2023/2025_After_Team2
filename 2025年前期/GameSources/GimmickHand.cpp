@@ -75,6 +75,9 @@ namespace basecross{
 			else if (id == L"goal") {
 				card = make_shared<GoalCard>();
 			}
+			else if (id == L"course") {
+				card = make_shared<CourseCard>();
+			}
 			card->Load(item);
 
 			Add(card);
