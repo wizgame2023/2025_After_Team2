@@ -17,8 +17,7 @@ namespace basecross
 		Goal,               // ゴール地点
 		SetPlayer,          // プレイヤー初期配置
 		CourseCorrection,   // 進行方向補正
-		Upper,              // 上昇ギミック
-		Lower,				// 下降ギミック
+		Teleporter,			// テレポーター
 		Killer,             // 即死ギミック
 	};
 
@@ -30,8 +29,7 @@ namespace basecross
 	{
 	protected:
 		shared_ptr<MoveCube> m_Cube;
-		Vec3 m_Direction; // 方向ベクトル
-		float m_Value;  // 効果の強さなどを表す値
+		Vec3 m_Value; // ギミックの方向ベクトルなどの値を格納する変数
 
 	public:
 		/*!
@@ -84,21 +82,10 @@ namespace basecross
 		@param velocity 方向ベクトル
 		@return なし
 		*/
-		void SetDirection(Vec3 direction)
-		{
-			m_Direction = direction;
-		}
-
-		/*!
-		@brief ギミックの数値を設定
-		@param velocity 方向ベクトル
-		@return なし
-		*/
-		void SetValue(float value)
+		void SetDirection(Vec3 value)
 		{
 			m_Value = value;
 		}
-
 	};
 
 	/*!
@@ -173,18 +160,18 @@ namespace basecross
 
 	};
 
-	class GimmickUpper : public Gimmicks
+	class GimmickTeleporter : public Gimmicks
 	{
 	public:
-		GimmickUpper(const shared_ptr<Stage>& ptrGimmick);
-		~GimmickUpper();
+		GimmickTeleporter(const shared_ptr<Stage>& ptrGimmick);
+		~GimmickTeleporter();
 		/*!
 		@brief ギミックの種類を取得
 		@return GimmickObjects::Upper
 		*/
 		GimmickObjects GetGimmickType() override
 		{
-			return GimmickObjects::Upper;
+			return GimmickObjects::Teleporter;
 		};
 		virtual void OnCreate();
 		virtual void Begin();
@@ -192,25 +179,6 @@ namespace basecross
 		virtual void End() {}
 	};
 
-	class GimmickLower : public Gimmicks
-	{
-	public:
-		GimmickLower(const shared_ptr<Stage>& ptrGimmick);
-		~GimmickLower();
-		/*!
-		@brief ギミックの種類を取得
-		@return GimmickObjects::Lower
-		*/
-		GimmickObjects GetGimmickType() override
-		{
-			return GimmickObjects::Lower;
-		};
-		virtual void OnCreate();
-		virtual void Begin();
-		virtual void Update();
-		virtual void End() {}
-
-	};
 
 	class GimmickKiller : public Gimmicks
 	{
