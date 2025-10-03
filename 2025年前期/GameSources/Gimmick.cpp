@@ -160,7 +160,7 @@ namespace basecross{
 		Gimmicks::Update();
 		if (m_Cube)
 		{
-			m_Cube->SetVelocity(/*m_Direction*/Vec3(-1.0f, 0.0f, 0.0f));
+			m_Cube->SetVelocity(m_Direction);
 
 			m_Cube = nullptr;
 		}
