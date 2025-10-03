@@ -19,6 +19,7 @@ namespace basecross
 		CourseCorrection,   // 進行方向補正
 		Teleporter,			// テレポーター
 		Killer,             // 即死ギミック
+		Roll				// 回転ギミック
 	};
 
 	/*!
@@ -31,6 +32,8 @@ namespace basecross
 		shared_ptr<MoveCube> m_Cube;
 		Vec3 m_Value; // ギミックの方向ベクトルなどの値を格納する変数
 
+		float m_Count;
+		float m_MaxCount;
 	public:
 		/*!
 		@brief コンストラクタ
@@ -78,13 +81,38 @@ namespace basecross
 		}
 
 		/*!
-		@brief ギミックの方向を設定
-		@param velocity 方向ベクトル
+		@brief ギミックの方向ベクトルなどの値を格納する変数を設定
+		@param value 数値ベクトル
 		@return なし
 		*/
-		void SetDirection(Vec3 value)
+		void SetValue(Vec3 value)
 		{
 			m_Value = value;
+		}
+		/*!
+		@brief 実行回数の設定
+		@param count 実行回数
+		@return なし
+		*/
+		void SetCount(float count)
+		{
+			m_MaxCount = count;
+			m_Count = m_MaxCount;
+		}
+	protected:
+		bool CheckCount()
+		{
+			if (m_Cube == nullptr)
+			{
+				m_Count = m_MaxCount;
+			}
+			else if (m_Count > 0)
+			{
+				m_Count--;
+				return true;
+			}
+	
+			return false;
 		}
 	};
 
@@ -192,6 +220,25 @@ namespace basecross
 		GimmickObjects GetGimmickType() override
 		{
 			return GimmickObjects::Killer;
+		};
+		virtual void OnCreate();
+		virtual void Begin();
+		virtual void Update();
+		virtual void End() {}
+	};
+
+	class GimmickRoll : public Gimmicks
+	{
+	public:
+		GimmickRoll(const shared_ptr<Stage>& ptrGimmick);
+		~GimmickRoll();
+		/*!
+		@brief ギミックの種類を取得
+		@return GimmickObjects::Roll
+		*/
+		GimmickObjects GetGimmickType() override
+		{
+			return GimmickObjects::Roll;
 		};
 		virtual void OnCreate();
 		virtual void Begin();

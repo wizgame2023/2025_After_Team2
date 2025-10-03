@@ -9,7 +9,11 @@
 namespace basecross{
 
 	Gimmicks::Gimmicks(const shared_ptr<Stage>& ptrStage) :
-	Object(ptrStage)	
+	Object(ptrStage),
+	m_Cube(nullptr),
+	m_MaxCount(1),
+	m_Count(m_MaxCount),
+	m_Value(Vec3(0.0f))
 	{
 	}
 
@@ -20,6 +24,7 @@ namespace basecross{
 	void Gimmicks::OnCreate()
 	{
 		Object::OnCreate();
+
 	}
 
 	void Gimmicks::Begin()
@@ -31,6 +36,8 @@ namespace basecross{
 	{
 		auto playerVec = GameManager::GetInstance().GetCubes();
 		auto pos = GetPosition();
+		shared_ptr<MoveCube> cube;
+
 		for (auto& ball : playerVec)
 		{
 			auto player = dynamic_pointer_cast<MoveCube>(ball);
@@ -41,7 +48,7 @@ namespace basecross{
 
 				if (distanceSq < (0.1f * 0.1f))
 				{
-					m_Cube = player;
+					cube = player;
 					break;
 				}
 				else
@@ -53,6 +60,8 @@ namespace basecross{
 			{
 				continue;
 			}
+
+			m_Cube = cube;
 		}
 	}
 
@@ -161,11 +170,9 @@ namespace basecross{
 	void GimmickCourseCorrection::Update()
 	{
 		Gimmicks::Update();
-		if (m_Cube)
+		if (CheckCount())
 		{
 			m_Cube->SetVelocity(m_Value);
-
-			m_Cube = nullptr;
 		}
 	}
 
@@ -192,12 +199,11 @@ namespace basecross{
 	void GimmickTeleporter::Update()
 	{
 		Gimmicks::Update();
-		if (m_Cube)
+		if (CheckCount())
 		{
 			Vec3 pos = m_Transform->GetPosition();
 
 			m_Cube->Telepote(pos + /*m_Value*/ Vec3(0.0f, 1.0f, 0.0f));
-			m_Cube = nullptr;
 		}
 
 	}
@@ -228,10 +234,39 @@ namespace basecross{
 	void GimmickKiller::Update()
 	{
 		Gimmicks::Update();
-		if (m_Cube)
+		if (CheckCount())
 		{
 			m_Cube->Destroy();
-			m_Cube = nullptr;
+		}
+	}
+
+	GimmickRoll::GimmickRoll(const shared_ptr<Stage>& ptrStage) :
+		Gimmicks(ptrStage)
+	{
+	}
+	GimmickRoll::~GimmickRoll()
+	{
+	}
+
+	void GimmickRoll::OnCreate()
+	{
+		Gimmicks::OnCreate();
+		auto draw = AddComponent<PNTStaticDraw>();
+		draw->SetMeshResource(L"DEFAULT_CUBE");
+		draw->SetDiffuse(Col4(1, 1, 1, 1));
+	}
+
+	void GimmickRoll::Begin()
+	{
+		Gimmicks::Begin();
+	}
+
+	void GimmickRoll::Update()
+	{
+		Gimmicks::Update();
+		if (CheckCount())
+		{
+
 		}
 	}
 }
