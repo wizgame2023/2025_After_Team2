@@ -18,7 +18,8 @@ namespace basecross
 		SetPlayer,          // プレイヤー初期配置
 		CourseCorrection,   // 進行方向補正
 		Upper,              // 上昇ギミック
-		Lower				// 下降ギミック
+		Lower,				// 下降ギミック
+		Killer,             // 即死ギミック
 	};
 
 	/*!
@@ -209,6 +210,25 @@ namespace basecross
 		virtual void Update();
 		virtual void End() {}
 
+	};
+
+	class GimmickKiller : public Gimmicks
+	{
+	public:
+		GimmickKiller(const shared_ptr<Stage>& ptrGimmick);
+		~GimmickKiller();
+		/*!
+		@brief ギミックの種類を取得
+		@return GimmickObjects::Killer
+		*/
+		GimmickObjects GetGimmickType() override
+		{
+			return GimmickObjects::Killer;
+		};
+		virtual void OnCreate();
+		virtual void Begin();
+		virtual void Update();
+		virtual void End() {}
 	};
 }
 //end basecross

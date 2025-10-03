@@ -95,7 +95,6 @@ namespace basecross{
 		if (m_Cube)
 		{
 			GameManager::GetInstance().DrawGoalEffect();
-
 			m_Cube = nullptr;
 		}
 	}
@@ -235,5 +234,36 @@ namespace basecross{
 
 	}
 
+
+	GimmickKiller::GimmickKiller(const shared_ptr<Stage>& ptrStage) :
+		Gimmicks(ptrStage)
+	{
+	}
+	GimmickKiller::~GimmickKiller()
+	{
+	}
+
+	void GimmickKiller::OnCreate()
+	{
+		Gimmicks::OnCreate();
+		auto draw = AddComponent<PNTStaticDraw>();
+		draw->SetMeshResource(L"DEFAULT_CUBE");
+		draw->SetDiffuse(Col4(0, 1, 1, 1));
+	}
+
+	void GimmickKiller::Begin()
+	{
+		Gimmicks::Begin();
+	}
+
+	void GimmickKiller::Update()
+	{
+		Gimmicks::Update();
+		if (m_Cube)
+		{
+			m_Cube->Destroy();
+			m_Cube = nullptr;
+		}
+	}
 }
 //end basecross
