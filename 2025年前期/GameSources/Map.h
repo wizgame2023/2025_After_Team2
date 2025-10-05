@@ -86,19 +86,19 @@ namespace basecross{
 			case GimmickObjects::Goal: {
 				gimmick = m_Stage->AddGameObject<GimmickGoal>();
 				auto card = dynamic_pointer_cast<GoalCard>(type);
-				if (card) gimmick->SetDirection(card->m_Direction);
+				if (card) gimmick->SetValue(card->m_Direction);
 				break;
 			}
 			case GimmickObjects::SetPlayer: {
 				gimmick = m_Stage->AddGameObject<GimmickSetPlayer>();
 				auto card = dynamic_pointer_cast<PlayerCard>(type);
-				if (card) gimmick->SetDirection(card->m_Velocity);
+				if (card) gimmick->SetValue(card->m_Velocity);
 				break;
 			}
 			case GimmickObjects::CourseCorrection: {
 				gimmick = m_Stage->AddGameObject<GimmickCourseCorrection>();
 				auto card = dynamic_pointer_cast<CourseCard>(type);
-				if (card) gimmick->SetDirection(card->m_Direction);
+				if (card) gimmick->SetValue(card->m_Direction);
 				break;
 			}
 			}

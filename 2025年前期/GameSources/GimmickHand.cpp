@@ -16,7 +16,7 @@ namespace basecross{
 
 		m_CoverTexKeys[GimmickObjects::Goal] = L"TEMP_GIMMICK_GOAL";
 		m_CoverTexKeys[GimmickObjects::SetPlayer] = L"TEMP_GIMMICK_PLAYER";
-		m_CoverTexKeys[GimmickObjects::Upper] = L"TEMP_GIMMICK_UPPER";
+		m_CoverTexKeys[GimmickObjects::Teleporter] = L"TEMP_GIMMICK_UPPER";
 		m_CoverTexKeys[GimmickObjects::CourseCorrection] = L"TEMP_GIMMICK_COURSE";
 		
 		if (m_Type->GetType() != GimmickObjects::None) {
