@@ -15,68 +15,79 @@ namespace basecross{
 		}
 	};
 
-	JsonArray::JsonArray(const vector<int>& array) {
+	JsonArray::JsonArray(const vector<int>& array) : m_ArrayType(JsonType::Number) {
 		for (const auto& value : array) {
 			m_Values.push_back(make_shared<JsonNumber>(value));
 		}
 	}
-	JsonArray::JsonArray(const vector<float>& array) {
+	JsonArray::JsonArray(const vector<float>& array) : m_ArrayType(JsonType::Number) {
 		for (const auto& value : array) {
 			m_Values.push_back(make_shared<JsonNumber>(value));
 		}
 	}
-	JsonArray::JsonArray(const vector<bool>& array) {
+	JsonArray::JsonArray(const vector<bool>& array) : m_ArrayType(JsonType::Bool) {
 		for (const auto& value : array) {
 			m_Values.push_back(make_shared<JsonBool>(value));
 		}
 	}
-	JsonArray::JsonArray(const vector<wstring>& array) {
+	JsonArray::JsonArray(const vector<wstring>& array) : m_ArrayType(JsonType::String) {
 		for (const auto& value : array) {
 			m_Values.push_back(make_shared<JsonString>(value));
 		}
 	}
-	JsonArray::JsonArray(const vector<JsonObject>& array) {
+	JsonArray::JsonArray(const vector<JsonObject>& array) : m_ArrayType(JsonType::Object) {
 		for (const auto& value : array) {
 			m_Values.push_back(make_shared<JsonObject>(value));
 		}
 	}
 	
 	vector<int> JsonArray::GetIntArray() {
+		if (m_ArrayType != JsonType::Number) return {};
 		vector<int> array;
 		for (auto& value : m_Values) {
 			auto ary = dynamic_pointer_cast<JsonNumber>(value);
+			if (!ary) throw BaseException(L"配列の型が異なります", L"", L"JsonArray::GetIntArray()");
 			array.push_back(ary->GetIntValue());
 		}
 		return array;
 	}
 	vector<float> JsonArray::GetFloatArray() {
+		if (m_ArrayType != JsonType::Number) return {};
 		vector<float> array;
 		for (auto& value : m_Values) {
 			auto ary = dynamic_pointer_cast<JsonNumber>(value);
+			if (!ary) throw BaseException(L"配列の型が異なります", L"", L"JsonArray::GetFloatArray()");
 			array.push_back(ary->GetFloatValue());
 		}
 		return array;
 	}
 	vector<bool> JsonArray::GetBoolArray() {
+		if (m_ArrayType != JsonType::Bool) return {};
 		vector<bool> array;
 		for (auto& value : m_Values) {
 			auto ary = dynamic_pointer_cast<JsonBool>(value);
+			if (!ary) throw BaseException(L"配列の型が異なります", L"", L"JsonArray::GetBoolArray()");
 			array.push_back(ary->GetValue());
 		}
 		return array;
 	}
 	vector<wstring> JsonArray::GetStringArray() {
+		if (m_ArrayType != JsonType::String) return {};
 		vector<wstring> array;
 		for (auto& value : m_Values) {
 			auto ary = dynamic_pointer_cast<JsonString>(value);
+			if (!ary) throw BaseException(L"配列の型が異なります", L"", L"JsonArray::GetStringArray()");
 			array.push_back(ary->GetValue());
 		}
 		return array;
 	}
 	vector<shared_ptr<JsonObject>> JsonArray::GetObjectArray() {
+		if (m_ArrayType != JsonType::Object) return {};
 		vector<shared_ptr<JsonObject>> array;
 		for (auto& value : m_Values) {
-			array.push_back(dynamic_pointer_cast<JsonObject>(value));
+			auto ary = dynamic_pointer_cast<JsonObject>(value);
+			if (!ary) throw BaseException(L"配列の型が異なります", L"", L"JsonArray::GetObjectArray()");
+			array.push_back(ary);
 		}
 		return array;
 	}
@@ -240,8 +251,7 @@ namespace basecross{
 		//最後のキーを追加
 		if (!key.empty()) keys.push_back(key);
 
-		if (keys.size() == 0) 
-			throw BaseException(L"キーが不正です",L"keys.size() == 0",L"JsonHelper::SplitKey(const wstring&)");
+		if (keys.size() == 0) throw BaseException(L"キーが不正です",L"keys.size() == 0",L"JsonHelper::SplitKey(const wstring&)");
 
 		return keys;
 	}
@@ -264,6 +274,8 @@ namespace basecross{
 
 		return current;
 	}
+
+	wstring Json::s_DefaultFilePath = L"";
 
 	shared_ptr<JsonValue> Json::At(const wstring& root) {
 		vector<wstring> keys = m_Helper.SplitKey(root);
