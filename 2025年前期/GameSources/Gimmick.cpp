@@ -41,6 +41,7 @@ namespace basecross{
 		for (auto& ball : playerVec)
 		{
 			auto player = dynamic_pointer_cast<MoveCube>(ball);
+
 			if (player)
 			{
 				Vec3 dist = player->GetPosition() - pos;
@@ -287,6 +288,38 @@ namespace basecross{
 				m_Cube->ChangeVelocity(m_RollVal);
 
 			}
+		}
+	}
+
+	GimmickInverter::GimmickInverter(const shared_ptr<Stage>& ptrStage) :
+		Gimmicks(ptrStage)
+	{
+	}
+
+	GimmickInverter::~GimmickInverter()
+	{
+	}
+
+	void GimmickInverter::OnCreate()
+	{
+		Gimmicks::OnCreate();
+		auto draw = AddComponent<PNTStaticDraw>();
+		draw->SetMeshResource(L"DEFAULT_CUBE");
+		draw->SetDiffuse(Col4(0, 0, 0, 1));
+	}
+
+	void GimmickInverter::Begin()
+	{
+		Gimmicks::Begin();
+	}
+
+	void GimmickInverter::Update()
+	{
+		Gimmicks::Update();
+
+		if (CheckCount())
+		{
+
 		}
 	}
 }
