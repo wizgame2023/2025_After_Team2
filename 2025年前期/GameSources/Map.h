@@ -101,6 +101,12 @@ namespace basecross{
 				if (card) gimmick->SetValue(card->m_Direction);
 				break;
 			}
+			case GimmickObjects::Teleporter: {
+				gimmick = m_Stage->AddGameObject<GimmickTeleporter>();
+				auto card = dynamic_pointer_cast<TeleportCard>(type);
+				if (card) gimmick->SetValue(card->m_TeleportTarget);
+				break;
+			}
 			}
 			return gimmick;
 		}

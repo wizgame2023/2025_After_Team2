@@ -33,4 +33,12 @@ namespace basecross {
 		}
 		virtual GimmickObjects GetType() { return GimmickObjects::CourseCorrection; }
 	};
+	struct TeleportCard : public CardData {
+		Vec3 m_TeleportTarget;
+		virtual void Load(shared_ptr<JsonObject>& data) {
+			auto target = data->At<JsonArray>(L"target")->GetFloatArray();
+			m_TeleportTarget = Vec3(target[0], target[1], target[2]);
+		}
+		virtual GimmickObjects GetType() { return GimmickObjects::Teleporter; }
+	};
 }

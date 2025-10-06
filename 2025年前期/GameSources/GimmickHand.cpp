@@ -78,6 +78,9 @@ namespace basecross{
 			else if (id == L"course") {
 				card = make_shared<CourseCard>();
 			}
+			else if (id == L"teleporter") {
+				card = make_shared<TeleportCard>();
+			}
 			card->Load(item);
 
 			Add(card);
