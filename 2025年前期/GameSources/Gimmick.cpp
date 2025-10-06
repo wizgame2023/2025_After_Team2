@@ -11,7 +11,7 @@ namespace basecross{
 	Gimmicks::Gimmicks(const shared_ptr<Stage>& ptrStage) :
 	Object(ptrStage),
 	m_Cube(nullptr),
-	m_MaxCount(3),
+	m_MaxCount(1),
 	m_Count(m_MaxCount),
 	m_Value(Vec3(0.0f))
 	{
@@ -63,6 +63,7 @@ namespace basecross{
 
 
 		}
+
 		m_Cube = cube;
 
 	}
@@ -174,26 +175,10 @@ namespace basecross{
 		Gimmicks::Update();
 		if (CheckCount())
 		{
-			if (m_IsLeftRoll)
-			{
-				Vec3 CubeVel = m_Cube->GetVelocity();
-
-				Vec3 RollVel = Vec3(-CubeVel.z, CubeVel.y, CubeVel.x);
-
-				m_Cube->SetVelocity(RollVel);
-			}
-			else
-			{
-				Vec3 CubeVel = m_Cube->GetVelocity();
-
-				m_RollVal = Vec3(CubeVel.z, CubeVel.y, -CubeVel.x);
-
-				m_Cube->SetVelocity(m_RollVal);
-
-			}
+			m_Cube->ChangeVelocity(m_Value);
 		}
 	}
-
+	
 	GimmickTeleporter::GimmickTeleporter(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage)
 	{
@@ -259,8 +244,8 @@ namespace basecross{
 	}
 
 	GimmickRoll::GimmickRoll(const shared_ptr<Stage>& ptrStage) :
-		Gimmicks(ptrStage)/*,
-		m_IsLeftRoll(false)*/
+		Gimmicks(ptrStage),
+		m_IsLeftRoll(false)
 	{
 	}
 	GimmickRoll::~GimmickRoll()
@@ -283,12 +268,25 @@ namespace basecross{
 	void GimmickRoll::Update()
 	{
 		Gimmicks::Update();
-		if (m_Cube)
+		if (CheckCount())
 		{
+			if (m_IsLeftRoll)
+			{
+				Vec3 CubeVel = m_Cube->GetVelocity();
 
-			m_Cube->ChangeVelocity(m_Direction);
-			//m_Cube = nullptr;
+				Vec3 RollVel = Vec3(-CubeVel.z, CubeVel.y, CubeVel.x);
 
+				m_Cube->ChangeVelocity(RollVel);
+			}
+			else
+			{
+				Vec3 CubeVel = m_Cube->GetVelocity();
+
+				m_RollVal = Vec3(CubeVel.z, CubeVel.y, -CubeVel.x);
+
+				m_Cube->ChangeVelocity(m_RollVal);
+
+			}
 		}
 	}
 }
