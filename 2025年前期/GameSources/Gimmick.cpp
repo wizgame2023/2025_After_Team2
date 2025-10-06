@@ -1,6 +1,6 @@
 /*!
 @file Character.cpp
-@brief ?L???ñ?N?^?[??????e?
+@brief ?L??????N?^?[???????e?
 */
 
 #include "stdafx.h"
@@ -285,24 +285,10 @@ namespace basecross{
 		Gimmicks::Update();
 		if (m_Cube)
 		{
-			if (m_IsLeftRoll)
-			{
-				Vec3 CubeVel = m_Cube->GetVelocity();
 
-				Vec3 RollVel = Vec3(-CubeVel.z, CubeVel.y, CubeVel.x);
+			m_Cube->ChangeVelocity(m_Direction);
+			//m_Cube = nullptr;
 
-				m_Cube->SetVelocity(RollVel);
-			}
-			else
-			{
-
-				Vec3 CubeVel = m_Cube->GetVelocity();
-
-				Vec3 RollVel = Vec3(CubeVel.z, CubeVel.y, -CubeVel.x);
-
-				m_Cube->SetVelocity(RollVel);
-
-			}
 		}
 	}
 }

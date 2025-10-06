@@ -7,6 +7,39 @@
 #include "Project.h"
 
 namespace basecross{
+	bool GameManager::IsUpdate() {
+		for (auto& cube : m_Cubes) {
+			if (cube->IsEffecting()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	void GameManager::GimmickUpdate() {
+		for (auto& mapVec : m_Map->GetMapData()) {
+			for (auto& map : mapVec) {
+				if (map.m_TempGimmick) {
+					map.m_TempGimmick->Update();
+				}
+			}
+		}
+	}
+	void GameManager::CubeUpdate() {
+		//ゲームオーバー判定
+		bool isOver = true;
+		for (auto& cube : m_Cubes) {
+			//一つでも動けるキューブがいたらfalse
+			if (cube->CheckArea()) isOver = false;
+			cube->Move();
+		}
+
+		if (isOver) DrawOverEffect();
+	}
+	void GameManager::StopCube() {
+		for (auto& cube : m_Cubes) {
+			cube->SetUpdateActive(false);
+		}
+	}
 
 	void GameManager::DrawTempGimmicks() {
 		
@@ -55,24 +88,11 @@ namespace basecross{
 		m_Tick += App::GetApp()->GetElapsedTime();
 		if (m_Tick <= m_UpdateTicks) return;
 
+		if (!IsUpdate()) return;
 		m_Tick = 0;
-		for (auto& mapVec : m_Map->GetMapData()) {
-			for (auto& map : mapVec) {
-				if (map.m_TempGimmick) {
-					map.m_TempGimmick->Update();
-				}
-			}
-		}
-		//ゲームオーバー判定
-		bool isOver = true;
-		for (auto& cube : m_Cubes) {
-			//一つでも動けるキューブがいたらfalse
-			if (cube->CheckArea()) isOver = false;
-			cube->Move();
-		}
-
-		if (isOver) DrawOverEffect();
 		
+		GimmickUpdate();
+		CubeUpdate();
 	}
 
 	void GameManager::DrawGoalEffect() {
@@ -82,9 +102,7 @@ namespace basecross{
 		m_EffectSprite.push_back(sprite);
 		m_GameState = GameState::Clear;
 
-		for (auto& cube : m_Cubes) {
-			cube->SetUpdateActive(false);
-		}
+		StopCube();
 	}
 	void GameManager::DrawOverEffect() {
 		if (!CompareState(GameState::Game)) return;
@@ -93,9 +111,7 @@ namespace basecross{
 		m_EffectSprite.push_back(sprite);
 		m_GameState = GameState::Over;
 
-		for (auto& cube : m_Cubes) {
-			cube->SetUpdateActive(false);
-		}
+		StopCube();
 	}
 }
 //end basecross
