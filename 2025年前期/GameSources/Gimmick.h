@@ -32,8 +32,12 @@ namespace basecross
 		shared_ptr<MoveCube> m_Cube;
 		Vec3 m_Value; // ギミックの方向ベクトルなどの値を格納する変数
 
-		float m_Count;
-		float m_MaxCount;
+		Vec3 m_RollVal;
+
+		bool m_IsLeftRoll = false;
+
+		int m_Count;
+		int m_MaxCount;
 	public:
 		/*!
 		@brief コンストラクタ
@@ -94,7 +98,7 @@ namespace basecross
 		@param count 実行回数
 		@return なし
 		*/
-		void SetCount(float count)
+		void SetCount(int count)
 		{
 			m_MaxCount = count;
 			m_Count = m_MaxCount;
@@ -244,6 +248,11 @@ namespace basecross
 		virtual void Begin();
 		virtual void Update();
 		virtual void End() {}
+
+		void OnLeftRoll(bool on)
+		{
+			m_IsLeftRoll = on;
+		}
 	};
 }
 //end basecross
