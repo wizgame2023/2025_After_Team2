@@ -27,6 +27,19 @@ namespace basecross{
 		}
 	}
 
+	template<class GimmickType>
+	vector<shared_ptr<GimmickType>> Map::GetGimmicks() {
+		vector<shared_ptr<GimmickType>> gimmicks;
+		for (auto& mapVec : m_Map) {
+			for (auto& map : mapVec) {
+				if (typeid(map.m_TempGimmick) == typeid(GimmickType)) {
+					gimmicks.push_back(map.m_TempGimmick);
+				}
+			}
+		}
+		return gimmicks;
+	}
+
 	void Map::Load() {
 		int maxHeight = -100;
 
