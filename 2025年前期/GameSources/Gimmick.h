@@ -33,9 +33,6 @@ namespace basecross
 		Vec3 m_Value; // ギミックの方向ベクトルなどの値を格納する変数
 
 		Vec3 m_RollVal;
-
-		bool m_IsLeftRoll = false;
-
 		int m_Count;
 		int m_MaxCount;
 	public:
@@ -108,7 +105,7 @@ namespace basecross
 		{
 			if (m_Cube == nullptr)
 			{
-				m_Count = m_MaxCount;
+				m_Count = m_MaxCount % 4;
 			}
 			else if (m_Count > 0)
 			{
@@ -233,6 +230,8 @@ namespace basecross
 
 	class GimmickRoll : public Gimmicks
 	{
+		bool m_IsLeftRoll = false;
+
 	public:
 		GimmickRoll(const shared_ptr<Stage>& ptrGimmick);
 		~GimmickRoll();
