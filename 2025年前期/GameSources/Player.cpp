@@ -99,6 +99,15 @@ namespace basecross{
 			m_IsEffecting = false;
 			break;
 		}
+		case MoveState::ChangeVelocity: {
+			Vec3 direction = m_TargetVelocity - m_Velocity;
+			Vec3 moveAmount = elapsed * m_MoveVelocitySpeed;
+			if (moveAmount.length() > direction.length()) {
+				moveAmount = direction;
+				m_IsEffecting = false;
+			}
+			m_Velocity += moveAmount;
+		}
 		}
 
 	

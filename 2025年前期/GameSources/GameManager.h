@@ -37,6 +37,10 @@ namespace basecross{
 		GameState m_GameState;
 
 		void DrawTempGimmicks();
+		bool IsUpdate();
+		void GimmickUpdate();
+		void CubeUpdate();
+		void StopCube();
 	public:
 		/// <summary>
 		/// “o˜^‚³‚ê‚Ä‚¢‚éî•ñ‚ğ‰Šú‰»‚·‚é

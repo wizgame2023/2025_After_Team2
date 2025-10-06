@@ -10,12 +10,15 @@ namespace basecross{
 	class Board;
 	enum class MoveState {
 		Telepote,
-		Move
+		Move,
+		ChangeVelocity
 	};
 	class MoveCube : public Object {
 		bool m_IsEffecting;		//演出中か(移動、テレポートなど)
 		bool m_IsDead;			//死亡判定
 		Vec3 m_TelepoteTarget;	//テレポート先
+		Vec3 m_TargetVelocity;	//移動方向の変更時の値
+		Vec3 m_MoveVelocitySpeed;	//移動方向の変更速度
 		Vec3 m_Velocity;		//移動方向
 		Vec3 m_Target;			//通常移動先
 		AABB m_MoveArea;		//移動範囲
@@ -59,6 +62,9 @@ namespace basecross{
 		/// <returns></returns>
 		float CalcRotatingCenterY(float rot);
 
+		bool IsEffecting() {
+			return m_IsEffecting;
+		}
 		void SetMoveSec(float sec) {
 			m_MoveSec = sec;
 		}
@@ -67,6 +73,14 @@ namespace basecross{
 		}
 		void SetVelocity(Vec3 velocity) {
 			m_Velocity = velocity;
+		}
+		void ChangeVelocity(Vec3 velocity) {
+			if (m_IsEffecting) return;
+			m_IsEffecting = true;
+
+			m_State = MoveState::ChangeVelocity;
+			m_TargetVelocity = velocity;
+			m_MoveVelocitySpeed = (m_TargetVelocity - m_Velocity) / m_MoveSec;
 		}
 		Vec3 GetVelocity()const {
 			return m_Velocity;
