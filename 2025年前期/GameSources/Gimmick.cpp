@@ -61,8 +61,11 @@ namespace basecross{
 				continue;
 			}
 
-			m_Cube = cube;
+
 		}
+
+		m_Cube = cube;
+
 	}
 
 	void Gimmicks::End()
@@ -172,10 +175,10 @@ namespace basecross{
 		Gimmicks::Update();
 		if (CheckCount())
 		{
-			m_Cube->SetVelocity(m_Value);
+			m_Cube->ChangeVelocity(m_Value);
 		}
 	}
-
+	
 	GimmickTeleporter::GimmickTeleporter(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage)
 	{
@@ -241,7 +244,8 @@ namespace basecross{
 	}
 
 	GimmickRoll::GimmickRoll(const shared_ptr<Stage>& ptrStage) :
-		Gimmicks(ptrStage)
+		Gimmicks(ptrStage),
+		m_IsLeftRoll(false)
 	{
 	}
 	GimmickRoll::~GimmickRoll()
@@ -266,8 +270,23 @@ namespace basecross{
 		Gimmicks::Update();
 		if (CheckCount())
 		{
-			m_Cube->ChangeVelocity(m_Direction);
-			//m_Cube = nullptr;
+			if (m_IsLeftRoll)
+			{
+				Vec3 CubeVel = m_Cube->GetVelocity();
+
+				Vec3 RollVel = Vec3(-CubeVel.z, CubeVel.y, CubeVel.x);
+
+				m_Cube->ChangeVelocity(RollVel);
+			}
+			else
+			{
+				Vec3 CubeVel = m_Cube->GetVelocity();
+
+				m_RollVal = Vec3(CubeVel.z, CubeVel.y, -CubeVel.x);
+
+				m_Cube->ChangeVelocity(m_RollVal);
+
+			}
 		}
 	}
 }

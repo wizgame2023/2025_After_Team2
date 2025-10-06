@@ -32,8 +32,9 @@ namespace basecross
 		shared_ptr<MoveCube> m_Cube;
 		Vec3 m_Value; // ギミックの方向ベクトルなどの値を格納する変数
 
-		float m_Count;
-		float m_MaxCount;
+		Vec3 m_RollVal;
+		int m_Count;
+		int m_MaxCount;
 	public:
 		/*!
 		@brief コンストラクタ
@@ -94,7 +95,7 @@ namespace basecross
 		@param count 実行回数
 		@return なし
 		*/
-		void SetCount(float count)
+		void SetCount(int count)
 		{
 			m_MaxCount = count;
 			m_Count = m_MaxCount;
@@ -104,7 +105,7 @@ namespace basecross
 		{
 			if (m_Cube == nullptr)
 			{
-				m_Count = m_MaxCount;
+				m_Count = m_MaxCount % 4;
 			}
 			else if (m_Count > 0)
 			{
@@ -229,6 +230,8 @@ namespace basecross
 
 	class GimmickRoll : public Gimmicks
 	{
+		bool m_IsLeftRoll = false;
+
 	public:
 		GimmickRoll(const shared_ptr<Stage>& ptrGimmick);
 		~GimmickRoll();
@@ -244,6 +247,11 @@ namespace basecross
 		virtual void Begin();
 		virtual void Update();
 		virtual void End() {}
+
+		void OnLeftRoll(bool on)
+		{
+			m_IsLeftRoll = on;
+		}
 	};
 }
 //end basecross
