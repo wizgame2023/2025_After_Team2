@@ -37,6 +37,9 @@ namespace basecross{
 
 		void Load();
 
+		template<class GimmickType>
+		vector<shared_ptr<GimmickType>> GetGimmicks();
+
 		vector<vector<MapData>> GetMapData() {
 			return m_Map;
 		}
