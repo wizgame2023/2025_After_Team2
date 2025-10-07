@@ -15,7 +15,7 @@ namespace basecross{
 
 	class GameManager : public SingletonBase<GameManager> {
 		friend class SingletonBase<GameManager>;
-		GameManager():m_Tick(0.0f),m_UpdateTicks(1.0f) {
+		GameManager():m_Tick(0.0f),m_UpdateTicks(0.5f) {
 			
 		}
 
