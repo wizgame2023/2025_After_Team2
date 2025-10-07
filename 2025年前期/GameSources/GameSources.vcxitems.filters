@@ -184,5 +184,8 @@
     <None Include="$(MSBuildThisFileDirectory)..\media\Level\level1.json">
       <Filter>Json\Level</Filter>
     </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\keyconfig.json">
+      <Filter>Json\Resource</Filter>
+    </None>
   </ItemGroup>
 </Project>

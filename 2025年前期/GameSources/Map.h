@@ -41,7 +41,7 @@ namespace basecross{
 			vector<shared_ptr<GimmickType>> gimmicks;
 			for (auto& mapVec : m_Map) {
 				for (auto& map : mapVec) {
-					if (auto& casted = dynamic_pointer_cast<GimmickType>(map.m_Gimmik)) {
+					if (auto casted = dynamic_pointer_cast<GimmickType>(map.m_Gimmik)) {
 						gimmicks.push_back(casted);
 					}
 				}

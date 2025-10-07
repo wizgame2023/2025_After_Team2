@@ -60,28 +60,9 @@ namespace basecross{
 		m_GameState = GameState::Game;
 	}
 	void GameManager::Update() {
-		auto device = App::GetApp()->GetInputDevice().GetControlerVec()[0];
-
-		if (device.bConnected) {
-			if (device.wPressedButtons & XINPUT_GAMEPAD_DPAD_LEFT) {
-				m_Hand->Back();
-			}
-			if (device.wPressedButtons & XINPUT_GAMEPAD_DPAD_RIGHT) {
-				m_Hand->Next();
-			}
-			if (device.wPressedButtons & XINPUT_GAMEPAD_A && !m_Map->CheckPutGimmick()) {
-				m_Map->PutGimmick(m_Hand->Use());
-				if (m_Hand->IsEmpty()) {
-					GameManager::GetInstance().Start();
-				}
-			}
-			if (device.wPressedButtons & XINPUT_GAMEPAD_B) {
-				m_Hand->Add(m_Map->RecoverGimmick());
-			}			
-		}
-
-
-
+		m_KeyConfigFile.Load(L"Json/keyconfig.json");
+		InputUpdate();
+		
 		//‚±‚±‚©‚ç‰º‚ÍƒQ[ƒ€is’†‚Ìˆ—
 		if (!CompareState(GameState::Game)) return;
 
@@ -93,6 +74,32 @@ namespace basecross{
 		
 		GimmickUpdate();
 		CubeUpdate();
+	}
+
+	void GameManager::InputUpdate() {
+
+		auto& input = InputManager::GetInputManager();
+		if (input->GetDownButton(GetKeyConfig(L"toolBack"))) {
+			m_Hand->Back();
+		}
+		if (input->GetDownButton(GetKeyConfig(L"toolNext"))) {
+			m_Hand->Next();
+		}
+		if (input->GetDownButton(GetKeyConfig(L"putGimmick")) && !m_Map->CheckPutGimmick())
+		{
+			m_Map->PutGimmick(m_Hand->Use());
+			if (m_Hand->IsEmpty()) {
+				GameManager::GetInstance().Start();
+			}
+		}
+		if (input->GetDownButton(GetKeyConfig(L"recoverGimmick")) && m_Map->CheckPutGimmick()) {
+			m_Hand->Add(m_Map->RecoverGimmick());
+		}
+		if (CompareState(GameState::Clear) || CompareState(GameState::Over)) {
+			if (input->GetDownButton(GetKeyConfig(L"restart"))) {
+				m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+			}
+		}
 	}
 
 	void GameManager::DrawGoalEffect() {

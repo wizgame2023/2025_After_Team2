@@ -21,34 +21,34 @@ namespace basecross{
 
 		auto device = app->GetInputDevice().GetControlerVec()[0];
 		auto elapsed = app->GetElapsedTime();
+		if (m_Angle == m_TargetAngle) {
+			
+			auto& input = InputManager::GetInputManager();
+			auto& gameManager = GameManager::GetInstance();
+			if (input->GetDownButton(gameManager.GetKeyConfig(L"cameraUp"))) {
+				m_IsUpperAngle = m_IsUpperAngle ? false : true;
 
-		if (device.bConnected) {
-			if (m_Angle == m_TargetAngle) {
-				if (device.wPressedButtons & XINPUT_GAMEPAD_X) {
-					m_IsUpperAngle = m_IsUpperAngle ? false : true;
-
-					m_TargetAngle.y = m_IsUpperAngle ? XM_PIDIV2 : m_FixedAngleVirtical;
-					SetUp(Vec3(0, 1, 0));
-				}
-				if (!m_IsUpperAngle) {
-					if (device.wPressedButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
-						if (m_TargetAngle.x <= 0) {
-							m_TargetAngle.x += XM_2PI;
-							m_Angle.x += XM_2PI;
-						}
-						m_TargetAngle.x -= XM_PIDIV2;
+				m_TargetAngle.y = m_IsUpperAngle ? XM_PIDIV2 : m_FixedAngleVirtical;
+				SetUp(Vec3(0, 1, 0));
+			}
+			if (!m_IsUpperAngle) {
+				if (input->GetDownButton(gameManager.GetKeyConfig(L"cameraRollL"))) {
+					if (m_TargetAngle.x <= 0) {
+						m_TargetAngle.x += XM_2PI;
+						m_Angle.x += XM_2PI;
 					}
-					else if (device.wPressedButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
-						if (m_TargetAngle.x >= XM_2PI) {
-							m_TargetAngle.x -= XM_2PI;
-							m_Angle.x -= XM_2PI;
-						}
-						m_TargetAngle.x += XM_PIDIV2;
-					}
+					m_TargetAngle.x -= XM_PIDIV2;
 				}
-				
+				else if (input->GetDownButton(gameManager.GetKeyConfig(L"cameraRollR"))) {
+					if (m_TargetAngle.x >= XM_2PI) {
+						m_TargetAngle.x -= XM_2PI;
+						m_Angle.x -= XM_2PI;
+					}
+					m_TargetAngle.x += XM_PIDIV2;
+				}
 			}
 		}
+
 		Vec2 diff = (m_TargetAngle - m_Angle);
 		Vec2 moveAmount = diff.normalize() * m_RotateSpeed * elapsed;
 		if (abs(moveAmount.x) > abs(m_TargetAngle.x - m_Angle.x)) {

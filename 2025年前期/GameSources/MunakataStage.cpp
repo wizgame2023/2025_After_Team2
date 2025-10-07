@@ -46,10 +46,6 @@ namespace basecross {
 
 			CreateViewLight();
 			CreateResorce();
-
-			/*auto player = AddGameObject<MoveCube>();
-			player->SetPosition(Vec3(0.0f,0.0f,0.0f));
-			player->SetVelocity(Vec3(1.0f, 0.0f, 0.0f));*/
 			
 			auto stageMap = AddGameObject<Map>();
 			stageMap->Load();
@@ -60,7 +56,7 @@ namespace basecross {
 			auto hand = AddGameObject<GimmickHand>();
 			hand->SetCardSize(Vec2(200, 300));
 			Json json;
-			json.Load(App::GetApp()->GetDataDirWString() + L"Level/level1.json");
+			json.Load(L"Level/level1.json");
 
 			hand->LoadHands(json.At<JsonArray>(L"items"));
 
