@@ -263,14 +263,14 @@ namespace basecross
 		}
 	};
 
-	class GimmickInverter : Gimmicks
+	class GimmickInverter : public Gimmicks
 	{
 	public:
 		GimmickInverter(const shared_ptr<Stage>& ptrGimmick);
 		~GimmickInverter();
 		/*!
 		@brief ƒMƒ~ƒbƒN‚ÌŽí—Þ‚ðŽæ“¾
-		@return GimmickObjects::Roll
+		@return GimmickObjects::Inverter
 		*/
 		GimmickObjects GetGimmickType() override
 		{

@@ -56,6 +56,18 @@ namespace basecross {
 		}
 	};
 
+	class InverterCard : public CardData {
+	public:
+		virtual void Load(shared_ptr<JsonObject>& data) {
+		}
+		virtual GimmickObjects GetType() { return GimmickObjects::Inverter; }
+		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
+			auto gimmick = stage->AddGameObject<GimmickInverter>();
+			return gimmick;
+		}
+
+	};
+
 	class TeleportCard : public CardData {
 	public:
 		Vec3 m_TeleportTarget;
@@ -71,7 +83,6 @@ namespace basecross {
 		}
 
 	};
-
 
 
 	class CardFactory {
@@ -101,5 +112,5 @@ namespace basecross {
 	REGISTER_CARD(L"goal", GoalCard)
 	REGISTER_CARD(L"course", CourseCard)
 	REGISTER_CARD(L"teleporter", TeleportCard)
-
+	REGISTER_CARD(L"inverter", InverterCard)
 }
