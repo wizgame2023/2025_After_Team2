@@ -36,7 +36,6 @@ namespace basecross{
 	}
 	void GimmickCard::SetCover(GimmickObjects type) {
 		m_CoverSprite = m_Stage->AddGameObject<Sprite>(m_CoverTexKeys[type], Vec3(0.0f), Vec2(), Anchor::Center);
-		//m_Type = type;
 	}
 	void GimmickHand::OnCreate() {
 		Object::OnCreate();
