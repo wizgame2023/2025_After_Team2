@@ -27,19 +27,6 @@ namespace basecross{
 		}
 	}
 
-	template<class GimmickType>
-	vector<shared_ptr<GimmickType>> Map::GetGimmicks() {
-		vector<shared_ptr<GimmickType>> gimmicks;
-		for (auto& mapVec : m_Map) {
-			for (auto& map : mapVec) {
-				if (typeid(map.m_Gimmik) == typeid(GimmickType)) {
-					gimmicks.push_back(map.m_Gimmik);
-				}
-			}
-		}
-		return gimmicks;
-	}
-
 	void Map::Load() {
 		int maxHeight = -100;
 
@@ -118,7 +105,7 @@ namespace basecross{
 					if (map.m_Gimmik != nullptr) {
 						continue;
 					}
-					map.m_Gimmik = CreateGimmick(type);
+					map.m_Gimmik = type->CreateGimmick(GetStage());
 
 					map.m_Gimmik->SetPosition(map.m_Position + Vec3(0.0f, map.m_Height + 0.5f, 0.0f));
 					map.m_Gimmik->SetScale(Vec3(0.5f, 0.5f, 0.5f));
