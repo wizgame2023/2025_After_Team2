@@ -37,7 +37,17 @@ namespace basecross{
 		void Load();
 
 		template<class GimmickType>
-		vector<shared_ptr<GimmickType>> GetGimmicks();
+		vector<shared_ptr<GimmickType>> GetGimmicks() {
+			vector<shared_ptr<GimmickType>> gimmicks;
+			for (auto& mapVec : m_Map) {
+				for (auto& map : mapVec) {
+					if (auto& casted = dynamic_pointer_cast<GimmickType>(map.m_Gimmik)) {
+						gimmicks.push_back(casted);
+					}
+				}
+			}
+			return gimmicks;
+		}
 
 		vector<vector<MapData>> GetMapData() {
 			return m_Map;
@@ -81,11 +91,6 @@ namespace basecross{
 		void PutGimmick(shared_ptr<CardData>& type);
 
 		shared_ptr<CardData> RecoverGimmick();
-
-		shared_ptr<Gimmicks> CreateGimmick(shared_ptr<CardData>& type) {
-			shared_ptr<Gimmicks> gimmick = type->CreateGimmick(GetStage());
-			return gimmick;
-		}
 	};
 
 
