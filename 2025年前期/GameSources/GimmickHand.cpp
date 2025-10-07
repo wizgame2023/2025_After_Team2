@@ -32,6 +32,7 @@ namespace basecross{
 			Vec2 coverScale = Vec2(cardScale.x / 2.0f, cardScale.y / 3.0f);
 			m_CoverSprite->SetPosition(coverPosition);
 			m_CoverSprite->SetSize(coverScale);
+			GameManager::GetInstance().GetMap()->GetGimmicks<GimmickGoal>();
 		}
 	}
 	void GimmickCard::SetCover(GimmickObjects type) {
