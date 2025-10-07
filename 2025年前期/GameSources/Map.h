@@ -81,11 +81,6 @@ namespace basecross{
 		void PutGimmick(shared_ptr<CardData>& type);
 
 		shared_ptr<CardData> RecoverGimmick();
-
-		shared_ptr<Gimmicks> CreateGimmick(shared_ptr<CardData>& type) {
-			shared_ptr<Gimmicks> gimmick = type->CreateGimmick(GetStage());
-			return gimmick;
-		}
 	};
 
 
