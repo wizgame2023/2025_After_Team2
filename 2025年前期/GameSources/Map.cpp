@@ -32,8 +32,8 @@ namespace basecross{
 		vector<shared_ptr<GimmickType>> gimmicks;
 		for (auto& mapVec : m_Map) {
 			for (auto& map : mapVec) {
-				if (typeid(map.m_TempGimmick) == typeid(GimmickType)) {
-					gimmicks.push_back(map.m_TempGimmick);
+				if (typeid(map.m_Gimmik) == typeid(GimmickType)) {
+					gimmicks.push_back(map.m_Gimmik);
 				}
 			}
 		}
@@ -71,7 +71,7 @@ namespace basecross{
 
 			//グリッドの生成
 			Vec3 position = Vec3(pos[0], m_GroundHeight - 0.5f, pos[1]);
-			auto box = m_Stage->AddGameObject<TempBox>(position, colorStr);
+			auto box = m_Stage->AddGameObject<Floor>(position, colorStr);
 			box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
 
 			MapData m = { colorStr,height,position,box,nullptr,nullptr};
@@ -81,9 +81,9 @@ namespace basecross{
 		for (int i = 0; i < mapSize[1]; i++) {
 			for (int j = 0; j < mapSize[0]; j++) {
 				if (m_Map[i][j].m_ColorStr == L"") {
-					auto box = m_Stage->AddGameObject<TempBox>(Vec3(j, m_GroundHeight - 0.5f, i), L"clear");
+					auto box = m_Stage->AddGameObject<Floor>(Vec3(j, m_GroundHeight - 0.5f, i), L"clear");
 					box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
-					m_Map[i][j].m_Temp = box;
+					m_Map[i][j].m_Floor = box;
 				}
 			}
 		}
@@ -95,12 +95,12 @@ namespace basecross{
 	void Map::HighlightBox(const wstring& colorText) {
 		for (auto& mapVec : m_Map) {
 			for (auto& map : mapVec) {
-				auto box = map.m_Temp;
+				auto box = map.m_Floor;
 				auto draw = box->GetComponent<PNTStaticDraw>();
 				if (colorText == map.m_ColorStr) {
 					draw->SetDiffuse(box->GetDefaultColor() - Col4(0.3f, 0.3f, 0.3f, 0));
 				}
-				else if (map.m_TempGimmick) {
+				else if (map.m_Gimmik) {
 					draw->SetDiffuse(box->GetDefaultColor() + Col4(0.6f, 0.6f, 0.6f, 0.0f));
 				}
 				else{
@@ -115,13 +115,13 @@ namespace basecross{
 			for (auto& map : mapVec) {
 				if (color == map.m_ColorStr) {
 					//すでに設置しているなら破壊
-					if (map.m_TempGimmick != nullptr) {
+					if (map.m_Gimmik != nullptr) {
 						continue;
 					}
-					map.m_TempGimmick = CreateGimmick(type);
+					map.m_Gimmik = CreateGimmick(type);
 
-					map.m_TempGimmick->SetPosition(map.m_Position + Vec3(0.0f, map.m_Height + 0.5f, 0.0f));
-					map.m_TempGimmick->SetScale(Vec3(0.5f, 0.5f, 0.5f));
+					map.m_Gimmik->SetPosition(map.m_Position + Vec3(0.0f, map.m_Height + 0.5f, 0.0f));
+					map.m_Gimmik->SetScale(Vec3(0.5f, 0.5f, 0.5f));
 					map.m_GimmickType = type;
 
 				}
@@ -135,10 +135,10 @@ namespace basecross{
 			for (auto& map : mapVec) {
 				if (color == map.m_ColorStr) {
 					//すでに設置しているなら破壊
-					if (map.m_TempGimmick != nullptr) {
-						m_Stage->RemoveGameObject<Gimmicks>(map.m_TempGimmick);
+					if (map.m_Gimmik != nullptr) {
+						m_Stage->RemoveGameObject<Gimmicks>(map.m_Gimmik);
 						
-						map.m_TempGimmick = nullptr;
+						map.m_Gimmik = nullptr;
 						
 						type = map.m_GimmickType;
 					}
@@ -148,7 +148,7 @@ namespace basecross{
 		return type;
 	}
 
-	void TempBox::OnCreate() {
+	void Floor::OnCreate() {
 		Object::OnCreate();
 
 		SetPosition(m_Position);
