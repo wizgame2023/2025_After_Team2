@@ -18,8 +18,8 @@ namespace basecross{
 	void GameManager::GimmickUpdate() {
 		for (auto& mapVec : m_Map->GetMapData()) {
 			for (auto& map : mapVec) {
-				if (map.m_TempGimmick) {
-					map.m_TempGimmick->Update();
+				if (map.m_Gimmik) {
+					map.m_Gimmik->Update();
 				}
 			}
 		}
@@ -48,8 +48,8 @@ namespace basecross{
 	void GameManager::Start() {
 		for (auto& mapVec : m_Map->GetMapData()) {
 			for (auto& map : mapVec) {
-				if (map.m_TempGimmick) {
-					map.m_TempGimmick->Begin();
+				if (map.m_Gimmik) {
+					map.m_Gimmik->Begin();
 				}
 			}
 		}
