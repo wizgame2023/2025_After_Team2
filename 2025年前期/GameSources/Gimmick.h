@@ -92,6 +92,14 @@ namespace basecross
 			m_Value = value;
 		}
 		/*!
+		@brief ギミックの方向ベクトルなどの値を取得する関数
+		@return ギミックの方向ベクトルなどの値
+		*/
+		Vec3 GetValue()
+		{
+			return m_Value;
+		}
+		/*!
 		@brief 実行回数の設定
 		@param count 実行回数
 		@return なし
