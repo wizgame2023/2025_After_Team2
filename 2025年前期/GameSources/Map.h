@@ -7,17 +7,16 @@
 #include "stdafx.h"
 #include "GimmickHand.h"
 namespace basecross{
-	class TempBox;
-
+	class Floor;
 
 	struct MapData {
 		wstring m_ColorStr;
 		int m_Height;
 		Vec3 m_Position;
 
-		shared_ptr<TempBox> m_Temp;
+		shared_ptr<Floor> m_Floor;
 		shared_ptr<CardData> m_GimmickType;
-		shared_ptr<Gimmicks> m_TempGimmick;
+		shared_ptr<Gimmicks> m_Gimmik;
 	};
 	class Map : public Object {
 		vector<vector<MapData>> m_Map;
@@ -67,7 +66,7 @@ namespace basecross{
 			for (auto& mapVec : m_Map) {
 				for (auto& map : mapVec) {
 					if (color == map.m_ColorStr) {
-						if (map.m_TempGimmick != nullptr) {
+						if (map.m_Gimmik != nullptr) {
 							return true;
 						}
 					}
@@ -117,13 +116,13 @@ namespace basecross{
 
 
 
-	class TempBox : public Object {
+	class Floor : public Object {
 		Vec3 m_Position;
 		wstring m_ColorStr;
 		Col4 m_DefaultColor;
 	public:
-		TempBox(const shared_ptr<Stage>& ptr,Vec3 position, wstring color) : Object(ptr), m_Position(position),m_ColorStr(color){}
-		virtual ~TempBox(){}
+		Floor(const shared_ptr<Stage>& ptr,Vec3 position, wstring color) : Object(ptr), m_Position(position),m_ColorStr(color){}
+		virtual ~Floor(){}
 
 		virtual void OnCreate()override;
 
