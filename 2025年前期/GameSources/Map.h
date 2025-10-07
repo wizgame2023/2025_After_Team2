@@ -83,33 +83,7 @@ namespace basecross{
 		shared_ptr<CardData> RecoverGimmick();
 
 		shared_ptr<Gimmicks> CreateGimmick(shared_ptr<CardData>& type) {
-			shared_ptr<Gimmicks> gimmick;
-			switch (type->GetType()) {
-			case GimmickObjects::Goal: {
-				gimmick = m_Stage->AddGameObject<GimmickGoal>();
-				auto card = dynamic_pointer_cast<GoalCard>(type);
-				if (card) gimmick->SetValue(card->m_Direction);
-				break;
-			}
-			case GimmickObjects::SetPlayer: {
-				gimmick = m_Stage->AddGameObject<GimmickSetPlayer>();
-				auto card = dynamic_pointer_cast<PlayerCard>(type);
-				if (card) gimmick->SetValue(card->m_Velocity);
-				break;
-			}
-			case GimmickObjects::CourseCorrection: {
-				gimmick = m_Stage->AddGameObject<GimmickCourseCorrection>();
-				auto card = dynamic_pointer_cast<CourseCard>(type);
-				if (card) gimmick->SetValue(card->m_Direction);
-				break;
-			}
-			case GimmickObjects::Teleporter: {
-				gimmick = m_Stage->AddGameObject<GimmickTeleporter>();
-				auto card = dynamic_pointer_cast<TeleportCard>(type);
-				if (card) gimmick->SetValue(card->m_TeleportTarget);
-				break;
-			}
-			}
+			shared_ptr<Gimmicks> gimmick = type->CreateGimmick(GetStage());
 			return gimmick;
 		}
 	};

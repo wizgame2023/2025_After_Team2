@@ -69,18 +69,8 @@ namespace basecross{
 			auto count = item->At<JsonNumber>(L"count")->GetIntValue();
 
 			shared_ptr<CardData> card;
-			if (id == L"player") {
-				card = make_shared<PlayerCard>();
-			}
-			else if (id == L"goal") {
-				card = make_shared<GoalCard>();
-			}
-			else if (id == L"course") {
-				card = make_shared<CourseCard>();
-			}
-			else if (id == L"teleporter") {
-				card = make_shared<TeleportCard>();
-			}
+			card = CardFactory::Create(id);
+			if (!card) continue;
 			card->Load(item);
 
 			Add(card);
