@@ -87,9 +87,9 @@ namespace basecross{
 			auto world = m_Transform->GetWorldMatrix();
 			world.rotation((Quat)XMQuaternionRotationMatrix(rot));
 
-			m_Transform->SetQuaternion(m_Transform->GetQuaternion() * world.quatInMatrix());
+			//m_Transform->SetQuaternion(m_Transform->GetQuaternion() * world.quatInMatrix());
 			position += moveAmount;
-			position.y = CalcRotatingCenterY(m_RotateRad);
+			//position.y = CalcRotatingCenterY(m_RotateRad);
 			m_RotateRad += rotateAmount;
 			break;
 		}
