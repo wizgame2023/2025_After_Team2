@@ -319,17 +319,16 @@ namespace basecross{
 
 		if (CheckCount())
 		{
-			//auto CourseCorrectionVec = GameManager::GetInstance().GetMap()->GetGimmicks<GimmickCourseCorrection>();
+			auto CourseCorrectionVec = GameManager::GetInstance().GetMap()->GetGimmicks<GimmickCourseCorrection>();
 
-			//for (auto& course : CourseCorrectionVec)
-			//{
-			//	if (course->GetPosition() == GetPosition())
-			//	{
-			//		Vec3 Val = course->GetValue();
-			//		course->SetValue(-Val);
-			//		continue;
-			//	}
-			//}
+			for (auto& course : CourseCorrectionVec)
+			{
+				if (course == nullptr) return;
+
+				Vec3 Val = course->GetValue();
+				course->SetValue(-Val);
+				continue;
+			}
 		}
 	}
 }
