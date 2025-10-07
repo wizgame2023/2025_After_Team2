@@ -57,4 +57,10 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Sprite.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)WinMain.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json" />
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\resorce.json" />
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\setting.json" />
+    <None Include="$(MSBuildThisFileDirectory)..\media\Level\level1.json" />
+  </ItemGroup>
 </Project>

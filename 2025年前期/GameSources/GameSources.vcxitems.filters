@@ -25,6 +25,27 @@
     <Filter Include="Json">
       <UniqueIdentifier>{62af316c-2dd8-41f3-863b-77289ae138b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Card">
+      <UniqueIdentifier>{cd887c4b-b49c-48de-8817-6c10c09b0d8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gimmick">
+      <UniqueIdentifier>{e83028e7-0451-437e-b4f4-1e156b061e73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{298b9435-f2d5-4801-8c97-d68ce6528e16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sprite">
+      <UniqueIdentifier>{cd78091e-5bae-4878-9955-9cbcf3705647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Json\source">
+      <UniqueIdentifier>{29ddccc2-a88f-4e09-b5c0-26ff463f538b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Json\Level">
+      <UniqueIdentifier>{e82e7984-07ff-44d0-a007-e8dc689f5559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Json\Resource">
+      <UniqueIdentifier>{496428e3-4552-43a3-8583-45179f26d6f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h">
@@ -63,25 +84,33 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Map.h">
       <Filter>Map</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Gimmick.h">
-      <Filter>Manager\Gimmick</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)InputManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)OkawaraStage.h">
       <Filter>work</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)GimmickHand.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)MainCamera.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Sprite.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GameManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Json.h">
-      <Filter>Json</Filter>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Card.h">
+      <Filter>Card</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Card.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Gimmick.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)GimmickHand.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)MainCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Sprite.h">
+      <Filter>Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Json.h">
+      <Filter>Json\source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -114,24 +143,46 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Map.cpp">
       <Filter>Map</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Gimmick.cpp">
-      <Filter>Manager\Gimmick</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)InputManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)OkawaraStage.cpp">
       <Filter>work</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)GimmickHand.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)MainCamera.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Sprite.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Json.cpp">
-      <Filter>Json</Filter>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Card.cpp">
+      <Filter>Card</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Card.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Gimmick.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)GimmickHand.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)MainCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Sprite.cpp">
+      <Filter>Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Json.cpp">
+      <Filter>Json\source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\resorce.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\setting.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Level\level1.json">
+      <Filter>Json\Level</Filter>
+    </None>
   </ItemGroup>
 </Project>
