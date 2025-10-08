@@ -232,6 +232,19 @@ namespace basecross{
 		}
 
 		/// <summary>
+		/// 指定したベクトル方向を向かせる
+		/// </summary>
+		/// <param name="vec">ベクトル</param>
+		void VectorToward(Vec2 vec);
+
+		/// <summary>
+		/// アンカーに対応した位置(0～1)を取得
+		/// </summary>
+		/// <param name="anchor">アンカー</param>
+		/// <returns>位置</returns>
+		Vec2 GetAnchorNormalize(Anchor anchor);
+
+		/// <summary>
 		/// 色の変更
 		/// </summary>
 		/// <param name="color"> : 色</param>
@@ -427,6 +440,9 @@ namespace basecross{
 		void ScreenAnchor(Anchor achor, const Vec3& offset = Vec3());
 
 		void ChangeWindowSize(float width, float height);
+
+		Vec2 GetAnchorPosition(Anchor anchor);
+		void SetAnchorPosition(Vec3 pos, Anchor anchor);
 	};
 
 

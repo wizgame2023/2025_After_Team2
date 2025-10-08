@@ -18,6 +18,7 @@
 #include "Gimmick.h"
 #include "MunakataStage.h"
 #include "OkawaraStage.h"
+#include "MenuStage.h"
 #include "Map.h"
 #include "MainCamera.h"
 #include "Sprite.h"
@@ -26,3 +27,4 @@
 #include "GameManager.h"
 #include "Json.h"
 #include "Card.h"
+#include "Menu.h"

@@ -46,6 +46,9 @@
     <Filter Include="Json\Resource">
       <UniqueIdentifier>{496428e3-4552-43a3-8583-45179f26d6f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{840e50f3-4479-4ace-88a7-d467ac806cea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h">
@@ -111,6 +114,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Json.h">
       <Filter>Json\source</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)MenuStage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Menu.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -170,6 +175,8 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Json.cpp">
       <Filter>Json\source</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)MenuStage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json">

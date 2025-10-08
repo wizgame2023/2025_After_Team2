@@ -12,6 +12,8 @@ namespace basecross{
 	///	ÉQÅ[ÉÄÉVÅ[Éì
 	//--------------------------------------------------------------------------------------
 	class Scene : public SceneBase{
+
+		Viewport m_GameViewport;
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -41,6 +43,15 @@ namespace basecross{
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnEvent(const shared_ptr<Event>& event) override;
+
+
+
+		void SetViewport(Viewport& viewport) {
+			m_GameViewport = viewport;
+		}
+		Viewport GetViewport() {
+			return m_GameViewport;
+		}
 	};
 
 }

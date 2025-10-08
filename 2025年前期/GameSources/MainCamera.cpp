@@ -12,9 +12,13 @@ namespace basecross{
 		m_TargetAngle.y = m_FixedAngleVirtical;
 		m_TargetAngle.x = XMConvertToRadians(270.0f);
 		m_Angle = m_TargetAngle;
-
+		
 		Vec3 position = CalcPosition(m_Angle.y, m_Angle.x);
 		SetEye(position);
+
+		float aspect = GetAspect();
+
+		//SetAspect(aspect);
 	}
 	void MainCamera::OnUpdate() {
 		auto& app = App::GetApp();
