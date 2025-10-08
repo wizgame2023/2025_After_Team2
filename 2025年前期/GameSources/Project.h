@@ -19,6 +19,7 @@
 #include "MunakataStage.h"
 #include "OkawaraStage.h"
 #include "TitleStage.h"
+#include "SelectStage.h"
 #include "Map.h"
 #include "MainCamera.h"
 #include "Sprite.h"

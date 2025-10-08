@@ -1,6 +1,6 @@
 /*!
-@file TitleStage.h
-@brief タイトルステージ
+@file SelectStage.h
+@brief セレクトステージ
 */
 
 #pragma once
@@ -9,20 +9,17 @@
 namespace basecross {
 
 	//--------------------------------------------------------------------------------------
-	//	タイトルステージクラス
+	//	セレクトステージクラス
 	//--------------------------------------------------------------------------------------
-	class TitleStage : public Stage {
+	class SelectStage : public Stage {
 		//ビューの作成
 		void CreateViewLight();
 	public:
 		//構築と破棄
-		TitleStage() :Stage() {}
-		virtual ~TitleStage() {}
+		SelectStage() :Stage() {}
+		virtual ~SelectStage() {}
 		//初期化
 		virtual void OnCreate()override;
-		virtual void OnUpdate()override;
-
-		void SpriteCreate();
 	};
 
 
