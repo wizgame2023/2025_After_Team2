@@ -111,6 +111,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Json.h">
       <Filter>Json\source</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)TitleStage.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -169,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Json.cpp">
       <Filter>Json\source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)TitleStage.cpp">
+      <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
