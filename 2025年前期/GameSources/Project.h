@@ -25,6 +25,7 @@
 #include "GimmickHand.h"
 #include "GimmickManager.h"
 #include "GameManager.h"
+#include "ResourceManager.h"
 #include "Json.h"
 #include "Card.h"
 #include "Menu.h"

@@ -474,6 +474,20 @@ namespace basecross{
 		shared_ptr<T> At(const wstring& root) {
 			return dynamic_pointer_cast<T>(At(root));
 		}
+
+		/// <summary>
+		/// 指定したキーに対応する値を取得。
+		/// 現状使いづらい。At<T>を使うべき。
+		/// virantを使わせろ
+		/// </summary>
+		/// <param name="key">キー</param>
+		/// <returns>値</returns>
+		inline shared_ptr<JsonValue> operator[](const wstring& key) {
+			if (!m_Root->HasKey(key)) {
+				throw BaseException(L"指定したキーが存在しません",key, L"Json::operator[](const wstring&)");
+			}
+			return m_Root->At(key);
+		}
 	};
 }
 //end basecross

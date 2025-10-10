@@ -116,6 +116,9 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)MenuStage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Menu.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ResourceManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -177,6 +180,9 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)MenuStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Menu.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ResourceManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json">
