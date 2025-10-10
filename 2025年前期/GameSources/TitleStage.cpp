@@ -61,7 +61,7 @@ namespace basecross {
 
 		if (input.wPressedButtons & XINPUT_GAMEPAD_A)
 		{
-			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToSelectStage");
 		}
 	}
 }
