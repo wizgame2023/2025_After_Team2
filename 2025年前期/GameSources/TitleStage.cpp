@@ -1,6 +1,6 @@
 /*!
-@file GameStage.cpp
-@brief ゲームステージ実体
+@file TitleStage.cpp
+@brief タイトルステージの実体
 */
 
 #include "stdafx.h"
@@ -9,7 +9,7 @@
 namespace basecross {
 
 	//--------------------------------------------------------------------------------------
-	//	ゲームステージクラス実体
+	//	タイトルステージ実体
 	//--------------------------------------------------------------------------------------
 	void TitleStage::CreateViewLight()
 	{
@@ -61,7 +61,7 @@ namespace basecross {
 
 		if (input.wPressedButtons & XINPUT_GAMEPAD_A)
 		{
-			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToSelectStage");
 		}
 	}
 }
