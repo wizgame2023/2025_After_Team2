@@ -19,7 +19,8 @@ namespace basecross
 		CourseCorrection,   // 進行方向補正
 		Teleporter,			// テレポーター
 		Killer,             // 即死ギミック
-		Roll				// 回転ギミック
+		Roll,				// 回転ギミック
+		Inverter			// 矢印の方向の反転
 	};
 
 	/*!
@@ -89,6 +90,14 @@ namespace basecross
 		void SetValue(Vec3 value)
 		{
 			m_Value = value;
+		}
+		/*!
+		@brief ギミックの方向ベクトルなどの値を取得する関数
+		@return ギミックの方向ベクトルなどの値
+		*/
+		Vec3 GetValue()
+		{
+			return m_Value;
 		}
 		/*!
 		@brief 実行回数の設定
@@ -252,6 +261,26 @@ namespace basecross
 		{
 			m_IsLeftRoll = on;
 		}
+	};
+
+	class GimmickInverter : public Gimmicks
+	{
+	public:
+		GimmickInverter(const shared_ptr<Stage>& ptrGimmick);
+		~GimmickInverter();
+		/*!
+		@brief ギミックの種類を取得
+		@return GimmickObjects::Inverter
+		*/
+		GimmickObjects GetGimmickType() override
+		{
+			return GimmickObjects::Inverter;
+		};
+		virtual void OnCreate();
+		virtual void Begin();
+		virtual void Update();
+		virtual void End() {}
+
 	};
 }
 //end basecross
