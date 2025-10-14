@@ -36,6 +36,8 @@ namespace basecross{
 		bool m_IsGameClear;
 		GameState m_GameState;
 
+		Json m_KeyConfigFile;
+
 		void DrawTempGimmicks();
 		bool IsUpdate();
 		void GimmickUpdate();
@@ -57,6 +59,8 @@ namespace basecross{
 			m_DirectionMap[L"north"] = Vec3(0, 0, 1);
 			m_DirectionMap[L"east"] = Vec3(1, 0, 0);
 			m_DirectionMap[L"west"] = Vec3(-1, 0, 0);
+
+			m_KeyConfigFile.Load(L"Json/keyconfig.json");
 		}
 
 		/// <summary>
@@ -136,7 +140,11 @@ namespace basecross{
 		/// </summary>
 		void Update();
 
+		void InputUpdate();
 
+		wstring GetKeyConfig(const wstring& key) {
+			return m_KeyConfigFile.At<JsonString>(key)->GetValue();
+		}
 		void DrawGoalEffect();
 		void DrawOverEffect();
 

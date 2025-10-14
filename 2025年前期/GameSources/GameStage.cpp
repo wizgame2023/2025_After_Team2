@@ -16,7 +16,7 @@ namespace basecross {
 		const Vec3 at(0.0f);
 		auto PtrView = CreateView<SingleView>();
 		//ビューのカメラの設定
-		auto PtrCamera = ObjectFactory::Create<Camera>();
+		auto PtrCamera = ObjectFactory::Create<MainCamera>(XM_PI);
 		PtrView->SetCamera(PtrCamera);
 		PtrCamera->SetEye(eye);
 		PtrCamera->SetAt(at);
@@ -26,16 +26,53 @@ namespace basecross {
 		PtrMultiLight->SetDefaultLighting();
 	}
 
-
+	void GameStage::CreateResorce() {
+		ResourceManager::RegisterTexture(L"Texture");
+		ResourceManager::RegisterTexture(L"UI");
+	}
 
 	void GameStage::OnCreate() {
 		try {
-			//ビューとライトの作成
+			GameManager::GetInstance().Reset();
+			GameManager::GetInstance().SetGameStage(GetThis<GameStage>());
+
 			CreateViewLight();
+			CreateResorce();
+
+
+			auto stageMap = AddGameObject<Map>();
+			stageMap->Load();
+
+			auto camera = static_pointer_cast<MainCamera>(GetView()->GetTargetCamera());
+			camera->SetFixedPoint(stageMap);
+
+			auto hand = AddGameObject<GimmickHand>();
+			hand->SetCardSize(Vec2(200, 300));
+			Json json;
+			json.Load(L"Level/level1.json");
+
+			hand->LoadHands(json.At<JsonArray>(L"items"));
+
+			GameManager::GetInstance().SetHand(hand);
+			GameManager::GetInstance().SetMap(stageMap);
+			auto view = dynamic_pointer_cast<SingleView>(GetView());
+			Viewport viewport = view->GetTargetViewport();
+			viewport.Height;
+			viewport.Width /= 1.5f;
+			viewport.TopLeftY = viewport.Height / 6.0f;
+			view->SetViewport(viewport);
+
+			App::GetApp()->GetScene<Scene>()->SetViewport(viewport);
+
+			AddChileStage<MenuStage>();
 		}
 		catch (...) {
 			throw;
 		}
+	}
+
+	void GameStage::OnUpdate() {
+		GameManager::GetInstance().Update();
 	}
 
 }

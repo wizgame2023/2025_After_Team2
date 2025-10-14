@@ -53,6 +53,9 @@ namespace basecross{
 
 		void LoadHands(shared_ptr<JsonArray>& items);
 
+		vector<shared_ptr<CardData>> GetCardData() {
+			return m_Hand;
+		}
 		/// <summary>
 		/// カードの描画サイズを設定
 		/// </summary>

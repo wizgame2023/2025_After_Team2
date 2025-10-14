@@ -25,6 +25,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Json.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MainCamera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Managers.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Menu.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MenuStage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MunakataStage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Object.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)OkawaraStage.h" />
@@ -32,6 +34,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Project.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ProjectBehavior.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ProjectShader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ResourceManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Map.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SelectStage.h" />
@@ -48,12 +51,15 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)InputManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Json.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MainCamera.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Menu.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MenuStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MunakataStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Object.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)OkawaraStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Player.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ProjectBehavior.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ProjectShader.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ResourceManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Scene.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Map.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)SelectStage.cpp" />
@@ -63,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json" />
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\keyconfig.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\resorce.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\setting.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Level\level1.json" />

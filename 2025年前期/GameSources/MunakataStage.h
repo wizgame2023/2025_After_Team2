@@ -10,19 +10,20 @@ namespace basecross {
 	class Map;
 	class MoveBall;
 	class GimmickHand;
+	static bool isChild = false;
+
 	//--------------------------------------------------------------------------------------
 	//	ゲームステージクラス
 	//--------------------------------------------------------------------------------------
 	class MStage : public GameStage {
-		void CreateViewLight();
-		void CreateResorce();
 	public:
 		//構築と破棄
-		MStage() :GameStage() {}
+		MStage() :GameStage(){}
 		virtual ~MStage() {}
 		//初期化
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
+
 	};
 
 

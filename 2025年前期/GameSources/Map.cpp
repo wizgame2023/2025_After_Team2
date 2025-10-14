@@ -13,25 +13,24 @@ namespace basecross{
 		//m_ColorTable = { Col4(1,0,0,1),Col4(0,1,0,1) };
 	}
 	void Map::OnUpdate() {
-		auto device = App::GetApp()->GetInputDevice().GetControlerVec()[0];
-		if (device.bConnected) {
-			if (device.wPressedButtons & XINPUT_GAMEPAD_DPAD_UP) {
-				m_SelectColorIndex++;
-				m_SelectColorIndex = min(m_ColorTable.size() - 1, m_SelectColorIndex);
-			}
-			if (device.wPressedButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
-				m_SelectColorIndex--;
-				m_SelectColorIndex = max(0, m_SelectColorIndex);
-			}
-			HighlightBox(m_ColorTable[m_SelectColorIndex]);
+		auto& input = InputManager::GetInputManager();
+		auto& gameManager = GameManager::GetInstance();
+		if (input->GetDownButton(gameManager.GetKeyConfig(L"colorNext"))) {
+			m_SelectColorIndex++;
+			m_SelectColorIndex = min(m_ColorTable.size() - 1, m_SelectColorIndex);
 		}
+		if (input->GetDownButton(gameManager.GetKeyConfig(L"colorBack"))) {
+			m_SelectColorIndex--;
+			m_SelectColorIndex = max(0, m_SelectColorIndex);
+		}
+		HighlightBox(m_ColorTable[m_SelectColorIndex]);
 	}
 
 	void Map::Load() {
 		int maxHeight = -100;
 
 		Json mapJson;
-		mapJson.Load(App::GetApp()->GetDataDirWString() + L"Level/level1.json");
+		mapJson.Load(L"Level/level1.json");
 
 		vector<int> mapSize = mapJson.At<JsonArray>(L"mapSize")->GetIntArray();
 		auto mapData = mapJson.At<JsonArray>(L"map")->GetObjectArray();
@@ -143,7 +142,7 @@ namespace basecross{
 		auto draw = AddComponent<PNTStaticDraw>();
 		draw->SetMeshResource(L"DEFAULT_CUBE");
 		
-		Json colorJson = Json(App::GetApp()->GetDataDirWString() + L"Json/color.json");
+		Json colorJson = Json(L"Json/color.json");
 		auto color = colorJson.At<JsonArray>(m_ColorStr)->GetFloatArray();
 		m_DefaultColor = Col4(color[0], color[1], color[2], 1.0f);
 		draw->SetDiffuse(m_DefaultColor);

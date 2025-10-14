@@ -46,6 +46,9 @@
     <Filter Include="Json\Resource">
       <UniqueIdentifier>{496428e3-4552-43a3-8583-45179f26d6f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{840e50f3-4479-4ace-88a7-d467ac806cea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h">
@@ -115,6 +118,11 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)SelectStage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MenuStage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Menu.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ResourceManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -178,6 +186,11 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)SelectStage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MenuStage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Menu.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ResourceManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json">
@@ -191,6 +204,9 @@
     </None>
     <None Include="$(MSBuildThisFileDirectory)..\media\Level\level1.json">
       <Filter>Json\Level</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\keyconfig.json">
+      <Filter>Json\Resource</Filter>
     </None>
   </ItemGroup>
 </Project>

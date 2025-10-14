@@ -1,10 +1,10 @@
 {
   "Model": {
-    "Player.bmf": { "model": "GOAL_MD", "texture": "",  "mesh": "static"},
-    "Goal.bmf": {   "model": "GOAL_MD", "texture": "",  "mesh": "static"}
+    "Player.bmf": { "model": "PLAYER_MD", "texture": "",  "type": "static"},
+    "Goal.bmf": {   "model": "GOAL_MD", "texture": "",  "type": "static"}
   },
-  "Textures": {
-
+  "Texture": {
+    "arrow_Orbit.png": "TEMP_ARROW_SPRITE"
   },
   "Sound": {
 
@@ -15,6 +15,8 @@
     "testSetPl.png": "TEMP_GIMMICK_PLAYER",
     "testUpper.png": "TEMP_GIMMICK_UPPER",
     "testCoruse.png": "TEMP_GIMMICK_COURSE",
-    "testGoalTxt.png": "TEMP_GOAL_SPRITE"
+    "testGoalTxt.png": "TEMP_GOAL_SPRITE",
+    "testOver.png": "TEMP_OVER_SPRITE"
+
   }
 }
