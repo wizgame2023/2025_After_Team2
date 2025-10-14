@@ -15,18 +15,20 @@ namespace basecross{
 	void Scene::OnCreate(){
 		try {
 
-			auto& app = App::GetApp();
+			//auto& app = App::GetApp();
 
-			wstring path = app->GetDataDirWString() + L"Model/";
-			auto staticModel = MeshResource::CreateStaticModelMesh(path, L"Player.bmf");
-			app->RegisterResource(L"PLAYER_MD", staticModel);
-			staticModel = MeshResource::CreateStaticModelMesh(path, L"Goal.bmf");
-			app->RegisterResource(L"GOAL_MD", staticModel);
+			//wstring path = app->GetDataDirWString() + L"Model/";
+			//auto staticModel = MeshResource::CreateStaticModelMesh(path, L"Player.bmf");
+			//app->RegisterResource(L"PLAYER_MD", staticModel);
+			//staticModel = MeshResource::CreateStaticModelMesh(path, L"Goal.bmf");
+			//app->RegisterResource(L"GOAL_MD", staticModel);
 
 			InputManager::CreateInputManager();
 
 			Json::SetDefaultFilePath(App::GetApp()->GetDataDirWString());
 			ResourceManager::Load(L"Json/resorce.json");
+
+			ResourceManager::RegisterResource(L"Model");
 			//ƒNƒŠƒA‚·‚éF‚ğİ’è
 			Col4 Col;
 			Col.set(31.0f / 255.0f, 30.0f / 255.0f, 71.0f / 255.0f, 255.0f / 255.0f);
