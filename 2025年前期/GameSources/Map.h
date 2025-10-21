@@ -89,8 +89,10 @@ namespace basecross{
 
 		//引数にはギミックのオブジェクト
 		void PutGimmick(shared_ptr<CardData>& type);
+		void PutGimmick(int colorIdx,shared_ptr<CardData>& type);
 
 		shared_ptr<CardData> RecoverGimmick();
+		shared_ptr<CardData> RecoverGimmick(int colorIdx);
 	};
 
 

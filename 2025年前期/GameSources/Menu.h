@@ -8,15 +8,21 @@
 
 namespace basecross{
 	class Coursor;
+	struct Line {
+		shared_ptr<Sprite> m_Line;
+		pair<int, int> m_PairHandle;
+	};
 	class Menu : public Object {
 		map<GimmickObjects, wstring> m_GimmickTextures;
 		shared_ptr<Stage> m_MenuStage;
 		shared_ptr<Coursor> m_Coursor;
+		shared_ptr<Sprite> m_CurrentLine;
 
 		shared_ptr<Sprite> m_BackGround;
 		vector<shared_ptr<Sprite>> m_ColorPalette;
 		vector<shared_ptr<Sprite>> m_GimmcikSprites;
-		vector<shared_ptr<Sprite>> m_Line;
+		vector<Line> m_Lines;
+
 		wstring m_ColorTexture;
 		wstring m_BackGroundTexture;
 
@@ -24,6 +30,10 @@ namespace basecross{
 
 		int m_ColorHandle;
 		int m_GimmikcHandle;
+
+		bool UpdateOnCoursorHandle();
+		vector<pair<int, int>> ConvertColorGimmickHandles(vector<Line>& lines);
+		void DrawLine(Vec3 start, Vec3 end);
 	public:
 		Menu(const shared_ptr<Stage>& ptr,const wstring& colorTex,const wstring& backGroundTex,Viewport& mainViewport) 
 			: Object(ptr),
