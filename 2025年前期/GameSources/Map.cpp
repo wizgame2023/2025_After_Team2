@@ -15,14 +15,7 @@ namespace basecross{
 	void Map::OnUpdate() {
 		auto& input = InputManager::GetInputManager();
 		auto& gameManager = GameManager::GetInstance();
-		if (input->GetDownButton(gameManager.GetKeyConfig(L"colorNext"))) {
-			m_SelectColorIndex++;
-			m_SelectColorIndex = min(m_ColorTable.size() - 1, m_SelectColorIndex);
-		}
-		if (input->GetDownButton(gameManager.GetKeyConfig(L"colorBack"))) {
-			m_SelectColorIndex--;
-			m_SelectColorIndex = max(0, m_SelectColorIndex);
-		}
+
 		HighlightBox(m_ColorTable[m_SelectColorIndex]);
 	}
 
@@ -86,9 +79,6 @@ namespace basecross{
 				if (colorText == map.m_ColorStr) {
 					draw->SetDiffuse(box->GetDefaultColor() - Col4(0.3f, 0.3f, 0.3f, 0));
 				}
-				else if (map.m_Gimmik) {
-					draw->SetDiffuse(box->GetDefaultColor() + Col4(0.6f, 0.6f, 0.6f, 0.0f));
-				}
 				else{
 					draw->SetDiffuse(box->GetDefaultColor());
 				}
@@ -96,10 +86,13 @@ namespace basecross{
 		}
 	}
 	void Map::PutGimmick(shared_ptr<CardData>& type) {
-		wstring color = m_ColorTable[m_SelectColorIndex];
+		PutGimmick(m_SelectColorIndex, type);
+	}
+	void Map::PutGimmick(int colorIdx,shared_ptr<CardData>& type) {
+		wstring colorStr = m_ColorTable[colorIdx];
 		for (auto& mapVec : m_Map) {
 			for (auto& map : mapVec) {
-				if (color == map.m_ColorStr) {
+				if (colorStr == map.m_ColorStr) {
 					//Ç∑Ç≈Ç…ê›íuÇµÇƒÇ¢ÇÈÇ»ÇÁîjâÛ
 					if (map.m_Gimmik != nullptr) {
 						continue;
@@ -115,7 +108,10 @@ namespace basecross{
 		}
 	}
 	shared_ptr<CardData> Map::RecoverGimmick() {
-		wstring color = m_ColorTable[m_SelectColorIndex];
+		return RecoverGimmick(m_SelectColorIndex);
+	}
+	shared_ptr<CardData> Map::RecoverGimmick(int colorIdx) {
+		wstring color = m_ColorTable[colorIdx];
 		shared_ptr<CardData> type;
 		for (auto& mapVec : m_Map) {
 			for (auto& map : mapVec) {
@@ -123,9 +119,9 @@ namespace basecross{
 					//Ç∑Ç≈Ç…ê›íuÇµÇƒÇ¢ÇÈÇ»ÇÁîjâÛ
 					if (map.m_Gimmik != nullptr) {
 						m_Stage->RemoveGameObject<Gimmicks>(map.m_Gimmik);
-						
+
 						map.m_Gimmik = nullptr;
-						
+
 						type = map.m_GimmickType;
 					}
 				}

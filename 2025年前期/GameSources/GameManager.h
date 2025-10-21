@@ -15,7 +15,7 @@ namespace basecross{
 
 	class GameManager : public SingletonBase<GameManager> {
 		friend class SingletonBase<GameManager>;
-		GameManager():m_Tick(0.0f),m_UpdateTicks(0.5f) {
+		GameManager():m_Tick(0.0f),m_UpdateTicks(0.5f), m_TickRate(1.0f){
 			
 		}
 
@@ -31,8 +31,12 @@ namespace basecross{
 
 		map<wstring, Vec3> m_DirectionMap;
 
+		vector<pair<int, int>> m_GimmickColorPairs;
+		vector<pair<int, int>> m_BeforeGimmickColorPairs;
+
 		float m_Tick;
 		float m_UpdateTicks;
+		float m_TickRate;
 		bool m_IsGameClear;
 		GameState m_GameState;
 
@@ -102,6 +106,10 @@ namespace basecross{
 			return m_Hand;
 		}
 
+		void SetPair(vector<pair<int, int>> gimmickPair) {
+			m_GimmickColorPairs = gimmickPair;
+		}
+
 		/// <summary>
 		/// ステージマップを登録
 		/// </summary>
@@ -132,6 +140,10 @@ namespace basecross{
 
 		Vec3 DirectionStrToVec(const wstring& str) {
 			return m_DirectionMap[str];
+		}
+
+		float GetGameSpeed()const {
+			return m_UpdateTicks / m_TickRate;
 		}
 
 		void Start();

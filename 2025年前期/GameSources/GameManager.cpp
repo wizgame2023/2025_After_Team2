@@ -49,6 +49,9 @@ namespace basecross{
 		for (auto& mapVec : m_Map->GetMapData()) {
 			for (auto& map : mapVec) {
 				if (map.m_Gimmik) {
+					auto color = map.m_Gimmik->GetComponent<SmBaseDraw>()->GetDiffuse();
+					color.w = 1.0f;
+					map.m_Gimmik->GetComponent<SmBaseDraw>()->SetDiffuse(color);
 					map.m_Gimmik->Begin();
 				}
 			}
@@ -62,12 +65,31 @@ namespace basecross{
 	void GameManager::Update() {
 		m_KeyConfigFile.Load(L"Json/keyconfig.json");
 		InputUpdate();
-		
+		//前のフレームから消えた物を削除
+		for (int i = 0; i < m_BeforeGimmickColorPairs.size(); i++) {
+			if (find(
+				m_GimmickColorPairs.begin(), m_GimmickColorPairs.end(),
+				m_BeforeGimmickColorPairs[i]) == m_GimmickColorPairs.end()) {
+
+				m_Map->RecoverGimmick(m_BeforeGimmickColorPairs[i].first);
+			}
+		}
+		//前のフレームから消えたものを追加
+		for (int i = 0; i < m_GimmickColorPairs.size(); i++) {
+			if (find(
+				m_BeforeGimmickColorPairs.begin(),m_BeforeGimmickColorPairs.end(),
+				m_GimmickColorPairs[i]) == m_BeforeGimmickColorPairs.end()) {
+
+				m_Map->PutGimmick(m_GimmickColorPairs[i].first, m_Hand->Get(m_GimmickColorPairs[i].second));
+			}
+		}
+		m_BeforeGimmickColorPairs = m_GimmickColorPairs;
+
 		//ここから下はゲーム進行中の処理
-		if (!CompareState(GameState::Game)) return;
+		if (!CompareState(GameState::Game))return;
 
 		m_Tick += App::GetApp()->GetElapsedTime();
-		if (m_Tick <= m_UpdateTicks) return;
+		if (m_Tick <= m_UpdateTicks / m_TickRate) return;
 
 		if (!IsUpdate()) return;
 		m_Tick = 0;
@@ -79,27 +101,28 @@ namespace basecross{
 	void GameManager::InputUpdate() {
 
 		auto& input = InputManager::GetInputManager();
-		if (input->GetDownButton(GetKeyConfig(L"toolBack"))) {
-			m_Hand->Back();
-		}
-		if (input->GetDownButton(GetKeyConfig(L"toolNext"))) {
-			m_Hand->Next();
-		}
-		if (input->GetDownButton(GetKeyConfig(L"putGimmick")) && !m_Map->CheckPutGimmick())
-		{
-			m_Map->PutGimmick(m_Hand->Use());
-			if (m_Hand->IsEmpty()) {
-				GameManager::GetInstance().Start();
-			}
-		}
-		if (input->GetDownButton(GetKeyConfig(L"recoverGimmick")) && m_Map->CheckPutGimmick()) {
-			m_Hand->Add(m_Map->RecoverGimmick());
-		}
 		if (CompareState(GameState::Clear) || CompareState(GameState::Over)) {
 			if (input->GetDownButton(GetKeyConfig(L"restart"))) {
 				m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 			}
 		}
+		if (input->GetDownButton(GetKeyConfig(L"start"))) {
+			if (CompareState(GameState::Put)) {
+				if (m_GimmickColorPairs.size() == m_Map->GetColorTable().size()) {
+					Start();
+				}
+			}
+		}
+
+		if (!CompareState(GameState::Game)) return;
+
+		if (input->GetButton(GetKeyConfig(L"fastMove"))) {
+			m_TickRate = 3.0f;
+		}
+		else {
+			m_TickRate = 1.0f;
+		}
+
 	}
 
 	void GameManager::DrawGoalEffect() {

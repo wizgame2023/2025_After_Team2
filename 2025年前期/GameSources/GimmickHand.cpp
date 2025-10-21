@@ -89,5 +89,8 @@ namespace basecross{
 	shared_ptr<CardData> GimmickHand::Get() {
 		return m_Hand[m_SelectIndex];
 	}
+	shared_ptr<CardData> GimmickHand::Get(int index) {
+		return m_Hand[index];
+	}
 }
 //end basecross
