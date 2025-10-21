@@ -60,6 +60,12 @@ namespace basecross{
 	void Menu::OnUpdate() {
 		auto& input = InputManager::GetInputManager();
 		auto& gameManager = GameManager::GetInstance();
+
+		if (input->GetDownButton(gameManager.GetKeyConfig(L"undo")) && m_Lines.size() > 0) {
+			auto line = m_Lines.back();
+			m_Lines.pop_back();
+			m_MenuStage->RemoveGameObject<Sprite>(line.m_Line);
+		}
 		if (input->GetDownButton(gameManager.GetKeyConfig(L"putGimmick"))) {
 			UpdateOnCoursorHandle();
 		}

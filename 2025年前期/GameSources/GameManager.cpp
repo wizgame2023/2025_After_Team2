@@ -41,10 +41,6 @@ namespace basecross{
 		}
 	}
 
-	void GameManager::DrawTempGimmicks() {
-		
-	}
-
 	void GameManager::Start() {
 		for (auto& mapVec : m_Map->GetMapData()) {
 			for (auto& map : mapVec) {

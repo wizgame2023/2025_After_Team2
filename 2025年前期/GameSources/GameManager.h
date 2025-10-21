@@ -42,7 +42,6 @@ namespace basecross{
 
 		Json m_KeyConfigFile;
 
-		void DrawTempGimmicks();
 		bool IsUpdate();
 		void GimmickUpdate();
 		void CubeUpdate();
