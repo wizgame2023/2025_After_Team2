@@ -8,7 +8,7 @@
 
 namespace basecross{
 	MoveCube::MoveCube(const shared_ptr<Stage>& ptr) : Object(ptr), 
-		m_IsEffecting(false),
+		m_IsEffecting(false), m_IsBeforeEffecting(false),
 		m_MoveSpeed(0.0f){}
 
 	void MoveCube::OnCreate() {
@@ -109,8 +109,15 @@ namespace basecross{
 			m_Velocity += moveAmount;
 		}
 		}
-
 	
+		if (m_IsBeforeEffecting && !m_IsEffecting) {
+			auto mapData = GameManager::GetInstance().GetMap()->
+				GetMapData(Vec2(static_cast<int>(position.x), static_cast<int>(position.y)));
+			if (mapData.m_Gimmik) {
+				mapData.m_Gimmik->End();
+			}
+		}
+		m_IsBeforeEffecting = m_IsEffecting;
 		SetPosition(position);
 	}
 	bool MoveCube::CheckArea() {
@@ -137,7 +144,28 @@ namespace basecross{
 		float r = 1.0f / sqrt(2.0f);
 		return m_CurrentHeight + r * sin(XM_PIDIV4 + rot) - 0.5f;
 	}
+	void MoveCube::ChangeVelocity(Vec3 velocity) {
+		if (m_IsEffecting) return;
+		m_IsEffecting = true;
 
+		m_State = MoveState::ChangeVelocity;
+		m_TargetVelocity = velocity;
+		m_MoveVelocitySpeed = (m_TargetVelocity - m_Velocity) / GameManager::GetInstance().GetGameSpeed();
+	}
+	void MoveCube::Move() {
+		if (m_IsEffecting) return;
+		m_IsEffecting = true;
+
+		if (!CheckArea() || m_IsDead) {
+			m_IsEffecting = false;
+			m_Target = GetPosition();
+		}
+		m_Target = GetPosition() + m_Velocity.normalize();
+		m_MoveSpeed = (m_Target - GetPosition()).length() / GameManager::GetInstance().GetGameSpeed();
+		m_RotateSpeed = XM_PIDIV2 / GameManager::GetInstance().GetGameSpeed();
+		m_RotateRad = 0;
+		m_State = MoveState::Move;
+	}
 	void MoveCube::Destroy() {
 		for (int i = 0; i < 2; i++) {
 			m_Stage->RemoveGameObject<Board>(m_Sprites[i]);

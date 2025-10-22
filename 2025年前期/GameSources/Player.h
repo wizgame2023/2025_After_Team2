@@ -5,7 +5,6 @@
 
 #pragma once
 #include "stdafx.h"
-
 namespace basecross{
 	class Board;
 	enum class MoveState {
@@ -15,6 +14,7 @@ namespace basecross{
 	};
 	class MoveCube : public Object {
 		bool m_IsEffecting;		//演出中か(移動、テレポートなど)
+		bool m_IsBeforeEffecting;//前フレームの演出状態
 		bool m_IsDead;			//死亡判定
 		Vec3 m_TelepoteTarget;	//テレポート先
 		Vec3 m_TargetVelocity;	//移動方向の変更時の値
@@ -74,14 +74,8 @@ namespace basecross{
 		void SetVelocity(Vec3 velocity) {
 			m_Velocity = velocity;
 		}
-		void ChangeVelocity(Vec3 velocity) {
-			if (m_IsEffecting) return;
-			m_IsEffecting = true;
+		void ChangeVelocity(Vec3 velocity);
 
-			m_State = MoveState::ChangeVelocity;
-			m_TargetVelocity = velocity;
-			m_MoveVelocitySpeed = (m_TargetVelocity - m_Velocity) / m_MoveSec;
-		}
 		Vec3 GetVelocity()const {
 			return m_Velocity;
 		}
@@ -90,20 +84,7 @@ namespace basecross{
 			return m_MoveArea;
 		}
 
-		void Move() {
-			if (m_IsEffecting) return;
-			m_IsEffecting = true;
-
-			if (!CheckArea() || m_IsDead) {
-				m_IsEffecting = false;
-				m_Target = GetPosition();
-			}
-			m_Target = GetPosition() + m_Velocity.normalize();
-			m_MoveSpeed = (m_Target - GetPosition()).length() / m_MoveSec;
-			m_RotateSpeed = XM_PIDIV2 / m_MoveSec;
-			m_RotateRad = 0;
-			m_State = MoveState::Move;
-		}
+		void Move();
 		void Telepote(Vec3 target) {
 			if (m_IsEffecting || m_IsDead) return;
 			m_IsEffecting = true;

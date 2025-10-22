@@ -94,7 +94,8 @@ namespace basecross{
 
 		auto draw = AddComponent<PNTStaticModelDraw>();
 		draw->SetMeshResource(L"GOAL_MD");
-		draw->SetDiffuse(Col4(0, 1, 0, 1));
+		SetAlphaActive(true);
+		draw->SetDiffuse(Col4(0, 1, 0, 0.5f));
 
 		Mat4x4 mat;
 		mat.affineTransformation(Vec3(0.9f), Vec3(), Vec3(), Vec3(0.0f, -0.9f, 0.0f));
@@ -173,13 +174,15 @@ namespace basecross{
 
 	void GimmickCourseCorrection::Update()
 	{
+		
+	}
+	void GimmickCourseCorrection::End() {
 		Gimmicks::Update();
 		if (CheckCount())
 		{
 			m_Cube->ChangeVelocity(m_Value);
 		}
 	}
-	
 	GimmickTeleporter::GimmickTeleporter(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage)
 	{
@@ -268,6 +271,9 @@ namespace basecross{
 
 	void GimmickRoll::Update()
 	{
+		
+	}
+	void GimmickRoll::End() {
 		Gimmicks::Update();
 		if (CheckCount())
 		{
@@ -290,7 +296,6 @@ namespace basecross{
 			}
 		}
 	}
-
 	GimmickInverter::GimmickInverter(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage)
 	{

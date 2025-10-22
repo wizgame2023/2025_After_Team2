@@ -25,6 +25,7 @@ namespace basecross{
 		Vec2 colorPalettePosition = Vec2(menuPosition.x + 100.0f, menuPosition.y + menuSize.y / 2.0f - 100.0f);
 		Vec2 gimmickPosition = Vec2(menuPosition.x + menuSize.x - 100.0f, menuPosition.y + menuSize.y / 2.0f - 100.0f);
 
+		auto expainMenu = m_MenuStage->AddGameObject<Sprite>(m_BackGroundTexture, Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f,0.0f), Vec2(menuSize.x,menuSize.y * 0.25f), Anchor::TopLeft);
 		auto& gameManager = GameManager::GetInstance();
 
 		auto colorTable = gameManager.GetMap()->GetColorTable();
@@ -55,50 +56,88 @@ namespace basecross{
 		m_Coursor = m_MenuStage->AddGameObject<Coursor>(L"TEMP_GIMMICK_COURSE");
 		m_Coursor->SetCoursorSize(25.0f);
 		m_Coursor->SetMoveSpeed(300.0f);
-		m_Coursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), m_BackGround->GetAnchorPosition(Anchor::BottomLeft));
+		m_Coursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), expainMenu->GetAnchorPosition(Anchor::TopLeft));
 	}
 	void Menu::OnUpdate() {
 		auto& input = InputManager::GetInputManager();
 		auto& gameManager = GameManager::GetInstance();
+
+		if (input->GetDownButton(gameManager.GetKeyConfig(L"undo")) && m_Lines.size() > 0) {
+			auto line = m_Lines.back();
+			m_Lines.pop_back();
+			m_MenuStage->RemoveGameObject<Sprite>(line.m_Line);
+		}
 		if (input->GetDownButton(gameManager.GetKeyConfig(L"putGimmick"))) {
-			m_ColorHandle = OnCoursorHandle(m_ColorPalette);
-			m_GimmikcHandle = OnCoursorHandle(m_GimmcikSprites);
-
-			if (m_ColorHandle != -1 || m_GimmikcHandle != -1) {
-				m_Line.push_back(m_MenuStage->AddGameObject<Sprite>(m_ColorTexture, m_Coursor->GetPosition(), Vec2(10,10), Anchor::Center));
-				if (m_ColorHandle != -1) {
-					m_Line.back()->SetDiffuse(m_ColorPalette[m_ColorHandle]->GetDiffuse());
-				}
-			}
-
+			UpdateOnCoursorHandle();
 		}
 
 		if (m_ColorHandle != -1 || m_GimmikcHandle != -1) {
-			Vec2 handlePosition;
+			if (!m_CurrentLine)return;
 
-			handlePosition = m_ColorHandle != -1 
-				? m_ColorPalette[m_ColorHandle]->GetPosition() : m_GimmcikSprites[m_GimmikcHandle]->GetPosition();
+			Vec3 coursorPosition = m_Coursor->GetPosition();
+			Vec3 handlePosition;
+			if (m_ColorHandle != -1) {
+				handlePosition = m_ColorPalette[m_ColorHandle]->GetPosition();
+				int handle = OnCoursorHandle(m_GimmcikSprites);
+				if (handle != -1) {
+					coursorPosition = m_GimmcikSprites[handle]->GetPosition();
+				}
+			}
+			else {
+				handlePosition = m_GimmcikSprites[m_GimmikcHandle]->GetPosition();
+				int handle = OnCoursorHandle(m_ColorPalette);
+				if (handle != -1) {
+					coursorPosition = m_ColorPalette[handle]->GetPosition();
+				}
+			}			
 
-			Vec2 direction = static_cast<Vec2>(m_Coursor->GetPosition()) - handlePosition;
-			auto& sprite = m_Line.back();
-			sprite->SetSize(Vec2(sprite->GetSize().x, direction.length()));
-			sprite->SetPosition(static_cast<Vec3>(handlePosition + direction / 2.0f));
-			sprite->VectorToward(direction.normalize());
+			DrawLine(handlePosition, coursorPosition);
 
 			if (input->GetUpButton(gameManager.GetKeyConfig(L"putGimmick"))) {
-				int handle = -1;
-				handle = m_ColorHandle != -1 ? OnCoursorHandle(m_GimmcikSprites) : OnCoursorHandle(m_ColorPalette);
-				if (handle == -1) {
-					m_MenuStage->RemoveGameObject<Sprite>(m_Line.back());
-					m_Line.pop_back();
+				if (UpdateOnCoursorHandle() && m_ColorHandle != -1 && m_GimmikcHandle != -1) {
+					stack<vector<Line>::iterator> eraseIteraters;
+					for (auto it = m_Lines.begin(); it != m_Lines.end(); it++) {
+						auto& pair = (*it).m_PairHandle;
+						if (pair.first == m_ColorHandle || pair.second == m_GimmikcHandle) {
+							m_MenuStage->RemoveGameObject<Sprite>((*it).m_Line);
+							eraseIteraters.push(it);
+						}
+					}
+					while (!eraseIteraters.empty()) {
+						m_Lines.erase(eraseIteraters.top());
+						eraseIteraters.pop();
+					}
+					m_Lines.push_back({ m_CurrentLine,pair<int,int>{m_ColorHandle,m_GimmikcHandle} });
 				}
-				else if(m_ColorHandle == -1){
-					m_Line.back()->SetDiffuse(m_ColorPalette[handle]->GetDiffuse());
+				else {
+					m_MenuStage->RemoveGameObject<Sprite>(m_CurrentLine);
 				}
-
+				m_CurrentLine = nullptr;
 				m_ColorHandle = m_GimmikcHandle = -1;
 			}
 		}
+
+		gameManager.UpdatePair(ConvertColorGimmickHandles(m_Lines));
+	}
+
+	bool Menu::UpdateOnCoursorHandle() {
+		int colorHandle = OnCoursorHandle(m_ColorPalette);
+		int gimmickHandle = OnCoursorHandle(m_GimmcikSprites);
+		
+		if (colorHandle == -1 && gimmickHandle == -1) return false;
+
+		if (!m_CurrentLine) {
+			m_CurrentLine = m_MenuStage->AddGameObject<Sprite>(m_ColorTexture, m_Coursor->GetPosition(), Vec2(10, 10), Anchor::Center);
+		}
+
+		if (colorHandle >= 0) {
+			m_ColorHandle = colorHandle;
+			m_CurrentLine->SetDiffuse(m_ColorPalette[colorHandle]->GetDiffuse());
+		}
+		if (gimmickHandle >= 0) {
+			m_GimmikcHandle = gimmickHandle;
+		}
+		return true;
 	}
 	int Menu::OnCoursorHandle(vector<shared_ptr<Sprite>>& sprites) {
 		for (int i = 0; i < sprites.size(); i++) {
@@ -110,7 +149,22 @@ namespace basecross{
 		}
 		return -1;
 	}
+	vector<pair<int, int>> Menu::ConvertColorGimmickHandles(vector<Line>& lines) {
+		vector<pair<int, int>> p;
+		for (auto& line : lines) {
+			auto& handles = line.m_PairHandle;
+			p.push_back(pair<int, int>{handles.first, handles.second});
+		}
+		return p;
+	}
+	void Menu::DrawLine(Vec3 start, Vec3 end) {
 
+		Vec3 direction = end - start;
+		m_CurrentLine->SetSize(Vec2(m_CurrentLine->GetSize().x, direction.length()));
+		m_CurrentLine->SetPosition(start + direction / 2.0f);
+		m_CurrentLine->VectorToward(static_cast<Vec2>(direction.normalize()));
+
+	}
 
 	void Coursor::OnCreate() {
 		m_Coursor = m_MenuStage->AddGameObject<Sprite>(m_CoursorTexture, Vec3(), Vec2(), Anchor::Center);

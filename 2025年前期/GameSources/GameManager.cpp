@@ -1,6 +1,6 @@
 /*!
 @file Character.cpp
-@brief ƒLƒƒƒ‰ƒNƒ^[‚È‚ÇÀ‘Ì
+@brief ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãªã©å®Ÿä½“
 */
 
 #include "stdafx.h"
@@ -15,20 +15,37 @@ namespace basecross{
 		}
 		return true;
 	}
-	void GameManager::GimmickUpdate() {
-		for (auto& mapVec : m_Map->GetMapData()) {
-			for (auto& map : mapVec) {
-				if (map.m_Gimmik) {
-					map.m_Gimmik->Update();
-				}
+	void GameManager::MapUpdate() {
+		//å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰æ¶ˆãˆãŸç‰©ã‚’å‰Šé™¤
+		for (int i = 0; i < m_BeforeGimmickColorPairs.size(); i++) {
+			if (find(
+				m_GimmickColorPairs.begin(), m_GimmickColorPairs.end(),
+				m_BeforeGimmickColorPairs[i]) == m_GimmickColorPairs.end()) {
+
+				m_Map->RecoverGimmick(m_BeforeGimmickColorPairs[i].first);
 			}
+		}
+		//å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰æ¶ˆãˆãŸã‚‚ã®ã‚’è¿½åŠ 
+		for (int i = 0; i < m_GimmickColorPairs.size(); i++) {
+			if (find(
+				m_BeforeGimmickColorPairs.begin(), m_BeforeGimmickColorPairs.end(),
+				m_GimmickColorPairs[i]) == m_BeforeGimmickColorPairs.end()) {
+
+				m_Map->PutGimmick(m_GimmickColorPairs[i].first, m_Hand->Get(m_GimmickColorPairs[i].second));
+			}
+		}
+		m_BeforeGimmickColorPairs = m_GimmickColorPairs;
+	}
+	void GameManager::GimmickUpdate() {
+		for (auto& gimmick : m_Map->GetGimmicks()) {
+			gimmick->Update();
 		}
 	}
 	void GameManager::CubeUpdate() {
-		//ƒQ[ƒ€ƒI[ƒo[”»’è
+		//ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼åˆ¤å®š
 		bool isOver = true;
 		for (auto& cube : m_Cubes) {
-			//ˆê‚Â‚Å‚à“®‚¯‚éƒLƒ…[ƒu‚ª‚¢‚½‚çfalse
+			//ä¸€ã¤ã§ã‚‚å‹•ã‘ã‚‹ã‚­ãƒ¥ãƒ¼ãƒ–ãŒã„ãŸã‚‰false
 			if (cube->CheckArea()) isOver = false;
 			cube->Move();
 		}
@@ -40,6 +57,7 @@ namespace basecross{
 			cube->SetUpdateActive(false);
 		}
 	}
+
 
 	void GameManager::ResultUpdate()
 	{
@@ -58,16 +76,16 @@ namespace basecross{
 		
 	}
 
+
 	void GameManager::Start() {
-		for (auto& mapVec : m_Map->GetMapData()) {
-			for (auto& map : mapVec) {
-				if (map.m_Gimmik) {
-					map.m_Gimmik->Begin();
-				}
-			}
+		for (auto& gimmick : m_Map->GetGimmicks()) {
+			auto color = gimmick->GetComponent<SmBaseDraw>()->GetDiffuse();
+			color.w = 1.0f;
+			gimmick->GetComponent<SmBaseDraw>()->SetDiffuse(color);
+			gimmick->Begin();
 		}
 		for (auto& sphere : m_Cubes) {
-			//ƒvƒŒƒCƒ„[‚ğ‰Ò“­ŠJn
+			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç¨¼åƒé–‹å§‹
 			sphere->SetUpdateActive(true);
 		}
 		m_GameState = GameState::Game;
@@ -76,11 +94,13 @@ namespace basecross{
 		m_KeyConfigFile.Load(L"Json/keyconfig.json");
 		InputUpdate();
 		ResultUpdate();
-		//‚±‚±‚©‚ç‰º‚ÍƒQ[ƒ€is’†‚Ìˆ—
-		if (!CompareState(GameState::Game)) return;
+		MapUpdate();
+		//ã“ã“ã‹ã‚‰ä¸‹ã¯ã‚²ãƒ¼ãƒ é€²è¡Œä¸­ã®å‡¦ç†
+		if (!CompareState(GameState::Game))return;
 
 		m_Tick += App::GetApp()->GetElapsedTime();
-		if (m_Tick <= m_UpdateTicks) return;
+		float updateTick = m_UpdateTicks / m_TickRate;
+		if (m_Tick <= updateTick) return;
 
 
 		if (!IsUpdate()) return;
@@ -94,27 +114,28 @@ namespace basecross{
 
 
 		auto& input = InputManager::GetInputManager();
-		if (input->GetDownButton(GetKeyConfig(L"toolBack"))) {
-			m_Hand->Back();
-		}
-		if (input->GetDownButton(GetKeyConfig(L"toolNext"))) {
-			m_Hand->Next();
-		}
-		if (input->GetDownButton(GetKeyConfig(L"putGimmick")) && !m_Map->CheckPutGimmick())
-		{
-			m_Map->PutGimmick(m_Hand->Use());
-			if (m_Hand->IsEmpty()) {
-				GameManager::GetInstance().Start();
-			}
-		}
-		if (input->GetDownButton(GetKeyConfig(L"recoverGimmick")) && m_Map->CheckPutGimmick()) {
-			m_Hand->Add(m_Map->RecoverGimmick());
-		}
 		if (CompareState(GameState::Clear) || CompareState(GameState::Over)) {
 			if (input->GetDownButton(GetKeyConfig(L"restart"))) {
 				m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 			}
 		}
+		if (input->GetDownButton(GetKeyConfig(L"start"))) {
+			if (CompareState(GameState::Put)) {
+				if (m_GimmickColorPairs.size() == m_Map->GetColorTable().size()) {
+					Start();
+				}
+			}
+		}
+
+		if (!CompareState(GameState::Game)) return;
+
+		if (input->GetButton(GetKeyConfig(L"fastMove"))) {
+			m_TickRate = 3.0f;
+		}
+		else {
+			m_TickRate = 1.0f;
+		}
+
 	}
 
 	void GameManager::DrawGoalEffect() {
@@ -205,7 +226,7 @@ namespace basecross{
 		float alpha = current.getW();
 		Vec2 currentSize = star->GetSize();
 
-		// ƒtƒF[ƒhƒCƒ“
+		// ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³
 		if (alpha < 1.0f)
 		{
 			alpha += 0.15f;

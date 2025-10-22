@@ -1,12 +1,7 @@
 {
-  "cameraRollR": "R",
-  "cameraRollL": "L",
-  "cameraUp": "X",
   "putGimmick": "A",
-  "recoverGimmick": "B",
+  "fastMove": "Y",
+  "start": "B",
   "restart": "X",
-  "toolNext": "DRight",
-  "toolBack": "DLeft",
-  "colorNext": "DUp",
-  "colorBack": "DDown"
+  "undo": "L"
 }

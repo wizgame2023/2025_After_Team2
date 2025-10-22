@@ -86,6 +86,13 @@ namespace basecross{
 		shared_ptr<CardData> Get();
 
 		/// <summary>
+		/// 指定した番号のカードのデータを取得
+		/// </summary>
+		/// <param name="index">番号</param>
+		/// <returns></returns>
+		shared_ptr<CardData> Get(int index);
+
+		/// <summary>
 		/// 指定した番号のカードを選択
 		/// </summary>
 		/// <param name="index"></param>
