@@ -194,7 +194,7 @@ namespace basecross
 		virtual void OnCreate();
 		virtual void Begin();
 		virtual void Update();
-		virtual void End() {}
+		virtual void End();
 
 	};
 
@@ -255,7 +255,7 @@ namespace basecross
 		virtual void OnCreate();
 		virtual void Begin();
 		virtual void Update();
-		virtual void End() {}
+		virtual void End();
 
 		void OnLeftRoll(bool on)
 		{

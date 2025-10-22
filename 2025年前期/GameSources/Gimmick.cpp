@@ -174,13 +174,15 @@ namespace basecross{
 
 	void GimmickCourseCorrection::Update()
 	{
+		
+	}
+	void GimmickCourseCorrection::End() {
 		Gimmicks::Update();
 		if (CheckCount())
 		{
 			m_Cube->ChangeVelocity(m_Value);
 		}
 	}
-	
 	GimmickTeleporter::GimmickTeleporter(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage)
 	{
@@ -269,6 +271,9 @@ namespace basecross{
 
 	void GimmickRoll::Update()
 	{
+		
+	}
+	void GimmickRoll::End() {
 		Gimmicks::Update();
 		if (CheckCount())
 		{
@@ -291,7 +296,6 @@ namespace basecross{
 			}
 		}
 	}
-
 	GimmickInverter::GimmickInverter(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage)
 	{

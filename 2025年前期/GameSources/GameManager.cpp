@@ -85,7 +85,8 @@ namespace basecross{
 		if (!CompareState(GameState::Game))return;
 
 		m_Tick += App::GetApp()->GetElapsedTime();
-		if (m_Tick <= m_UpdateTicks / m_TickRate) return;
+		float updateTick = m_UpdateTicks / m_TickRate;
+		if (m_Tick <= updateTick) return;
 
 		if (!IsUpdate()) return;
 		m_Tick = 0;
