@@ -16,7 +16,11 @@
     "testUpper.png": "TEMP_GIMMICK_UPPER",
     "testCoruse.png": "TEMP_GIMMICK_COURSE",
     "testGoalTxt.png": "TEMP_GOAL_SPRITE",
-    "testOver.png": "TEMP_OVER_SPRITE"
-
+    "testOver.png": "TEMP_OVER_SPRITE",
+    "SelectLogo.png": "SelectUI",
+    "ResultBackBoard.png": "ResultBackBoardUI",
+    "StarCover.png": "StarCoverUI",
+    "Star.png": "StarUI",
+    "Evaluation.png": "EvaluationUI"
   }
 }

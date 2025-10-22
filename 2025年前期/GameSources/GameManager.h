@@ -43,6 +43,17 @@ namespace basecross{
 		void GimmickUpdate();
 		void CubeUpdate();
 		void StopCube();
+
+		//ƒŠƒUƒ‹ƒg
+		void ResultCreate();
+		void ResultUpdate();
+		float m_ResultTime;
+		int m_CurrentStarIndex = 0;
+		int m_GameEvaluation = 2;
+		vector<shared_ptr<Sprite>> m_StarSp;
+		vector<shared_ptr<Sprite>> m_EvaluationSp;
+
+
 	public:
 		/// <summary>
 		/// “o˜^‚³‚ê‚Ä‚¢‚éî•ñ‚ğ‰Šú‰»‚·‚é
@@ -154,6 +165,13 @@ namespace basecross{
 			}
 			m_EffectSprite.clear();
 		}
+
+
+		void SetGameEvaluation(int eval)
+		{
+			m_GameEvaluation = eval;
+		}
+
 	};
 }
 //end basecross
