@@ -1,9 +1,7 @@
 {
-  "cameraRollR": "R",
-  "cameraRollL": "L",
-  "cameraUp": "X",
   "putGimmick": "A",
   "fastMove": "Y",
   "start": "B",
-  "restart": "X"
+  "restart": "X",
+  "undo": "L"
 }

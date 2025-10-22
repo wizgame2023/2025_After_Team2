@@ -42,8 +42,8 @@ namespace basecross{
 
 		Json m_KeyConfigFile;
 
-		void DrawTempGimmicks();
 		bool IsUpdate();
+		void MapUpdate();
 		void GimmickUpdate();
 		void CubeUpdate();
 		void StopCube();
@@ -106,7 +106,7 @@ namespace basecross{
 			return m_Hand;
 		}
 
-		void SetPair(vector<pair<int, int>> gimmickPair) {
+		void UpdatePair(vector<pair<int, int>> gimmickPair) {
 			m_GimmickColorPairs = gimmickPair;
 		}
 

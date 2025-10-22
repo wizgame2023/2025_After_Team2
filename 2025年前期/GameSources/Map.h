@@ -48,9 +48,27 @@ namespace basecross{
 			}
 			return gimmicks;
 		}
+		vector<shared_ptr<Gimmicks>> GetGimmicks() {
+			vector<shared_ptr<Gimmicks>> gimmicks;
+			for (auto& mapVec : m_Map) {
+				for (auto& map : mapVec) {
+					if (map.m_Gimmik) {
+						gimmicks.push_back(map.m_Gimmik);
+					}
+				}
+			}
+			return gimmicks;
+		}
 
-		vector<vector<MapData>> GetMapData() {
+		vector<vector<MapData>>& GetMapData() {
 			return m_Map;
+		}
+
+		MapData GetMapData(Vec2 pos) {
+			int x = static_cast<int>(pos.x);
+			int y = static_cast<int>(pos.y);
+			if (y >= m_Map.size() || x >= m_Map[y].size()) return {};
+			return m_Map[y][x];
 		}
 		Vec3 GetMapCenter() {
 			Vec2 size = Vec2(static_cast<float>(m_Map[0].size() - 1), static_cast<float>(m_Map.size() - 1));

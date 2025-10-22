@@ -8,7 +8,7 @@
 
 namespace basecross{
 	MoveCube::MoveCube(const shared_ptr<Stage>& ptr) : Object(ptr), 
-		m_IsEffecting(false),
+		m_IsEffecting(false), m_IsBeforeEffecting(false),
 		m_MoveSpeed(0.0f){}
 
 	void MoveCube::OnCreate() {
@@ -109,8 +109,15 @@ namespace basecross{
 			m_Velocity += moveAmount;
 		}
 		}
-
 	
+		if (m_IsBeforeEffecting && !m_IsEffecting) {
+			auto mapData = GameManager::GetInstance().GetMap()->
+				GetMapData(Vec2(static_cast<int>(position.x), static_cast<int>(position.y)));
+			if (mapData.m_Gimmik) {
+				mapData.m_Gimmik->End();
+			}
+		}
+		m_IsBeforeEffecting = m_IsEffecting;
 		SetPosition(position);
 	}
 	bool MoveCube::CheckArea() {

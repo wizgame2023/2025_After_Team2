@@ -15,10 +15,6 @@ namespace basecross{
 		
 		Vec3 position = CalcPosition(m_Angle.y, m_Angle.x);
 		SetEye(position);
-
-		float aspect = GetAspect();
-
-		//SetAspect(aspect);
 	}
 	void MainCamera::OnUpdate() {
 		auto& app = App::GetApp();
@@ -29,21 +25,28 @@ namespace basecross{
 			
 			auto& input = InputManager::GetInputManager();
 			auto& gameManager = GameManager::GetInstance();
-			if (input->GetDownButton(gameManager.GetKeyConfig(L"cameraUp"))) {
-				m_IsUpperAngle = m_IsUpperAngle ? false : true;
+			Vec2 stick = input->GetRStick();
+			
+			float deadzone = 0.2f;
+			if(stick.y > deadzone){
+				m_IsUpperAngle = true;
 
-				m_TargetAngle.y = m_IsUpperAngle ? XM_PIDIV2 : m_FixedAngleVirtical;
+				m_TargetAngle.y = XM_PIDIV2;
+			}
+			else if (stick.y < -deadzone) {
+				m_IsUpperAngle = false;
+				m_TargetAngle.y = m_FixedAngleVirtical;
 				SetUp(Vec3(0, 1, 0));
 			}
 			if (!m_IsUpperAngle) {
-				if (input->GetDownButton(gameManager.GetKeyConfig(L"cameraRollL"))) {
+				if(stick.x < -deadzone){
 					if (m_TargetAngle.x <= 0) {
 						m_TargetAngle.x += XM_2PI;
 						m_Angle.x += XM_2PI;
 					}
 					m_TargetAngle.x -= XM_PIDIV2;
 				}
-				else if (input->GetDownButton(gameManager.GetKeyConfig(L"cameraRollR"))) {
+				else if(stick.x > deadzone){
 					if (m_TargetAngle.x >= XM_2PI) {
 						m_TargetAngle.x -= XM_2PI;
 						m_Angle.x -= XM_2PI;

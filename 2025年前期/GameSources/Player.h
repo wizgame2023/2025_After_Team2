@@ -14,6 +14,7 @@ namespace basecross{
 	};
 	class MoveCube : public Object {
 		bool m_IsEffecting;		//演出中か(移動、テレポートなど)
+		bool m_IsBeforeEffecting;//前フレームの演出状態
 		bool m_IsDead;			//死亡判定
 		Vec3 m_TelepoteTarget;	//テレポート先
 		Vec3 m_TargetVelocity;	//移動方向の変更時の値

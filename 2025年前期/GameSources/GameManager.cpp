@@ -15,13 +15,30 @@ namespace basecross{
 		}
 		return true;
 	}
-	void GameManager::GimmickUpdate() {
-		for (auto& mapVec : m_Map->GetMapData()) {
-			for (auto& map : mapVec) {
-				if (map.m_Gimmik) {
-					map.m_Gimmik->Update();
-				}
+	void GameManager::MapUpdate() {
+		//前のフレームから消えた物を削除
+		for (int i = 0; i < m_BeforeGimmickColorPairs.size(); i++) {
+			if (find(
+				m_GimmickColorPairs.begin(), m_GimmickColorPairs.end(),
+				m_BeforeGimmickColorPairs[i]) == m_GimmickColorPairs.end()) {
+
+				m_Map->RecoverGimmick(m_BeforeGimmickColorPairs[i].first);
 			}
+		}
+		//前のフレームから消えたものを追加
+		for (int i = 0; i < m_GimmickColorPairs.size(); i++) {
+			if (find(
+				m_BeforeGimmickColorPairs.begin(), m_BeforeGimmickColorPairs.end(),
+				m_GimmickColorPairs[i]) == m_BeforeGimmickColorPairs.end()) {
+
+				m_Map->PutGimmick(m_GimmickColorPairs[i].first, m_Hand->Get(m_GimmickColorPairs[i].second));
+			}
+		}
+		m_BeforeGimmickColorPairs = m_GimmickColorPairs;
+	}
+	void GameManager::GimmickUpdate() {
+		for (auto& gimmick : m_Map->GetGimmicks()) {
+			gimmick->Update();
 		}
 	}
 	void GameManager::CubeUpdate() {
@@ -41,20 +58,12 @@ namespace basecross{
 		}
 	}
 
-	void GameManager::DrawTempGimmicks() {
-		
-	}
-
 	void GameManager::Start() {
-		for (auto& mapVec : m_Map->GetMapData()) {
-			for (auto& map : mapVec) {
-				if (map.m_Gimmik) {
-					auto color = map.m_Gimmik->GetComponent<SmBaseDraw>()->GetDiffuse();
-					color.w = 1.0f;
-					map.m_Gimmik->GetComponent<SmBaseDraw>()->SetDiffuse(color);
-					map.m_Gimmik->Begin();
-				}
-			}
+		for (auto& gimmick : m_Map->GetGimmicks()) {
+			auto color = gimmick->GetComponent<SmBaseDraw>()->GetDiffuse();
+			color.w = 1.0f;
+			gimmick->GetComponent<SmBaseDraw>()->SetDiffuse(color);
+			gimmick->Begin();
 		}
 		for (auto& sphere : m_Cubes) {
 			//プレイヤーを稼働開始
@@ -65,31 +74,14 @@ namespace basecross{
 	void GameManager::Update() {
 		m_KeyConfigFile.Load(L"Json/keyconfig.json");
 		InputUpdate();
-		//前のフレームから消えた物を削除
-		for (int i = 0; i < m_BeforeGimmickColorPairs.size(); i++) {
-			if (find(
-				m_GimmickColorPairs.begin(), m_GimmickColorPairs.end(),
-				m_BeforeGimmickColorPairs[i]) == m_GimmickColorPairs.end()) {
-
-				m_Map->RecoverGimmick(m_BeforeGimmickColorPairs[i].first);
-			}
-		}
-		//前のフレームから消えたものを追加
-		for (int i = 0; i < m_GimmickColorPairs.size(); i++) {
-			if (find(
-				m_BeforeGimmickColorPairs.begin(),m_BeforeGimmickColorPairs.end(),
-				m_GimmickColorPairs[i]) == m_BeforeGimmickColorPairs.end()) {
-
-				m_Map->PutGimmick(m_GimmickColorPairs[i].first, m_Hand->Get(m_GimmickColorPairs[i].second));
-			}
-		}
-		m_BeforeGimmickColorPairs = m_GimmickColorPairs;
+		MapUpdate();
 
 		//ここから下はゲーム進行中の処理
 		if (!CompareState(GameState::Game))return;
 
 		m_Tick += App::GetApp()->GetElapsedTime();
-		if (m_Tick <= m_UpdateTicks / m_TickRate) return;
+		float updateTick = m_UpdateTicks / m_TickRate;
+		if (m_Tick <= updateTick) return;
 
 		if (!IsUpdate()) return;
 		m_Tick = 0;
