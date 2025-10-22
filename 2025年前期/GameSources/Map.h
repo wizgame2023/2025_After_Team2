@@ -48,8 +48,19 @@ namespace basecross{
 			}
 			return gimmicks;
 		}
+		vector<shared_ptr<Gimmicks>> GetGimmicks() {
+			vector<shared_ptr<Gimmicks>> gimmicks;
+			for (auto& mapVec : m_Map) {
+				for (auto& map : mapVec) {
+					if (map.m_Gimmik) {
+						gimmicks.push_back(map.m_Gimmik);
+					}
+				}
+			}
+			return gimmicks;
+		}
 
-		vector<vector<MapData>> GetMapData() {
+		vector<vector<MapData>>& GetMapData() {
 			return m_Map;
 		}
 

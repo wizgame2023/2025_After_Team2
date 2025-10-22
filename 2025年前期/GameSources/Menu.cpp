@@ -25,6 +25,7 @@ namespace basecross{
 		Vec2 colorPalettePosition = Vec2(menuPosition.x + 100.0f, menuPosition.y + menuSize.y / 2.0f - 100.0f);
 		Vec2 gimmickPosition = Vec2(menuPosition.x + menuSize.x - 100.0f, menuPosition.y + menuSize.y / 2.0f - 100.0f);
 
+		auto expainMenu = m_MenuStage->AddGameObject<Sprite>(m_BackGroundTexture, Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f,0.0f), Vec2(menuSize.x,menuSize.y * 0.25f), Anchor::TopLeft);
 		auto& gameManager = GameManager::GetInstance();
 
 		auto colorTable = gameManager.GetMap()->GetColorTable();
@@ -55,7 +56,7 @@ namespace basecross{
 		m_Coursor = m_MenuStage->AddGameObject<Coursor>(L"TEMP_GIMMICK_COURSE");
 		m_Coursor->SetCoursorSize(25.0f);
 		m_Coursor->SetMoveSpeed(300.0f);
-		m_Coursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), m_BackGround->GetAnchorPosition(Anchor::BottomLeft));
+		m_Coursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), expainMenu->GetAnchorPosition(Anchor::TopLeft));
 	}
 	void Menu::OnUpdate() {
 		auto& input = InputManager::GetInputManager();
@@ -94,13 +95,17 @@ namespace basecross{
 
 			if (input->GetUpButton(gameManager.GetKeyConfig(L"putGimmick"))) {
 				if (UpdateOnCoursorHandle() && m_ColorHandle != -1 && m_GimmikcHandle != -1) {
+					stack<vector<Line>::iterator> eraseIteraters;
 					for (auto it = m_Lines.begin(); it != m_Lines.end(); it++) {
 						auto& pair = (*it).m_PairHandle;
 						if (pair.first == m_ColorHandle || pair.second == m_GimmikcHandle) {
 							m_MenuStage->RemoveGameObject<Sprite>((*it).m_Line);
-							m_Lines.erase(it);
-							break;
+							eraseIteraters.push(it);
 						}
+					}
+					while (!eraseIteraters.empty()) {
+						m_Lines.erase(eraseIteraters.top());
+						eraseIteraters.pop();
 					}
 					m_Lines.push_back({ m_CurrentLine,pair<int,int>{m_ColorHandle,m_GimmikcHandle} });
 				}
@@ -112,7 +117,7 @@ namespace basecross{
 			}
 		}
 
-		gameManager.SetPair(ConvertColorGimmickHandles(m_Lines));
+		gameManager.UpdatePair(ConvertColorGimmickHandles(m_Lines));
 	}
 
 	bool Menu::UpdateOnCoursorHandle() {
