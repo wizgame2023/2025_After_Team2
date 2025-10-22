@@ -1,6 +1,6 @@
 /*!
 @file Character.cpp
-@brief ƒLƒƒƒ‰ƒNƒ^[‚È‚ÇÀ‘Ì
+@brief ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãªã©å®Ÿä½“
 */
 
 #include "stdafx.h"
@@ -16,7 +16,7 @@ namespace basecross{
 		return true;
 	}
 	void GameManager::MapUpdate() {
-		//‘O‚ÌƒtƒŒ[ƒ€‚©‚çÁ‚¦‚½•¨‚ğíœ
+		//å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰æ¶ˆãˆãŸç‰©ã‚’å‰Šé™¤
 		for (int i = 0; i < m_BeforeGimmickColorPairs.size(); i++) {
 			if (find(
 				m_GimmickColorPairs.begin(), m_GimmickColorPairs.end(),
@@ -25,7 +25,7 @@ namespace basecross{
 				m_Map->RecoverGimmick(m_BeforeGimmickColorPairs[i].first);
 			}
 		}
-		//‘O‚ÌƒtƒŒ[ƒ€‚©‚çÁ‚¦‚½‚à‚Ì‚ğ’Ç‰Á
+		//å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰æ¶ˆãˆãŸã‚‚ã®ã‚’è¿½åŠ 
 		for (int i = 0; i < m_GimmickColorPairs.size(); i++) {
 			if (find(
 				m_BeforeGimmickColorPairs.begin(), m_BeforeGimmickColorPairs.end(),
@@ -42,10 +42,10 @@ namespace basecross{
 		}
 	}
 	void GameManager::CubeUpdate() {
-		//ƒQ[ƒ€ƒI[ƒo[”»’è
+		//ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼åˆ¤å®š
 		bool isOver = true;
 		for (auto& cube : m_Cubes) {
-			//ˆê‚Â‚Å‚à“®‚¯‚éƒLƒ…[ƒu‚ª‚¢‚½‚çfalse
+			//ä¸€ã¤ã§ã‚‚å‹•ã‘ã‚‹ã‚­ãƒ¥ãƒ¼ãƒ–ãŒã„ãŸã‚‰false
 			if (cube->CheckArea()) isOver = false;
 			cube->Move();
 		}
@@ -58,6 +58,25 @@ namespace basecross{
 		}
 	}
 
+
+	void GameManager::ResultUpdate()
+	{
+		if (!CompareState(GameState::Clear)) return;
+
+		m_ResultTime += App::GetApp()->GetElapsedTime();
+
+		if (m_ResultTime >= 0.05f)
+		{
+			ResultCreate();
+			m_ResultTime = 0.0f;
+		}
+	}
+
+	void GameManager::DrawTempGimmicks() {
+		
+	}
+
+
 	void GameManager::Start() {
 		for (auto& gimmick : m_Map->GetGimmicks()) {
 			auto color = gimmick->GetComponent<SmBaseDraw>()->GetDiffuse();
@@ -66,7 +85,7 @@ namespace basecross{
 			gimmick->Begin();
 		}
 		for (auto& sphere : m_Cubes) {
-			//ƒvƒŒƒCƒ„[‚ğ‰Ò“­ŠJn
+			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç¨¼åƒé–‹å§‹
 			sphere->SetUpdateActive(true);
 		}
 		m_GameState = GameState::Game;
@@ -74,14 +93,15 @@ namespace basecross{
 	void GameManager::Update() {
 		m_KeyConfigFile.Load(L"Json/keyconfig.json");
 		InputUpdate();
+		ResultUpdate();
 		MapUpdate();
-
-		//‚±‚±‚©‚ç‰º‚ÍƒQ[ƒ€is’†‚Ìˆ—
+		//ã“ã“ã‹ã‚‰ä¸‹ã¯ã‚²ãƒ¼ãƒ é€²è¡Œä¸­ã®å‡¦ç†
 		if (!CompareState(GameState::Game))return;
 
 		m_Tick += App::GetApp()->GetElapsedTime();
 		float updateTick = m_UpdateTicks / m_TickRate;
 		if (m_Tick <= updateTick) return;
+
 
 		if (!IsUpdate()) return;
 		m_Tick = 0;
@@ -91,6 +111,7 @@ namespace basecross{
 	}
 
 	void GameManager::InputUpdate() {
+
 
 		auto& input = InputManager::GetInputManager();
 		if (CompareState(GameState::Clear) || CompareState(GameState::Over)) {
@@ -119,10 +140,17 @@ namespace basecross{
 
 	void GameManager::DrawGoalEffect() {
 		if (!CompareState(GameState::Game)) return;
-		DeleteEffectSprite();
-		auto sprite = m_Stage->AddGameObject<Sprite>(L"TEMP_GOAL_SPRITE",Vec3(), Vec2(500, 250), Anchor::Center);
-		m_EffectSprite.push_back(sprite);
+
 		m_GameState = GameState::Clear;
+
+		auto menu = m_Stage->GetChileStageVec()[0];
+
+		auto& app = App::GetApp();
+
+		auto backBoardUI = menu->AddGameObject<Sprite>(L"ResultBackBoardUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 600), Anchor::Center);
+		auto starCoverUI = menu->AddGameObject<Sprite>(L"StarCoverUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 180), Anchor::Center);
+		m_EffectSprite.push_back(backBoardUI);
+		m_EffectSprite.push_back(starCoverUI);
 
 		StopCube();
 	}
@@ -135,5 +163,84 @@ namespace basecross{
 
 		StopCube();
 	}
+
+
+	void GameManager::ResultCreate()
+	{
+		if (m_StarSp.size() == 0)
+		{
+			auto menu = m_Stage->GetChileStageVec()[0];
+			for (int i = 0; i < 3; i++)
+			{
+				auto starUI = menu->AddGameObject<Sprite>(L"StarUI", Vec3(-200, 0.0f, 0.0f), Vec2(200, 180), Anchor::Center);
+				starUI->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, 0.0f));
+				starUI->CreateAnimationUV(Vec2(3, 1));
+
+				auto evaluationUI = menu->AddGameObject<Sprite>(L"EvaluationUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(500.0f, 78.0f), Anchor::Top);
+				evaluationUI->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, 1.0f));
+				evaluationUI->CreateAnimationUV(Vec2(1, 3));
+
+				if (i == 1)
+				{
+					starUI->SetPosition(Vec3(200, 0.0f, 0.0f));
+					auto uv = starUI->GetUv(2);
+					starUI->UpdateUV(uv);
+					m_StarSp.push_back(starUI);
+					m_EffectSprite.push_back(starUI);
+				}
+
+				else if (i == 2)
+				{
+					starUI->SetPosition(Vec3(0.0f, 0.0f, 0.0f));
+					auto uv = starUI->GetUv(1);
+					starUI->UpdateUV(uv);
+					m_StarSp.push_back(starUI);
+					m_EffectSprite.push_back(starUI);
+				}
+				else
+				{
+					auto uv = starUI->GetUv(i);
+					starUI->UpdateUV(uv);
+					m_StarSp.push_back(starUI);
+					m_EffectSprite.push_back(starUI);
+				}
+
+				evaluationUI->SetPosition(Vec3(0.0f, 80.0f - 60.0f * i, 0.0f));
+				auto uv = evaluationUI->GetUv(i);
+				evaluationUI->UpdateUV(uv);
+				m_EvaluationSp.push_back(evaluationUI);
+				m_EffectSprite.push_back(evaluationUI);
+
+			}
+
+
+			m_CurrentStarIndex = 0;
+
+		}
+		if (m_CurrentStarIndex >= m_StarSp.size()) return;
+
+		if (m_GameEvaluation <= 0) return;
+
+		auto star = m_StarSp[m_CurrentStarIndex];
+		Col4 current = star->GetDiffuse();
+		float alpha = current.getW();
+		Vec2 currentSize = star->GetSize();
+
+		// ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³
+		if (alpha < 1.0f)
+		{
+			alpha += 0.15f;
+			if (alpha > 1.0f) alpha = 1.0f;
+			star->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, alpha));
+
+			m_EvaluationSp[m_CurrentStarIndex]->SetDiffuse(Col4(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+		else
+		{
+			m_CurrentStarIndex++;
+			m_GameEvaluation--;
+		}
+	}
+
 }
 //end basecross
