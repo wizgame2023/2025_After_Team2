@@ -112,7 +112,7 @@ namespace basecross{
 	
 		if (m_IsBeforeEffecting && !m_IsEffecting) {
 			auto mapData = GameManager::GetInstance().GetMap()->
-				GetMapData(Vec2(static_cast<int>(position.x), static_cast<int>(position.y)));
+				GetMapData(Vec2(static_cast<int>(position.x), static_cast<int>(position.z)));
 			if (mapData.m_Gimmik) {
 				mapData.m_Gimmik->End();
 			}

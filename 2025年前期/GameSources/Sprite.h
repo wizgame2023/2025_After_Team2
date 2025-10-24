@@ -7,7 +7,6 @@
 #include "stdafx.h"
 
 namespace basecross{
-
 	struct SpriteAnimation {
 		size_t		m_CurrentOrder;		//現在のアニメーション番号
 		float		m_AnimationTime;	//アニメーションタイマー
@@ -193,6 +192,9 @@ namespace basecross{
 		/// <param name="size"> : サイズ(uv)</param>
 		void SetSize(Vec2 size);
 
+		void MatchToScreenSize() {
+			SetSize(m_ScreenHalfSize * 2.0f);
+		}
 		/// <summary>
 		/// 表示サイズ取得
 		/// </summary>
@@ -579,18 +581,31 @@ namespace basecross{
 	//	Sprite操作 : フェードイン・フェードアウト																								
 	//																																
 	//----------------------------------------------------------
+	enum class FadeState {
+		Out,In,InToOut,OutToIn
+	};
 	class SpriteFade : public SpriteAction {
 		float m_FadeSpeed;
 		bool m_IsFadeOut;
 		bool m_IsFinished;
+		FadeState m_FadeState;
 	public:
-		SpriteFade(const shared_ptr<GameObject>& ptr,float fadeSpeed) : SpriteAction(ptr),m_FadeSpeed(fadeSpeed),m_IsFadeOut(true),m_IsFinished(false){}
+		SpriteFade(const shared_ptr<GameObject>& ptr,float fadeSpeed) : SpriteAction(ptr),m_FadeSpeed(fadeSpeed),m_IsFadeOut(true),m_IsFinished(false), m_FadeState(FadeState::In){}
 		virtual ~SpriteFade(){}
 
 		virtual void OnUpdate()override;
 
 		bool IsFadeOut() {
 			return m_IsFadeOut;
+		}
+		void StartFade(FadeState state) {
+			if (state == FadeState::OutToIn || state == FadeState::Out) {
+				FadeOut();
+			}
+			else {
+				FadeIn();
+			}
+			m_FadeState = state;
 		}
 		void FadeOut() {
 			m_IsFadeOut = true;

@@ -20,6 +20,7 @@ namespace basecross{
 		}
 
 		shared_ptr<Stage> m_Stage;
+		shared_ptr<Stage> m_MenuStage;
 
 		vector<shared_ptr<MoveCube>> m_Cubes;
 
@@ -28,6 +29,7 @@ namespace basecross{
 		shared_ptr<Map> m_Map;
 
 		vector<shared_ptr<Sprite>> m_EffectSprite;
+		shared_ptr<SpriteFade> m_SpriteFade;
 
 		map<wstring, Vec3> m_DirectionMap;
 
@@ -38,6 +40,7 @@ namespace basecross{
 		float m_UpdateTicks;
 		float m_TickRate;
 		bool m_IsGameClear;
+		bool m_IsFading;
 		GameState m_GameState;
 
 		Json m_KeyConfigFile;
@@ -57,7 +60,7 @@ namespace basecross{
 		vector<shared_ptr<Sprite>> m_StarSp;
 		vector<shared_ptr<Sprite>> m_EvaluationSp;
 
-
+		void StartFade();
 	public:
 		/// <summary>
 		/// 登録されている情報を初期化する
@@ -68,6 +71,7 @@ namespace basecross{
 			m_Map = nullptr;
 			m_Stage = nullptr;
 			m_IsGameClear = false;
+			m_IsFading = false;
 			m_GameState = GameState::Put;
 
 			m_DirectionMap[L"south"] = Vec3(0, 0, -1);
@@ -83,7 +87,12 @@ namespace basecross{
 			m_GameEvaluation = 2;
 			m_CurrentStarIndex = 0;
 		}
-
+		
+		/// <summary>
+		/// ゲームをリスタートする。
+		/// </summary>
+		/// <param name="isAll">すべて最初からにするか</param>
+		void RestartGame(bool isAll = false);
 		/// <summary>
 		/// プレイヤーを登録
 		/// </summary>
@@ -145,6 +154,9 @@ namespace basecross{
 
 		void SetGameStage(const shared_ptr<Stage>& stage) {
 			m_Stage = stage;
+		}
+		void SetMenuStage(const shared_ptr<Stage>& stage) {
+			m_MenuStage = stage;
 		}
 
 		bool IsClear() {
