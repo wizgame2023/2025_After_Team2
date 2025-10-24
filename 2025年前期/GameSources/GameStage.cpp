@@ -64,7 +64,9 @@ namespace basecross {
 
 			App::GetApp()->GetScene<Scene>()->SetViewport(viewport);
 
-			AddChileStage<MenuStage>();
+			auto menuStage = AddChileStage<MenuStage>();
+
+			GameManager::GetInstance().SetMenuStage(menuStage);
 		}
 		catch (...) {
 			throw;

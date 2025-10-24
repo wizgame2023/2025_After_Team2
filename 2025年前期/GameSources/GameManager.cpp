@@ -1,6 +1,6 @@
 /*!
 @file Character.cpp
-@brief ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãªã©å®Ÿä½“
+@brief ƒLƒƒƒ‰ƒNƒ^[‚È‚ÇÀ‘Ì
 */
 
 #include "stdafx.h"
@@ -16,7 +16,7 @@ namespace basecross{
 		return true;
 	}
 	void GameManager::MapUpdate() {
-		//å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰æ¶ˆãˆãŸç‰©ã‚’å‰Šé™¤
+		//‘O‚ÌƒtƒŒ[ƒ€‚©‚çÁ‚¦‚½•¨‚ğíœ
 		for (int i = 0; i < m_BeforeGimmickColorPairs.size(); i++) {
 			if (find(
 				m_GimmickColorPairs.begin(), m_GimmickColorPairs.end(),
@@ -25,7 +25,7 @@ namespace basecross{
 				m_Map->RecoverGimmick(m_BeforeGimmickColorPairs[i].first);
 			}
 		}
-		//å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰æ¶ˆãˆãŸã‚‚ã®ã‚’è¿½åŠ 
+		//‘O‚ÌƒtƒŒ[ƒ€‚©‚çÁ‚¦‚½‚à‚Ì‚ğ’Ç‰Á
 		for (int i = 0; i < m_GimmickColorPairs.size(); i++) {
 			if (find(
 				m_BeforeGimmickColorPairs.begin(), m_BeforeGimmickColorPairs.end(),
@@ -42,15 +42,18 @@ namespace basecross{
 		}
 	}
 	void GameManager::CubeUpdate() {
-		//ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼åˆ¤å®š
+		//ƒQ[ƒ€ƒI[ƒo[”»’è
 		bool isOver = true;
 		for (auto& cube : m_Cubes) {
-			//ä¸€ã¤ã§ã‚‚å‹•ã‘ã‚‹ã‚­ãƒ¥ãƒ¼ãƒ–ãŒã„ãŸã‚‰false
+			//ˆê‚Â‚Å‚à“®‚¯‚éƒLƒ…[ƒu‚ª‚¢‚½‚çfalse
 			if (cube->CheckArea()) isOver = false;
 			cube->Move();
 		}
 
-		if (isOver) DrawOverEffect();
+		if (isOver) {
+			m_GameState = GameState::Over;
+			RestartGame();
+		}
 	}
 	void GameManager::StopCube() {
 		for (auto& cube : m_Cubes) {
@@ -73,6 +76,20 @@ namespace basecross{
 	}
 
 
+	void GameManager::StartFade() {
+		if (!m_SpriteFade) {
+			auto sprite = m_MenuStage->AddGameObject<Sprite>(L"TEMP_OVER_SPRITE",Vec3(),Vec2(),Anchor::Center);
+			sprite->MatchToScreenSize();
+			sprite->SetDiffuse(Col4(0, 0, 0, 1));
+			m_SpriteFade = sprite->AddComponent<SpriteFade>(1.0f);
+		}
+		m_SpriteFade->StartFade(FadeState::OutToIn);
+		m_IsFading = true;
+	}
+	void GameManager::RestartGame(bool isAll) {
+		StartFade();
+		//m_GameState = GameState::Put;
+	}
 	void GameManager::Start() {
 		for (auto& gimmick : m_Map->GetGimmicks()) {
 			auto color = gimmick->GetComponent<SmBaseDraw>()->GetDiffuse();
@@ -81,7 +98,7 @@ namespace basecross{
 			gimmick->Begin();
 		}
 		for (auto& sphere : m_Cubes) {
-			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç¨¼åƒé–‹å§‹
+			//ƒvƒŒƒCƒ„[‚ğ‰Ò“­ŠJn
 			sphere->SetUpdateActive(true);
 		}
 		m_GameState = GameState::Game;
@@ -91,7 +108,14 @@ namespace basecross{
 		InputUpdate();
 		ResultUpdate();
 		MapUpdate();
-		//ã“ã“ã‹ã‚‰ä¸‹ã¯ã‚²ãƒ¼ãƒ é€²è¡Œä¸­ã®å‡¦ç†
+
+		if (m_IsFading) {
+			if (m_SpriteFade->IsFinish()) {
+				m_IsFading = false;
+				m_GameState = GameState::Put;
+			}
+		}
+		//‚±‚±‚©‚ç‰º‚ÍƒQ[ƒ€is’†‚Ìˆ—
 		if (!CompareState(GameState::Game))return;
 
 		m_Tick += App::GetApp()->GetElapsedTime();
@@ -220,7 +244,7 @@ namespace basecross{
 		float alpha = current.getW();
 		Vec2 currentSize = star->GetSize();
 
-		// ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³
+		// ƒtƒF[ƒhƒCƒ“
 		if (alpha < 1.0f)
 		{
 			alpha += 0.15f;

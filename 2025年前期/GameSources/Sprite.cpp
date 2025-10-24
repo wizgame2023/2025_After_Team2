@@ -310,13 +310,30 @@ namespace basecross {
 			if (!IsFinish()) {
 				color.w += elapsed * m_FadeSpeed;
 			}
+			if (color.w < 0.0f) {
+				if (m_FadeState == FadeState::OutToIn || m_FadeState == FadeState::In) m_IsFinished = true;
+				else if (m_FadeState == FadeState::InToOut) m_IsFadeOut = true;
+			}
+			else if (color.w > 1.0f) {
+				if (m_FadeState == FadeState::InToOut || m_FadeState == FadeState::Out) m_IsFinished = true;
+				else if (m_FadeState == FadeState::OutToIn) m_IsFadeOut = false;
+			}
+			else {
+				m_IsFinished = false;
+			}
+			/*if (m_FadeState == FadeState::OutToIn || m_FadeState == FadeState::In) {
+				if (color.w < 0.0f) m_IsFinished = true;
+			}
+			else {
+				if (color.w > 1.0f) m_IsFinished = true;
+			}
 			if (color.w < 0 || color.w > 1)
 			{
 				m_IsFinished = true;
 			}
 			else {
 				m_IsFinished = false;
-			}
+			}*/
 			m_Draw->SetDiffuse(color);
 		}
 	}

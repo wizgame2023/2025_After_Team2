@@ -144,6 +144,8 @@ int MainLoop(HINSTANCE hInstance, HWND hWnd, bool isFullScreen, int iClientWidth
 		//キーボード入力用
 		//ここに設定したキーボード入力を得る
 		vector<DWORD> UseKeyVec = {};
+		float fps = 60.0f;
+		float timer = 0.0f;
 		while (WM_QUIT != msg.message) {
 			if (!App::GetApp()->ResetInputState(hWnd, UseKeyVec)) {
 				//キー状態が何もなければウインドウメッセージを得る
@@ -153,6 +155,8 @@ int MainLoop(HINSTANCE hInstance, HWND hWnd, bool isFullScreen, int iClientWidth
 					DispatchMessage(&msg);
 				}
 			}
+			timer += App::GetApp()->GetElapsedTime();
+			if (timer < fps) continue;
 			//更新描画処理
 			App::GetApp()->UpdateDraw(1);
 		}
