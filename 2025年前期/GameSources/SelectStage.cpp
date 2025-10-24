@@ -29,15 +29,6 @@ namespace basecross {
 
 	void SelectStage::SpriteCreate()
 	{
-		auto& app = App::GetApp();
-
-		wstring path = app->GetDataDirWString();
-		wstring uiPath = path + L"UI/";
-
-		app->RegisterTexture(L"SelectUI", uiPath + L"SelectLogo.png");
-		app->RegisterTexture(L"NumUI", uiPath + L"Number.png");
-		app->RegisterTexture(L"CursorUI", uiPath + L"TestCursor.png");
-
 
 		auto selectSp = AddGameObject<Sprite>(L"SelectUI", Vec3(-640.0f, 400.0f, 0.0f), Vec2(256, 64), Anchor::TopLeft);
 		m_StageNum = 10;        // •\¦‚·‚é”š‚Ì”

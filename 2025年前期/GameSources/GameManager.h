@@ -47,6 +47,17 @@ namespace basecross{
 		void GimmickUpdate();
 		void CubeUpdate();
 		void StopCube();
+
+		//ƒŠƒUƒ‹ƒg
+		void ResultCreate();
+		void ResultUpdate();
+		float m_ResultTime;
+		int m_CurrentStarIndex = 0;
+		int m_GameEvaluation = 2;
+		vector<shared_ptr<Sprite>> m_StarSp;
+		vector<shared_ptr<Sprite>> m_EvaluationSp;
+
+
 	public:
 		/// <summary>
 		/// “o˜^‚³‚ê‚Ä‚¢‚éî•ñ‚ğ‰Šú‰»‚·‚é
@@ -65,6 +76,12 @@ namespace basecross{
 			m_DirectionMap[L"west"] = Vec3(-1, 0, 0);
 
 			m_KeyConfigFile.Load(L"Json/keyconfig.json");
+
+			m_StarSp.clear();
+			m_EvaluationSp.clear();
+
+			m_GameEvaluation = 2;
+			m_CurrentStarIndex = 0;
 		}
 
 		/// <summary>
@@ -166,6 +183,13 @@ namespace basecross{
 			}
 			m_EffectSprite.clear();
 		}
+
+
+		void SetGameEvaluation(int eval)
+		{
+			m_GameEvaluation = eval;
+		}
+
 	};
 }
 //end basecross

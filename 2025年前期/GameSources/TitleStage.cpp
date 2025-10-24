@@ -29,15 +29,6 @@ namespace basecross {
 
 	void TitleStage::SpriteCreate()
 	{
-		auto& app = App::GetApp();
-
-		wstring path = app->GetDataDirWString();
-		wstring uiPath = path + L"UI/";
-
-		app->RegisterTexture(L"TitleLogoUI", uiPath + L"TitleLogo.png");
-		app->RegisterTexture(L"StartUI", uiPath + L"Start.png");
-
-
 		auto titleSp = AddGameObject<Sprite>(L"TitleLogoUI", Vec3(0.0f), Vec2(1280, 300), Anchor::Bottom);
 		auto startSp = AddGameObject<Sprite>(L"StartUI", Vec3(0.0f,-100.0f,0.0f), Vec2(256, 64), Anchor::Center);
 
