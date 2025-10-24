@@ -8,7 +8,7 @@
 
 namespace basecross{
 
-	void Menu::OnCreate() {
+	void GameMenu::OnCreate() {
 		m_GimmickTextures[GimmickObjects::Goal] = L"TEMP_GIMMICK_GOAL";
 		m_GimmickTextures[GimmickObjects::SetPlayer] = L"TEMP_GIMMICK_PLAYER";
 		m_GimmickTextures[GimmickObjects::CourseCorrection] = L"TEMP_GIMMICK_COURSE";
@@ -53,14 +53,19 @@ namespace basecross{
 			m_GimmcikSprites.push_back(sprite);
 		}
 
-		m_Coursor = m_MenuStage->AddGameObject<Coursor>(L"TEMP_GIMMICK_COURSE");
-		m_Coursor->SetCoursorSize(25.0f);
-		m_Coursor->SetMoveSpeed(300.0f);
-		m_Coursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), expainMenu->GetAnchorPosition(Anchor::TopLeft));
+		m_Cursor = m_MenuStage->AddGameObject<Coursor>(L"TEMP_GIMMICK_COURSE");
+		m_Cursor->SetCoursorSize(25.0f);
+		m_Cursor->SetMoveSpeed(300.0f);
+		m_Cursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), expainMenu->GetAnchorPosition(Anchor::TopLeft));
+	
+
+		m_PoseMenu = m_MenuStage->AddGameObject<PoseMenu>(GetThis<GameMenu>(),menuPosition + Vec3(screenSize.x / 10.0f,screenSize.y / 2.0f - 50,0), Vec2(120.0f, 60.0f));
 	}
-	void Menu::OnUpdate() {
+	void GameMenu::OnUpdate() {
 		auto& input = InputManager::GetInputManager();
 		auto& gameManager = GameManager::GetInstance();
+
+		if (!gameManager.CompareState(GameState::Put))return;
 
 		if (input->GetDownButton(gameManager.GetKeyConfig(L"undo")) && m_Lines.size() > 0) {
 			auto line = m_Lines.back();
@@ -70,11 +75,14 @@ namespace basecross{
 		if (input->GetDownButton(gameManager.GetKeyConfig(L"putGimmick"))) {
 			UpdateOnCoursorHandle();
 		}
+		if (input->GetDownButton(gameManager.GetKeyConfig(L"openPose"))) {
+			SetDrawActive(false);
+		}
 
 		if (m_ColorHandle != -1 || m_GimmikcHandle != -1) {
 			if (!m_CurrentLine)return;
 
-			Vec3 coursorPosition = m_Coursor->GetPosition();
+			Vec3 coursorPosition = m_Cursor->GetPosition();
 			Vec3 handlePosition;
 			if (m_ColorHandle != -1) {
 				handlePosition = m_ColorPalette[m_ColorHandle]->GetPosition();
@@ -120,14 +128,14 @@ namespace basecross{
 		gameManager.UpdatePair(ConvertColorGimmickHandles(m_Lines));
 	}
 
-	bool Menu::UpdateOnCoursorHandle() {
+	bool GameMenu::UpdateOnCoursorHandle() {
 		int colorHandle = OnCoursorHandle(m_ColorPalette);
 		int gimmickHandle = OnCoursorHandle(m_GimmcikSprites);
 		
 		if (colorHandle == -1 && gimmickHandle == -1) return false;
 
 		if (!m_CurrentLine) {
-			m_CurrentLine = m_MenuStage->AddGameObject<Sprite>(m_ColorTexture, m_Coursor->GetPosition(), Vec2(10, 10), Anchor::Center);
+			m_CurrentLine = m_MenuStage->AddGameObject<Sprite>(m_ColorTexture, m_Cursor->GetPosition(), Vec2(10, 10), Anchor::Center);
 		}
 
 		if (colorHandle >= 0) {
@@ -139,17 +147,31 @@ namespace basecross{
 		}
 		return true;
 	}
-	int Menu::OnCoursorHandle(vector<shared_ptr<Sprite>>& sprites) {
+	int GameMenu::OnCoursorHandle(vector<shared_ptr<Sprite>>& sprites) {
 		for (int i = 0; i < sprites.size(); i++) {
 			auto& sprite = sprites[i];
-			if (m_Coursor->IsOnArea(
+			if (m_Cursor->IsOnArea(
 				sprite->GetAnchorPosition(Anchor::TopRight), sprite->GetAnchorPosition(Anchor::BottomLeft))) {
 				return i;
 			}
 		}
 		return -1;
 	}
-	vector<pair<int, int>> Menu::ConvertColorGimmickHandles(vector<Line>& lines) {
+	void GameMenu::SetDrawActive(bool flag) {
+		if (!flag)	m_PoseMenu->Open();
+
+		m_Cursor->SetUpdateActive(flag);
+		for (auto& colorPalette : m_ColorPalette) {
+			colorPalette->SetDrawActive(flag);
+		}
+		for (auto& gimmickSprite : m_GimmcikSprites) {
+			gimmickSprite->SetDrawActive(flag);
+		}
+		for (auto& line : m_Lines) {
+			line.m_Line->SetDrawActive(flag);
+		}
+	}
+	vector<pair<int, int>> GameMenu::ConvertColorGimmickHandles(vector<Line>& lines) {
 		vector<pair<int, int>> p;
 		for (auto& line : lines) {
 			auto& handles = line.m_PairHandle;
@@ -157,7 +179,7 @@ namespace basecross{
 		}
 		return p;
 	}
-	void Menu::DrawLine(Vec3 start, Vec3 end) {
+	void GameMenu::DrawLine(Vec3 start, Vec3 end) {
 
 		Vec3 direction = end - start;
 		m_CurrentLine->SetSize(Vec2(m_CurrentLine->GetSize().x, direction.length()));
@@ -165,6 +187,79 @@ namespace basecross{
 		m_CurrentLine->VectorToward(static_cast<Vec2>(direction.normalize()));
 
 	}
+
+
+	void PoseMenu::OnCreate() {
+		Vec3 duration = Vec3(0.0f,m_ButtonSize.y / 2.0f,0.0f);
+		duration.y += m_ButtonSize.y;
+		//音量
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_SOUND_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition, m_ButtonSize,GetThis<PoseMenu>(),
+			[](shared_ptr<ObjectInterface>& object) {
+				auto pose = dynamic_pointer_cast<PoseMenu>(object);
+				pose->SettingSound();
+			});
+		//タイトルに戻る
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_TITLE_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration, m_ButtonSize, GetThis<PoseMenu>(),
+			[](shared_ptr<ObjectInterface>& object) {
+				auto pose = dynamic_pointer_cast<PoseMenu>(object);
+				pose->MoveTitleStage();
+			});
+		//セレクトステージに戻る
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_SELECT_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration * 2.0f, m_ButtonSize, GetThis<PoseMenu>(),
+			[](shared_ptr<ObjectInterface>& object) {
+				auto pose = dynamic_pointer_cast<PoseMenu>(object);
+				pose->MoveSelectStage();
+			});
+		//最初から始める
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_NEW_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration * 3.0f, m_ButtonSize, GetThis<PoseMenu>(),
+			[](shared_ptr<ObjectInterface>& object) {
+				auto pose = dynamic_pointer_cast<PoseMenu>(object);
+				pose->CloseNewGame();
+			});
+		//ギミック解説
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_EXPAIN_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration * 4.0f, m_ButtonSize, GetThis<PoseMenu>(),
+			[](shared_ptr<ObjectInterface>& object) {
+				auto pose = dynamic_pointer_cast<PoseMenu>(object);
+				pose->OpenExpainGimmicks();
+			});
+		//ゲームに戻る
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_BACK_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration * 5.0f, m_ButtonSize, GetThis<PoseMenu>(),
+			[](shared_ptr<ObjectInterface>& object) {
+				auto pose = dynamic_pointer_cast<PoseMenu>(object);
+				pose->Close();
+			});
+
+		ButtonManager::instance->AddAcceptButton(L"POSE", XINPUT_GAMEPAD_A);//決定ボタン
+		ButtonManager::instance->SetInput(L"POSE", InputData(XINPUT_GAMEPAD_DPAD_DOWN, 1));//選択(上)
+		ButtonManager::instance->SetInput(L"POSE", InputData(XINPUT_GAMEPAD_DPAD_UP, -1));//選択(下)
+		ButtonManager::instance->SetInput(L"POSE", InputData(StickMode::LY, 1, 0.1f));//選択(左スティック)
+		ButtonManager::instance->SetLoop(true);
+
+		Close();
+	}
+	void PoseMenu::Open() {
+		ButtonManager::instance->OpenAndUse(L"POSE");
+	}
+	void PoseMenu::Close() {
+		ButtonManager::instance->Close(L"POSE");
+		m_GameMenu->SetDrawActive(true);
+	}
+	void PoseMenu::MoveSelectStage() {
+
+	}
+	void PoseMenu::MoveTitleStage() {
+
+	}
+	void PoseMenu::SettingSound() {
+
+	}
+	void PoseMenu::CloseNewGame() {
+
+	}
+	void PoseMenu::OpenExpainGimmicks() {
+
+	}
+
 
 	void Coursor::OnCreate() {
 		m_Coursor = m_MenuStage->AddGameObject<Sprite>(m_CoursorTexture, Vec3(), Vec2(), Anchor::Center);

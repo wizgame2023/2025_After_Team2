@@ -3,5 +3,6 @@
   "fastMove": "Y",
   "start": "B",
   "restart": "X",
-  "undo": "L"
+  "undo": "L",
+  "openPose": "Start"
 }

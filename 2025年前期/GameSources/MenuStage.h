@@ -2,11 +2,11 @@
 #include "stdafx.h"
 
 namespace basecross {
-	class Menu;
+	class GameMenu;
 	class MenuStage : public Stage {
 		void CreateViewLight();
 		void CreateResorce();
-		shared_ptr<Menu> m_Menu;
+		shared_ptr<GameMenu> m_Menu;
 	public:
 		//\’z‚Æ”jŠü
 		MenuStage() :Stage() {}

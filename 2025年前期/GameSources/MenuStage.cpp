@@ -31,16 +31,11 @@ namespace basecross {
 	void MenuStage::OnCreate() {
 		try {
 			CreateViewLight();
-			//Stage::OnCreate();
 			CreateResorce();
-			/*auto view = dynamic_pointer_cast<SingleView>(GetView());
-			Viewport viewport = view->GetTargetViewport();
-			viewport.Height;
-			viewport.Width /= 1.5f;
-			viewport.TopLeftY = viewport.Height / 6.0f;*/
+			AddGameObject<ButtonManager>();
 
 			auto viewport = App::GetApp()->GetScene<Scene>()->GetViewport();
-			m_Menu = AddGameObject<Menu>(L"TEMP_COLOR_PALETTE", L"TEMP_MENU", viewport);
+			m_Menu = AddGameObject<GameMenu>(L"TEMP_COLOR_PALETTE", L"TEMP_MENU", viewport);
 		}
 		catch (...) {
 			throw;

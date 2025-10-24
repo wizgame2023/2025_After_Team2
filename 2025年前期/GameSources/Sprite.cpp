@@ -374,7 +374,7 @@ namespace basecross {
 
 
 	shared_ptr<Sprite> ButtonManager::Create(shared_ptr<Stage>& stage, const wstring& group, const wstring& defaultTex, const wstring& selectedTex, Col4 selectedColor, Vec3 pos, Vec2 size, const shared_ptr<ObjectInterface>& object, function<void(shared_ptr<ObjectInterface>&)> func) {
-		auto sprite = stage->AddGameObject<Sprite>(defaultTex, pos, size, Vec2(0.5f));
+		auto sprite = stage->AddGameObject<Sprite>(defaultTex, pos, size, Anchor::TopLeft);
 		sprite->AddTag(L"Button");
 		shared_ptr<SpriteButton> button = nullptr;
 
@@ -417,8 +417,7 @@ namespace basecross {
 		//選択
 		if (PressSelect(m_UsingGroup,data)) {
 			int checkButton = static_cast<int>(selectIndex) + data.m_MoveAmount;
-			checkButton = min(static_cast<int>(m_ButtonGroup[m_UsingGroup].size()) - 1, checkButton);
-			checkButton = max(0, checkButton);
+			LimitIndex(checkButton);
 			if (m_ButtonGroup[m_UsingGroup][checkButton]->GetActive()) {
 				if (m_SelectSound != L"") {
 					//SoundManager::GetInstance().PlaySE(m_SelectSound);
@@ -426,10 +425,10 @@ namespace basecross {
 				selectIndex = checkButton;
 			}
 		}
-		LimitIndex();
+		m_SelectIndexes[m_UsingGroup] = selectIndex;
 		//選択状態の適用
 		for (int i = 0; i < m_ButtonGroup[m_UsingGroup].size(); i++) {
-			if (i == selectIndex) {
+			if (i == m_SelectIndexes[m_UsingGroup]) {
 				m_ButtonGroup[m_UsingGroup][i]->Select();
 			}
 			else {
@@ -441,7 +440,7 @@ namespace basecross {
 			if (m_ClickSound != L"") {
 				//SoundManager::GetInstance().PlaySE(m_ClickSound);
 			}
-			m_ButtonGroup[m_UsingGroup][selectIndex]->Func();
+			m_ButtonGroup[m_UsingGroup][m_SelectIndexes[m_UsingGroup]]->Func();
 		}
 
 		//移動

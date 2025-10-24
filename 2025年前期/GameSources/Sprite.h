@@ -796,7 +796,7 @@ namespace basecross{
 		wstring m_SelectSound;	//選択音のキー
 
 		bool	m_IsActive;		//Updateさせるか
-
+		bool	m_IsSelectLoop;	//選択をループさせるか
 
 		shared_ptr<Sprite> Create(shared_ptr<Stage>& stage, const wstring& group, const wstring& defaultTex, const wstring& selectedTex, Col4 selectedColor, Vec3 pos, Vec2 size, const shared_ptr<ObjectInterface>& object, function<void(shared_ptr<ObjectInterface>&)> func);
 
@@ -820,7 +820,8 @@ namespace basecross{
 
 		ButtonManager(const shared_ptr<Stage>& ptr) : 
 			GameObject(ptr),
-			m_IsActive(true),m_UsingGroup(L""),m_ClickSound(L"")
+			m_IsActive(true), m_IsSelectLoop(false),
+			m_UsingGroup(L""),m_ClickSound(L"")
 		{}
 		virtual ~ButtonManager(){}
 
@@ -1198,6 +1199,14 @@ namespace basecross{
 		}
 
 		/// <summary>
+		/// ループの設定
+		/// </summary>
+		/// <param name="flag">ループするか</param>
+		void SetLoop(bool flag) {
+			m_IsSelectLoop = flag;
+		}
+
+		/// <summary>
 		/// Updata状態の取得
 		/// </summary>
 		/// <returns>Update状態</returns>
@@ -1208,11 +1217,21 @@ namespace basecross{
 		/// <summary>
 		/// 選択中の番号が範囲外に行かないように制限する
 		/// </summary>
-		void LimitIndex() {
-			size_t maxIndex = m_ButtonGroup[m_UsingGroup].size() - 1;
-			size_t minIndex = 0;
-			m_SelectIndexes[m_UsingGroup] = max(minIndex, m_SelectIndexes[m_UsingGroup]);
-			m_SelectIndexes[m_UsingGroup] = min(maxIndex, m_SelectIndexes[m_UsingGroup]);
+		void LimitIndex(int& selectIndex) {
+			int maxIndex = static_cast<int>(m_ButtonGroup[m_UsingGroup].size() - 1);
+			int minIndex = 0;
+			if (!m_IsSelectLoop) {
+				selectIndex = max(minIndex, selectIndex);
+				selectIndex = min(maxIndex, selectIndex);
+			}
+			else {
+				if (selectIndex < minIndex) {
+					selectIndex = maxIndex;
+				}
+				if (selectIndex > maxIndex) {
+					selectIndex = minIndex;
+				}
+			}
 		}
 		/// <summary>
 		/// 移動後の番号が範囲外に行っていないか判定する
