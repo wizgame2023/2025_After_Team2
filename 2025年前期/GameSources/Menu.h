@@ -8,14 +8,15 @@
 
 namespace basecross{
 	class Coursor;
+	class PoseMenu;
 	struct Line {
 		shared_ptr<Sprite> m_Line;
 		pair<int, int> m_PairHandle;
 	};
-	class Menu : public Object {
+	class GameMenu : public Object {
 		map<GimmickObjects, wstring> m_GimmickTextures;
 		shared_ptr<Stage> m_MenuStage;
-		shared_ptr<Coursor> m_Coursor;
+		shared_ptr<Coursor> m_Cursor;
 		shared_ptr<Sprite> m_CurrentLine;
 
 		shared_ptr<Sprite> m_BackGround;
@@ -28,6 +29,7 @@ namespace basecross{
 
 		Viewport m_MainViewPort;
 
+		shared_ptr<PoseMenu> m_PoseMenu;
 		int m_ColorHandle;
 		int m_GimmikcHandle;
 
@@ -35,16 +37,40 @@ namespace basecross{
 		vector<pair<int, int>> ConvertColorGimmickHandles(vector<Line>& lines);
 		void DrawLine(Vec3 start, Vec3 end);
 	public:
-		Menu(const shared_ptr<Stage>& ptr,const wstring& colorTex,const wstring& backGroundTex,Viewport& mainViewport) 
+		GameMenu(const shared_ptr<Stage>& ptr,const wstring& colorTex,const wstring& backGroundTex,Viewport& mainViewport) 
 			: Object(ptr),
 			m_ColorTexture(colorTex),m_BackGroundTexture(backGroundTex),m_MainViewPort(mainViewport), 
 			m_MenuStage(ptr), m_ColorHandle(-1),m_GimmikcHandle(-1){}
-		virtual ~Menu(){}
+		virtual ~GameMenu(){}
 
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
 		int OnCoursorHandle(vector<shared_ptr<Sprite>>& sprites);
+
+
+		void SetDrawActive(bool flag);
+	};
+
+	class PoseMenu : public Object {
+		shared_ptr<GameMenu> m_GameMenu;
+		shared_ptr<Stage> m_MenuStage;
+		Vec3 m_TopLeftPosition;
+		Vec2 m_ButtonSize;
+	public:
+		PoseMenu(const shared_ptr<Stage>& ptr,const shared_ptr<GameMenu>& menu,Vec3 topLeft,Vec2 size):Object(ptr),
+			m_MenuStage(ptr),m_GameMenu(menu),
+			m_TopLeftPosition(topLeft),m_ButtonSize(size){}
+
+		virtual void OnCreate()override;
+
+		void Open();
+		void Close();
+		void MoveSelectStage();
+		void MoveTitleStage();
+		void SettingSound();
+		void CloseNewGame();
+		void OpenExpainGimmicks();
 	};
 
 	enum class CoursorMode {
@@ -89,6 +115,11 @@ namespace basecross{
 		Vec3 LimitMoveArea();
 
 		bool IsOnArea(Vec2 max, Vec2 min);
+
+		void SetUpdateActive(bool flag) {
+			Object::SetUpdateActive(flag);
+			m_Coursor->SetDrawActive(flag);
+		}
 	};
 }
 //end basecross

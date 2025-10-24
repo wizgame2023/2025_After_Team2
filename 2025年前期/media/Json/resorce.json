@@ -16,7 +16,13 @@
     "testUpper.png": "TEMP_GIMMICK_UPPER",
     "testCoruse.png": "TEMP_GIMMICK_COURSE",
     "testGoalTxt.png": "TEMP_GOAL_SPRITE",
-    "testOver.png": "TEMP_OVER_SPRITE"
+    "testOver.png": "TEMP_OVER_SPRITE",
+    "tempBackGame.png": "TEMP_BACK_MENU",
+    "tempMenuExpain.png": "TEMP_EXPAIN_MENU",
+    "tempMenuNewGame.png": "TEMP_NEW_MENU",
+    "tempMenuSelect.png": "TEMP_SELECT_MENU",
+    "tempMenuSound.png": "TEMP_SOUND_MENU",
+    "tempMenuTitle.png": "TEMP_TITLE_MENU"
 
   }
 }
