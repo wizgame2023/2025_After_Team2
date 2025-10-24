@@ -113,8 +113,27 @@ namespace basecross{
 
 		if (m_Cube)
 		{
-			GameManager::GetInstance().DrawGoalEffect();
-			m_Cube = nullptr;
+			Vec3 playerVel = m_Cube->GetVelocity();
+
+			// ゼロベクトルでないことを確認
+			if (playerVel.lengthSqr() > 0.0001f)
+			{
+				Vec3 normalizedVel = playerVel.normalize();
+				Vec3 goalDir = m_Transform->GetForward().normalize();
+
+				float dot = normalizedVel.dot(goalDir);
+
+				if (dot > 0.9f) // ある程度逆向きとみなす閾値
+				{
+					GameManager::GetInstance().DrawGoalEffect();
+					m_Cube = nullptr;
+				}
+				else
+				{
+					m_Cube->Destroy();
+					m_Cube = nullptr;
+				}
+			}
 		}
 	}
 
