@@ -76,6 +76,12 @@ namespace basecross{
 			m_DirectionMap[L"west"] = Vec3(-1, 0, 0);
 
 			m_KeyConfigFile.Load(L"Json/keyconfig.json");
+
+			m_StarSp.clear();
+			m_EvaluationSp.clear();
+
+			m_GameEvaluation = 2;
+			m_CurrentStarIndex = 0;
 		}
 
 		/// <summary>

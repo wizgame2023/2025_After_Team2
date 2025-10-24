@@ -72,10 +72,6 @@ namespace basecross{
 		}
 	}
 
-	void GameManager::DrawTempGimmicks() {
-		
-	}
-
 
 	void GameManager::Start() {
 		for (auto& gimmick : m_Map->GetGimmicks()) {
@@ -205,7 +201,7 @@ namespace basecross{
 					m_EffectSprite.push_back(starUI);
 				}
 
-				evaluationUI->SetPosition(Vec3(0.0f, 80.0f - 60.0f * i, 0.0f));
+				evaluationUI->SetPosition(Vec3(0.0f, -80.0f - 60.0f * i, 0.0f));
 				auto uv = evaluationUI->GetUv(i);
 				evaluationUI->UpdateUV(uv);
 				m_EvaluationSp.push_back(evaluationUI);
@@ -213,8 +209,6 @@ namespace basecross{
 
 			}
 
-
-			m_CurrentStarIndex = 0;
 
 		}
 		if (m_CurrentStarIndex >= m_StarSp.size()) return;
