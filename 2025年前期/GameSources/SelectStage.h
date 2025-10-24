@@ -21,6 +21,7 @@ namespace basecross {
 		int m_Count = 0;
 
 		bool m_IsStick = false;
+		bool m_IsButton = true;
 
 		vector<Vec3> m_NumPositions;
 
@@ -42,7 +43,6 @@ namespace basecross {
 
 	private:
 		void SpriteCreate();
-		void NumSprite();
 	};
 
 
