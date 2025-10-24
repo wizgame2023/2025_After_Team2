@@ -245,16 +245,16 @@ namespace basecross{
 		m_GameMenu->SetDrawActive(true);
 	}
 	void PoseMenu::MoveSelectStage() {
-
+		PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToSelectStage");
 	}
 	void PoseMenu::MoveTitleStage() {
-
+		PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
 	}
 	void PoseMenu::SettingSound() {
 
 	}
 	void PoseMenu::CloseNewGame() {
-
+		PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 	}
 	void PoseMenu::OpenExpainGimmicks() {
 
