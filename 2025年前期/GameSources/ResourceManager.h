@@ -9,11 +9,14 @@ namespace basecross{
 
 
 	class ResourceManager {
+		static wstring g_ResourcesFilePath;
 		static Json g_ResourceJson;
 	public:
-
+		static void SetResourcesFilePath(const wstring& path) {
+			g_ResourcesFilePath = path;
+		}
 		static void Load(const wstring& filename) {
-			g_ResourceJson = Json(filename);
+			g_ResourceJson = Json(g_ResourcesFilePath + filename);
 		}
 		static void RegisterTexture(const wstring& foldername) {
 			auto& app = App::GetApp();

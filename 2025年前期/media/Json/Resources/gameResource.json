@@ -1,0 +1,17 @@
+{
+  "Model": {
+  },
+  "Texture": {
+  },
+  "Sound": {
+
+  },
+  "UI": {
+   "GimmickExpain_PL.png" :  "EXPAIN_PL",
+   "GimmickExpain_GL.png" :  "EXPAIN_GL",
+   "GimmickExpain_ARRW.png" :  "EXPAIN_ARRW",
+   "GimmickExpain_TP.png" :  "EXPAIN_TP",
+   "GimmickExpain_INV.png" :  "EXPAIN_INV",
+   "GimmickExpain_ROLL.png" :  "EXPAIN_ROLL"
+  }
+}

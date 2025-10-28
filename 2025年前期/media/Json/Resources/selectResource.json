@@ -1,0 +1,36 @@
+{
+  "Model": {
+    "Player.bmf": { "model": "PLAYER_MD", "texture": "",  "type": "static"},
+    "Goal.bmf": {   "model": "GOAL_MD", "texture": "",  "type": "static"}
+  },
+  "Texture": {
+    "arrow_Orbit.png": "TEMP_ARROW_SPRITE"
+  },
+  "Sound": {
+
+  },
+  "UI": {
+    "testGimmick.png": "TEMP_GIMMICK",
+    "testGoal.png": "TEMP_GIMMICK_GOAL",
+    "testSetPl.png": "TEMP_GIMMICK_PLAYER",
+    "testUpper.png": "TEMP_GIMMICK_UPPER",
+    "testCoruse.png": "TEMP_GIMMICK_COURSE",
+    "testGoalTxt.png": "TEMP_GOAL_SPRITE",
+    "testOver.png": "TEMP_OVER_SPRITE",
+    "TitleLogo.png": "TitleLogoUI",
+    "SelectLogo.png": "SelectUI",
+    "Start.png": "StartUI",
+    "Number.png": "NumUI",
+    "TestCursor.png": "CursorUI",
+    "ResultBackBoard.png": "ResultBackBoardUI",
+    "StarCover.png": "StarCoverUI",
+    "Star.png": "StarUI",
+    "Evaluation.png": "EvaluationUI",
+    "tempBackGame.png": "TEMP_BACK_MENU",
+    "tempMenuExpain.png": "TEMP_EXPAIN_MENU",
+    "tempMenuNewGame.png": "TEMP_NEW_MENU",
+    "tempMenuSelect.png": "TEMP_SELECT_MENU",
+    "tempMenuSound.png": "TEMP_SOUND_MENU",
+    "tempMenuTitle.png": "TEMP_TITLE_MENU"
+  }
+}

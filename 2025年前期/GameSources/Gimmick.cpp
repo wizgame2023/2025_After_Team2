@@ -193,9 +193,11 @@ namespace basecross{
 
 	void GimmickCourseCorrection::Update()
 	{
-		
+		Gimmicks::Update();
+		CheckCount();
 	}
 	void GimmickCourseCorrection::End() {
+		Gimmicks::End();
 		Gimmicks::Update();
 		if (CheckCount())
 		{

@@ -14,10 +14,13 @@ namespace basecross{
 		pair<int, int> m_PairHandle;
 	};
 	class GameMenu : public Object {
+		bool m_IsCursor;
+
 		map<GimmickObjects, wstring> m_GimmickTextures;
 		shared_ptr<Stage> m_MenuStage;
 		shared_ptr<Coursor> m_Cursor;
 		shared_ptr<Sprite> m_CurrentLine;
+		shared_ptr<Sprite> m_CurrentExpain;
 
 		shared_ptr<Sprite> m_BackGround;
 		vector<shared_ptr<Sprite>> m_ColorPalette;
@@ -30,8 +33,9 @@ namespace basecross{
 		Viewport m_MainViewPort;
 
 		shared_ptr<PoseMenu> m_PoseMenu;
-		int m_ColorHandle;
-		int m_GimmikcHandle;
+		int m_ColorHandle;	//指定中の色
+		int m_GimmikcHandle;//指定中のギミック
+		int m_CursorHandle;	//カーソルがある番号(色+ギミックの合計値が最大)
 
 		bool UpdateOnCoursorHandle();
 		vector<pair<int, int>> ConvertColorGimmickHandles(vector<Line>& lines);
@@ -40,7 +44,7 @@ namespace basecross{
 		GameMenu(const shared_ptr<Stage>& ptr,const wstring& colorTex,const wstring& backGroundTex,Viewport& mainViewport) 
 			: Object(ptr),
 			m_ColorTexture(colorTex),m_BackGroundTexture(backGroundTex),m_MainViewPort(mainViewport), 
-			m_MenuStage(ptr), m_ColorHandle(-1),m_GimmikcHandle(-1){}
+			m_MenuStage(ptr), m_ColorHandle(-1),m_GimmikcHandle(-1), m_IsCursor(true){}
 		virtual ~GameMenu(){}
 
 		virtual void OnCreate()override;
@@ -94,6 +98,9 @@ namespace basecross{
 
 		Vec3 GetPosition() {
 			return m_Coursor->GetPosition();
+		}
+		void SetPosition(Vec3 position) {
+			m_Coursor->SetPosition(position);
 		}
 
 		void SetCoursorMode(CoursorMode mode) {

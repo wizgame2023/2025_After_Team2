@@ -49,6 +49,9 @@
     <Filter Include="Stage">
       <UniqueIdentifier>{840e50f3-4479-4ace-88a7-d467ac806cea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Json\Setting">
+      <UniqueIdentifier>{f54336bf-b63a-499e-9e5b-888e9db16016}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h">
@@ -196,16 +199,25 @@
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json">
       <Filter>Json\Resource</Filter>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)..\media\Json\resorce.json">
-      <Filter>Json\Resource</Filter>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)..\media\Json\setting.json">
-      <Filter>Json\Resource</Filter>
-    </None>
     <None Include="$(MSBuildThisFileDirectory)..\media\Level\level1.json">
       <Filter>Json\Level</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\keyconfig.json">
+      <Filter>Json\Setting</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\setting.json">
+      <Filter>Json\Setting</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\gameResource.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\sceneResource.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\selectResource.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\titleResource.json">
       <Filter>Json\Resource</Filter>
     </None>
   </ItemGroup>

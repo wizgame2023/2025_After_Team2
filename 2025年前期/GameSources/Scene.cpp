@@ -17,7 +17,8 @@ namespace basecross{
 			InputManager::CreateInputManager();
 
 			Json::SetDefaultFilePath(App::GetApp()->GetDataDirWString());
-			ResourceManager::Load(L"Json/resorce.json");
+			ResourceManager::SetResourcesFilePath(L"Json/Resources/");
+			ResourceManager::Load(L"sceneResource.json");
 
 			ResourceManager::RegisterResource(L"Model");
 
