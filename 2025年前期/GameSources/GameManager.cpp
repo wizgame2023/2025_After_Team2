@@ -81,6 +81,7 @@ namespace basecross{
 			auto sprite = m_MenuStage->AddGameObject<Sprite>(L"TEMP_OVER_SPRITE",Vec3(),Vec2(),Anchor::Center);
 			sprite->MatchToScreenSize();
 			sprite->SetDiffuse(Col4(0, 0, 0, 1));
+			sprite->SetLayer(10);
 			m_SpriteFade = sprite->AddComponent<SpriteFade>(1.0f);
 		}
 		m_SpriteFade->StartFade(FadeState::OutToIn);
@@ -88,7 +89,6 @@ namespace basecross{
 	}
 	void GameManager::RestartGame(bool isAll) {
 		StartFade();
-		//m_GameState = GameState::Put;
 	}
 	void GameManager::Start() {
 		for (auto& gimmick : m_Map->GetGimmicks()) {

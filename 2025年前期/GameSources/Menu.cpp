@@ -21,15 +21,19 @@ namespace basecross{
 		Vec2 menuSize = Vec2(screenSize.x - mainViewSize.x, screenSize.y);
 		Vec3 menuPosition = Vec3(screenSize.x / 2.0f - menuSize.x, 0, 0);
 		m_BackGround = m_MenuStage->AddGameObject<Sprite>(m_BackGroundTexture, menuPosition, menuSize,Anchor::Left);
+		m_BackGround->SetLayer(0);
 		float duretionY = 75.0f;
 		Vec2 colorPalettePosition = Vec2(menuPosition.x + 100.0f, menuPosition.y + menuSize.y / 2.0f - 100.0f);
 		Vec2 gimmickPosition = Vec2(menuPosition.x + menuSize.x - 100.0f, menuPosition.y + menuSize.y / 2.0f - 100.0f);
 
 		m_ExpainBox = m_MenuStage->AddGameObject<Sprite>(m_BackGroundTexture, Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f,0.0f), Vec2(menuSize.x,menuSize.y * 0.25f), Anchor::TopLeft);
+		m_ExpainBox->SetLayer(0);
 		m_CurrentExpain = m_MenuStage->AddGameObject<Sprite>(L"EXPAIN_PL", Vec3(), Vec2(menuSize.x, menuSize.y * 0.25f) * 0.9f, Anchor::Center);
 		m_CurrentExpain->SetAnchorPosition(static_cast<Vec3>(m_ExpainBox->GetAnchorPosition(Anchor::Center)), Anchor::Center);
-
+		m_CurrentExpain->SetLayer(1);
 		Vec2 iconSize = Vec2(50.0f, 50.0f);
+		m_ConnectOffsetX = iconSize.x / 2.0f;
+
 		auto& gameManager = GameManager::GetInstance();
 
 		auto colorTable = gameManager.GetMap()->GetColorTable();
@@ -44,7 +48,16 @@ namespace basecross{
 				Vec3(colorPalettePosition.x, colorPalettePosition.y - i * duretionY,0.0f), iconSize,
 				Anchor::Center);
 			sprite->SetDiffuse(color);
+			sprite->SetLayer(2);
+
+			auto handler = m_MenuStage->AddGameObject<Sprite>(
+				L"HANDLER",
+				static_cast<Vec3>(sprite->GetAnchorPosition(Anchor::Right)) + Vec3(m_ConnectOffsetX, 0, 0), iconSize / 2.0f,
+				Anchor::Center);
+			handler->SetLayer(2);
+
 			m_ColorPalette.push_back(sprite);
+			m_HandlerSprites.push_back(handler);
 		}
 
 
@@ -54,7 +67,14 @@ namespace basecross{
 				m_GimmickTextures[cards[i]->GetType()],
 				Vec3(gimmickPosition.x, gimmickPosition.y - i * duretionY, 0.0f), iconSize,
 				Anchor::Center);
+			sprite->SetLayer(2);
+			auto handler = m_MenuStage->AddGameObject<Sprite>(
+				L"HANDLER",
+				static_cast<Vec3>(sprite->GetAnchorPosition(Anchor::Left)) - Vec3(m_ConnectOffsetX, 0, 0), iconSize / 2.0f,
+				Anchor::Center);
+			handler->SetLayer(2);
 			m_GimmcikSprites.push_back(sprite);
+			m_HandlerSprites.push_back(handler);
 		}
 
 		m_Cursor = m_MenuStage->AddGameObject<Coursor>(L"MOUSE_CURSOR");
@@ -65,7 +85,6 @@ namespace basecross{
 
 		m_PoseMenu = m_MenuStage->AddGameObject<PoseMenu>(GetThis<GameMenu>(),menuPosition + Vec3(screenSize.x / 10.0f,screenSize.y / 2.0f - 50,0), Vec2(120.0f, 60.0f));
 		
-		m_ConnectOffsetX = iconSize.x / 2.0f;
 	}
 	void GameMenu::OnUpdate() {
 		auto& input = InputManager::GetInputManager();
@@ -173,23 +192,7 @@ namespace basecross{
 		}
 
 		gameManager.UpdatePair(ConvertColorGimmickHandles(m_Lines));
-
-		auto cards = gameManager.GetHand()->GetCardData();
-		if (m_GimmikcHandle != -1) {
-			wstring key = cards[m_GimmikcHandle]->GetExpainKey();
-			if (key != L"") {
-				m_CurrentExpain->SetTextureKey(key);
-			}
-		}
-		else {
-			int handle = OnCoursorHandle(m_GimmcikSprites);
-			if (handle != -1) {
-				wstring key = cards[handle]->GetExpainKey();
-				if (key != L"") {
-					m_CurrentExpain->SetTextureKey(key);
-				}
-			}
-		}
+		DrawExpain();
 	}
 
 	bool GameMenu::UpdateOnCoursorHandle() {
@@ -200,6 +203,7 @@ namespace basecross{
 
 		if (!m_CurrentLine) {
 			m_CurrentLine = m_MenuStage->AddGameObject<Sprite>(m_ColorTexture, m_Cursor->GetPosition(), Vec2(10, 10), Anchor::Center);
+			m_CurrentLine->SetLayer(1);
 		}
 
 		if (colorHandle >= 0) {
@@ -249,11 +253,28 @@ namespace basecross{
 
 		Vec3 direction = end - start;
 		m_CurrentLine->SetSize(Vec2(m_CurrentLine->GetSize().x, direction.length()));
-		m_CurrentLine->SetPosition(start + direction / 2.0f);
+		m_CurrentLine->SetAnchorPosition(start + direction / 2.0f,Anchor::Center);
 		m_CurrentLine->VectorToward(static_cast<Vec2>(direction.normalize()));
 
 	}
-
+	void GameMenu::DrawExpain() {
+		auto cards = GameManager::GetInstance().GetHand()->GetCardData();
+		if (m_GimmikcHandle != -1) {
+			wstring key = cards[m_GimmikcHandle]->GetExpainKey();
+			if (key != L"") {
+				m_CurrentExpain->SetTextureKey(key);
+			}
+		}
+		else {
+			int handle = OnCoursorHandle(m_GimmcikSprites);
+			if (handle != -1) {
+				wstring key = cards[handle]->GetExpainKey();
+				if (key != L"") {
+					m_CurrentExpain->SetTextureKey(key);
+				}
+			}
+		}
+	}
 
 	void PoseMenu::OnCreate() {
 		Vec3 duration = Vec3(0.0f,m_ButtonSize.y / 2.0f,0.0f);
@@ -331,6 +352,7 @@ namespace basecross{
 
 	void Coursor::OnCreate() {
 		m_Coursor = m_MenuStage->AddGameObject<Sprite>(m_CoursorTexture, Vec3(), Vec2(), Anchor::TopLeft);
+		m_Coursor->SetLayer(3);
 	}
 	void Coursor::OnUpdate() {
 		auto& input = InputManager::GetInputManager();

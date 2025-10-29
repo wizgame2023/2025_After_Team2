@@ -28,6 +28,7 @@ namespace basecross{
 		shared_ptr<Sprite> m_BackGround;
 		vector<shared_ptr<Sprite>> m_ColorPalette;
 		vector<shared_ptr<Sprite>> m_GimmcikSprites;
+		vector<shared_ptr<Sprite>> m_HandlerSprites;
 		vector<Line> m_Lines;
 
 		wstring m_ColorTexture;
@@ -45,6 +46,7 @@ namespace basecross{
 		bool UpdateOnCoursorHandle();
 		vector<pair<int, int>> ConvertColorGimmickHandles(vector<Line>& lines);
 		void DrawLine(Vec3 start, Vec3 end);
+		void DrawExpain();
 	public:
 		GameMenu(const shared_ptr<Stage>& ptr,const wstring& colorTex,const wstring& backGroundTex,Viewport& mainViewport) 
 			: Object(ptr),
