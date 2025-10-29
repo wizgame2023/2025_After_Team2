@@ -26,7 +26,7 @@ namespace basecross{
 
 			ResourceManager::RegisterTexture(L"UI");
 
-
+			SoundManager::GetInstance().RegisterSounds();
 			//ƒNƒŠƒA‚·‚éF‚ğİ’è
 			Col4 Col;
 			Col.set(31.0f / 255.0f, 30.0f / 255.0f, 71.0f / 255.0f, 255.0f / 255.0f);
