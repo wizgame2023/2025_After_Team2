@@ -79,7 +79,7 @@ namespace basecross{
 
 		m_Cursor = m_MenuStage->AddGameObject<Coursor>(L"MOUSE_CURSOR");
 		m_Cursor->SetCoursorSize(25.0f);
-		m_Cursor->SetMoveSpeed(300.0f);
+		m_Cursor->SetMoveSpeed(450.0f);
 		m_Cursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), m_ExpainBox->GetAnchorPosition(Anchor::TopLeft));
 	
 
