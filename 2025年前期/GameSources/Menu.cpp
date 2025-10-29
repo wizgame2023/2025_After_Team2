@@ -126,6 +126,16 @@ namespace basecross{
 		}
 
 		gameManager.UpdatePair(ConvertColorGimmickHandles(m_Lines));
+
+		if (input->GetDownButton(L"Y"))
+		{
+			if (m_HintStartPos.empty()) {
+				LoadHintData();
+			}
+
+			HintCreate(); // 描画とインデックス進行を内部で処理
+		}
+
 	}
 
 	bool GameMenu::UpdateOnCoursorHandle() {
@@ -186,6 +196,101 @@ namespace basecross{
 		m_CurrentLine->SetPosition(start + direction / 2.0f);
 		m_CurrentLine->VectorToward(static_cast<Vec2>(direction.normalize()));
 
+	}
+
+	void GameMenu::HintCreate()
+	{
+		int hintDrawCount = 0;
+		const int maxDrawPerCall = 2; // ← 同時に描画する本数
+
+		while (m_HintIndex < m_HintStartPos.size() && hintDrawCount < maxDrawPerCall)
+		{
+			bool alreadyMatched = IsHintPairMatched(m_HintIndex);
+			Vec3 startPos = m_HintStartPos[m_HintIndex];
+			Vec3 endPos = m_HintEndPos[m_HintIndex];
+
+			bool alreadyDrawn = false;
+			for (const auto& line : m_HintLines)
+			{
+				Vec3 linePos = line->GetPosition();
+				float lineLength = line->GetSize().y;
+
+				Vec3 expectedPos = startPos + (endPos - startPos) / 2.0f;
+				float expectedLength = (endPos - startPos).length();
+
+				if ((linePos - expectedPos).length() < 0.1f &&
+					std::abs(lineLength - expectedLength) < 0.1f)
+				{
+					alreadyDrawn = true;
+					break;
+				}
+			}
+
+			if (alreadyDrawn || alreadyMatched)
+			{
+				m_HintIndex++;
+				continue;
+			}
+
+			auto line = m_MenuStage->AddGameObject<Sprite>(L"HintLine", startPos, Vec2(10, 10), Anchor::Center);
+			Vec3 direction = endPos - startPos;
+			line->SetSize(Vec2(line->GetSize().x, direction.length()));
+			line->SetPosition(startPos + direction / 2.0f);
+			line->VectorToward(static_cast<Vec2>(direction.normalize()));
+
+			m_HintLines.push_back(line);
+			m_HintIndex++;
+			hintDrawCount++;
+		}
+
+	}
+	void GameMenu::LoadHintData()
+	{
+		auto& gameManager = GameManager::GetInstance();
+		auto colorTable = gameManager.GetMap()->GetColorTable();
+		Json levelJson;
+		levelJson.Load(L"Level/level1.json");
+		auto hintArray = levelJson.At<JsonArray>(L"hint");
+		auto objectArray = hintArray->GetObjectArray();
+		auto cards = gameManager.GetHand()->GetCardData();
+
+		for (const auto& hintObj : objectArray)
+		{
+			auto color = hintObj->At<JsonString>(L"color")->GetValue();
+			auto id = hintObj->At<JsonString>(L"id")->GetValue();
+
+			Vec3 startPos = Vec3();
+			Vec3 endPos = Vec3();
+			int colorIndex = -1;
+			int gimmickIndex = -1;
+
+			for (size_t j = 0; j < colorTable.size(); ++j)
+			{
+				if (color == colorTable[j])
+				{
+					startPos = m_ColorPalette[j]->GetPosition();
+					colorIndex = static_cast<int>(j);
+					break;
+				}
+			}
+
+			for (size_t j = 0; j < cards.size(); ++j)
+			{
+				if (id == cards[j]->GetId())
+				{
+					endPos = m_GimmcikSprites[j]->GetPosition();
+					gimmickIndex = static_cast<int>(j);
+					break;
+				}
+			}
+
+			if (startPos != Vec3() && endPos != Vec3())
+			{
+				m_HintStartPos.push_back(startPos);
+				m_HintEndPos.push_back(endPos);
+				m_HintPairs.push_back({ colorIndex, gimmickIndex }); // ? ここが重要
+			}
+		}
 	}
 
 
@@ -318,5 +423,7 @@ namespace basecross{
 		}
 		return true;
 	}
+
+
 }
 //end basecross

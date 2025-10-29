@@ -46,7 +46,6 @@
   ],
   "hint": [
     {"color": "red","id": "player"},
-    {"color": "blue","id": "goal"},
-    {"color": "green","id": "course"}
+    {"color": "blue","id": "goal"}
   ]
 }
