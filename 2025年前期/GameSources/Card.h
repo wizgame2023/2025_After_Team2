@@ -1,7 +1,11 @@
 #pragma once
+
 #include "stdafx.h"
+
 #include "Json.h"
+
 #include "GameManager.h"
+
 namespace basecross {
 
 	class CardData {
@@ -14,13 +18,13 @@ namespace basecross {
 		virtual GimmickObjects GetType() { return GimmickObjects::None; }
 		virtual wstring GetExpainKey() { return L""; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage) { return nullptr; }
-
 		wstring GetId() { return m_Id; }
 	};
+
 	class PlayerCard : public CardData {
 		Vec3 m_Velocity;
 	public:
-		PlayerCard(const wstring& id) : CardData(id){}
+		PlayerCard(const wstring& id) : CardData(id) {}
 		virtual void Load(shared_ptr<JsonObject>& data) {
 			auto str = data->At<JsonString>(L"direction")->GetValue();
 			m_Velocity = GameManager::GetInstance().DirectionStrToVec(str);
@@ -28,10 +32,15 @@ namespace basecross {
 		virtual GimmickObjects GetType() { return GimmickObjects::SetPlayer; }
 		virtual wstring GetExpainKey() { return L"EXPAIN_PL"; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
+
 			auto gimmick = stage->AddGameObject<GimmickSetPlayer>();
+
 			gimmick->SetValue(m_Velocity);
+
 			return gimmick;
+
 		}
+
 
 	};
 	class GoalCard : public CardData {
@@ -42,6 +51,7 @@ namespace basecross {
 			auto str = data->At<JsonString>(L"direction")->GetValue();
 			m_Direction = GameManager::GetInstance().DirectionStrToVec(str);
 		}
+
 		virtual GimmickObjects GetType() { return GimmickObjects::Goal; }
 		virtual wstring GetExpainKey() { return L"EXPAIN_GL"; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
@@ -49,7 +59,9 @@ namespace basecross {
 			gimmick->SetValue(m_Direction);
 			return gimmick;
 		}
+
 	};
+
 	class CourseCard : public CardData {
 		Vec3 m_Direction;
 	public:
@@ -71,15 +83,13 @@ namespace basecross {
 	class InverterCard : public CardData {
 	public:
 		InverterCard(const wstring& id) : CardData(id) {}
-		virtual void Load(shared_ptr<JsonObject>& data) {
-		}
+		virtual void Load(shared_ptr<JsonObject>& data) {}
 		virtual GimmickObjects GetType() { return GimmickObjects::Inverter; }
 		virtual wstring GetExpainKey() { return L""; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
 			auto gimmick = stage->AddGameObject<GimmickInverter>();
 			return gimmick;
 		}
-
 	};
 
 	class TeleportCard : public CardData {
@@ -90,6 +100,7 @@ namespace basecross {
 			auto target = data->At<JsonArray>(L"target")->GetFloatArray();
 			m_TeleportTarget = Vec3(target[0], target[1], target[2]);
 		}
+
 		virtual GimmickObjects GetType() { return GimmickObjects::Teleporter; }
 		virtual wstring GetExpainKey() { return L""; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
@@ -108,6 +119,7 @@ namespace basecross {
 			GetMap()[name] = func;
 			return true;
 		}
+
 		static shared_ptr<CardData> Create(const wstring& name) {
 			auto& map = GetMap();
 			if (map.find(name) != map.end()) {
@@ -121,12 +133,15 @@ namespace basecross {
 			return map;
 		}
 	};
+
 #define REGISTER_CARD(name,type) \
 	static bool reg_##type = CardFactory::Register(name, [](const wstring& id) {return make_shared<type>(id); });
 
-	REGISTER_CARD(L"player",PlayerCard)
-	REGISTER_CARD(L"goal", GoalCard)
-	REGISTER_CARD(L"course", CourseCard)
-	REGISTER_CARD(L"teleporter", TeleportCard)
-	REGISTER_CARD(L"inverter", InverterCard)
+		REGISTER_CARD(L"player", PlayerCard)
+		REGISTER_CARD(L"goal", GoalCard)
+		REGISTER_CARD(L"course", CourseCard)
+		REGISTER_CARD(L"teleporter", TeleportCard)
+		REGISTER_CARD(L"inverter", InverterCard)
+
 }
+

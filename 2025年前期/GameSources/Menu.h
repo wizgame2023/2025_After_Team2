@@ -12,6 +12,7 @@ namespace basecross{
 	struct Line {
 		shared_ptr<Sprite> m_Line;
 		pair<int, int> m_PairHandle;
+
 	};
 	class GameMenu : public Object {
 		bool m_IsCursor;
@@ -62,6 +63,34 @@ namespace basecross{
 
 
 		void SetDrawActive(bool flag);
+
+		//ヒント
+		void HintCreate();
+		void LoadHintData();
+		vector<Vec3> m_HintStartPos;
+		vector<Vec3> m_HintEndPos;
+		vector<shared_ptr<Sprite>> m_HintLines;
+		vector<pair<int, int>> m_HintPairs;
+		size_t m_HintIndex = 0; // 現在表示するヒントのインデックス
+
+		bool IsHintPairMatched(size_t hintIndex)
+		{
+			if (hintIndex >= m_HintPairs.size()) return false;
+
+			auto& hintPair = m_HintPairs[hintIndex];
+
+			for (const auto& line : m_Lines)
+			{
+				if (line.m_PairHandle == hintPair ||
+					line.m_PairHandle == pair<int, int>{hintPair.second, hintPair.first})
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 	};
 
 	class PoseMenu : public Object {
@@ -139,6 +168,8 @@ namespace basecross{
 			Object::SetUpdateActive(flag);
 			m_Coursor->SetDrawActive(flag);
 		}
+
+
 	};
 }
 //end basecross

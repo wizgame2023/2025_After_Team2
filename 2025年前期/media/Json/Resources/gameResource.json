@@ -7,6 +7,8 @@
 
   },
   "UI": {
+    "HintLine.png": "HintLine",
+
     "Expains/GimmickExpain_PL.png": "EXPAIN_PL",
     "Expains/GimmickExpain_GL.png": "EXPAIN_GL",
     "Expains/GimmickExpain_ARRW.png": "EXPAIN_ARRW",

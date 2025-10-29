@@ -68,7 +68,7 @@ namespace basecross {
 
 
 
-	void SelectStage::OnCreate() 
+	void SelectStage::OnCreate()
 	{
 		try {
 			//ビューとライトの作成
@@ -83,18 +83,27 @@ namespace basecross {
 
 	void SelectStage::OnUpdate()
 	{
-		auto input = App::GetApp()->GetInputDevice().GetControlerVec()[0];
+		auto& input = InputManager::GetInputManager();
 
 
-		if (input.wPressedButtons & XINPUT_GAMEPAD_A)
+		if (input->GetDownButton(L"A") && !m_IsButton)
 		{
 			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 		}
-		if (input.fThumbLX == 0)
+		else if (input->GetDownButton(L"B") && !m_IsButton)
+		{
+			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
+		}
+		else
+		{
+			m_IsButton = false;
+		}
+
+		if (input->GetLStick().x == 0.0f)
 		{
 			m_IsStick = false;
 		}
-		if (input.fThumbLX > 0 && m_IsStick == false)
+		if (input->GetLStick().x > 0.2f && m_IsStick == false)
 		{
 			m_Count++;
 			if (m_Count == 10)
@@ -108,7 +117,7 @@ namespace basecross {
 
 			m_IsStick = true;
 		}
-		if (input.fThumbLX < 0 && m_IsStick == false)
+		if (input->GetLStick().x < -0.2f && m_IsStick == false)
 		{
 			m_Count--;
 
@@ -127,9 +136,5 @@ namespace basecross {
 		}
 	}
 
-	void SelectStage::NumSprite()
-	{
-
-	}
 }
 //end basecross

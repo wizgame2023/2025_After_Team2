@@ -43,5 +43,9 @@
       "color": "blue",
       "height": 0
     }
+  ],
+  "hint": [
+    {"color": "red","id": "player"},
+    {"color": "blue","id": "goal"}
   ]
 }

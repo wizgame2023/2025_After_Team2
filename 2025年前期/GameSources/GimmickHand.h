@@ -10,37 +10,8 @@
 #include "Sprite.h"
 
 namespace basecross{
-
-	class GimmickCard : public Object {
-		static map<GimmickObjects, wstring> m_CoverTexKeys;
-		shared_ptr<Sprite> m_Card;
-		shared_ptr<Sprite> m_CoverSprite;
-
-		shared_ptr<CardData> m_Type;
-	public:
-		GimmickCard(const shared_ptr<Stage>& ptr,const shared_ptr<CardData>& type) : Object(ptr), m_Type(type){}
-		GimmickCard(const shared_ptr<Stage>& ptr) : GimmickCard(ptr, make_shared<CardData>()) {}
-
-		virtual ~GimmickCard(){}
-
-		virtual void OnCreate()override;
-		virtual void OnUpdate()override;
-
-		void Remove() {
-			m_Stage->RemoveGameObject<Sprite>(m_Card);
-			m_Stage->RemoveGameObject<Sprite>(m_CoverSprite);
-			m_Stage->RemoveGameObject<GimmickCard>(GetThis<GimmickCard>());
-		}
-		shared_ptr<Sprite> GetCardSprite() {
-			return m_Card;
-		}
-
-		void SetCover(GimmickObjects type);
-	};
-
 	class GimmickHand : public Object {
 		vector<shared_ptr<CardData>> m_Hand;
-		vector<shared_ptr<GimmickCard>> m_HandSprite;
 
 		Vec2 m_CardSize;
 		int m_SelectIndex;
@@ -70,7 +41,6 @@ namespace basecross{
 		/// <param name="gimmicks">’Ç‰Á‚·‚éƒMƒ~ƒbƒN</param>
 		void Add(const shared_ptr<CardData>& gimmicks) {
 			m_Hand.push_back(gimmicks);
-			m_HandSprite.push_back(m_Stage->AddGameObject<GimmickCard>(gimmicks));
 		}
 
 		/// <summary>
