@@ -20,7 +20,10 @@ namespace basecross{
 		shared_ptr<Stage> m_MenuStage;
 		shared_ptr<Coursor> m_Cursor;
 		shared_ptr<Sprite> m_CurrentLine;
+
+
 		shared_ptr<Sprite> m_CurrentExpain;
+		shared_ptr<Sprite> m_ExpainBox;
 
 		shared_ptr<Sprite> m_BackGround;
 		vector<shared_ptr<Sprite>> m_ColorPalette;
@@ -67,6 +70,10 @@ namespace basecross{
 			m_TopLeftPosition(topLeft),m_ButtonSize(size){}
 
 		virtual void OnCreate()override;
+
+		bool IsOpen() {
+			return GetDrawActive();
+		}
 
 		void Open();
 		void Close();
