@@ -9,12 +9,12 @@
 namespace basecross{
 
 	void GameMenu::OnCreate() {
-		m_GimmickTextures[GimmickObjects::Goal] = L"TEMP_GIMMICK_GOAL";
-		m_GimmickTextures[GimmickObjects::SetPlayer] = L"TEMP_GIMMICK_PLAYER";
-		m_GimmickTextures[GimmickObjects::CourseCorrection] = L"TEMP_GIMMICK_COURSE";
-		m_GimmickTextures[GimmickObjects::Roll] = L"TEMP_GIMMICK_COURSE";
-		m_GimmickTextures[GimmickObjects::Killer] = L"TEMP_GIMMICK_UPPER";
-		m_GimmickTextures[GimmickObjects::Teleporter] = L"TEMP_GIMMICK_UPPER";
+		m_GimmickTextures[GimmickObjects::Goal] = L"ICON_GOAL";
+		m_GimmickTextures[GimmickObjects::SetPlayer] = L"ICON_PL";
+		m_GimmickTextures[GimmickObjects::CourseCorrection] = L"ICON_ARROW";
+		m_GimmickTextures[GimmickObjects::Roll] = L"ICON_ROLL";
+		m_GimmickTextures[GimmickObjects::Killer] = L"ICON_KILL";
+		m_GimmickTextures[GimmickObjects::Teleporter] = L"ICON_TL";
 
 		Vec2 mainViewSize = Vec2(m_MainViewPort.Width, m_MainViewPort.Height);
 		Vec2 screenSize = Vec2(App::GetApp()->GetGameWidth(), App::GetApp()->GetGameHeight());
@@ -29,7 +29,7 @@ namespace basecross{
 		m_CurrentExpain = m_MenuStage->AddGameObject<Sprite>(L"EXPAIN_PL", Vec3(), Vec2(menuSize.x, menuSize.y * 0.25f) * 0.9f, Anchor::Center);
 		m_CurrentExpain->SetAnchorPosition(static_cast<Vec3>(m_ExpainBox->GetAnchorPosition(Anchor::Center)), Anchor::Center);
 
-		
+		Vec2 iconSize = Vec2(50.0f, 50.0f);
 		auto& gameManager = GameManager::GetInstance();
 
 		auto colorTable = gameManager.GetMap()->GetColorTable();
@@ -41,7 +41,7 @@ namespace basecross{
 
 			auto sprite = m_MenuStage->AddGameObject<Sprite>(
 				m_ColorTexture,
-				Vec3(colorPalettePosition.x, colorPalettePosition.y - i * duretionY,0.0f), Vec2(50, 50),
+				Vec3(colorPalettePosition.x, colorPalettePosition.y - i * duretionY,0.0f), iconSize,
 				Anchor::Center);
 			sprite->SetDiffuse(color);
 			m_ColorPalette.push_back(sprite);
@@ -52,7 +52,7 @@ namespace basecross{
 		for (int i = 0; i < cards.size(); i++) {
 			auto sprite = m_MenuStage->AddGameObject<Sprite>(
 				m_GimmickTextures[cards[i]->GetType()],
-				Vec3(gimmickPosition.x, gimmickPosition.y - i * duretionY, 0.0f), Vec2(50, 50),
+				Vec3(gimmickPosition.x, gimmickPosition.y - i * duretionY, 0.0f), iconSize,
 				Anchor::Center);
 			m_GimmcikSprites.push_back(sprite);
 		}
@@ -64,6 +64,8 @@ namespace basecross{
 	
 
 		m_PoseMenu = m_MenuStage->AddGameObject<PoseMenu>(GetThis<GameMenu>(),menuPosition + Vec3(screenSize.x / 10.0f,screenSize.y / 2.0f - 50,0), Vec2(120.0f, 60.0f));
+		
+		m_ConnectOffsetX = iconSize.x / 2.0f;
 	}
 	void GameMenu::OnUpdate() {
 		auto& input = InputManager::GetInputManager();
@@ -124,20 +126,26 @@ namespace basecross{
 			Vec3 coursorPosition = m_Cursor->GetPosition();
 			Vec3 handlePosition;
 			if (m_ColorHandle != -1) {
-				handlePosition = m_ColorPalette[m_ColorHandle]->GetPosition();
+				handlePosition = m_ColorPalette[m_ColorHandle]->GetAnchorPosition(Anchor::Right);
+				handlePosition.x += m_ConnectOffsetX;
 				int handle = OnCoursorHandle(m_GimmcikSprites);
 				if (handle != -1) {
-					coursorPosition = m_GimmcikSprites[handle]->GetPosition();
+					coursorPosition = m_GimmcikSprites[handle]->GetAnchorPosition(Anchor::Left);
+					coursorPosition.x -= m_ConnectOffsetX;
 				}
 			}
 			else {
-				handlePosition = m_GimmcikSprites[m_GimmikcHandle]->GetPosition();
+				handlePosition = m_GimmcikSprites[m_GimmikcHandle]->GetAnchorPosition(Anchor::Left);
+				handlePosition.x -= m_ConnectOffsetX;
 				int handle = OnCoursorHandle(m_ColorPalette);
 				if (handle != -1) {
-					coursorPosition = m_ColorPalette[handle]->GetPosition();
+					coursorPosition = m_ColorPalette[handle]->GetAnchorPosition(Anchor::Right);
+					coursorPosition.x += m_ConnectOffsetX;
 				}
 			}
 			
+
+
 			DrawLine(handlePosition, coursorPosition);
 
 			if (input->GetUpButton(gameManager.GetKeyConfig(L"putGimmick"))) {

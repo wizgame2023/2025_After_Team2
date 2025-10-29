@@ -40,6 +40,8 @@ namespace basecross{
 		int m_GimmikcHandle;//指定中のギミック
 		int m_CursorHandle;	//カーソルがある番号(色+ギミックの合計値が最大)
 
+		float m_ConnectOffsetX;
+
 		bool UpdateOnCoursorHandle();
 		vector<pair<int, int>> ConvertColorGimmickHandles(vector<Line>& lines);
 		void DrawLine(Vec3 start, Vec3 end);
@@ -47,6 +49,7 @@ namespace basecross{
 		GameMenu(const shared_ptr<Stage>& ptr,const wstring& colorTex,const wstring& backGroundTex,Viewport& mainViewport) 
 			: Object(ptr),
 			m_ColorTexture(colorTex),m_BackGroundTexture(backGroundTex),m_MainViewPort(mainViewport), 
+			m_ConnectOffsetX(0),
 			m_MenuStage(ptr), m_ColorHandle(-1),m_GimmikcHandle(-1), m_IsCursor(true){}
 		virtual ~GameMenu(){}
 
