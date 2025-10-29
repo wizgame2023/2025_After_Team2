@@ -31,6 +31,7 @@
     "tempMenuNewGame.png": "TEMP_NEW_MENU",
     "tempMenuSelect.png": "TEMP_SELECT_MENU",
     "tempMenuSound.png": "TEMP_SOUND_MENU",
-    "tempMenuTitle.png": "TEMP_TITLE_MENU"
+    "tempMenuTitle.png": "TEMP_TITLE_MENU",
+    "HintLine.png": "HintLine"
   }
 }

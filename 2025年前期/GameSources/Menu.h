@@ -12,6 +12,7 @@ namespace basecross{
 	struct Line {
 		shared_ptr<Sprite> m_Line;
 		pair<int, int> m_PairHandle;
+
 	};
 	class GameMenu : public Object {
 		bool m_IsCursor;
@@ -28,6 +29,7 @@ namespace basecross{
 		shared_ptr<Sprite> m_BackGround;
 		vector<shared_ptr<Sprite>> m_ColorPalette;
 		vector<shared_ptr<Sprite>> m_GimmcikSprites;
+		vector<shared_ptr<Sprite>> m_HandlerSprites;
 		vector<Line> m_Lines;
 
 		wstring m_ColorTexture;
@@ -40,13 +42,17 @@ namespace basecross{
 		int m_GimmikcHandle;//指定中のギミック
 		int m_CursorHandle;	//カーソルがある番号(色+ギミックの合計値が最大)
 
+		float m_ConnectOffsetX;
+
 		bool UpdateOnCoursorHandle();
 		vector<pair<int, int>> ConvertColorGimmickHandles(vector<Line>& lines);
 		void DrawLine(Vec3 start, Vec3 end);
+		void DrawExpain();
 	public:
 		GameMenu(const shared_ptr<Stage>& ptr,const wstring& colorTex,const wstring& backGroundTex,Viewport& mainViewport) 
 			: Object(ptr),
 			m_ColorTexture(colorTex),m_BackGroundTexture(backGroundTex),m_MainViewPort(mainViewport), 
+			m_ConnectOffsetX(0),
 			m_MenuStage(ptr), m_ColorHandle(-1),m_GimmikcHandle(-1), m_IsCursor(true){}
 		virtual ~GameMenu(){}
 
@@ -57,6 +63,34 @@ namespace basecross{
 
 
 		void SetDrawActive(bool flag);
+
+		//ヒント
+		void HintCreate();
+		void LoadHintData();
+		vector<Vec3> m_HintStartPos;
+		vector<Vec3> m_HintEndPos;
+		vector<shared_ptr<Sprite>> m_HintLines;
+		vector<pair<int, int>> m_HintPairs;
+		size_t m_HintIndex = 0; // 現在表示するヒントのインデックス
+
+		bool IsHintPairMatched(size_t hintIndex)
+		{
+			if (hintIndex >= m_HintPairs.size()) return false;
+
+			auto& hintPair = m_HintPairs[hintIndex];
+
+			for (const auto& line : m_Lines)
+			{
+				if (line.m_PairHandle == hintPair ||
+					line.m_PairHandle == pair<int, int>{hintPair.second, hintPair.first})
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 	};
 
 	class PoseMenu : public Object {
@@ -134,6 +168,8 @@ namespace basecross{
 			Object::SetUpdateActive(flag);
 			m_Coursor->SetDrawActive(flag);
 		}
+
+
 	};
 }
 //end basecross

@@ -7,11 +7,25 @@
 
   },
   "UI": {
-   "GimmickExpain_PL.png" :  "EXPAIN_PL",
-   "GimmickExpain_GL.png" :  "EXPAIN_GL",
-   "GimmickExpain_ARRW.png" :  "EXPAIN_ARRW",
-   "GimmickExpain_TP.png" :  "EXPAIN_TP",
-   "GimmickExpain_INV.png" :  "EXPAIN_INV",
-   "GimmickExpain_ROLL.png" :  "EXPAIN_ROLL"
+    "HintLine.png": "HintLine",
+
+    "Expains/GimmickExpain_PL.png": "EXPAIN_PL",
+    "Expains/GimmickExpain_GL.png": "EXPAIN_GL",
+    "Expains/GimmickExpain_ARRW.png": "EXPAIN_ARRW",
+    "Expains/GimmickExpain_TP.png": "EXPAIN_TP",
+    "Expains/GimmickExpain_INV.png": "EXPAIN_INV",
+    "Expains/GimmickExpain_ROLL.png": "EXPAIN_ROLL",
+
+    "Icons/Icon_Arrow.png": "ICON_ARROW",
+    "Icons/Icon_Goal.png": "ICON_GOAL",
+    "Icons/Icon_Inverter.png": "ICON_INV",
+    "Icons/Icon_Killer.png": "ICON_KILL",
+    "Icons/Icon_Player.png": "ICON_PL",
+    "Icons/Icon_Roll.png": "ICON_ROLL",
+    "Icons/Icon_Teleporter.png": "ICON_TL",
+    "Icons/Icon_Upper.png": "ICON_UPPER",
+    "Icons/Icon_Lower.png": "ICON_LOWER",
+    "Icons/IconHandler.png": "HANDLER"
+
   }
 }
