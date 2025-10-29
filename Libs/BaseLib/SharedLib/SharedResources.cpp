@@ -587,6 +587,7 @@ namespace basecross {
 			{ 0.7198464f,  0.3420201f,  0.6040227f },
 			{ 0.4545195f, -0.7660444f,  0.4545195f },
 		};
+
 		static const bsm::Col4 defaultDiffuse[3] =
 		{
 			{ 1.0000000f, 0.9607844f, 0.8078432f,0.0f },

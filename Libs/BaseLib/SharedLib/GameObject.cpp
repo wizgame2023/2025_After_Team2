@@ -645,7 +645,7 @@ namespace basecross {
 			Qt,
 			WorldPos
 		);
-		DrawCom->AddParticle(ToCaneraLength, matrix, TextureRes, rParticleSprite.m_ColorStr);
+		DrawCom->AddParticle(ToCaneraLength, matrix, TextureRes, rParticleSprite.m_Color);
 	}
 
 	void ParticleManager::OnDraw() {

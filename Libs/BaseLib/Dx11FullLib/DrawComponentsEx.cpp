@@ -737,10 +737,8 @@ namespace basecross {
 		GetStaticMeshLocalPositions(vertices);
 		//ƒ[ƒ‹ƒhs—ñ‚Ì”½‰f
 		auto WorldMat = GetGameObject()->GetComponent<Transform>()->GetWorldMatrix();
-		auto meshMat = GetMeshToTransformMatrix();
 		for (auto& v : vertices) {
-			v *= WorldMat * meshMat;
-			v += GetGameObject()->GetComponent<Transform>()->GetWorldPosition();
+			v *= WorldMat;
 		}
 	}
 

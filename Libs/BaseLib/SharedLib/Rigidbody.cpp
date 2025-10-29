@@ -233,7 +233,7 @@ namespace basecross {
 	{
 		//‹óID‚ÌŽæ“¾
 		auto index = GameObjectPtr->GetStage()->GetVacantPhysicsIndex();
-		m_PsSphere = GameObjectPtr->GetStage()->GetBasePhysics().AddBall(param, index);
+		m_PsSphere = GameObjectPtr->GetStage()->GetBasePhysics().AddSphere(param, index);
 	}
 
 	uint16_t RigidbodySphere::GetIndex() const {
@@ -265,7 +265,7 @@ namespace basecross {
 	}
 
 	void RigidbodySphere::Reset(const PsSphereParam& param, uint16_t index) {
-		m_PsSphere = GetGameObject()->GetStage()->GetBasePhysics().AddBall(param, index);
+		m_PsSphere = GetGameObject()->GetStage()->GetBasePhysics().AddSphere(param, index);
 	}
 
 	void RigidbodySphere::OnDraw() {
@@ -655,9 +655,9 @@ namespace basecross {
 
 
 
-	size_t RigidbodyMulti::AddBall(const PsSphereParam& param) {
+	size_t RigidbodyMulti::AddSphere(const PsSphereParam& param) {
 		size_t obj_index = m_PsObjectVec.size();
-		auto PsSpherePtr = GetGameObject()->GetStage()->GetBasePhysics().AddBall(param);
+		auto PsSpherePtr = GetGameObject()->GetStage()->GetBasePhysics().AddSphere(param);
 		m_PsObjectVec.push_back(PsSpherePtr);
 		return obj_index;
 	}
