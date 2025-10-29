@@ -109,21 +109,21 @@ namespace basecross{
 				m_IsCursor = true;
 			}
 
-			if (input->GetDownButton(L"DUp") && m_CursorHandle > 0) {
-				m_CursorHandle--;
+			if (input->GetDownButton(L"DUp")) {
 				m_IsCursor = false;
+				if(m_CursorHandle > 0) m_CursorHandle--;
 			}
-			if (input->GetDownButton(L"DDown") && m_CursorHandle < m_ColorPalette.size() * 2 - 1) {
-				m_CursorHandle++;
+			if (input->GetDownButton(L"DDown")) {
 				m_IsCursor = false;
+				if(m_CursorHandle < m_ColorPalette.size() * 2 - 1) m_CursorHandle++;
 			}
-			if (input->GetDownButton(L"DRight") && m_CursorHandle < m_ColorPalette.size()) {
-				m_CursorHandle += m_ColorPalette.size();
+			if (input->GetDownButton(L"DRight")) {
 				m_IsCursor = false;
+				if(m_CursorHandle < m_ColorPalette.size()) m_CursorHandle += m_ColorPalette.size();
 			}
-			if (input->GetDownButton(L"DLeft") && m_CursorHandle > m_ColorPalette.size() - 1) {
-				m_CursorHandle -= m_ColorPalette.size();
+			if (input->GetDownButton(L"DLeft")) {
 				m_IsCursor = false;
+				if(m_CursorHandle > m_ColorPalette.size() - 1) m_CursorHandle -= m_ColorPalette.size();
 			}
 		}
 		if (!m_IsCursor) {
