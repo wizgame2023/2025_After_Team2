@@ -70,7 +70,10 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\keyconfig.json" />
-    <None Include="$(MSBuildThisFileDirectory)..\media\Json\resorce.json" />
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\gameResource.json" />
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\sceneResource.json" />
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\selectResource.json" />
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\titleResource.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\setting.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Level\level1.json" />
   </ItemGroup>

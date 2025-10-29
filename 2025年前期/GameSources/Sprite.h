@@ -186,6 +186,11 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
+		void SetTextureKey(const wstring& key) {
+			m_Draw->SetTextureResource(key);
+			m_TexKey = key;
+		}
+
 		/// <summary>
 		/// 表示サイズ変更
 		/// </summary>

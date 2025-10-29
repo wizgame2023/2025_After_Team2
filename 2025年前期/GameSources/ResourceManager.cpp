@@ -7,6 +7,7 @@
 #include "Project.h"
 
 namespace basecross{
+	wstring ResourceManager::g_ResourcesFilePath = L"";
 	Json ResourceManager::g_ResourceJson = Json();
 }
 //end basecross

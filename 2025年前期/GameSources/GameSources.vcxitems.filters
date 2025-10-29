@@ -49,15 +49,15 @@
     <Filter Include="Stage">
       <UniqueIdentifier>{840e50f3-4479-4ace-88a7-d467ac806cea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Json\Setting">
+      <UniqueIdentifier>{f54336bf-b63a-499e-9e5b-888e9db16016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{acd9e12b-fba5-4c0d-ba2f-4907a7e1bfa6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)GameStage.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Player.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Project.h">
@@ -114,24 +114,28 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Json.h">
       <Filter>Json\source</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)TitleStage.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)SelectStage.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)MenuStage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Menu.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ResourceManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)MenuStage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SelectStage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameStage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)TitleStage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Player.h">
+      <Filter>Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)GameStage.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Player.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ProjectShader.cpp">
@@ -185,27 +189,46 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)TitleStage.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)SelectStage.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)MenuStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Menu.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ResourceManager.cpp">
       <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)MenuStage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SelectStage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)GameStage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Player.cpp">
+      <Filter>Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json">
       <Filter>Json\Resource</Filter>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)..\media\Json\resorce.json">
-      <Filter>Json\Resource</Filter>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)..\media\Json\setting.json">
-      <Filter>Json\Resource</Filter>
-    </None>
     <None Include="$(MSBuildThisFileDirectory)..\media\Level\level1.json">
       <Filter>Json\Level</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\keyconfig.json">
+      <Filter>Json\Setting</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\setting.json">
+      <Filter>Json\Setting</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\gameResource.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\sceneResource.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\selectResource.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\titleResource.json">
       <Filter>Json\Resource</Filter>
     </None>
   </ItemGroup>

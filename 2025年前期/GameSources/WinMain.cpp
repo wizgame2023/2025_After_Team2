@@ -156,7 +156,7 @@ int MainLoop(HINSTANCE hInstance, HWND hWnd, bool isFullScreen, int iClientWidth
 				}
 			}
 			timer += App::GetApp()->GetElapsedTime();
-			if (timer < fps) continue;
+			//if (timer < fps) continue;
 			//XV•`‰æˆ—
 			App::GetApp()->UpdateDraw(1);
 		}
