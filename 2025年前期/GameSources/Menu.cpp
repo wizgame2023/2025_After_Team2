@@ -182,6 +182,7 @@ namespace basecross{
 						eraseIteraters.pop();
 					}
 					m_Lines.push_back({ m_CurrentLine,pair<int,int>{m_ColorHandle,m_GimmikcHandle} });
+					SoundManager::GetInstance().PlaySE(L"Put");
 				}
 				else {
 					m_MenuStage->RemoveGameObject<Sprite>(m_CurrentLine);

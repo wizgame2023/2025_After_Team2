@@ -7,7 +7,9 @@
     "arrow_Orbit.png": "TEMP_ARROW_SPRITE"
   },
   "Sound": {
-
+    "put4.wav": "Put",
+    "playerDead2.wav": "Dead",
+    "clear2.wav": "Clear"
   },
   "UI": {
     "TitleLogo.png": "TitleLogoUI",

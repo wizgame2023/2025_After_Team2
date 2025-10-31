@@ -10,7 +10,7 @@ namespace basecross {
 	void SoundManager::RegisterSounds() {
 		m_Audio = App::GetApp()->GetXAudio2Manager();
 
-		ResourceManager::RegisterWav(L"Sounds");
+		ResourceManager::RegisterWav(L"Sound");
 	}
 	void SoundManager::RegisterSound(const wstring& key, const wstring& fileName) {
 		wstring path = App::GetApp()->GetDataDirWString() + L"Sounds/";

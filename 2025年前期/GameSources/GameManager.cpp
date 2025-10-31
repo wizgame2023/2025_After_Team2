@@ -172,6 +172,7 @@ namespace basecross{
 		m_EffectSprite.push_back(backBoardUI);
 		m_EffectSprite.push_back(starCoverUI);
 
+		SoundManager::GetInstance().PlaySE(L"Clear");
 		StopCube();
 	}
 	void GameManager::ResultCreate()

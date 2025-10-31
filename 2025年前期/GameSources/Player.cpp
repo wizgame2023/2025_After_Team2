@@ -167,6 +167,7 @@ namespace basecross{
 		m_State = MoveState::Move;
 	}
 	void MoveCube::Destroy() {
+		SoundManager::GetInstance().PlaySE(L"Dead");
 		for (int i = 0; i < 2; i++) {
 			m_Stage->RemoveGameObject<Board>(m_Sprites[i]);
 		}
