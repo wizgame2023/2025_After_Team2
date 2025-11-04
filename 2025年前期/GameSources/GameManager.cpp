@@ -1,6 +1,6 @@
 /*!
 @file Character.cpp
-@brief ƒLƒƒƒ‰ƒNƒ^[‚È‚ÇÀ‘Ì
+@brief ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãªã©å®Ÿä½“
 */
 
 #include "stdafx.h"
@@ -16,7 +16,7 @@ namespace basecross{
 		return true;
 	}
 	void GameManager::MapUpdate() {
-		//‘O‚ÌƒtƒŒ[ƒ€‚©‚çÁ‚¦‚½•¨‚ğíœ
+		//å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰æ¶ˆãˆãŸç‰©ã‚’å‰Šé™¤
 		for (int i = 0; i < m_BeforeGimmickColorPairs.size(); i++) {
 			if (find(
 				m_GimmickColorPairs.begin(), m_GimmickColorPairs.end(),
@@ -25,7 +25,7 @@ namespace basecross{
 				m_Map->RecoverGimmick(m_BeforeGimmickColorPairs[i].first);
 			}
 		}
-		//‘O‚ÌƒtƒŒ[ƒ€‚©‚çÁ‚¦‚½‚à‚Ì‚ğ’Ç‰Á
+		//å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰æ¶ˆãˆãŸã‚‚ã®ã‚’è¿½åŠ 
 		for (int i = 0; i < m_GimmickColorPairs.size(); i++) {
 			if (find(
 				m_BeforeGimmickColorPairs.begin(), m_BeforeGimmickColorPairs.end(),
@@ -42,10 +42,10 @@ namespace basecross{
 		}
 	}
 	void GameManager::CubeUpdate() {
-		//ƒQ[ƒ€ƒI[ƒo[”»’è
+		//ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼åˆ¤å®š
 		bool isOver = true;
 		for (auto& cube : m_Cubes) {
-			//ˆê‚Â‚Å‚à“®‚¯‚éƒLƒ…[ƒu‚ª‚¢‚½‚çfalse
+			//ä¸€ã¤ã§ã‚‚å‹•ã‘ã‚‹ã‚­ãƒ¥ãƒ¼ãƒ–ãŒã„ãŸã‚‰false
 			if (cube->CheckArea()) isOver = false;
 			cube->Move();
 		}
@@ -98,7 +98,7 @@ namespace basecross{
 			gimmick->Begin();
 		}
 		for (auto& sphere : m_Cubes) {
-			//ƒvƒŒƒCƒ„[‚ğ‰Ò“­ŠJn
+			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç¨¼åƒé–‹å§‹
 			sphere->SetUpdateActive(true);
 		}
 		m_GameState = GameState::Game;
@@ -115,7 +115,7 @@ namespace basecross{
 				m_GameState = GameState::Put;
 			}
 		}
-		//‚±‚±‚©‚ç‰º‚ÍƒQ[ƒ€is’†‚Ìˆ—
+		//ã“ã“ã‹ã‚‰ä¸‹ã¯ã‚²ãƒ¼ãƒ é€²è¡Œä¸­ã®å‡¦ç†
 		if (!CompareState(GameState::Game))return;
 
 		m_Tick += App::GetApp()->GetElapsedTime();
@@ -161,19 +161,33 @@ namespace basecross{
 	void GameManager::DrawGoalEffect() {
 		if (!CompareState(GameState::Game)) return;
 
-		m_GameState = GameState::Clear;
-
-		auto menu = m_Stage->GetChileStageVec()[0];
-
-		auto& app = App::GetApp();
-
-		auto backBoardUI = menu->AddGameObject<Sprite>(L"ResultBackBoardUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 600), Anchor::Center);
-		auto starCoverUI = menu->AddGameObject<Sprite>(L"StarCoverUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 180), Anchor::Center);
-		m_EffectSprite.push_back(backBoardUI);
-		m_EffectSprite.push_back(starCoverUI);
-
-		SoundManager::GetInstance().PlaySE(L"Clear");
 		StopCube();
+
+		auto gameObjectVec = m_Stage->GetGameObjectVec();
+
+		for (auto& obj : gameObjectVec)
+		{
+			auto effect = dynamic_pointer_cast<Effect>(obj);
+
+			if (!effect) continue;
+
+			if (effect->GetEffectName() == L"GoalGimmickEffect.efk")
+			{
+
+				if (effect->EffectEnd())
+				{
+					auto menu = m_Stage->GetChileStageVec()[0];
+					auto backBoardUI = menu->AddGameObject<Sprite>(L"ResultBackBoardUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 600), Anchor::Center);
+					auto starCoverUI = menu->AddGameObject<Sprite>(L"StarCoverUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 180), Anchor::Center);
+					m_EffectSprite.push_back(backBoardUI);
+					m_EffectSprite.push_back(starCoverUI);
+					effect->EffectDelete();
+					m_GameState = GameState::Clear;
+					break;
+				}
+			}
+		}
+		SoundManager::GetInstance().PlaySE(L"Clear");
 	}
 	void GameManager::ResultCreate()
 	{
@@ -234,7 +248,7 @@ namespace basecross{
 		float alpha = current.getW();
 		Vec2 currentSize = star->GetSize();
 
-		// ƒtƒF[ƒhƒCƒ“
+		// ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³
 		if (alpha < 1.0f)
 		{
 			alpha += 0.15f;

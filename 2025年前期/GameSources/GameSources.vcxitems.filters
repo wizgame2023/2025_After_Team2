@@ -118,6 +118,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ResourceManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Effect.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MenuStage.h">
       <Filter>Stage</Filter>
     </ClInclude>
@@ -196,6 +197,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ResourceManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Effect.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MenuStage.cpp">
       <Filter>Stage</Filter>
     </ClCompile>

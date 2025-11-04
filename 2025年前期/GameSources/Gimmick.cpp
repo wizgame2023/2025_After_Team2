@@ -27,6 +27,12 @@ namespace basecross{
 
 	}
 
+	void Gimmicks::OnUpdate()
+	{
+		Object::OnUpdate();
+
+	}
+
 	void Gimmicks::Begin()
 	{
 		//Object::OnCreate();
@@ -81,7 +87,9 @@ namespace basecross{
 
 
 	GimmickGoal::GimmickGoal(const shared_ptr<Stage>& ptrStage) :
-		Gimmicks(ptrStage)
+		Gimmicks(ptrStage),
+		m_GoalEffect(nullptr),
+		m_Goal(false)
 	{
 	}
 	GimmickGoal::~GimmickGoal()
@@ -95,12 +103,41 @@ namespace basecross{
 		auto draw = AddComponent<PNTStaticModelDraw>();
 		draw->SetMeshResource(L"GOAL_MD");
 		SetAlphaActive(true);
-		draw->SetDiffuse(Col4(0, 1, 0, 0.5f));
+		draw->SetDiffuse(Col4(1, 1, 1, 0.75f));
 
 		Mat4x4 mat;
-		mat.affineTransformation(Vec3(0.9f), Vec3(), Vec3(), Vec3(0.0f, -0.9f, 0.0f));
+		mat.affineTransformation(Vec3(0.9f), Vec3(), Vec3(0,XM_PIDIV2,0), Vec3(0.0f, -0.9f, 0.0f));
 		draw->SetMeshToTransformMatrix(mat);
 
+		//Quat quat = XMQuaternionRotationAxis(Vec3(0, 1, 0), );
+	}
+
+	void GimmickGoal::OnUpdate()
+	{
+		Gimmicks::OnUpdate();
+
+		auto scene = App::GetApp()->GetScene<Scene>();
+		wstringstream wss;
+
+		if (m_Goal)
+		{
+			if (!m_GoalEffect)
+			{
+				m_GoalEffect = m_Stage->AddGameObject<Effect>(L"GoalGimmickEffect.efk", GetPosition());
+				SoundManager::GetInstance().PlaySE(L"Clear");
+			}
+
+			if (m_GoalEffect)
+			{
+				wss << L"\nインスタンス数 :" << m_GoalEffect->GetEffectInstance() << endl;
+				scene->SetDebugString(wss.str());
+				GameManager::GetInstance().DrawGoalEffect();
+				if (m_GoalEffect->EffectEnd())
+				{
+					m_Goal = false;
+				}
+			}
+		}
 	}
 
 	void GimmickGoal::Begin()
@@ -125,7 +162,7 @@ namespace basecross{
 
 				if (dot > 0.9f) // ある程度逆向きとみなす閾値
 				{
-					GameManager::GetInstance().DrawGoalEffect();
+					m_Goal = true;
 					m_Cube = nullptr;
 				}
 				else
@@ -152,6 +189,29 @@ namespace basecross{
 		auto draw = AddComponent<PNTStaticDraw>();
 		draw->SetMeshResource(L"DEFAULT_CUBE");
 		draw->SetDiffuse(Col4(1, 0, 0, 1));
+
+		//m_Board = m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1, 1, 0),false);
+		//m_Board->AddComponent<UVScroll>(Vec2(0.0f, 1.0f), m_Board->GetVertices());
+	}
+	void GimmickSetPlayer::OnUpdate() {
+		/*m_Board->GetTrans()->SetPosition(GetPosition() + m_Value - Vec3(0, 0.5f, 0));
+		m_Board->RotateVector(Vec3(0, 1, 0));
+
+		m_Value = Vec3(-1, 0, 0);
+		float angle  = 0.0f;
+		if (m_Value == Vec3(1, 0, 0)) {
+			angle = XM_PIDIV2;
+		}else if(m_Value == Vec3(-1, 0, 0)) {
+			angle = -XM_PIDIV2;
+		}else if (m_Value == Vec3(0, 0, 1)) {
+			angle = XM_PI;
+		}
+		auto rot = XMMatrixRotationAxis(Vec3(0,1,0), angle);
+
+		auto world = m_Board->GetTrans()->GetWorldMatrix();
+		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
+
+		m_Board->GetTrans()->SetQuaternion(m_Board->GetTrans()->GetQuaternion() * world.quatInMatrix());*/
 
 	}
 	void GimmickSetPlayer::Begin()

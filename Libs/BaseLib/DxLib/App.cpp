@@ -643,29 +643,21 @@ namespace basecross {
 		}
 
 
-		HWND CleateMobieWnd(RECT* rec = nullptr) {
+		HWND CleateMobieWnd() {
 			auto hInst = App::GetApp()->GetHInstance();
 			movie::RegisterChild(App::GetApp()->GetHInstance(),
 				movie::ChildProc,
 				L"BaseCrossChildClass");
 			auto ParHWnd = App::GetApp()->GetHWnd();
 			RECT rectPar;
-			if (rec == nullptr)
-			{
-				GetClientRect(ParHWnd, &rectPar);
-			}
-			else
-			{
-				rectPar = *rec;
-			}
-
+			GetClientRect(ParHWnd, &rectPar);
 			data::ChildHWnd = CreateWindowExW(
 				WS_EX_TOPMOST,
 				L"BaseCrossChildClass",
 				L"",//タイトルバーにこの名前が表示されます
 				WS_CHILD,    //ウィンドウの種類
-				rectPar.left,    //Ｘ座標
-				rectPar.top,    //Ｙ座標
+				0,    //Ｘ座標
+				0,    //Ｙ座標
 				rectPar.right,    //幅
 				rectPar.bottom,    //高さ
 				ParHWnd,            //親ウィンドウのハンドル、親を作るときはNULL
@@ -794,13 +786,7 @@ namespace basecross {
 
 		void PlayMovie(const wstring& MovieFileName) {
 
-			RECT r;
-			r.right = 704;
-			r.left = 320;
-			r.bottom = 464;
-			r.top = 100;
-
-			//auto hwnd = CleateMobieWnd();
+			auto hwnd = CleateMobieWnd();
 
 			HRESULT hr = S_OK;
 
@@ -817,13 +803,13 @@ namespace basecross {
 						L"App::PlayMovie()"
 					);
 				}
-				auto a = App::GetApp()->GetHWnd();
+
 				hr = MFPCreateMediaPlayer(
 					NULL,
 					FALSE,          // Start playback automatically?
 					0,              // Flags
 					data::PlayerCB.Get(),    // Callback pointer
-					a,           // Video window
+					hwnd,           // Video window
 					&data::Player
 				);
 
@@ -1000,7 +986,6 @@ namespace basecross {
 			}
 			////デバイスリソースの構築
 			m_DeviceResources = shared_ptr<DeviceResources>(new DeviceResources(hWnd, FullScreen, Width, Height));
-			
 			//オーディオマネージャの取得
 			GetXAudio2Manager();
 			//イベント配送クラス
@@ -1023,11 +1008,6 @@ namespace basecross {
 				m_App.reset(new App(hInstance, hWnd, FullScreen, Width, Height));
 				m_App->AfterInitContents(ShadowActive);
 
-			}
-			else {
-				//自分自身の構築
-				m_App.reset(new App(hInstance, hWnd, FullScreen, Width, Height));
-				m_App->AfterInitContents(ShadowActive);
 			}
 			return m_App;
 		}

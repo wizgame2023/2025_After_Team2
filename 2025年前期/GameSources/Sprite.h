@@ -1373,7 +1373,11 @@ namespace basecross{
 		virtual void OnUpdate()override;
 
 		void RotateVector(Vec3 vec) {
-			Mat4x4 rotMatrix = static_cast<Mat4x4>(XMMatrixLookAtLH(Vec3(0, 0, 0), -vec, Vec3(0,1,0)));
+			Vec3 up = Vec3(0, 1, 0);
+			if (vec == Vec3(0, 1, 0)) {
+				up = Vec3(1, 0, 0);
+			}
+			Mat4x4 rotMatrix = static_cast<Mat4x4>(XMMatrixLookAtLH(Vec3(0, 0, 0), -vec, up));
 			rotMatrix = inverse(rotMatrix);
 			Quat Qt = rotMatrix.quatInMatrix();
 			Qt.normalize();
@@ -1397,6 +1401,19 @@ namespace basecross{
 		vector<VertexPositionNormalTexture> GetVertices() {
 			return m_Vertices;
 		}
+	};
+
+	class UVScroll : public Component {
+		weak_ptr<SmBaseDraw> m_Draw;
+		vector<VertexPositionNormalTexture> m_Vertex;
+		Vec2 m_ScrollSpeed;
+	public:
+		UVScroll(const shared_ptr<GameObject>& ptr, Vec2 scrollSpeed, vector<VertexPositionNormalTexture>& vertex) : m_ScrollSpeed(scrollSpeed),m_Vertex(vertex), Component(ptr) {}
+		virtual ~UVScroll(){}
+
+		virtual void OnCreate()override;
+		virtual void OnUpdate()override;
+		virtual void OnDraw()override{}
 	};
 
 	class SlideInSprite : public GameObject
