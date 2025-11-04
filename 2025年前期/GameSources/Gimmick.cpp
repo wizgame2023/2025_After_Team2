@@ -123,6 +123,7 @@ namespace basecross{
 			if (!m_GoalEffect)
 			{
 				m_GoalEffect = m_Stage->AddGameObject<Effect>(L"GoalGimmickEffect.efk", GetPosition());
+				SoundManager::GetInstance().PlaySE(L"Clear");
 			}
 
 			if (m_GoalEffect)
