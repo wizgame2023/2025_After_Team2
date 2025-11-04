@@ -34,6 +34,8 @@ namespace basecross{
 		Vec3 GetForward() const{
 			return m_Transform->GetForward();
 		}
+		void SetForward(Vec3 vec);
+
 		Vec3 GetScale() const{
 			return m_Transform->GetScale();
 		}

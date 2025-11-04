@@ -166,6 +166,7 @@ namespace basecross
 	*/
 	class GimmickSetPlayer : public Gimmicks
 	{
+		shared_ptr<Board> m_Board;
 	public:
 		GimmickSetPlayer(const shared_ptr<Stage>& ptrGimmick);
 		~GimmickSetPlayer();
@@ -180,6 +181,7 @@ namespace basecross
 		};
 
 		virtual void OnCreate();
+		virtual void OnUpdate();
 		virtual void Begin();
 		virtual void Update();
 		virtual void End() {}
