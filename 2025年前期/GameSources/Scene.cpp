@@ -17,7 +17,8 @@ namespace basecross{
 			InputManager::CreateInputManager();
 
 			Json::SetDefaultFilePath(App::GetApp()->GetDataDirWString());
-			ResourceManager::Load(L"Json/resorce.json");
+			ResourceManager::SetResourcesFilePath(L"Json/Resources/");
+			ResourceManager::Load(L"sceneResource.json");
 
 			ResourceManager::RegisterResource(L"Model");
 
@@ -25,7 +26,7 @@ namespace basecross{
 
 			ResourceManager::RegisterTexture(L"UI");
 
-
+			SoundManager::GetInstance().RegisterSounds();
 			//ƒNƒŠƒA‚·‚éF‚ğİ’è
 			Col4 Col;
 			Col.set(31.0f / 255.0f, 30.0f / 255.0f, 71.0f / 255.0f, 255.0f / 255.0f);

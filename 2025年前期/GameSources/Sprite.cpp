@@ -321,19 +321,6 @@ namespace basecross {
 			else {
 				m_IsFinished = false;
 			}
-			/*if (m_FadeState == FadeState::OutToIn || m_FadeState == FadeState::In) {
-				if (color.w < 0.0f) m_IsFinished = true;
-			}
-			else {
-				if (color.w > 1.0f) m_IsFinished = true;
-			}
-			if (color.w < 0 || color.w > 1)
-			{
-				m_IsFinished = true;
-			}
-			else {
-				m_IsFinished = false;
-			}*/
 			m_Draw->SetDiffuse(color);
 		}
 	}
