@@ -23,7 +23,6 @@ namespace basecross {
 		wstring uiPath = path + L"UI/";
 		wstring texPath = path + L"Texture/";
 	
-		app->RegisterTexture(L"TEMP_MENU", uiPath + L"tempMenuBackGround.png");
 		app->RegisterTexture(L"TEMP_COLOR_PALETTE", uiPath + L"tempColorPalette.png");
 
 	}
@@ -35,7 +34,7 @@ namespace basecross {
 			AddGameObject<ButtonManager>();
 
 			auto viewport = App::GetApp()->GetScene<Scene>()->GetViewport();
-			m_Menu = AddGameObject<GameMenu>(L"TEMP_COLOR_PALETTE", L"TEMP_MENU", viewport);
+			m_Menu = AddGameObject<GameMenu>(L"TEMP_COLOR_PALETTE", L"MENU", viewport);
 		}
 		catch (...) {
 			throw;
