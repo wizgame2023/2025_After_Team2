@@ -890,7 +890,7 @@ namespace basecross {
 		@return	マルチボディのインデックス
 		*/
 		//--------------------------------------------------------------------------------------
-		size_t  AddBall(const PsSphereParam& param);
+		size_t  AddSphere(const PsSphereParam& param);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	ボックスの追加

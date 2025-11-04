@@ -1920,7 +1920,7 @@ namespace basecross {
 		@return	シャドウマップのレンダリングターゲット
 		*/
 		//--------------------------------------------------------------------------------------
-		shared_ptr<ShadowMapRenderTarget> GetShadowMapRenderTarget(float ShadowMapDimension = 4096.0f);
+		shared_ptr<ShadowMapRenderTarget> GetShadowMapRenderTarget(float ShadowMapDimension = 2048.0f);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief レンダリングステートの取得
