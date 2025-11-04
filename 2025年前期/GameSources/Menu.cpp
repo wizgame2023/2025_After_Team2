@@ -26,10 +26,10 @@ namespace basecross{
 		Vec2 colorPalettePosition = Vec2(menuPosition.x + 100.0f, menuPosition.y + menuSize.y / 2.0f - 100.0f);
 		Vec2 gimmickPosition = Vec2(menuPosition.x + menuSize.x - 100.0f, menuPosition.y + menuSize.y / 2.0f - 100.0f);
 
-		m_ExpainBox = m_MenuStage->AddGameObject<Sprite>(m_BackGroundTexture, Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f,0.0f), Vec2(menuSize.x,menuSize.y * 0.25f), Anchor::TopLeft);
+		m_ExpainBox = m_MenuStage->AddGameObject<Sprite>(L"MENU_EXPLAIN", Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f, 0.0f), Vec2(menuSize.x, menuSize.y * 0.25f), Anchor::TopLeft);
 		m_ExpainBox->SetLayer(0);
 		m_CurrentExpain = m_MenuStage->AddGameObject<Sprite>(L"EXPAIN_PL", Vec3(), Vec2(menuSize.x, menuSize.y * 0.25f) * 0.9f, Anchor::Center);
-		m_CurrentExpain->SetAnchorPosition(static_cast<Vec3>(m_ExpainBox->GetAnchorPosition(Anchor::Center)), Anchor::Center);
+		m_CurrentExpain->SetAnchorPosition(static_cast<Vec3>(m_ExpainBox->GetAnchorPosition(Anchor::Center)) - Vec3(0,20,0), Anchor::Center);
 		m_CurrentExpain->SetLayer(1);
 		Vec2 iconSize = Vec2(50.0f, 50.0f);
 		m_ConnectOffsetX = iconSize.x / 2.0f;

@@ -563,6 +563,21 @@ namespace basecross {
 
 	}
 
+	void UVScroll::OnCreate() {
+		m_Draw = GetGameObject()->GetComponent<SmBaseDraw>();
+		if (auto draw = m_Draw.lock()) {
+			draw->SetSamplerState(SamplerState::LinearWrap);
+		}
+	}
+	void UVScroll::OnUpdate() {
+		auto draw = m_Draw.lock();
+		if (draw) {
+			for (int i = 0; i < m_Vertex.size(); i++) {
+				m_Vertex[i].textureCoordinate += m_ScrollSpeed * App::GetApp()->GetElapsedTime();
+			}
+			draw->UpdateVertices(m_Vertex);
+		}
+	}
 
 	SlideInSprite::SlideInSprite(
 		const shared_ptr<Stage>& StagePtr, 

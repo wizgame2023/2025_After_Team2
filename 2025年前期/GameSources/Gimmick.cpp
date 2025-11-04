@@ -103,12 +103,13 @@ namespace basecross{
 		auto draw = AddComponent<PNTStaticModelDraw>();
 		draw->SetMeshResource(L"GOAL_MD");
 		SetAlphaActive(true);
-		draw->SetDiffuse(Col4(0, 1, 0, 0.5f));
+		draw->SetDiffuse(Col4(1, 1, 1, 0.75f));
 
 		Mat4x4 mat;
-		mat.affineTransformation(Vec3(0.9f), Vec3(), Vec3(), Vec3(0.0f, -0.9f, 0.0f));
+		mat.affineTransformation(Vec3(0.9f), Vec3(), Vec3(0,XM_PIDIV2,0), Vec3(0.0f, -0.9f, 0.0f));
 		draw->SetMeshToTransformMatrix(mat);
 
+		//Quat quat = XMQuaternionRotationAxis(Vec3(0, 1, 0), );
 	}
 
 	void GimmickGoal::OnUpdate()
@@ -188,6 +189,29 @@ namespace basecross{
 		auto draw = AddComponent<PNTStaticDraw>();
 		draw->SetMeshResource(L"DEFAULT_CUBE");
 		draw->SetDiffuse(Col4(1, 0, 0, 1));
+
+		//m_Board = m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1, 1, 0),false);
+		//m_Board->AddComponent<UVScroll>(Vec2(0.0f, 1.0f), m_Board->GetVertices());
+	}
+	void GimmickSetPlayer::OnUpdate() {
+		/*m_Board->GetTrans()->SetPosition(GetPosition() + m_Value - Vec3(0, 0.5f, 0));
+		m_Board->RotateVector(Vec3(0, 1, 0));
+
+		m_Value = Vec3(-1, 0, 0);
+		float angle  = 0.0f;
+		if (m_Value == Vec3(1, 0, 0)) {
+			angle = XM_PIDIV2;
+		}else if(m_Value == Vec3(-1, 0, 0)) {
+			angle = -XM_PIDIV2;
+		}else if (m_Value == Vec3(0, 0, 1)) {
+			angle = XM_PI;
+		}
+		auto rot = XMMatrixRotationAxis(Vec3(0,1,0), angle);
+
+		auto world = m_Board->GetTrans()->GetWorldMatrix();
+		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
+
+		m_Board->GetTrans()->SetQuaternion(m_Board->GetTrans()->GetQuaternion() * world.quatInMatrix());*/
 
 	}
 	void GimmickSetPlayer::Begin()
