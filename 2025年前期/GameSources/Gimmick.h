@@ -54,12 +54,17 @@ namespace basecross
 		virtual void OnCreate();
 
 		/*!
+		@brief 毎ターンの更新処理
+		*/
+		virtual void OnUpdate();
+
+		/*!
 		@brief ゲーム開始時の初期化処理
 		*/
 		virtual void Begin();
 
 		/*!
-		@brief 毎フレームの更新処理
+		@brief 毎ターンの更新処理
 		*/
 		virtual void Update();
 
@@ -132,6 +137,9 @@ namespace basecross
 	*/
 	class GimmickGoal : public Gimmicks
 	{
+		shared_ptr<Effect> m_GoalEffect;
+
+		bool m_Goal;
 	public:
 		GimmickGoal(const shared_ptr<Stage>& ptrGimmick);
 		~GimmickGoal();
@@ -146,6 +154,7 @@ namespace basecross
 		};
 
 		virtual void OnCreate();
+		virtual void OnUpdate();
 		virtual void Begin();
 		virtual void Update();
 		virtual void End() {}

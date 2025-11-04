@@ -27,6 +27,12 @@ namespace basecross{
 
 	}
 
+	void Gimmicks::OnUpdate()
+	{
+		Object::OnUpdate();
+
+	}
+
 	void Gimmicks::Begin()
 	{
 		//Object::OnCreate();
@@ -81,7 +87,9 @@ namespace basecross{
 
 
 	GimmickGoal::GimmickGoal(const shared_ptr<Stage>& ptrStage) :
-		Gimmicks(ptrStage)
+		Gimmicks(ptrStage),
+		m_GoalEffect(nullptr),
+		m_Goal(false)
 	{
 	}
 	GimmickGoal::~GimmickGoal()
@@ -101,6 +109,33 @@ namespace basecross{
 		mat.affineTransformation(Vec3(0.9f), Vec3(), Vec3(), Vec3(0.0f, -0.9f, 0.0f));
 		draw->SetMeshToTransformMatrix(mat);
 
+	}
+
+	void GimmickGoal::OnUpdate()
+	{
+		Gimmicks::OnUpdate();
+
+		auto scene = App::GetApp()->GetScene<Scene>();
+		wstringstream wss;
+
+		if (m_Goal)
+		{
+			if (!m_GoalEffect)
+			{
+				m_GoalEffect = m_Stage->AddGameObject<Effect>(L"GoalGimmickEffect.efk", GetPosition());
+			}
+
+			if (m_GoalEffect)
+			{
+				wss << L"\nインスタンス数 :" << m_GoalEffect->GetEffectInstance() << endl;
+				scene->SetDebugString(wss.str());
+				GameManager::GetInstance().DrawGoalEffect();
+				if (m_GoalEffect->EffectEnd())
+				{
+					m_Goal = false;
+				}
+			}
+		}
 	}
 
 	void GimmickGoal::Begin()
@@ -125,7 +160,7 @@ namespace basecross{
 
 				if (dot > 0.9f) // ある程度逆向きとみなす閾値
 				{
-					GameManager::GetInstance().DrawGoalEffect();
+					m_Goal = true;
 					m_Cube = nullptr;
 				}
 				else

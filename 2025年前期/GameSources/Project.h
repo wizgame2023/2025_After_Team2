@@ -8,6 +8,8 @@
 // Effkekseer
 #include <Effekseer.h>
 #include <EffekseerRendererDX11.h>
+//Effect
+#include "Effect.h"
 
 #include "ProjectShader.h"
 #include "ProjectBehavior.h"
@@ -34,5 +36,3 @@
 #include "Json.h"
 #include "Card.h"
 #include "Menu.h"
-//Effect
-#include "Effect.h"

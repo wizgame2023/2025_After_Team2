@@ -161,18 +161,35 @@ namespace basecross{
 	void GameManager::DrawGoalEffect() {
 		if (!CompareState(GameState::Game)) return;
 
-		m_GameState = GameState::Clear;
-
-		auto menu = m_Stage->GetChileStageVec()[0];
-
-		auto& app = App::GetApp();
-
-		auto backBoardUI = menu->AddGameObject<Sprite>(L"ResultBackBoardUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 600), Anchor::Center);
-		auto starCoverUI = menu->AddGameObject<Sprite>(L"StarCoverUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 180), Anchor::Center);
-		m_EffectSprite.push_back(backBoardUI);
-		m_EffectSprite.push_back(starCoverUI);
-
 		StopCube();
+
+		auto gameObjectVec = m_Stage->GetGameObjectVec();
+
+		for (auto& obj : gameObjectVec)
+		{
+			auto effect = dynamic_pointer_cast<Effect>(obj);
+
+			if (!effect) continue;
+
+			if (effect->GetEffectName() == L"GoalGimmickEffect.efk")
+			{
+
+				if (effect->EffectEnd())
+				{
+					auto menu = m_Stage->GetChileStageVec()[0];
+					auto backBoardUI = menu->AddGameObject<Sprite>(L"ResultBackBoardUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 600), Anchor::Center);
+					auto starCoverUI = menu->AddGameObject<Sprite>(L"StarCoverUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 180), Anchor::Center);
+					m_EffectSprite.push_back(backBoardUI);
+					m_EffectSprite.push_back(starCoverUI);
+					effect->EffectDelete();
+					m_GameState = GameState::Clear;
+					break;
+				}
+			}
+		}
+
+
+
 	}
 	void GameManager::DrawOverEffect() {
 		if (!CompareState(GameState::Game)) return;

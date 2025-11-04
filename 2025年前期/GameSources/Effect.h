@@ -25,6 +25,8 @@ namespace basecross {
 		Effekseer::Vector3D m_EffectPosVector;
 		Effekseer::Vector3D m_EffectAxisVector;
 
+		shared_ptr<Stage> m_Stage;
+
 		wstring m_FileName;
 
 		Vec3 m_Pos;
@@ -40,20 +42,36 @@ namespace basecross {
 		float m_FrameSpeed;
 		float m_speed;
 		float m_Angle;
+
+		
 	public:
+		/*!
+		@brief エフェクトのコンストラクタ
+		@param[in] wstring エフェクト名
+		@param[in] pos エフェクトの位置
+		@param[in] rot エフェクトの向き
+		@param[in] size エフェクトのサイズ
+		@return なし
+		*/
 		Effect(const shared_ptr<Stage>& StagePtr, wstring name, Vec3 pos = Vec3(0.0f), Vec3 rot = Vec3(0.0f), Vec3 size = Vec3(1.0f));
-		~Effect() {}
+		~Effect() 
+		{
+			// エフェクトのマネージャーの解放
+			m_Manager.Reset();
+			// 描画モジュールの解放
+			m_Renderer.Reset();
+
+			m_Manager->StopRoot(m_Effect);
+		}
 
 		virtual void OnCreate() override;
 		virtual void OnUpdate() override;
 		virtual void OnDraw() override;
+		virtual void OnDestroy() override;
 
-		/*!
-		@brief エフェクトの位置を設定する関数
-		@param[in] pos エフェクトの位置
-		@return なし
-		*/
-		void SetEffectOwner(const shared_ptr<GameObject>& ptrObject);
+
+		void EffectDelete();
+
 		/*!
 		@brief エフェクトの位置を設定する関数
 		@param[in] pos エフェクトの位置
@@ -137,10 +155,21 @@ namespace basecross {
 
 		/*!
 		@brief エフェクトの名前を所得する関数
-		@return エフェクトのフレームの速さ
+		@return エフェクトの
 		*/
 		wstring GetEffectName();
 
+		/*!
+		@brief  再生中のエフェクトの描画終了を取得する関数
+		@return 再生中のエフェクトが存在しない場合、true を返す
+		*/
+		bool EffectEnd();
+
+		/*!
+		@brief  再生中のエフェクトのインスタンス数を取得する関数
+		@return 再生中のエフェクトのインスタンス数
+		*/
+		int GetEffectInstance();
 	private:
 
 		/*!

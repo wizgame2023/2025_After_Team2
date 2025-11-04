@@ -25,6 +25,13 @@ namespace basecross {
 
 	void Effect::OnCreate()
 	{
+		m_Stage = GetStage();
+
+		if (m_Stage==nullptr)
+		{
+			OnDestroy();
+		}
+
 		auto d3D11Device = App::GetApp()->GetDeviceResources()->GetD3DDevice();
 		auto d3D11DeviceContext = App::GetApp()->GetDeviceResources()->GetD3DDeviceContext();;
 		m_Renderer = EffekseerRendererDX11::Renderer::Create(d3D11Device, d3D11DeviceContext, 8000);
@@ -50,6 +57,27 @@ namespace basecross {
 		wstring wstrEfk = effectPath + m_FileName;
 		m_Effect = Effekseer::Effect::Create(m_Manager, (const char16_t*)wstrEfk.c_str());
 
+		if (m_IsRelease == false)
+		{
+			m_Handle = m_Manager->Play(m_Effect, m_Pos.x, m_Pos.y, m_Pos.z);// 初期位置の設定
+			m_Manager->Update(1.0f);
+			m_IsRelease = true;
+		}
+
+
+	}
+
+	void Effect::OnDraw()
+	{
+		// エフェクトの描画開始処理
+		m_Renderer->BeginRendering();
+
+		// エフェクトの描画を実行
+		m_Manager->Draw();
+
+		// エフェクトの描画終了処理
+		m_Renderer->EndRendering();
+
 	}
 
 	void Effect::OnUpdate()
@@ -62,23 +90,9 @@ namespace basecross {
 
 	}
 
-	void Effect::OnDraw()
+	void Effect::OnDestroy()
 	{
-		if (m_IsRelease == false)
-		{
-			m_Handle = m_Manager->Play(m_Effect, m_Pos.x, m_Pos.y, m_Pos.z);// 初期位置の設定
-
-			m_IsRelease = true;
-		}
-
-		// エフェクトの描画開始処理
-		m_Renderer->BeginRendering();
-
-		// エフェクトの描画を実行
-		m_Manager->Draw();
-
-		// エフェクトの描画終了処理
-		m_Renderer->EndRendering();
+		m_Stage->RemoveGameObject<Effect>(GetThis<Effect>());
 	}
 
 	void Mat4x4Matrix44(const bsm::Mat4x4& src, Effekseer::Matrix44& dest) {
@@ -101,6 +115,11 @@ namespace basecross {
 		m_Renderer->SetCameraMatrix(v);
 		m_Renderer->SetProjectionMatrix(p);
 
+	}
+
+	void Effect::EffectDelete()
+	{
+		m_Stage->RemoveGameObject<Effect>(GetThis<Effect>());
 	}
 
 	void Effect::SetEffectPoison(const Vec3& pos)
@@ -182,6 +201,18 @@ namespace basecross {
 	wstring Effect::GetEffectName()
 	{
 		return m_FileName;
+	}
+
+	bool Effect::EffectEnd()
+	{
+		if (!m_Manager->Exists(m_Handle)) return true;
+
+		return m_Manager->GetInstanceCount(m_Handle) == 0;
+	}
+
+	int Effect::GetEffectInstance()
+	{
+		return m_Manager->GetInstanceCount(m_Handle);
 	}
 }
 //end basecross
