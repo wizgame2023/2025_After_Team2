@@ -50,7 +50,7 @@ namespace basecross {
 			auto hand = AddGameObject<GimmickHand>();
 			hand->SetCardSize(Vec2(200, 300));
 			Json json;
-			json.Load(L"Level/level1.json");
+			json.Load(L"Level/TestMap.json");
 
 			hand->LoadHands(json.At<JsonArray>(L"items"));
 

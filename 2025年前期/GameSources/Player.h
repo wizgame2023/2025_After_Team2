@@ -32,7 +32,6 @@ namespace basecross{
 		MoveState m_State;		//現在の行動
 
 		shared_ptr<PNTStaticModelDraw> m_Draw;
-		vector<shared_ptr<Board>> m_Sprites;
 	public:
 		MoveCube(const shared_ptr<Stage>& ptr);
 		virtual ~MoveCube(){}
@@ -97,48 +96,6 @@ namespace basecross{
 		}
 
 		void Destroy();
-	};
-
-	class MoveBall : public Object {
-		float m_Speed;	//移動速度
-		Vec3 m_Velocity;	//進行方向
-		Vec3 m_TargetPosition;	//目標地点
-		AABB m_MoveArea;	//移動範囲
-		bool m_IsTarget;	//目標地点に向かうか
-		bool m_IsActive;	//移動中か
-
-		shared_ptr<PNTStaticDraw> m_Draw;
-	public:
-		MoveBall(const shared_ptr<Stage>& ptr, float speed, Vec3 velocity): Object(ptr){}
-		MoveBall(const shared_ptr<Stage>& ptr) : MoveBall(ptr,1.0f,Vec3(1.0f,0.0f,0.0f)){}
-		virtual ~MoveBall(){}
-
-		virtual void OnCreate()override{}
-		virtual void OnUpdate()override{}
-
-		Vec3 LimitArea(Vec3 position){}
-		void SetVelocity(Vec3 velocity) {
-			m_Velocity = velocity;
-		}
-		Vec3 GetVelocity() {
-			return m_Velocity;
-		}
-
-		void SetTarget(Vec3 position) {
-			m_TargetPosition = position;
-			m_IsTarget = true;
-		}
-		void SetMoveArea(AABB aabb) {
-			m_MoveArea = aabb;
-		}
-
-		AABB GetMoveArea() const{
-			return m_MoveArea;
-		}
-
-		bool GetIsActive()const {
-			return m_IsActive;
-		}
 	};
 }
 //end basecross

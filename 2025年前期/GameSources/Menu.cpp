@@ -243,6 +243,9 @@ namespace basecross{
 		for (auto& gimmickSprite : m_GimmcikSprites) {
 			gimmickSprite->SetDrawActive(flag);
 		}
+		for (auto& handleSprite : m_HandlerSprites) {
+			handleSprite->SetDrawActive(flag);
+		}
 		for (auto& line : m_Lines) {
 			line.m_Line->SetDrawActive(flag);
 		}
@@ -335,7 +338,7 @@ namespace basecross{
 		auto& gameManager = GameManager::GetInstance();
 		auto colorTable = gameManager.GetMap()->GetColorTable();
 		Json levelJson;
-		levelJson.Load(L"Level/level1.json");
+		levelJson.Load(L"Level/TestMap.json");
 		auto hintArray = levelJson.At<JsonArray>(L"hint");
 		auto objectArray = hintArray->GetObjectArray();
 		auto cards = gameManager.GetHand()->GetCardData();

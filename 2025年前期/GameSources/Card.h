@@ -97,8 +97,10 @@ namespace basecross {
 	public:
 		TeleportCard(const wstring& id) : CardData(id) {}
 		virtual void Load(shared_ptr<JsonObject>& data) {
-			auto target = data->At<JsonArray>(L"target")->GetFloatArray();
-			m_TeleportTarget = Vec3(target[0], target[1], target[2]);
+			auto str = data->At<JsonString>(L"direction")->GetValue();
+			auto direction = GameManager::GetInstance().DirectionStrToVec(str);
+			auto value = data->At<JsonNumber>(L"value")->GetFloatValue();
+			m_TeleportTarget = direction * value;
 		}
 
 		virtual GimmickObjects GetType() { return GimmickObjects::Teleporter; }
@@ -109,6 +111,22 @@ namespace basecross {
 			return gimmick;
 		}
 
+	};
+
+	class RollCard : public CardData {
+		int m_RollCount;
+	public:
+		RollCard(const wstring& id): CardData(id){}
+		virtual GimmickObjects GetType() { return GimmickObjects::Roll; }
+		virtual void Load(shared_ptr<JsonObject>& data) {
+			m_RollCount = data->At<JsonNumber>(L"value")->GetIntValue();
+		}
+		virtual wstring GetExpainKey() { return L""; }
+		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
+			auto gimmick = stage->AddGameObject<GimmickRoll>();
+			gimmick->SetCount(m_RollCount);
+			return gimmick;
+		}
 	};
 
 
@@ -142,6 +160,7 @@ namespace basecross {
 		REGISTER_CARD(L"course", CourseCard)
 		REGISTER_CARD(L"teleporter", TeleportCard)
 		REGISTER_CARD(L"inverter", InverterCard)
+		REGISTER_CARD(L"roll",RollCard)
 
 }
 

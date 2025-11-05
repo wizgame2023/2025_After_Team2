@@ -23,7 +23,7 @@ namespace basecross{
 		int maxHeight = -100;
 
 		Json mapJson;
-		mapJson.Load(L"Level/level1.json");
+		mapJson.Load(L"Level/TestMap.json");
 
 		vector<int> mapSize = mapJson.At<JsonArray>(L"mapSize")->GetIntArray();
 		auto mapData = mapJson.At<JsonArray>(L"map")->GetObjectArray();
@@ -49,7 +49,7 @@ namespace basecross{
 			}
 
 			//グリッドの生成
-			Vec3 position = Vec3(pos[0], m_GroundHeight - 0.5f, pos[1]);
+			Vec3 position = Vec3(pos[0], m_GroundHeight - 0.5f, -pos[1]);
 			auto box = m_Stage->AddGameObject<Floor>(position, colorStr);
 			box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
 
@@ -60,7 +60,7 @@ namespace basecross{
 		for (int i = 0; i < mapSize[1]; i++) {
 			for (int j = 0; j < mapSize[0]; j++) {
 				if (m_Map[i][j].m_ColorStr == L"") {
-					auto box = m_Stage->AddGameObject<Floor>(Vec3(j, m_GroundHeight - 0.5f, i), L"clear");
+					auto box = m_Stage->AddGameObject<Floor>(Vec3(j, m_GroundHeight - 0.5f, -i), L"clear");
 					box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
 					m_Map[i][j].m_Floor = box;
 				}
@@ -93,7 +93,6 @@ namespace basecross{
 		for (auto& mapVec : m_Map) {
 			for (auto& map : mapVec) {
 				if (colorStr == map.m_ColorStr) {
-					//すでに設置しているなら破壊
 					if (map.m_Gimmik != nullptr) {
 						continue;
 					}
@@ -118,7 +117,7 @@ namespace basecross{
 				if (color == map.m_ColorStr) {
 					//すでに設置しているなら破壊
 					if (map.m_Gimmik != nullptr) {
-						m_Stage->RemoveGameObject<Gimmicks>(map.m_Gimmik);
+						map.m_Gimmik->GimmickDelete();
 
 						map.m_Gimmik = nullptr;
 
