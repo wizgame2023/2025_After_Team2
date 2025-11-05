@@ -54,13 +54,8 @@ namespace basecross
 		*/
 		virtual void OnCreate();
 
-		/*
-		@brief オブジェクトの更新処理
-		*/
-		virtual void OnUpdate();
-
 		/*!
-		@brief 毎ターンの更新処理
+		@brief オブジェクトの更新処理
 		*/
 		virtual void OnUpdate();
 
