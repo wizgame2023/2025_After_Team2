@@ -29,8 +29,6 @@ namespace basecross{
 		SetMoveSec(0.5f);
 		GameManager::GetInstance().AddCube(GetThis<MoveCube>());
 
-		//m_Sprites.push_back(m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1.0f, 1.0f, 1.0f), false));
-		//m_Sprites.push_back(m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1.0f, 1.0f, 1.0f), false));
 
 	}
 	void MoveCube::OnUpdate() {
@@ -41,20 +39,6 @@ namespace basecross{
 		auto rot = XMMatrixRotationAxis(side, angle);
 
 		SetForward(m_Velocity);
-		////ç∂âEÇÃñÓàÛÇÃâÒì]
-		//for (int i = 0; i < 2; i++) {
-		//	//é≤ÇÃï‚ê≥(îΩì]óp)
-		//	int correct = i == 0 ? 1 : -1;
-
-		//	m_Sprites[i]->RotateVector(side * correct);
-
-		//	m_Sprites[i]->GetTrans()->SetPosition(side * correct * 0.5f + GetPosition());
-
-		//	auto world = m_Sprites[i]->GetTrans()->GetWorldMatrix();
-		//	world.rotation((Quat)XMQuaternionRotationMatrix(rot));
-
-		//	m_Sprites[i]->GetTrans()->SetQuaternion(m_Sprites[i]->GetTrans()->GetQuaternion() * world.quatInMatrix());
-		//}
 
 		if (!m_IsEffecting) {
 			return;
@@ -169,10 +153,6 @@ namespace basecross{
 	}
 	void MoveCube::Destroy() {
 		SoundManager::GetInstance().PlaySE(L"Dead");
-		for (int i = 0; i < m_Sprites.size(); i++) {
-			m_Stage->RemoveGameObject<Board>(m_Sprites[i]);
-		}
-		m_Sprites.clear();
 		GameManager::GetInstance().DeleteCube(GetThis<MoveCube>());
 	}
 }

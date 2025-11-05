@@ -29,6 +29,7 @@ namespace basecross
 	*/
 	class Gimmicks : public Object
 	{
+		shared_ptr<Board> m_Board;
 	protected:
 		shared_ptr<MoveCube> m_Cube;
 		Vec3 m_Value; // ギミックの方向ベクトルなどの値を格納する変数
@@ -52,6 +53,11 @@ namespace basecross
 		@brief オブジェクト生成時の初期化処理
 		*/
 		virtual void OnCreate();
+
+		/*
+		@brief オブジェクトの更新処理
+		*/
+		virtual void OnUpdate();
 
 		/*!
 		@brief ゲーム開始時の初期化処理
@@ -157,7 +163,6 @@ namespace basecross
 	*/
 	class GimmickSetPlayer : public Gimmicks
 	{
-		shared_ptr<Board> m_Board;
 	public:
 		GimmickSetPlayer(const shared_ptr<Stage>& ptrGimmick);
 		~GimmickSetPlayer();
@@ -172,7 +177,6 @@ namespace basecross
 		};
 
 		virtual void OnCreate();
-		virtual void OnUpdate();
 		virtual void Begin();
 		virtual void Update();
 		virtual void End() {}
@@ -194,6 +198,7 @@ namespace basecross
 		};
 
 		virtual void OnCreate();
+		virtual void OnUpdate(){}
 		virtual void Begin();
 		virtual void Update();
 		virtual void End();
