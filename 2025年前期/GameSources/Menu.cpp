@@ -243,6 +243,9 @@ namespace basecross{
 		for (auto& gimmickSprite : m_GimmcikSprites) {
 			gimmickSprite->SetDrawActive(flag);
 		}
+		for (auto& handleSprite : m_HandlerSprites) {
+			handleSprite->SetDrawActive(flag);
+		}
 		for (auto& line : m_Lines) {
 			line.m_Line->SetDrawActive(flag);
 		}

@@ -25,6 +25,36 @@ namespace basecross{
 	{
 		Object::OnCreate();
 
+		m_Board = m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1, 1, 0), false);
+		m_Board->AddComponent<UVScroll>(Vec2(0.0f, 1.0f), m_Board->GetVertices());
+	}
+
+	void Gimmicks::OnUpdate()
+	{
+		Object::OnUpdate();
+		if (m_Value.lengthSqr() == 0) {
+			m_Board->GetDraw()->SetDrawActive(false);
+			return;
+		}
+		m_Board->GetTrans()->SetPosition(GetPosition() + Vec3(0, 0.75f, 0));
+		m_Board->RotateVector(Vec3(0, 1, 0));
+
+		float angle = 0.0f;
+		if (m_Value == Vec3(-1, 0, 0)) {
+			angle = XM_PI;
+		}
+		else if (m_Value == Vec3(0, 0, 1)) {
+			angle = -XM_PIDIV2;
+		}
+		else if (m_Value == Vec3(0, 0, -1)) {
+			angle = XM_PIDIV2;
+		}
+		auto rot = XMMatrixRotationAxis(Vec3(0, 1, 0), angle);
+
+		auto world = m_Board->GetTrans()->GetWorldMatrix();
+		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
+
+		m_Board->GetTrans()->SetQuaternion(m_Board->GetTrans()->GetQuaternion() * world.quatInMatrix());
 	}
 
 	void Gimmicks::OnUpdate()
@@ -147,7 +177,7 @@ namespace basecross{
 	void GimmickGoal::Update()
 	{
 		Gimmicks::Update();
-
+		
 		if (m_Cube)
 		{
 			Vec3 playerVel = m_Cube->GetVelocity();
@@ -189,29 +219,6 @@ namespace basecross{
 		auto draw = AddComponent<PNTStaticDraw>();
 		draw->SetMeshResource(L"DEFAULT_CUBE");
 		draw->SetDiffuse(Col4(1, 0, 0, 1));
-
-		//m_Board = m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1, 1, 0),false);
-		//m_Board->AddComponent<UVScroll>(Vec2(0.0f, 1.0f), m_Board->GetVertices());
-	}
-	void GimmickSetPlayer::OnUpdate() {
-		/*m_Board->GetTrans()->SetPosition(GetPosition() + m_Value - Vec3(0, 0.5f, 0));
-		m_Board->RotateVector(Vec3(0, 1, 0));
-
-		m_Value = Vec3(-1, 0, 0);
-		float angle  = 0.0f;
-		if (m_Value == Vec3(1, 0, 0)) {
-			angle = XM_PIDIV2;
-		}else if(m_Value == Vec3(-1, 0, 0)) {
-			angle = -XM_PIDIV2;
-		}else if (m_Value == Vec3(0, 0, 1)) {
-			angle = XM_PI;
-		}
-		auto rot = XMMatrixRotationAxis(Vec3(0,1,0), angle);
-
-		auto world = m_Board->GetTrans()->GetWorldMatrix();
-		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
-
-		m_Board->GetTrans()->SetQuaternion(m_Board->GetTrans()->GetQuaternion() * world.quatInMatrix());*/
 
 	}
 	void GimmickSetPlayer::Begin()
