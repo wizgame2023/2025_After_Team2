@@ -24,7 +24,7 @@ namespace basecross{
 
 		Vec3 mapSize = GameManager::GetInstance().GetMap()->GetMapSize();
 
-		SetMoveArea(AABB(Vec3(-1.0f, -100.0f, -1.0f), Vec3(mapSize.x, 5.0f, mapSize.z)));
+		SetMoveArea(AABB(Vec3(-1.0f, -100.0f, -mapSize.z), Vec3(mapSize.x, 5.0f, 1.0f)));
 
 		SetMoveSec(0.5f);
 		GameManager::GetInstance().AddCube(GetThis<MoveCube>());
@@ -97,7 +97,7 @@ namespace basecross{
 	
 		if (m_IsBeforeEffecting && !m_IsEffecting) {
 			auto mapData = GameManager::GetInstance().GetMap()->
-				GetMapData(Vec2(static_cast<int>(position.x), static_cast<int>(position.z)));
+				GetMapData(Vec2(static_cast<int>(position.x), static_cast<int>(-position.z)));
 			if (mapData.m_Gimmik) {
 				mapData.m_Gimmik->End();
 			}

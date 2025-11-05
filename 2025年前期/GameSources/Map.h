@@ -72,7 +72,7 @@ namespace basecross{
 		}
 		Vec3 GetMapCenter() {
 			Vec2 size = Vec2(static_cast<float>(m_Map[0].size() - 1), static_cast<float>(m_Map.size() - 1));
-			return Vec3(size.x / 2.0f, m_CenterY, size.x / 2.0f);
+			return Vec3(size.x / 2.0f, m_CenterY, -size.y / 2.0f);
 		}
 		Vec3 GetMapSize() {
 			return Vec3(static_cast<float>(m_Map[0].size()), m_MapHeight, static_cast<float>(m_Map.size()));
