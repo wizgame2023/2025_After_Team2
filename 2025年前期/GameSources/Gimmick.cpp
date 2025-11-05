@@ -57,12 +57,6 @@ namespace basecross{
 		m_Board->GetTrans()->SetQuaternion(m_Board->GetTrans()->GetQuaternion() * world.quatInMatrix());
 	}
 
-	void Gimmicks::OnUpdate()
-	{
-		Object::OnUpdate();
-
-	}
-
 	void Gimmicks::Begin()
 	{
 		//Object::OnCreate();
