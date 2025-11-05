@@ -85,7 +85,7 @@ namespace basecross {
 		InverterCard(const wstring& id) : CardData(id) {}
 		virtual void Load(shared_ptr<JsonObject>& data) {}
 		virtual GimmickObjects GetType() { return GimmickObjects::Inverter; }
-		virtual wstring GetExpainKey() { return L""; }
+		virtual wstring GetExpainKey() { return L"EXPAIN_INV"; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
 			auto gimmick = stage->AddGameObject<GimmickInverter>();
 			return gimmick;
@@ -104,7 +104,7 @@ namespace basecross {
 		}
 
 		virtual GimmickObjects GetType() { return GimmickObjects::Teleporter; }
-		virtual wstring GetExpainKey() { return L""; }
+		virtual wstring GetExpainKey() { return L"EXPAIN_TP"; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
 			auto gimmick = stage->AddGameObject<GimmickTeleporter>();
 			gimmick->SetValue(m_TeleportTarget);
@@ -121,7 +121,7 @@ namespace basecross {
 		virtual void Load(shared_ptr<JsonObject>& data) {
 			m_RollCount = data->At<JsonNumber>(L"value")->GetIntValue();
 		}
-		virtual wstring GetExpainKey() { return L""; }
+		virtual wstring GetExpainKey() { return L"EXPAIN_ROLL"; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
 			auto gimmick = stage->AddGameObject<GimmickRoll>();
 			gimmick->SetCount(m_RollCount);

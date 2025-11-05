@@ -36,6 +36,7 @@ namespace basecross {
 		try {
 			GameManager::GetInstance().Reset();
 			GameManager::GetInstance().SetGameStage(GetThis<GameStage>());
+			auto mapJson = GameManager::GetInstance().LoadStage(L"level1");
 
 			CreateViewLight();
 			CreateResorce();
@@ -49,10 +50,8 @@ namespace basecross {
 
 			auto hand = AddGameObject<GimmickHand>();
 			hand->SetCardSize(Vec2(200, 300));
-			Json json;
-			json.Load(L"Level/TestMap.json");
 
-			hand->LoadHands(json.At<JsonArray>(L"items"));
+			hand->LoadHands(mapJson.At<JsonArray>(L"items"));
 
 			GameManager::GetInstance().SetHand(hand);
 			GameManager::GetInstance().SetMap(stageMap);
@@ -60,7 +59,7 @@ namespace basecross {
 			Viewport viewport = view->GetTargetViewport();
 			viewport.Height;
 			viewport.Width /= 1.5f;
-			viewport.TopLeftY = viewport.Height / 6.0f;
+			viewport.TopLeftY = 0;
 			view->SetViewport(viewport);
 
 			App::GetApp()->GetScene<Scene>()->SetViewport(viewport);

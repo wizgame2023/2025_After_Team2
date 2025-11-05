@@ -23,8 +23,8 @@ namespace basecross{
 		m_BackGround = m_MenuStage->AddGameObject<Sprite>(m_BackGroundTexture, menuPosition, menuSize,Anchor::Left);
 		m_BackGround->SetLayer(0);
 		float duretionY = 75.0f;
-		Vec2 colorPalettePosition = Vec2(menuPosition.x + 100.0f, menuPosition.y + menuSize.y / 2.0f - 100.0f);
-		Vec2 gimmickPosition = Vec2(menuPosition.x + menuSize.x - 100.0f, menuPosition.y + menuSize.y / 2.0f - 100.0f);
+		Vec2 colorPalettePosition = Vec2(menuPosition.x + 100.0f, menuPosition.y + menuSize.y / 2.0f - 60.0f);
+		Vec2 gimmickPosition = Vec2(menuPosition.x + menuSize.x - 100.0f, menuPosition.y + menuSize.y / 2.0f - 60.0f);
 
 		m_ExpainBox = m_MenuStage->AddGameObject<Sprite>(L"MENU_EXPLAIN", Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f, 0.0f), Vec2(menuSize.x, menuSize.y * 0.25f), Anchor::TopLeft);
 		m_ExpainBox->SetLayer(0);
@@ -337,8 +337,7 @@ namespace basecross{
 	{
 		auto& gameManager = GameManager::GetInstance();
 		auto colorTable = gameManager.GetMap()->GetColorTable();
-		Json levelJson;
-		levelJson.Load(L"Level/TestMap.json");
+		Json levelJson = gameManager.GetMapJsonData();
 		auto hintArray = levelJson.At<JsonArray>(L"hint");
 		auto objectArray = hintArray->GetObjectArray();
 		auto cards = gameManager.GetHand()->GetCardData();

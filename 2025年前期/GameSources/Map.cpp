@@ -22,8 +22,7 @@ namespace basecross{
 	void Map::Load() {
 		int maxHeight = -100;
 
-		Json mapJson;
-		mapJson.Load(L"Level/TestMap.json");
+		Json mapJson = GameManager::GetInstance().GetMapJsonData();
 
 		vector<int> mapSize = mapJson.At<JsonArray>(L"mapSize")->GetIntArray();
 		auto mapData = mapJson.At<JsonArray>(L"map")->GetObjectArray();

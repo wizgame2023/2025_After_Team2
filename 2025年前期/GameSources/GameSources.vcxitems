@@ -80,5 +80,6 @@
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\titleResource.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\setting.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Level\level1.json" />
+    <None Include="$(MSBuildThisFileDirectory)..\media\Level\TestMap.json" />
   </ItemGroup>
 </Project>
