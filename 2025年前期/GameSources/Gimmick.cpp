@@ -39,14 +39,16 @@ namespace basecross{
 		m_Board->GetTrans()->SetPosition(GetPosition() + Vec3(0, 0.75f, 0));
 		m_Board->RotateVector(Vec3(0, 1, 0));
 
+		Vec3 normalizeVec = (Vec3)XMVector3Normalize(m_Value);
+
 		float angle = 0.0f;
-		if (m_Value == Vec3(-1, 0, 0)) {
+		if (normalizeVec == Vec3(-1, 0, 0)) {
 			angle = XM_PI;
 		}
-		else if (m_Value == Vec3(0, 0, 1)) {
+		else if (normalizeVec == Vec3(0, 0, 1)) {
 			angle = -XM_PIDIV2;
 		}
-		else if (m_Value == Vec3(0, 0, -1)) {
+		else if (normalizeVec == Vec3(0, 0, -1)) {
 			angle = XM_PIDIV2;
 		}
 		auto rot = XMMatrixRotationAxis(Vec3(0, 1, 0), angle);
@@ -105,6 +107,9 @@ namespace basecross{
 
 	void Gimmicks::GimmickDelete()
 	{
+		if (m_Board) {
+			m_Stage->RemoveGameObject<Board>(m_Board);
+		}
 		m_Stage->RemoveGameObject<Gimmicks>(GetThis<Gimmicks>());
 	}
 
@@ -162,6 +167,23 @@ namespace basecross{
 				}
 			}
 		}
+
+		float angle = 0.0f;
+		if (m_Value == Vec3(-1, 0, 0)) {
+			angle = XM_PIDIV2;
+		}
+		else if (m_Value == Vec3(1, 0, 0)) {
+			angle = -XM_PIDIV2;
+		}
+		else if (m_Value == Vec3(0, 0, 1)) {
+			angle = XM_PI;
+		}
+		auto rot = XMMatrixRotationAxis(Vec3(0, 1, 0), angle);
+
+		auto world = m_Transform->GetWorldMatrix();
+		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
+
+		m_Transform->SetQuaternion(world.quatInMatrix());
 	}
 
 	void GimmickGoal::Begin()
@@ -222,7 +244,7 @@ namespace basecross{
 		auto pos = GetPosition();
 
 		player->Spawn(pos);
-		player->SetVelocity(/*Vec3(1.0f, 0.0f, 0.0f)*/m_Value);
+		player->SetVelocity(m_Value);
 	}
 	void GimmickSetPlayer::Update()
 	{
@@ -292,7 +314,7 @@ namespace basecross{
 		{
 			Vec3 pos = m_Transform->GetPosition();
 
-			m_Cube->Telepote(pos + /*m_Value*/ Vec3(0.0f, 1.0f, 0.0f));
+			m_Cube->Telepote(pos + m_Value);
 		}
 
 	}

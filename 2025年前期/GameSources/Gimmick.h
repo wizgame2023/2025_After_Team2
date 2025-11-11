@@ -54,11 +54,10 @@ namespace basecross
 		*/
 		virtual void OnCreate();
 
-		/*
+		/*!
 		@brief オブジェクトの更新処理
 		*/
 		virtual void OnUpdate();
-
 
 		/*!
 		@brief ゲーム開始時の初期化処理
