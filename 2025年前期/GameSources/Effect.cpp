@@ -176,6 +176,16 @@ namespace basecross {
 
 		m_Manager->SetRotation(m_Handle, m_EffectAxisVector, m_Angle);
 	}
+
+	void Effect::SetEffectColor(const Col4& cal)
+	{
+		Effekseer::Color color;
+		color.R = (uint8_t)(cal.x * 255);
+		color.G = (uint8_t)(cal.y * 255);
+		color.B = (uint8_t)(cal.z * 255);
+		m_Manager->SetAllColor(m_Handle, color);// F‚Ìİ’è
+	}
+
 	void Effect::SetEffectFrameSpeed(const float& speed)
 	{
 		m_FrameSpeed = speed;

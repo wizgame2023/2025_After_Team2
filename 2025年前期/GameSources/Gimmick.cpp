@@ -27,21 +27,31 @@ namespace basecross{
 
 		m_Board = m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1, 1, 0), false);
 		m_Board->AddComponent<UVScroll>(Vec2(0.0f, 1.0f), m_Board->GetVertices());
+
+		m_PutEffect.reset();
 	}
 
 	void Gimmicks::OnUpdate()
 	{
 		Object::OnUpdate();
+
+		if (m_PutEffect == nullptr)
+		{
+			m_PutEffect = m_Stage->AddGameObject<Effect>(L"PutGimmickEffect.efk", GetPosition() + Vec3(0, 0.75f, 0));
+			m_PutEffect->SetEffectSize(Vec3(0.7f));
+		}
+
 		if (m_Value.lengthSqr() == 0) {
 			m_Board->GetDraw()->SetDrawActive(false);
 			return;
 		}
+
 		m_Board->GetTrans()->SetPosition(GetPosition() + Vec3(0, 0.75f, 0));
 		m_Board->RotateVector(Vec3(0, 1, 0));
 
 		Vec3 normalizeVec = (Vec3)XMVector3Normalize(m_Value);
 
-		float angle = 0.0f;
+		float angle = 0.0f;  
 		if (normalizeVec == Vec3(-1, 0, 0)) {
 			angle = XM_PI;
 		}

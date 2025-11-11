@@ -30,6 +30,8 @@ namespace basecross
 	class Gimmicks : public Object
 	{
 		shared_ptr<Board> m_Board;
+		
+		bool m_IsEffect;
 	protected:
 		shared_ptr<MoveCube> m_Cube;
 		Vec3 m_Value; // ギミックの方向ベクトルなどの値を格納する変数
@@ -37,6 +39,8 @@ namespace basecross
 		Vec3 m_RollVal;
 		int m_Count;
 		int m_MaxCount;
+
+		shared_ptr<Effect> m_PutEffect;
 	public:
 		/*!
 		@brief コンストラクタ
