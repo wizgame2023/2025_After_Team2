@@ -44,6 +44,7 @@ namespace basecross{
 		GameState m_GameState;
 
 		Json m_KeyConfigFile;
+		Json m_MapFile;
 
 		bool IsUpdate();
 		void MapUpdate();
@@ -87,7 +88,11 @@ namespace basecross{
 			m_GameEvaluation = 3;
 			m_CurrentStarIndex = 0;
 		}
-		
+		Json LoadStage(const wstring& levelName) {
+			m_MapFile.Load(L"Level/" + levelName + L".json");
+			return m_MapFile;
+		}
+
 		/// <summary>
 		/// ゲームをリスタートする。
 		/// </summary>
@@ -170,6 +175,14 @@ namespace basecross{
 		Vec3 DirectionStrToVec(const wstring& str) {
 			return m_DirectionMap[str];
 		}
+		wstring DirectionVecToStr(Vec3& vec) {
+			for (auto& dire : m_DirectionMap) {
+				if (dire.second == vec) {
+					return dire.first;
+				}
+			}
+			return L"";
+		}
 
 		float GetGameSpeed()const {
 			return m_UpdateTicks / m_TickRate;
@@ -186,6 +199,11 @@ namespace basecross{
 		wstring GetKeyConfig(const wstring& key) {
 			return m_KeyConfigFile.At<JsonString>(key)->GetValue();
 		}
+
+		Json GetMapJsonData()const {
+			return m_MapFile;
+		}
+
 		void DrawGoalEffect();
 		void DrawOverEffect();
 
