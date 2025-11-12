@@ -135,6 +135,7 @@ namespace basecross{
 
 		auto draw = AddComponent<PNTStaticDraw>();
 		draw->SetMeshResource(L"DEFAULT_CUBE");
+		draw->SetTextureResource(L"FLOOR");
 		
 		Json colorJson = Json(L"Json/color.json");
 		auto color = colorJson.At<JsonArray>(m_ColorStr)->GetFloatArray();

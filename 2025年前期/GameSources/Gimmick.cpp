@@ -324,7 +324,7 @@ namespace basecross{
 		{
 			Vec3 pos = m_Transform->GetPosition();
 
-			m_Cube->Telepote(pos + m_Value);
+			m_Cube->Telepote(pos + m_Value,0.25f,2.0f);
 		}
 
 	}
