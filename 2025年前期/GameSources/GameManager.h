@@ -175,6 +175,14 @@ namespace basecross{
 		Vec3 DirectionStrToVec(const wstring& str) {
 			return m_DirectionMap[str];
 		}
+		wstring DirectionVecToStr(Vec3& vec) {
+			for (auto& dire : m_DirectionMap) {
+				if (dire.second == vec) {
+					return dire.first;
+				}
+			}
+			return L"";
+		}
 
 		float GetGameSpeed()const {
 			return m_UpdateTicks / m_TickRate;

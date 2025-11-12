@@ -78,7 +78,7 @@ namespace basecross{
 
 	void GameManager::StartFade() {
 		if (!m_SpriteFade) {
-			auto sprite = m_MenuStage->AddGameObject<Sprite>(L"ICON_KILL",Vec3(),Vec2(),Anchor::Center);
+			auto sprite = m_MenuStage->AddGameObject<Sprite>(L"MENU",Vec3(),Vec2(),Anchor::Center);
 			sprite->MatchToScreenSize();
 			sprite->SetDiffuse(Col4(0, 0, 0, 1));
 			sprite->SetLayer(10);
@@ -97,9 +97,10 @@ namespace basecross{
 	}
 	void GameManager::Start() {
 		for (auto& gimmick : m_Map->GetGimmicks()) {
-			auto color = gimmick->GetComponent<SmBaseDraw>()->GetDiffuse();
+			auto draw = gimmick->GetComponent<SmBaseDraw>();
+			auto color = draw->GetDiffuse();
 			color.w = 1.0f;
-			gimmick->GetComponent<SmBaseDraw>()->SetDiffuse(color);
+			draw->SetDiffuse(color);
 			gimmick->Begin();
 		}
 		for (auto& sphere : m_Cubes) {

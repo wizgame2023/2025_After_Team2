@@ -22,9 +22,10 @@ namespace basecross{
 		Vec3 menuPosition = Vec3(screenSize.x / 2.0f - menuSize.x, 0, 0);
 		m_BackGround = m_MenuStage->AddGameObject<Sprite>(m_BackGroundTexture, menuPosition, menuSize,Anchor::Left);
 		m_BackGround->SetLayer(0);
-		float duretionY = 75.0f;
-		Vec2 colorPalettePosition = Vec2(menuPosition.x + 100.0f, menuPosition.y + menuSize.y / 2.0f - 60.0f);
-		Vec2 gimmickPosition = Vec2(menuPosition.x + menuSize.x - 100.0f, menuPosition.y + menuSize.y / 2.0f - 60.0f);
+		float duretionY = 70.0f;
+		float paletteStartPositionY = 75.0f;
+		Vec2 colorPalettePosition = Vec2(menuPosition.x + 100.0f, menuPosition.y + menuSize.y / 2.0f - paletteStartPositionY);
+		Vec2 gimmickPosition = Vec2(menuPosition.x + menuSize.x - 150.0f, menuPosition.y + menuSize.y / 2.0f - paletteStartPositionY);
 
 		m_ExpainBox = m_MenuStage->AddGameObject<Sprite>(L"MENU_EXPLAIN", Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f, 0.0f), Vec2(menuSize.x, menuSize.y * 0.25f), Anchor::TopLeft);
 		m_ExpainBox->SetLayer(0);
@@ -52,9 +53,9 @@ namespace basecross{
 
 			auto handler = m_MenuStage->AddGameObject<Sprite>(
 				L"HANDLER",
-				static_cast<Vec3>(sprite->GetAnchorPosition(Anchor::Right)) + Vec3(m_ConnectOffsetX, 0, 0), iconSize / 2.0f,
+				static_cast<Vec3>(sprite->GetAnchorPosition(Anchor::Right)), iconSize / 2.0f,
 				Anchor::Center);
-			handler->SetLayer(2);
+			handler->SetLayer(1);
 
 			m_ColorPalette.push_back(sprite);
 			m_HandlerSprites.push_back(handler);
@@ -68,13 +69,28 @@ namespace basecross{
 				Vec3(gimmickPosition.x, gimmickPosition.y - i * duretionY, 0.0f), iconSize,
 				Anchor::Center);
 			sprite->SetLayer(2);
+			auto explain = m_MenuStage->AddGameObject<Sprite>(
+				L"ICON_EXPLAIN",
+				Vec3(gimmickPosition.x + iconSize.x, gimmickPosition.y - i * duretionY, 0.0f), iconSize,
+				Anchor::Center);
+			explain->SetLayer(2);
+			wstring direction = gameManager.DirectionVecToStr(cards[i]->GetVelocity());
+			if (!direction.empty()) {
+				transform(direction.begin(), direction.end(), direction.begin(), ::toupper);
+				wstring direKey = L"ICON_" + direction;
+				explain->GetComponent<PCTSpriteDraw>()->AddTextureResource(direKey);
+			}
+
+			explain->GetComponent<PCTSpriteDraw>()->AddTextureResource(L"ICON_TWO");
+
 			auto handler = m_MenuStage->AddGameObject<Sprite>(
 				L"HANDLER",
-				static_cast<Vec3>(sprite->GetAnchorPosition(Anchor::Left)) - Vec3(m_ConnectOffsetX, 0, 0), iconSize / 2.0f,
+				static_cast<Vec3>(sprite->GetAnchorPosition(Anchor::Left)), iconSize / 2.0f,
 				Anchor::Center);
-			handler->SetLayer(2);
+			handler->SetLayer(1);
 			m_GimmcikSprites.push_back(sprite);
 			m_HandlerSprites.push_back(handler);
+			m_ExplainIcons.push_back(explain);
 		}
 
 		m_Cursor = m_MenuStage->AddGameObject<Coursor>(L"MOUSE_CURSOR");
@@ -85,6 +101,12 @@ namespace basecross{
 
 		m_PoseMenu = m_MenuStage->AddGameObject<PoseMenu>(GetThis<GameMenu>(),menuPosition + Vec3(screenSize.x / 10.0f,screenSize.y / 2.0f - 50,0), Vec2(120.0f, 60.0f));
 		
+		m_MovieWindow = m_MenuStage->AddGameObject<MovieWindow>(Vec2(menuSize.x, menuSize.y * 0.25f) * 0.8f);
+		Vec3 windowPosition = static_cast<Vec3>(m_ExpainBox->GetAnchorPosition(Anchor::TopLeft) + Vec2(640,-400));
+		windowPosition.y = windowPosition.y < 0 ? fabs(windowPosition.y) : windowPosition.y;
+
+		m_MovieWindow->SetPosition(windowPosition + Vec3(20,20,0));
+		//m_MovieWindow->Play(App::GetApp()->GetDataDirWString() + L"Movies/preview.mp4");
 	}
 	void GameMenu::OnUpdate() {
 		auto& input = InputManager::GetInputManager();
@@ -116,14 +138,17 @@ namespace basecross{
 			if (input->GetDownButton(L"DDown")) {
 				m_IsCursor = false;
 				if(m_CursorHandle < m_ColorPalette.size() * 2 - 1) m_CursorHandle++;
+				//m_MovieWindow->Stop();
 			}
 			if (input->GetDownButton(L"DRight")) {
 				m_IsCursor = false;
 				if(m_CursorHandle < m_ColorPalette.size()) m_CursorHandle += m_ColorPalette.size();
+				//m_MovieWindow->Play(App::GetApp()->GetDataDirWString() + L"Movies/PV.mp4");
 			}
 			if (input->GetDownButton(L"DLeft")) {
 				m_IsCursor = false;
 				if(m_CursorHandle > m_ColorPalette.size() - 1) m_CursorHandle -= m_ColorPalette.size();
+				//m_MovieWindow->Play(App::GetApp()->GetDataDirWString() + L"Movies/preview.mp4");
 			}
 		}
 		if (!m_IsCursor) {
@@ -146,20 +171,16 @@ namespace basecross{
 			Vec3 handlePosition;
 			if (m_ColorHandle != -1) {
 				handlePosition = m_ColorPalette[m_ColorHandle]->GetAnchorPosition(Anchor::Right);
-				handlePosition.x += m_ConnectOffsetX;
 				int handle = OnCoursorHandle(m_GimmcikSprites);
 				if (handle != -1) {
 					coursorPosition = m_GimmcikSprites[handle]->GetAnchorPosition(Anchor::Left);
-					coursorPosition.x -= m_ConnectOffsetX;
 				}
 			}
 			else {
 				handlePosition = m_GimmcikSprites[m_GimmikcHandle]->GetAnchorPosition(Anchor::Left);
-				handlePosition.x -= m_ConnectOffsetX;
 				int handle = OnCoursorHandle(m_ColorPalette);
 				if (handle != -1) {
 					coursorPosition = m_ColorPalette[handle]->GetAnchorPosition(Anchor::Right);
-					coursorPosition.x += m_ConnectOffsetX;
 				}
 			}
 			
@@ -245,6 +266,9 @@ namespace basecross{
 		}
 		for (auto& handleSprite : m_HandlerSprites) {
 			handleSprite->SetDrawActive(flag);
+		}
+		for (auto& eplainIcon : m_ExplainIcons) {
+			eplainIcon->SetDrawActive(flag);
 		}
 		for (auto& line : m_Lines) {
 			line.m_Line->SetDrawActive(flag);

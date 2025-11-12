@@ -36,7 +36,7 @@ namespace basecross {
 		try {
 			GameManager::GetInstance().Reset();
 			GameManager::GetInstance().SetGameStage(GetThis<GameStage>());
-			auto mapJson = GameManager::GetInstance().LoadStage(L"level1");
+			auto mapJson = GameManager::GetInstance().LoadStage(L"TestMap");
 
 			CreateViewLight();
 			CreateResorce();
