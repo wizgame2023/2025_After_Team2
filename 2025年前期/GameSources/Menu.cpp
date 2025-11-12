@@ -451,6 +451,9 @@ namespace basecross{
 		ButtonManager::instance->SetInput(L"POSE", InputData(StickMode::LY, 1, 0.1f));//選択(左スティック)
 		ButtonManager::instance->SetLoop(true);
 
+		m_ExplainMenu = m_MenuStage->AddGameObject<ExplainMenu>();
+		m_ExplainMenu->Close();
+
 		Close();
 	}
 	void PoseMenu::Open() {
@@ -475,7 +478,60 @@ namespace basecross{
 		PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 	}
 	void PoseMenu::OpenExpainGimmicks() {
+		m_ExplainMenu->Open();
+	}
 
+	void ExplainMenu::OnCreate(){
+		m_ExplainStr = m_MenuStage->AddGameObject<Sprite>(L"", Vec3(-120,-100,0), Vec2(300, 300), Anchor::Center);
+		m_BackGround = m_MenuStage->AddGameObject<Sprite>(L"MENU", Vec3(-640,400,0), Vec2(800, 800), Anchor::TopLeft);
+		m_BackGround->SetLayer(-1);
+
+		AddExplain(ExplainData{ L"ICON_PL",L"",L"EXPAIN_PL" });
+		AddExplain(ExplainData{ L"ICON_GOAL",L"",L"EXPAIN_GL" });
+		AddExplain(ExplainData{ L"ICON_ARROW",L"",L"EXPAIN_ARRW" });
+		AddExplain(ExplainData{ L"ICON_TL",L"",L"EXPAIN_TP" });
+		AddExplain(ExplainData{ L"ICON_INV",L"",L"EXPAIN_INV" });
+		AddExplain(ExplainData{ L"ICON_ROLL",L"",L"EXPAIN_ROLL" });
+
+		CreateExplain();
+	}
+	void ExplainMenu::CreateExplain() {
+		Vec2 explainTabSize = Vec2(200, 50);
+		Vec3 topLeft = static_cast<Vec3>(m_BackGround->GetAnchorPosition(Anchor::TopLeft) + Vec3(50,-50,0));
+		for (int i = 0; i < m_ExplainDatas.size(); i++) {
+			ButtonManager::Create(m_MenuStage, L"EXPLAIN", m_ExplainDatas[i].m_MenuIconKey, L"ICON_EXPLAIN", topLeft - Vec3(0, explainTabSize.y, 0) * i, explainTabSize,
+				[](shared_ptr<ObjectInterface>& object) {
+				});
+		}
+		
+
+		ButtonManager::instance->SetInput(L"EXPLAIN", InputData(XINPUT_GAMEPAD_DPAD_DOWN, 1));//選択(上)
+		ButtonManager::instance->SetInput(L"EXPLAIN", InputData(XINPUT_GAMEPAD_DPAD_UP, -1));//選択(下)
+		ButtonManager::instance->SetInput(L"EXPLAIN", InputData(StickMode::LY, 1, 0.1f));//選択(左スティック)
+
+	}
+	void ExplainMenu::OnUpdate() {
+		if (!ButtonManager::instance->CompareUseGroup(L"EXPLAIN")) return;
+
+		int index = ButtonManager::instance->GetSelectIndex(L"EXPLAIN");
+
+		m_ExplainStr->SetTextureKey(m_ExplainDatas[index].m_ExplainKey);
+
+		if (InputManager::GetInputManager()->GetDownButton(L"Start")) {
+			Close();
+		}
+	}
+
+	void ExplainMenu::Open() {
+		m_BackGround->SetDrawActive(true);
+		m_ExplainStr->SetDrawActive(true);
+		ButtonManager::instance->OpenAndUse(L"EXPLAIN");
+	}
+	void ExplainMenu::Close() {
+		m_BackGround->SetDrawActive(false);
+		m_ExplainStr->SetDrawActive(false);
+		ButtonManager::instance->Close(L"EXPLAIN");
+		ButtonManager::instance->OpenAndUse(L"POSE");
 	}
 
 

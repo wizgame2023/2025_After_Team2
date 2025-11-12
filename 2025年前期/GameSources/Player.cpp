@@ -83,7 +83,14 @@ namespace basecross{
 			if (m_TeleportTimer > m_TeleportTime) {
 				position = m_TelepoteTarget;
 				m_CurrentHeight = position.y;
-				m_IsEffecting = false;
+				if (m_AfterTeloprotTime > 0) {
+					m_TeleportTime = m_AfterTeloprotTime;
+					m_AfterTeloprotTime = 0.0f;
+					m_TeleportTimer = 0.0f;
+				}
+				else {
+					m_IsEffecting = false;
+				}
 			}
 			break;
 		}

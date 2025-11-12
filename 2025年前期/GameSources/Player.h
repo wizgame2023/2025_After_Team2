@@ -29,6 +29,7 @@ namespace basecross{
 		float m_RotateRad;		//現在の回転角度(ラジアン)
 		float m_CurrentHeight;	//現在の高さ
 		float m_TeleportTimer;
+		float m_AfterTeloprotTime;
 		float m_TeleportTime;
 
 		MoveState m_State;		//現在の行動
@@ -86,10 +87,11 @@ namespace basecross{
 		}
 
 		void Move();
-		void Telepote(Vec3 target,float time) {
+		void Telepote(Vec3 target,float time,float afterTime = 0.0f) {
 			if (m_IsEffecting || m_IsDead) return;
 			m_IsEffecting = true;
 			m_TeleportTime = time;
+			m_AfterTeloprotTime = afterTime;
 			m_TeleportTimer = 0.0f;
 			if (target.y < 0) {
 				target.y = 0;
