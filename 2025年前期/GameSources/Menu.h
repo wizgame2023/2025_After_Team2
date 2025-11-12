@@ -9,6 +9,7 @@
 namespace basecross{
 	class Coursor;
 	class PoseMenu;
+	class MovieWindow;
 	struct Line {
 		shared_ptr<Sprite> m_Line;
 		pair<int, int> m_PairHandle;
@@ -30,6 +31,7 @@ namespace basecross{
 		vector<shared_ptr<Sprite>> m_ColorPalette;
 		vector<shared_ptr<Sprite>> m_GimmcikSprites;
 		vector<shared_ptr<Sprite>> m_HandlerSprites;
+		vector<shared_ptr<Sprite>> m_ExplainIcons;
 		vector<Line> m_Lines;
 
 		wstring m_ColorTexture;
@@ -37,6 +39,7 @@ namespace basecross{
 
 		Viewport m_MainViewPort;
 
+		shared_ptr<MovieWindow> m_MovieWindow;
 		shared_ptr<PoseMenu> m_PoseMenu;
 		int m_ColorHandle;	//指定中の色
 		int m_GimmikcHandle;//指定中のギミック
