@@ -111,7 +111,7 @@ namespace basecross {
 
 		virtual GimmickObjects GetType() { return GimmickObjects::Teleporter; }
 		virtual wstring GetExpainKey() { return L"EXPAIN_TP"; }
-		virtual Vec3 GetVelocity() { return m_TeleportTarget.normalize(); }
+		virtual Vec3 GetVelocity() { return (Vec3)XMVector3Normalize(m_TeleportTarget); }
 		virtual int GetCount() { return m_Length; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
 			auto gimmick = stage->AddGameObject<GimmickTeleporter>();
