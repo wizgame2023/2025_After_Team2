@@ -126,7 +126,12 @@ namespace basecross {
 		*/
 		void SetEffectQuaternion(const Vec3& axis, const float& angle);
 
-
+		/*!
+		@brief エフェクトの色を設定する関数
+		@param[in] cal 色
+		@return なし
+		*/
+		void SetEffectColor(const Col4& cal);
 		/*!
 		@brief エフェクトのフレームの速さを設定する関数
 		@param[in] speed エフェクトのフレームの速さ
