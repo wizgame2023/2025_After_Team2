@@ -220,7 +220,10 @@ namespace basecross
 
 		Vec3 m_PlayerVal;
 
-		bool m_IsTeleport;
+		bool m_IsFastTeleport;
+		bool m_WasStepped = false;
+
+		float m_Time;
 	public:
 		GimmickTeleporter(const shared_ptr<Stage>& ptrGimmick);
 		~GimmickTeleporter();
