@@ -168,7 +168,7 @@ namespace basecross{
 
 			if (m_GoalEffect)
 			{
-				wss << L"\nƒCƒ“ƒXƒ^ƒ“ƒX” :" << m_GoalEffect->GetEffectInstance() << endl;
+				wss << L"\nã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ•° :" << m_GoalEffect->GetEffectInstance() << endl;
 				scene->SetDebugString(wss.str());
 				GameManager::GetInstance().DrawGoalEffect();
 				if (m_GoalEffect->EffectEnd())
@@ -208,7 +208,7 @@ namespace basecross{
 		{
 			Vec3 playerVel = m_Cube->GetVelocity();
 
-			// ƒ[ƒƒxƒNƒgƒ‹‚Å‚È‚¢‚±‚Æ‚ðŠm”F
+			// ã‚¼ãƒ­ãƒ™ã‚¯ãƒˆãƒ«ã§ãªã„ã“ã¨ã‚’ç¢ºèª
 			if (playerVel.lengthSqr() > 0.0001f)
 			{
 				Vec3 normalizedVel = playerVel.normalize();
@@ -216,7 +216,7 @@ namespace basecross{
 
 				float dot = normalizedVel.dot(goalDir);
 
-				if (dot > 0.9f) // ‚ ‚é’ö“x‹tŒü‚«‚Æ‚Ý‚È‚·è‡’l
+				if (dot > 0.9f) // ã‚ã‚‹ç¨‹åº¦é€†å‘ãã¨ã¿ãªã™é–¾å€¤
 				{
 					m_Goal = true;
 					m_Cube = nullptr;
@@ -358,7 +358,8 @@ namespace basecross{
 		if (CheckCount())
 		{
 			Vec3 pos = m_Transform->GetPosition();
-			m_Cube->Telepote(pos + m_Value, 0.4f);
+
+			m_Cube->Telepote(pos + m_Value,0.25f,2.0f);
 		}
 	}
 
