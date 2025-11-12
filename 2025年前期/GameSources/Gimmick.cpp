@@ -262,15 +262,15 @@ namespace basecross{
 	}
 
 
-	GimmickCourseCorrection::GimmickCourseCorrection(const shared_ptr<Stage>& ptrStage) :
+	GimmickArrow::GimmickArrow(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage)
 	{
 	}
-	GimmickCourseCorrection::~GimmickCourseCorrection()
+	GimmickArrow::~GimmickArrow()
 	{
 	}
 
-	void GimmickCourseCorrection::OnCreate()
+	void GimmickArrow::OnCreate()
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
@@ -279,17 +279,17 @@ namespace basecross{
 
 	}
 
-	void GimmickCourseCorrection::Begin()
+	void GimmickArrow::Begin()
 	{
 		Gimmicks::Begin();
 	}
 
-	void GimmickCourseCorrection::Update()
+	void GimmickArrow::Update()
 	{
 		Gimmicks::Update();
 		CheckCount();
 	}
-	void GimmickCourseCorrection::End() {
+	void GimmickArrow::End() {
 		Gimmicks::End();
 		Gimmicks::Update();
 		if (CheckCount())
@@ -317,19 +317,54 @@ namespace basecross{
 	{
 		Gimmicks::Begin();
 	}
+
+	void GimmickTeleporter::OnUpdate()
+	{
+		Gimmicks::OnUpdate();
+		if (m_Cube)
+		{
+			if (m_TeleportFastEffect == nullptr)
+			{
+				m_TeleportFastEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickFastEffect.efk", m_Cube->GetPosition());
+				m_TeleportFastEffect->SetEffectSize(Vec3(0.5f));
+				m_Cube->ChangeVelocity(Vec3(0.0f));
+			}
+		}
+		if (m_TeleportFastEffect)
+		{
+			if (m_TeleportFastEffect->EffectEnd())
+			{
+				m_TeleportFastEffect->EffectDelete();
+				m_TeleportFastEffect = nullptr;
+
+ 				m_TeleportEndEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickEndEffect.efk", m_Cube->GetPosition());
+			}
+
+		}
+		//if (m_TeleportEndEffect->EffectEnd())
+		//{
+		//	m_TeleportEndEffect->EffectDelete();
+		//	m_TeleportEndEffect = nullptr;
+		//}
+
+	}
+
 	void GimmickTeleporter::Update()
 	{
 		Gimmicks::Update();
-		if (CheckCount())
+		if (m_IsTeleport)
 		{
-			Vec3 pos = m_Transform->GetPosition();
+			if (CheckCount())
+			{
+				Vec3 pos = m_Transform->GetPosition();
+				m_Cube->Telepote(pos + m_Value);
+			}
 
-			m_Cube->Telepote(pos + m_Value);
 		}
 
 	}
 
-
+	
 
 	GimmickKiller::GimmickKiller(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage)
@@ -438,7 +473,7 @@ namespace basecross{
 
 		if (CheckCount())
 		{
-			auto CourseCorrectionVec = GameManager::GetInstance().GetMap()->GetGimmicks<GimmickCourseCorrection>();
+			auto CourseCorrectionVec = GameManager::GetInstance().GetMap()->GetGimmicks<GimmickArrow>();
 
 			for (auto& course : CourseCorrectionVec)
 			{

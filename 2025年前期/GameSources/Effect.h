@@ -61,7 +61,7 @@ namespace basecross {
 			// •`‰æƒ‚ƒWƒ…[ƒ‹‚Ì‰ð•ú
 			m_Renderer.Reset();
 
-			m_Manager->StopRoot(m_Effect);
+			//m_Manager->StopRoot(m_Effect);
 		}
 
 		virtual void OnCreate() override;

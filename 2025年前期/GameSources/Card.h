@@ -73,7 +73,7 @@ namespace basecross {
 		virtual GimmickObjects GetType() { return GimmickObjects::CourseCorrection; }
 		virtual wstring GetExpainKey() { return L"EXPAIN_ARRW"; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
-			auto gimmick = stage->AddGameObject<GimmickCourseCorrection>();
+			auto gimmick = stage->AddGameObject<GimmickArrow>();
 			gimmick->SetValue(m_Direction);
 			gimmick->SetCount(1);
 			return gimmick;
