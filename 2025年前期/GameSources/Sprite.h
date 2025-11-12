@@ -7,7 +7,6 @@
 #include "stdafx.h"
 
 namespace basecross{
-
 	struct SpriteAnimation {
 		size_t		m_CurrentOrder;		//現在のアニメーション番号
 		float		m_AnimationTime;	//アニメーションタイマー
@@ -187,12 +186,20 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
+		void SetTextureKey(const wstring& key) {
+			m_Draw->SetTextureResource(key);
+			m_TexKey = key;
+		}
+
 		/// <summary>
 		/// 表示サイズ変更
 		/// </summary>
 		/// <param name="size"> : サイズ(uv)</param>
 		void SetSize(Vec2 size);
 
+		void MatchToScreenSize() {
+			SetSize(m_ScreenHalfSize * 2.0f);
+		}
 		/// <summary>
 		/// 表示サイズ取得
 		/// </summary>
@@ -230,6 +237,19 @@ namespace basecross{
 		Vec2 GetPivot() const{
 			return m_Pivot;
 		}
+
+		/// <summary>
+		/// 指定したベクトル方向を向かせる
+		/// </summary>
+		/// <param name="vec">ベクトル</param>
+		void VectorToward(Vec2 vec);
+
+		/// <summary>
+		/// アンカーに対応した位置(0～1)を取得
+		/// </summary>
+		/// <param name="anchor">アンカー</param>
+		/// <returns>位置</returns>
+		Vec2 GetAnchorNormalize(Anchor anchor);
 
 		/// <summary>
 		/// 色の変更
@@ -427,6 +447,9 @@ namespace basecross{
 		void ScreenAnchor(Anchor achor, const Vec3& offset = Vec3());
 
 		void ChangeWindowSize(float width, float height);
+
+		Vec2 GetAnchorPosition(Anchor anchor);
+		void SetAnchorPosition(Vec3 pos, Anchor anchor);
 	};
 
 
@@ -563,18 +586,31 @@ namespace basecross{
 	//	Sprite操作 : フェードイン・フェードアウト																								
 	//																																
 	//----------------------------------------------------------
+	enum class FadeState {
+		Out,In,InToOut,OutToIn
+	};
 	class SpriteFade : public SpriteAction {
 		float m_FadeSpeed;
 		bool m_IsFadeOut;
 		bool m_IsFinished;
+		FadeState m_FadeState;
 	public:
-		SpriteFade(const shared_ptr<GameObject>& ptr,float fadeSpeed) : SpriteAction(ptr),m_FadeSpeed(fadeSpeed),m_IsFadeOut(true),m_IsFinished(false){}
+		SpriteFade(const shared_ptr<GameObject>& ptr,float fadeSpeed) : SpriteAction(ptr),m_FadeSpeed(fadeSpeed),m_IsFadeOut(true),m_IsFinished(false), m_FadeState(FadeState::In){}
 		virtual ~SpriteFade(){}
 
 		virtual void OnUpdate()override;
 
 		bool IsFadeOut() {
 			return m_IsFadeOut;
+		}
+		void StartFade(FadeState state) {
+			if (state == FadeState::OutToIn || state == FadeState::Out) {
+				FadeOut();
+			}
+			else {
+				FadeIn();
+			}
+			m_FadeState = state;
 		}
 		void FadeOut() {
 			m_IsFadeOut = true;
@@ -780,7 +816,7 @@ namespace basecross{
 		wstring m_SelectSound;	//選択音のキー
 
 		bool	m_IsActive;		//Updateさせるか
-
+		bool	m_IsSelectLoop;	//選択をループさせるか
 
 		shared_ptr<Sprite> Create(shared_ptr<Stage>& stage, const wstring& group, const wstring& defaultTex, const wstring& selectedTex, Col4 selectedColor, Vec3 pos, Vec2 size, const shared_ptr<ObjectInterface>& object, function<void(shared_ptr<ObjectInterface>&)> func);
 
@@ -804,7 +840,8 @@ namespace basecross{
 
 		ButtonManager(const shared_ptr<Stage>& ptr) : 
 			GameObject(ptr),
-			m_IsActive(true),m_UsingGroup(L""),m_ClickSound(L"")
+			m_IsActive(true), m_IsSelectLoop(false),
+			m_UsingGroup(L""),m_ClickSound(L"")
 		{}
 		virtual ~ButtonManager(){}
 
@@ -1182,6 +1219,14 @@ namespace basecross{
 		}
 
 		/// <summary>
+		/// ループの設定
+		/// </summary>
+		/// <param name="flag">ループするか</param>
+		void SetLoop(bool flag) {
+			m_IsSelectLoop = flag;
+		}
+
+		/// <summary>
 		/// Updata状態の取得
 		/// </summary>
 		/// <returns>Update状態</returns>
@@ -1192,11 +1237,21 @@ namespace basecross{
 		/// <summary>
 		/// 選択中の番号が範囲外に行かないように制限する
 		/// </summary>
-		void LimitIndex() {
-			size_t maxIndex = m_ButtonGroup[m_UsingGroup].size() - 1;
-			size_t minIndex = 0;
-			m_SelectIndexes[m_UsingGroup] = max(minIndex, m_SelectIndexes[m_UsingGroup]);
-			m_SelectIndexes[m_UsingGroup] = min(maxIndex, m_SelectIndexes[m_UsingGroup]);
+		void LimitIndex(int& selectIndex) {
+			int maxIndex = static_cast<int>(m_ButtonGroup[m_UsingGroup].size() - 1);
+			int minIndex = 0;
+			if (!m_IsSelectLoop) {
+				selectIndex = max(minIndex, selectIndex);
+				selectIndex = min(maxIndex, selectIndex);
+			}
+			else {
+				if (selectIndex < minIndex) {
+					selectIndex = maxIndex;
+				}
+				if (selectIndex > maxIndex) {
+					selectIndex = minIndex;
+				}
+			}
 		}
 		/// <summary>
 		/// 移動後の番号が範囲外に行っていないか判定する
@@ -1317,11 +1372,28 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
+		void RotateVector(Vec3 vec) {
+			Vec3 up = Vec3(0, 1, 0);
+			if (vec == Vec3(0, 1, 0)) {
+				up = Vec3(1, 0, 0);
+			}
+			Mat4x4 rotMatrix = static_cast<Mat4x4>(XMMatrixLookAtLH(Vec3(0, 0, 0), -vec, up));
+			rotMatrix = inverse(rotMatrix);
+			Quat Qt = rotMatrix.quatInMatrix();
+			Qt.normalize();
+
+			m_Trans->SetQuaternion(Qt);
+
+		}
+
 		void SetOffset(Vec3 offset) {
 			m_Offset = offset;
 		}
 		shared_ptr<PNTStaticDraw> GetDraw() {
 			return m_Draw;
+		}
+		shared_ptr<Transform> GetTrans() {
+			return m_Trans;
 		}
 		void SetColor(Col4 color) {
 			m_Draw->SetDiffuse(color);
@@ -1329,6 +1401,19 @@ namespace basecross{
 		vector<VertexPositionNormalTexture> GetVertices() {
 			return m_Vertices;
 		}
+	};
+
+	class UVScroll : public Component {
+		weak_ptr<SmBaseDraw> m_Draw;
+		vector<VertexPositionNormalTexture> m_Vertex;
+		Vec2 m_ScrollSpeed;
+	public:
+		UVScroll(const shared_ptr<GameObject>& ptr, Vec2 scrollSpeed, vector<VertexPositionNormalTexture>& vertex) : m_ScrollSpeed(scrollSpeed),m_Vertex(vertex), Component(ptr) {}
+		virtual ~UVScroll(){}
+
+		virtual void OnCreate()override;
+		virtual void OnUpdate()override;
+		virtual void OnDraw()override{}
 	};
 
 	class SlideInSprite : public GameObject

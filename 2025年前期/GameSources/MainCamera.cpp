@@ -10,42 +10,52 @@ namespace basecross{
 
 	void MainCamera::OnCreate() {
 		m_TargetAngle.y = m_FixedAngleVirtical;
-		m_TargetAngle.x = XMConvertToRadians(0.0f);
+		m_TargetAngle.x = XMConvertToRadians(270.0f);
 		m_Angle = m_TargetAngle;
+		
+		Vec3 position = CalcPosition(m_Angle.y, m_Angle.x);
+		SetEye(position);
 	}
 	void MainCamera::OnUpdate() {
 		auto& app = App::GetApp();
 
 		auto device = app->GetInputDevice().GetControlerVec()[0];
 		auto elapsed = app->GetElapsedTime();
+		if (m_Angle == m_TargetAngle) {
+			
+			auto& input = InputManager::GetInputManager();
+			auto& gameManager = GameManager::GetInstance();
+			Vec2 stick = input->GetRStick();
+			
+			float deadzone = 0.2f;
+			if(stick.y > deadzone){
+				m_IsUpperAngle = true;
 
-		if (device.bConnected) {
-			if (m_Angle == m_TargetAngle) {
-				if (device.wPressedButtons & XINPUT_GAMEPAD_X) {
-					m_IsUpperAngle = m_IsUpperAngle ? false : true;
-
-					m_TargetAngle.y = m_IsUpperAngle ? XM_PIDIV2 : m_FixedAngleVirtical;
-					SetUp(Vec3(0, 1, 0));
-				}
-				if (!m_IsUpperAngle) {
-					if (device.wPressedButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
-						if (m_TargetAngle.x <= 0) {
-							m_TargetAngle.x += XM_2PI;
-							m_Angle.x += XM_2PI;
-						}
-						m_TargetAngle.x -= XM_PIDIV2;
+				m_TargetAngle.y = XM_PIDIV2;
+			}
+			else if (stick.y < -deadzone) {
+				m_IsUpperAngle = false;
+				m_TargetAngle.y = m_FixedAngleVirtical;
+				SetUp(Vec3(0, 1, 0));
+			}
+			if (!m_IsUpperAngle) {
+				if(stick.x < -deadzone){
+					if (m_TargetAngle.x <= 0) {
+						m_TargetAngle.x += XM_2PI;
+						m_Angle.x += XM_2PI;
 					}
-					else if (device.wPressedButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
-						if (m_TargetAngle.x >= XM_2PI) {
-							m_TargetAngle.x -= XM_2PI;
-							m_Angle.x -= XM_2PI;
-						}
-						m_TargetAngle.x += XM_PIDIV2;
-					}
+					m_TargetAngle.x -= XM_PIDIV2;
 				}
-				
+				else if(stick.x > deadzone){
+					if (m_TargetAngle.x >= XM_2PI) {
+						m_TargetAngle.x -= XM_2PI;
+						m_Angle.x -= XM_2PI;
+					}
+					m_TargetAngle.x += XM_PIDIV2;
+				}
 			}
 		}
+
 		Vec2 diff = (m_TargetAngle - m_Angle);
 		Vec2 moveAmount = diff.normalize() * m_RotateSpeed * elapsed;
 		if (abs(moveAmount.x) > abs(m_TargetAngle.x - m_Angle.x)) {
@@ -59,9 +69,7 @@ namespace basecross{
 		}
 
 		m_Angle += moveAmount;
-		Vec3 position = CalcPosition(m_Angle.y, m_Angle.x);//GetAt() + Vec3(cos(m_Angle.x), 0.0f, sin(m_Angle.x)) * m_ArmLength;//CalcPosition(m_Angle.y, m_Angle.x);
-		//position.x = 5.0f;
-		//position.y = 10.0f;
+		Vec3 position = CalcPosition(m_Angle.y, m_Angle.x);
 		SetEye(position);
 	}
 	Vec3 MainCamera::CalcPosition(float virticalAngle, float horizonAngle) {
@@ -85,7 +93,7 @@ namespace basecross{
 
 		m_ArmLength = max(mapSize.x, max(mapSize.y, mapSize.z)) * 2.0f;
 
-		m_Angle = Vec2(0.0f, m_FixedAngleVirtical);
+		m_Angle = Vec2(XMConvertToRadians(270.0f), m_FixedAngleVirtical);
 		SetEye(CalcPosition(m_Angle.y, m_Angle.x));
 		SetAt(center);
 	}

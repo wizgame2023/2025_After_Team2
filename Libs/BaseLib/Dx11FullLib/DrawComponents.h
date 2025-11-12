@@ -47,7 +47,7 @@ namespace basecross {
 		/// 射影行列
 		bsm::Mat4x4 mProj;
 		/// Bone用
-		bsm::Vec4 Bones[3 * 72];
+		bsm::Vec4 Bones[3 * 256];
 		ShadowConstants() {
 			memset(this, 0, sizeof(ShadowConstants));
 		};
@@ -70,6 +70,9 @@ namespace basecross {
 		bsm::Col4 Emissive;
 		/// デフューズ色
 		bsm::Col4 Diffuse;
+
+		int TextureCount;
+		int padding[3];
 		SpriteConstants() {
 			memset(this, 0, sizeof(SpriteConstants));
 			Diffuse = bsm::Col4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -119,7 +122,7 @@ namespace basecross {
 		/// ライト射影行列
 		bsm::Mat4x4 LightProjection;
 		/// Bone配列
-		bsm::Vec4 Bones[3 * 72];
+		bsm::Vec4 Bones[3 * 256];
 		SimpleConstants() {
 			memset(this, 0, sizeof(SimpleConstants));
 			Diffuse = bsm::Col4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -584,6 +587,7 @@ namespace basecross {
 	///	Sprite描画オブジェクトの親
 	//--------------------------------------------------------------------------------------
 	class SpriteBaseDraw : public DrawComponent {
+		vector<shared_ptr<TextureResource>> m_AddTexture;
 	protected:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -706,6 +710,7 @@ namespace basecross {
 			SpriteConstants sb;
 			//コンスタントバッファの作成
 			SetConstants(sb);
+			sb.TextureCount = m_AddTexture.size();
 			//テクスチャ
 			auto shTex = GetTextureResource();
 			//コンスタントバッファの更新
@@ -733,7 +738,11 @@ namespace basecross {
 			RenderState->SetDepthStencilState(pD3D11DeviceContext, GetDepthStencilState());
 			//テクスチャとサンプラー
 			if (shTex) {
-				pD3D11DeviceContext->PSSetShaderResources(0, 1, shTex->GetShaderResourceView().GetAddressOf());
+				vector<ID3D11ShaderResourceView*> views = { shTex->GetShaderResourceView().Get() };
+				for (int i = 0; i < m_AddTexture.size() && i < 2; i++) {
+					views.push_back(m_AddTexture[i]->GetShaderResourceView().Get());
+				}
+				pD3D11DeviceContext->PSSetShaderResources(0, views.size(), views.data());
 				//サンプラーを設定
 				RenderState->SetSamplerState(pD3D11DeviceContext, GetSamplerState(), 0);
 			}
@@ -779,6 +788,7 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		void SetTextureResource(const wstring& TextureKey);
+		void AddTextureResource(const wstring& TextureKey);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	テクスチャリソースの取得

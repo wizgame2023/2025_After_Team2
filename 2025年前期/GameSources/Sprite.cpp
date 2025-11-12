@@ -8,24 +8,8 @@
 
 namespace basecross {
 
-	Sprite::Sprite(const shared_ptr<Stage>& ptr, const wstring& texKey, Vec3 pos, Vec2 size, Anchor anchor) : Sprite(ptr, texKey, pos, size, {0,0}) {
-		Vec2 pivot;
-
-		switch (anchor)
-		{
-		case Anchor::Center:	 pivot = Vec2(0.5f, 0.5f); break;
-		case Anchor::Top:		 pivot = Vec2(0.5f, 0.0f); break;
-		case Anchor::Bottom:	 pivot = Vec2(0.5f, 1.0f); break;
-		case Anchor::Left:		 pivot = Vec2(0.0f, 0.5f); break;
-		case Anchor::Right:		 pivot = Vec2(1.0f, 0.5f); break;
-		case Anchor::TopLeft:	 pivot = Vec2(0.0f, 0.0f); break;
-		case Anchor::TopRight:	 pivot = Vec2(1.0f, 0.0f); break;
-		case Anchor::BottomLeft: pivot = Vec2(0.0f, 1.0f); break;
-		case Anchor::BottomRight:pivot = Vec2(1.0f, 1.0f); break;
-		default: pivot = Vec2(); break;
-		}
-		
-		SetPivot(pivot);
+	Sprite::Sprite(const shared_ptr<Stage>& ptr, const wstring& texKey, Vec3 pos, Vec2 size, Anchor anchor) : Sprite(ptr, texKey, pos, size, {0,0}) {		
+		SetPivot(GetAnchorNormalize(anchor));
 	}
 
 
@@ -137,13 +121,36 @@ namespace basecross {
 	void Sprite::SetPosition(Vec3 pos) {
 		m_Transform->SetPosition(pos);
 	}
+	void Sprite::VectorToward(Vec2 vec) {
+		float rad = atan2f(-vec.x, vec.y);
+		auto rot = XMMatrixRotationAxis(Vec3(0,0,1), rad);
+		auto world = m_Transform->GetWorldMatrix();
+		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
+
+		m_Transform->SetQuaternion(world.quatInMatrix());
+	}
+
 	void Sprite::SetDiffuse(Col4 color) {
 		m_Draw->SetDiffuse(color);
 	}
 	Col4 Sprite::GetDiffuse() const{
 		return m_Draw->GetDiffuse();
 	}
-
+	Vec2 Sprite::GetAnchorNormalize(Anchor anchor) {
+		switch (anchor)
+		{
+		case Anchor::Center:	 return Vec2(0.5f, 0.5f); 
+		case Anchor::Top:		 return Vec2(0.5f, 0.0f);
+		case Anchor::Bottom:	 return Vec2(0.5f, 1.0f);
+		case Anchor::Left:		 return Vec2(0.0f, 0.5f);
+		case Anchor::Right:		 return Vec2(1.0f, 0.5f);
+		case Anchor::TopLeft:	 return Vec2(0.0f, 0.0f);
+		case Anchor::TopRight:	 return Vec2(1.0f, 0.0f);
+		case Anchor::BottomLeft: return Vec2(0.0f, 1.0f);
+		case Anchor::BottomRight:return Vec2(1.0f, 1.0f);
+		default: return Vec2();
+		}
+	}
 	void Sprite::ScreenAnchor(Anchor anchor, const Vec3& offset) {
 
 		Vec3 pos;
@@ -173,6 +180,25 @@ namespace basecross {
 		SetSize(Vec2(m_Size.x * rateW, m_Size.y * rateH));
 
 		m_ScreenHalfSize = Vec2(width * 0.5f, height * 0.5f);
+	}
+	Vec2 Sprite::GetAnchorPosition(Anchor anchor) {
+		Vec3 pos = GetPosition();
+		Vec2 size = GetSize();
+		Vec2 leftTop = Vec2(pos.x - m_Pivot.x * size.x, pos.y + m_Pivot.y * size.y);
+		Vec2 offset;
+		offset = GetAnchorNormalize(anchor) * GetSize();
+		offset.y *= -1;
+		return leftTop + offset;
+	}
+	void Sprite::SetAnchorPosition(Vec3 pos, Anchor anchor) {
+		Vec3 offset;
+		offset = GetAnchorNormalize(anchor) * GetSize();
+		offset.y *= -1;
+		Vec3 leftTop = pos - offset;
+		
+		Vec3 newPosition = leftTop + static_cast<Vec3>(Vec2(m_Pivot.x,-m_Pivot.y) * GetSize());
+
+		SetPosition(newPosition);
 	}
 	void NumberSprite::OnCreate() {
 		int digits = static_cast<int>(pow(10, m_DisplayDigit - 1));
@@ -284,9 +310,13 @@ namespace basecross {
 			if (!IsFinish()) {
 				color.w += elapsed * m_FadeSpeed;
 			}
-			if (color.w < 0 || color.w > 1)
-			{
-				m_IsFinished = true;
+			if (color.w < 0.0f) {
+				if (m_FadeState == FadeState::OutToIn || m_FadeState == FadeState::In) m_IsFinished = true;
+				else if (m_FadeState == FadeState::InToOut) m_IsFadeOut = true;
+			}
+			else if (color.w > 1.0f) {
+				if (m_FadeState == FadeState::InToOut || m_FadeState == FadeState::Out) m_IsFinished = true;
+				else if (m_FadeState == FadeState::OutToIn) m_IsFadeOut = false;
 			}
 			else {
 				m_IsFinished = false;
@@ -348,7 +378,7 @@ namespace basecross {
 
 
 	shared_ptr<Sprite> ButtonManager::Create(shared_ptr<Stage>& stage, const wstring& group, const wstring& defaultTex, const wstring& selectedTex, Col4 selectedColor, Vec3 pos, Vec2 size, const shared_ptr<ObjectInterface>& object, function<void(shared_ptr<ObjectInterface>&)> func) {
-		auto sprite = stage->AddGameObject<Sprite>(defaultTex, pos, size, Vec2(0.5f));
+		auto sprite = stage->AddGameObject<Sprite>(defaultTex, pos, size, Anchor::TopLeft);
 		sprite->AddTag(L"Button");
 		shared_ptr<SpriteButton> button = nullptr;
 
@@ -391,8 +421,7 @@ namespace basecross {
 		//選択
 		if (PressSelect(m_UsingGroup,data)) {
 			int checkButton = static_cast<int>(selectIndex) + data.m_MoveAmount;
-			checkButton = min(static_cast<int>(m_ButtonGroup[m_UsingGroup].size()) - 1, checkButton);
-			checkButton = max(0, checkButton);
+			LimitIndex(checkButton);
 			if (m_ButtonGroup[m_UsingGroup][checkButton]->GetActive()) {
 				if (m_SelectSound != L"") {
 					//SoundManager::GetInstance().PlaySE(m_SelectSound);
@@ -400,10 +429,10 @@ namespace basecross {
 				selectIndex = checkButton;
 			}
 		}
-		LimitIndex();
+		m_SelectIndexes[m_UsingGroup] = selectIndex;
 		//選択状態の適用
 		for (int i = 0; i < m_ButtonGroup[m_UsingGroup].size(); i++) {
-			if (i == selectIndex) {
+			if (i == m_SelectIndexes[m_UsingGroup]) {
 				m_ButtonGroup[m_UsingGroup][i]->Select();
 			}
 			else {
@@ -415,7 +444,7 @@ namespace basecross {
 			if (m_ClickSound != L"") {
 				//SoundManager::GetInstance().PlaySE(m_ClickSound);
 			}
-			m_ButtonGroup[m_UsingGroup][selectIndex]->Func();
+			m_ButtonGroup[m_UsingGroup][m_SelectIndexes[m_UsingGroup]]->Func();
 		}
 
 		//移動
@@ -534,6 +563,21 @@ namespace basecross {
 
 	}
 
+	void UVScroll::OnCreate() {
+		m_Draw = GetGameObject()->GetComponent<SmBaseDraw>();
+		if (auto draw = m_Draw.lock()) {
+			draw->SetSamplerState(SamplerState::LinearWrap);
+		}
+	}
+	void UVScroll::OnUpdate() {
+		auto draw = m_Draw.lock();
+		if (draw) {
+			for (int i = 0; i < m_Vertex.size(); i++) {
+				m_Vertex[i].textureCoordinate += m_ScrollSpeed * App::GetApp()->GetElapsedTime();
+			}
+			draw->UpdateVertices(m_Vertex);
+		}
+	}
 
 	SlideInSprite::SlideInSprite(
 		const shared_ptr<Stage>& StagePtr, 

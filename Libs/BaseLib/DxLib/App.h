@@ -1352,7 +1352,7 @@ namespace basecross {
 		@return	なし
 		*/
 		//--------------------------------------------------------------------------------------
-		void PlayMovie(const wstring& MovieFileName);
+		void PlayMovie(const wstring& MovieFileName, RECT* rect = nullptr);
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief ムービーが有効かどうか

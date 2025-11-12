@@ -5,39 +5,13 @@
 
 #pragma once
 #include "stdafx.h"
+#include "Json.h"
+#include "Card.h"
+#include "Sprite.h"
 
 namespace basecross{
-
-	class GimmickCard : public Object {
-		static map<Gimmicks::Objects, wstring> m_CoverTexKeys;
-		shared_ptr<Sprite> m_Card;
-		shared_ptr<Sprite> m_CoverSprite;
-
-		Gimmicks::Objects m_Type;
-	public:
-		GimmickCard(const shared_ptr<Stage>& ptr,const Gimmicks::Objects type) : Object(ptr), m_Type(type){}
-		GimmickCard(const shared_ptr<Stage>& ptr) : GimmickCard(ptr, Gimmicks::Objects::None) {}
-
-		virtual ~GimmickCard(){}
-
-		virtual void OnCreate()override;
-		virtual void OnUpdate()override;
-
-		void Remove() {
-			m_Stage->RemoveGameObject<Sprite>(m_Card);
-			m_Stage->RemoveGameObject<Sprite>(m_CoverSprite);
-			m_Stage->RemoveGameObject<GimmickCard>(GetThis<GimmickCard>());
-		}
-		shared_ptr<Sprite> GetCardSprite() {
-			return m_Card;
-		}
-
-		void SetCover(Gimmicks::Objects type);
-	};
-
 	class GimmickHand : public Object {
-		vector<Gimmicks::Objects> m_Hand;
-		vector<shared_ptr<GimmickCard>> m_HandSprite;
+		vector<shared_ptr<CardData>> m_Hand;
 
 		Vec2 m_CardSize;
 		int m_SelectIndex;
@@ -48,6 +22,11 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
+		void LoadHands(shared_ptr<JsonArray>& items);
+
+		vector<shared_ptr<CardData>> GetCardData() {
+			return m_Hand;
+		}
 		/// <summary>
 		/// カードの描画サイズを設定
 		/// </summary>
@@ -60,16 +39,28 @@ namespace basecross{
 		/// 手札を追加する
 		/// </summary>
 		/// <param name="gimmicks">追加するギミック</param>
-		void Add(Gimmicks::Objects gimmicks) {
+		void Add(const shared_ptr<CardData>& gimmicks) {
 			m_Hand.push_back(gimmicks);
-			m_HandSprite.push_back(m_Stage->AddGameObject<GimmickCard>(gimmicks));
 		}
 
 		/// <summary>
 		/// 選択中のカードのデータを取得・手札から削除
 		/// </summary>
 		/// <returns></returns>
-		Gimmicks::Objects Use();
+		shared_ptr<CardData> Use();
+
+		/// <summary>
+		/// 選択中のカードのデータを取得
+		/// </summary>
+		/// <returns></returns>
+		shared_ptr<CardData> Get();
+
+		/// <summary>
+		/// 指定した番号のカードのデータを取得
+		/// </summary>
+		/// <param name="index">番号</param>
+		/// <returns></returns>
+		shared_ptr<CardData> Get(int index);
 
 		/// <summary>
 		/// 指定した番号のカードを選択

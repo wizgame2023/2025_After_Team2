@@ -25,15 +25,39 @@
     <Filter Include="Json">
       <UniqueIdentifier>{62af316c-2dd8-41f3-863b-77289ae138b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Card">
+      <UniqueIdentifier>{cd887c4b-b49c-48de-8817-6c10c09b0d8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gimmick">
+      <UniqueIdentifier>{e83028e7-0451-437e-b4f4-1e156b061e73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{298b9435-f2d5-4801-8c97-d68ce6528e16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sprite">
+      <UniqueIdentifier>{cd78091e-5bae-4878-9955-9cbcf3705647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Json\source">
+      <UniqueIdentifier>{29ddccc2-a88f-4e09-b5c0-26ff463f538b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Json\Level">
+      <UniqueIdentifier>{e82e7984-07ff-44d0-a007-e8dc689f5559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Json\Resource">
+      <UniqueIdentifier>{496428e3-4552-43a3-8583-45179f26d6f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{840e50f3-4479-4ace-88a7-d467ac806cea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Json\Setting">
+      <UniqueIdentifier>{f54336bf-b63a-499e-9e5b-888e9db16016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{acd9e12b-fba5-4c0d-ba2f-4907a7e1bfa6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)GameStage.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Player.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Project.h">
@@ -63,33 +87,60 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Map.h">
       <Filter>Map</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Gimmick.h">
-      <Filter>Manager\Gimmick</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)InputManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)OkawaraStage.h">
       <Filter>work</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)GimmickHand.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)MainCamera.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Sprite.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GameManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Json.h">
-      <Filter>Json</Filter>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Card.h">
+      <Filter>Card</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Gimmick.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)GimmickHand.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)MainCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Sprite.h">
+      <Filter>Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Json.h">
+      <Filter>Json\source</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Menu.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ResourceManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Effect.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MenuStage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SelectStage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameStage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)TitleStage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Player.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SoundManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)MovieWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)GameStage.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Player.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ProjectShader.cpp">
@@ -113,23 +164,85 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Map.cpp">
       <Filter>Map</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Gimmick.cpp">
-      <Filter>Manager\Gimmick</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)InputManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)OkawaraStage.cpp">
       <Filter>work</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)GimmickHand.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)MainCamera.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Sprite.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Json.cpp">
-      <Filter>Json</Filter>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Card.cpp">
+      <Filter>Card</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Gimmick.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)GimmickHand.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)MainCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Sprite.cpp">
+      <Filter>Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Json.cpp">
+      <Filter>Json\source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)TitleStage.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Menu.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ResourceManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Effect.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MenuStage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SelectStage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)GameStage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Player.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SoundManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)MovieWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Level\level1.json">
+      <Filter>Json\Level</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\keyconfig.json">
+      <Filter>Json\Setting</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\setting.json">
+      <Filter>Json\Setting</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\gameResource.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\sceneResource.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\selectResource.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\titleResource.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Level\TestMap.json">
+      <Filter>Json\Level</Filter>
+    </None>
   </ItemGroup>
 </Project>

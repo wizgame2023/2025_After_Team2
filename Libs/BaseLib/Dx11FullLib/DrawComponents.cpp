@@ -257,11 +257,11 @@ namespace basecross {
 		~Impl() {}
 	};
 
-	float Shadowmap::Impl::m_LightHeight(100.0f);
+	float Shadowmap::Impl::m_LightHeight(200.0f);
 	float Shadowmap::Impl::m_LightNear(1.0f);
 	float Shadowmap::Impl::m_LightFar(220.0f);
-	float Shadowmap::Impl::m_ViewWidth(128.0f);
-	float Shadowmap::Impl::m_ViewHeight(128.0f);
+	float Shadowmap::Impl::m_ViewWidth(32.0f);
+	float Shadowmap::Impl::m_ViewHeight(32.0f);
 	float Shadowmap::Impl::m_PosAdjustment(0.1f);
 
 
@@ -878,6 +878,9 @@ namespace basecross {
 
 	void SpriteBaseDraw::SetTextureResource(const wstring& TextureKey) {
 		this->SetTextureResource(App::GetApp()->GetResource<TextureResource>(TextureKey));
+	}
+	void SpriteBaseDraw::AddTextureResource(const wstring& TextureKey) {
+		m_AddTexture.push_back(App::GetApp()->GetResource<TextureResource>(TextureKey));
 	}
 
 	shared_ptr<TextureResource> SpriteBaseDraw::GetTextureResource() const {
@@ -1805,9 +1808,8 @@ namespace basecross {
 		GetStaticMeshLocalPositions(vertices);
 		//ƒ[ƒ‹ƒhs—ñ‚Ì”½‰f
 		auto WorldMat = GetGameObject()->GetComponent<Transform>()->GetWorldMatrix();
-		auto meshMat = GetMeshToTransformMatrix();
 		for (auto& v : vertices) {
-			v *= /*meshMat **/ WorldMat;
+			v *= WorldMat;
 		}
 	}
 
