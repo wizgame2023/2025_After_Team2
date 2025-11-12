@@ -79,9 +79,12 @@ namespace basecross{
 			break;
 		}
 		case MoveState::Telepote: {
-			position = m_TelepoteTarget;
-			m_CurrentHeight = position.y;
-			m_IsEffecting = false;
+			m_TeleportTimer += elapsed;
+			if (m_TeleportTimer > m_TeleportTime) {
+				position = m_TelepoteTarget;
+				m_CurrentHeight = position.y;
+				m_IsEffecting = false;
+			}
 			break;
 		}
 		case MoveState::ChangeVelocity: {
