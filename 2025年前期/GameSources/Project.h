@@ -37,3 +37,4 @@
 #include "Json.h"
 #include "Card.h"
 #include "Menu.h"
+#include "MovieWindow.h"

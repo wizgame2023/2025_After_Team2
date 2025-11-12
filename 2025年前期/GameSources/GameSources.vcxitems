@@ -28,6 +28,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Managers.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Menu.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MenuStage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MovieWindow.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MunakataStage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Object.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)OkawaraStage.h" />
@@ -56,6 +57,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)MainCamera.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Menu.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MenuStage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MovieWindow.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MunakataStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Object.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)OkawaraStage.cpp" />
@@ -80,5 +82,6 @@
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\titleResource.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\setting.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Level\level1.json" />
+    <None Include="$(MSBuildThisFileDirectory)..\media\Level\TestMap.json" />
   </ItemGroup>
 </Project>

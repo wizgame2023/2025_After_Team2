@@ -16,6 +16,12 @@
     "Expains/GimmickExpain_INV.png": "EXPAIN_INV",
     "Expains/GimmickExpain_ROLL.png": "EXPAIN_ROLL",
 
+    "Icons/Icon_Explain_North.png": "ICON_NORTH",
+    "Icons/Icon_Explain_South.png": "ICON_SOUTH",
+    "Icons/Icon_Explain_East.png": "ICON_EAST",
+    "Icons/Icon_Explain_West.png": "ICON_WEST",
+    "Icons/Icon_Explain_2.png": "ICON_TWO",
+    "Icons/Icon_Explain.png": "ICON_EXPLAIN",
     "Icons/Icon_Arrow.png": "ICON_ARROW",
     "Icons/Icon_Goal.png": "ICON_GOAL",
     "Icons/Icon_Inverter.png": "ICON_INV",

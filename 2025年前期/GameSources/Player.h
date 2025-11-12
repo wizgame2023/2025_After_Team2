@@ -61,6 +61,9 @@ namespace basecross{
 		/// <returns></returns>
 		float CalcRotatingCenterY(float rot);
 
+		void SetEffecting(bool flag) {
+			m_IsEffecting = flag;
+		}
 		bool IsEffecting() {
 			return m_IsEffecting;
 		}

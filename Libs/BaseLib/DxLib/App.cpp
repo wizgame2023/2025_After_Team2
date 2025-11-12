@@ -643,23 +643,28 @@ namespace basecross {
 		}
 
 
-		HWND CleateMobieWnd() {
+		HWND CleateMobieWnd(RECT* rect = nullptr) {
 			auto hInst = App::GetApp()->GetHInstance();
 			movie::RegisterChild(App::GetApp()->GetHInstance(),
 				movie::ChildProc,
 				L"BaseCrossChildClass");
 			auto ParHWnd = App::GetApp()->GetHWnd();
 			RECT rectPar;
-			GetClientRect(ParHWnd, &rectPar);
+			if (rect == nullptr) {
+				GetClientRect(ParHWnd, &rectPar);
+			}
+			else {
+				rectPar = *rect;
+			}
 			data::ChildHWnd = CreateWindowExW(
 				WS_EX_TOPMOST,
 				L"BaseCrossChildClass",
 				L"",//タイトルバーにこの名前が表示されます
 				WS_CHILD,    //ウィンドウの種類
-				0,    //Ｘ座標
-				0,    //Ｙ座標
-				rectPar.right,    //幅
-				rectPar.bottom,    //高さ
+				rectPar.left,    //Ｘ座標
+				rectPar.top,    //Ｙ座標
+				rectPar.right - rectPar.left,    //幅
+				rectPar.bottom - rectPar.top,    //高さ
 				ParHWnd,            //親ウィンドウのハンドル、親を作るときはNULL
 				0, //メニューハンドル、子供のID
 				hInst,            //インスタンスハンドル
@@ -783,16 +788,15 @@ namespace basecross {
 			}
 			data::ChildHWnd = NULL;
 		}
-
-		void PlayMovie(const wstring& MovieFileName) {
-
-			auto hwnd = CleateMobieWnd();
+		void PlayMovie(const wstring& MovieFileName, RECT* rect = nullptr) {
 
 			HRESULT hr = S_OK;
 
 			// Create the MFPlayer object.
 			if (data::Player == nullptr)
 			{
+				auto hwnd = CleateMobieWnd(rect);
+
 				data::PlayerCB = new (std::nothrow) movie::MediaPlayerCallback();
 
 				if (data::PlayerCB == nullptr)
@@ -1243,8 +1247,8 @@ namespace basecross {
 		movie::ClearMovie();
 	}
 
-	void App::PlayMovie(const wstring& MovieFileName) {
-		movie::PlayMovie(MovieFileName);
+	void App::PlayMovie(const wstring& MovieFileName,RECT* rect) {
+		movie::PlayMovie(MovieFileName, rect);
 	}
 
 	void App::UpdateMovie() {
