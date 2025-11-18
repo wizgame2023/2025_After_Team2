@@ -168,7 +168,7 @@ namespace basecross{
 
 			if (m_GoalEffect)
 			{
-				wss << L"\nƒCƒ“ƒXƒ^ƒ“ƒX” :" << m_GoalEffect->GetEffectInstance() << endl;
+				wss << L"\nã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ•° :" << m_GoalEffect->GetEffectInstance() << endl;
 				scene->SetDebugString(wss.str());
 				GameManager::GetInstance().DrawGoalEffect();
 				if (m_GoalEffect->EffectEnd())
@@ -208,7 +208,7 @@ namespace basecross{
 		{
 			Vec3 playerVel = m_Cube->GetVelocity();
 
-			// ƒ[ƒƒxƒNƒgƒ‹‚Å‚È‚¢‚±‚Æ‚ğŠm”F
+			// ã‚¼ãƒ­ãƒ™ã‚¯ãƒˆãƒ«ã§ãªã„ã“ã¨ã‚’ç¢ºèª
 			if (playerVel.lengthSqr() > 0.0001f)
 			{
 				Vec3 normalizedVel = playerVel.normalize();
@@ -216,7 +216,7 @@ namespace basecross{
 
 				float dot = normalizedVel.dot(goalDir);
 
-				if (dot > 0.9f) // ‚ ‚é’ö“x‹tŒü‚«‚Æ‚İ‚È‚·è‡’l
+				if (dot > 0.9f) // ã‚ã‚‹ç¨‹åº¦é€†å‘ãã¨ã¿ãªã™é–¾å€¤
 				{
 					m_Goal = true;
 					m_Cube = nullptr;
@@ -262,15 +262,15 @@ namespace basecross{
 	}
 
 
-	GimmickCourseCorrection::GimmickCourseCorrection(const shared_ptr<Stage>& ptrStage) :
+	GimmickArrow::GimmickArrow(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage)
 	{
 	}
-	GimmickCourseCorrection::~GimmickCourseCorrection()
+	GimmickArrow::~GimmickArrow()
 	{
 	}
 
-	void GimmickCourseCorrection::OnCreate()
+	void GimmickArrow::OnCreate()
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
@@ -279,17 +279,17 @@ namespace basecross{
 
 	}
 
-	void GimmickCourseCorrection::Begin()
+	void GimmickArrow::Begin()
 	{
 		Gimmicks::Begin();
 	}
 
-	void GimmickCourseCorrection::Update()
+	void GimmickArrow::Update()
 	{
 		Gimmicks::Update();
 		CheckCount();
 	}
-	void GimmickCourseCorrection::End() {
+	void GimmickArrow::End() {
 		Gimmicks::End();
 		Gimmicks::Update();
 		if (CheckCount())
@@ -316,20 +316,61 @@ namespace basecross{
 	void GimmickTeleporter::Begin()
 	{
 		Gimmicks::Begin();
+		m_TeleportFastEffect = nullptr;
+		m_TeleportEndEffect = nullptr;
+
 	}
+
+	void GimmickTeleporter::OnUpdate()
+	{
+		Gimmicks::OnUpdate();
+
+		if (m_IsFastTeleport)
+		{
+			if (m_TeleportFastEffect && m_TeleportFastEffect->EffectEnd())
+			{
+				m_TeleportFastEffect->EffectDelete();
+				m_TeleportFastEffect = nullptr;
+
+				Vec3 endPos = m_Transform->GetPosition() + m_Value;
+				m_TeleportEndEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickEndEffect.efk", endPos);
+				m_TeleportEndEffect->SetEffectSize(Vec3(0.5f));
+				m_TeleportEndEffect->SetEffectSpeed(1.7f);
+			}
+
+			if (m_TeleportEndEffect && m_TeleportEndEffect->EffectEnd())
+			{
+				m_TeleportEndEffect->EffectDelete();
+				m_TeleportEndEffect = nullptr;
+				m_IsFastTeleport = false;
+			}
+		}
+	}
+
+
 	void GimmickTeleporter::Update()
 	{
 		Gimmicks::Update();
-		if (CheckCount())
-		{
-			Vec3 pos = m_Transform->GetPosition();
 
-			m_Cube->Telepote(pos + m_Value);
+		bool isStepped = CheckCount();
+		if (isStepped && !m_WasStepped)
+		{
+			// è¸ã‚“ã ç¬é–“ã ã‘å‡¦ç†
+			Vec3 pos = m_Transform->GetPosition();
+			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cubeå´ã¯å˜ç´”ãªç§»å‹•ã ã‘ã§OK
+
+			// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆé–‹å§‹
+			m_TeleportFastEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickFastEffect.efk", m_Cube->GetPosition());
+			m_TeleportFastEffect->SetEffectSize(Vec3(0.5f));
+			m_TeleportFastEffect->SetEffectSpeed(1.7f);
+
+			m_IsFastTeleport = true;
 		}
 
+		m_WasStepped = isStepped;
 	}
 
-
+	
 
 	GimmickKiller::GimmickKiller(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage)
@@ -438,7 +479,7 @@ namespace basecross{
 
 		if (CheckCount())
 		{
-			auto CourseCorrectionVec = GameManager::GetInstance().GetMap()->GetGimmicks<GimmickCourseCorrection>();
+			auto CourseCorrectionVec = GameManager::GetInstance().GetMap()->GetGimmicks<GimmickArrow>();
 
 			for (auto& course : CourseCorrectionVec)
 			{

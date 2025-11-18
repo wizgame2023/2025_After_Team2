@@ -10,6 +10,8 @@ namespace basecross{
 	class Coursor;
 	class PoseMenu;
 	class MovieWindow;
+	class ExplainMenu;
+
 	struct Line {
 		shared_ptr<Sprite> m_Line;
 		pair<int, int> m_PairHandle;
@@ -99,6 +101,7 @@ namespace basecross{
 	class PoseMenu : public Object {
 		shared_ptr<GameMenu> m_GameMenu;
 		shared_ptr<Stage> m_MenuStage;
+		shared_ptr<ExplainMenu> m_ExplainMenu;
 		Vec3 m_TopLeftPosition;
 		Vec2 m_ButtonSize;
 	public:
@@ -107,6 +110,7 @@ namespace basecross{
 			m_TopLeftPosition(topLeft),m_ButtonSize(size){}
 
 		virtual void OnCreate()override;
+
 
 		bool IsOpen() {
 			return GetDrawActive();
@@ -120,7 +124,35 @@ namespace basecross{
 		void CloseNewGame();
 		void OpenExpainGimmicks();
 	};
+	struct ExplainData {
+		wstring m_MenuIconKey;
+		wstring m_MovieFilename;
+		wstring m_ExplainKey;
+		ExplainData(const wstring& icon,const wstring& movie,const wstring& explain):
+			m_MenuIconKey(icon),m_MovieFilename(movie),m_ExplainKey(explain){ }
+	};
+	class ExplainMenu : public Object{
+		shared_ptr<Sprite> m_BackGround;
+		shared_ptr<Sprite> m_ExplainStr;
+		shared_ptr<MovieWindow> m_ExplainMovie;
+		shared_ptr<Stage> m_MenuStage;
 
+		vector<ExplainData> m_ExplainDatas;
+
+		void CreateExplain();
+	public:
+		ExplainMenu(const shared_ptr<Stage>& ptr) :m_MenuStage(ptr), Object(ptr){}
+		virtual ~ExplainMenu(){}
+
+		virtual void OnCreate();
+		virtual void OnUpdate();
+
+		void AddExplain(ExplainData& data) {
+			m_ExplainDatas.push_back(data);
+		}
+		void Open();
+		void Close();
+	};
 	enum class CoursorMode {
 		Stick,Mouse
 	};

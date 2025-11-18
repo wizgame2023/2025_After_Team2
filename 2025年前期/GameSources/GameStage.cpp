@@ -28,7 +28,7 @@ namespace basecross {
 
 	void GameStage::CreateResorce() {
 		ResourceManager::Load(L"gameResource.json");
-		//ResourceManager::RegisterTexture(L"Texture");
+		ResourceManager::RegisterTexture(L"Texture");
 		ResourceManager::RegisterTexture(L"UI");
 	}
 
