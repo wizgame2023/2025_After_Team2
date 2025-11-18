@@ -55,13 +55,19 @@ namespace basecross {
 			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToSelectStage");
 		}
 
-		if (m_StartSprite->GetDiffuse().w <= 1.0f)
-		{
-			m_Fade += 0.06f;
-			Col4 col = m_StartSprite->GetDiffuse();
-			col.w = (sinf(m_Fade) + 1.0f) / 2.0f;
-			m_StartSprite->SetDiffuse(col);
-		}
+
+		m_Fade += 0.06f;
+		Col4 col = m_StartSprite->GetDiffuse();
+		col.w = (sinf(m_Fade) + 1.0f) / 2.0f;
+		m_StartSprite->SetDiffuse(col);
+
+		//if (m_StartSprite->GetDiffuse().w <= 1.0f)
+		//{
+		//	m_Fade += 0.06f;
+		//	Col4 col = m_StartSprite->GetDiffuse();
+		//	col.w = (sinf(m_Fade) + 1.0f) / 2.0f;
+		//	m_StartSprite->SetDiffuse(col);
+		//}
 
 	}
 }
