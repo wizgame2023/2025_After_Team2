@@ -43,6 +43,7 @@ namespace basecross {
 
 	private:
 		void SpriteCreate();
+		void Json();
 	};
 
 
