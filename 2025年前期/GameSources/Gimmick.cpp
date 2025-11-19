@@ -316,51 +316,58 @@ namespace basecross{
 	void GimmickTeleporter::Begin()
 	{
 		Gimmicks::Begin();
+		m_TeleportFastEffect = nullptr;
+		m_TeleportEndEffect = nullptr;
+
 	}
 
 	void GimmickTeleporter::OnUpdate()
 	{
-		auto& game = GameManager::GetInstance();
 		Gimmicks::OnUpdate();
-		if (m_Cube)
+
+		if (m_IsFastTeleport)
 		{
-			if (m_TeleportFastEffect == nullptr)
-			{
-				m_TeleportFastEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickFastEffect.efk", m_Cube->GetPosition());
-				m_TeleportFastEffect->SetEffectSize(Vec3(0.5f));
-				m_TeleportFastEffect->SetEffectSpeed(2.0f);
-			}
-		}
-		if (m_TeleportFastEffect)
-		{
-			if (m_TeleportFastEffect->EffectEnd())
+			if (m_TeleportFastEffect && m_TeleportFastEffect->EffectEnd())
 			{
 				m_TeleportFastEffect->EffectDelete();
 				m_TeleportFastEffect = nullptr;
-				if (m_TeleportEndEffect == nullptr)
-				{
-					m_TeleportEndEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickEndEffect.efk", m_Cube->GetPosition());
-					m_TeleportEndEffect->SetEffectSize(Vec3(0.5f));
-					m_TeleportEndEffect->SetEffectSpeed(2.0f);
 
-				}
-
+				Vec3 endPos = m_Transform->GetPosition() + m_Value;
+				m_TeleportEndEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickEndEffect.efk", endPos);
+				m_TeleportEndEffect->SetEffectSize(Vec3(0.5f));
+				m_TeleportEndEffect->SetEffectSpeed(1.7f);
 			}
 
+			if (m_TeleportEndEffect && m_TeleportEndEffect->EffectEnd())
+			{
+				m_TeleportEndEffect->EffectDelete();
+				m_TeleportEndEffect = nullptr;
+				m_IsFastTeleport = false;
+			}
 		}
-
 	}
+
 
 	void GimmickTeleporter::Update()
 	{
 		Gimmicks::Update();
 
-		if (CheckCount())
+		bool isStepped = CheckCount();
+		if (isStepped && !m_WasStepped)
 		{
+			// 踏んだ瞬間だけ処理
 			Vec3 pos = m_Transform->GetPosition();
+			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cube側は単純な移動だけでOK
 
-			m_Cube->Telepote(pos + m_Value,0.25f,2.0f);
+			// エフェクト開始
+			m_TeleportFastEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickFastEffect.efk", m_Cube->GetPosition());
+			m_TeleportFastEffect->SetEffectSize(Vec3(0.5f));
+			m_TeleportFastEffect->SetEffectSpeed(1.7f);
+
+			m_IsFastTeleport = true;
 		}
+
+		m_WasStepped = isStepped;
 	}
 
 	

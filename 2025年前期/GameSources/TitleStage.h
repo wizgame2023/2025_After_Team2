@@ -7,13 +7,20 @@
 #include "stdafx.h"
 
 namespace basecross {
+	class Sprite;
 
 	//--------------------------------------------------------------------------------------
 	//	タイトルステージクラス
 	//--------------------------------------------------------------------------------------
 	class TitleStage : public Stage {
+
 		//ビューの作成
 		void CreateViewLight();
+
+		shared_ptr<Sprite> m_StartSprite;
+
+		float m_Fade;
+
 	public:
 		//構築と破棄
 		TitleStage() :Stage() {}

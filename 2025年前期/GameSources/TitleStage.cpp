@@ -30,7 +30,7 @@ namespace basecross {
 	void TitleStage::SpriteCreate()
 	{
 		auto titleSp = AddGameObject<Sprite>(L"TitleLogoUI", Vec3(0.0f), Vec2(1280, 300), Anchor::Bottom);
-		auto startSp = AddGameObject<Sprite>(L"StartUI", Vec3(0.0f,-100.0f,0.0f), Vec2(256, 64), Anchor::Center);
+		m_StartSprite = AddGameObject<Sprite>(L"StartUI", Vec3(0.0f,-100.0f,0.0f), Vec2(256, 64), Anchor::Center);
 
 	}
 
@@ -54,6 +54,21 @@ namespace basecross {
 		{
 			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToSelectStage");
 		}
+
+
+		m_Fade += 0.06f;
+		Col4 col = m_StartSprite->GetDiffuse();
+		col.w = (sinf(m_Fade) + 1.0f) / 2.0f;
+		m_StartSprite->SetDiffuse(col);
+
+		//if (m_StartSprite->GetDiffuse().w <= 1.0f)
+		//{
+		//	m_Fade += 0.06f;
+		//	Col4 col = m_StartSprite->GetDiffuse();
+		//	col.w = (sinf(m_Fade) + 1.0f) / 2.0f;
+		//	m_StartSprite->SetDiffuse(col);
+		//}
+
 	}
 }
 //end basecross
