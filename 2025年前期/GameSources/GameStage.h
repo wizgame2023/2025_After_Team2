@@ -1,29 +1,42 @@
 /*!
 @file GameStage.h
-@brief ƒQ[ƒ€ƒXƒe[ƒW
+@brief ã‚²ãƒ¼ãƒ ã‚¹ãƒ†ãƒ¼ã‚¸
 */
 
 #pragma once
 #include "stdafx.h"
-
-
 namespace basecross {
+	struct TutorialTask {
+		enum class Task {
+			Connect, Put, Put_Color, Param
+		};
+		bool m_IsCompleted;
+		wstring m_EventName;
+		wstring m_TutorialTextureKey;
+		Vec3 m_DrawPosition;
+		Task m_Task;
+		function<void()> m_Start;	//ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«é–‹å§‹æ™‚
+		function<void()> m_Update;	//ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ä¸­
+		function<void()> m_End;		//ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«çµ‚äº†æ™‚
 
+	};
 	//--------------------------------------------------------------------------------------
-	//	ƒQ[ƒ€ƒXƒe[ƒWƒNƒ‰ƒX
+	//	ã‚²ãƒ¼ãƒ ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒ©ã‚¹
 	//--------------------------------------------------------------------------------------
+
 	class GameStage : public Stage {
-		//ƒrƒ…[‚Ìì¬
+		TutorialTask::Task m_CurrentTask;
+		//ãƒ“ãƒ¥ãƒ¼ã®ä½œæˆ
 		void CreateViewLight();
 		void CreateResorce();
-
 	public:
-		//\’z‚Æ”jŠü
+		//æ§‹ç¯‰ã¨ç ´æ£„
 		GameStage() :Stage() {}
 		virtual ~GameStage() {}
-		//‰Šú‰»
+		//åˆæœŸåŒ–
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
+		virtual void OnEvent(const shared_ptr<Event>& event)override;
 	};
 
 
