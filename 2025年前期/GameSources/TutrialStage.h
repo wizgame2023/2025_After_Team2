@@ -5,34 +5,22 @@
 
 #pragma once
 #include "stdafx.h"
-namespace basecross {
-	struct TutorialTask {
-		enum class Task {
-			Connect, Put, Put_Color, Param
-		};
-		bool m_IsCompleted;
-		wstring m_EventName;
-		wstring m_TutorialTextureKey;
-		Vec3 m_DrawPosition;
-		Task m_Task;
-		function<void()> m_Start;	//チュートリアル開始時
-		function<void()> m_Update;	//チュートリアル中
-		function<void()> m_End;		//チュートリアル終了時
 
-	};
+namespace basecross {
+
 	//--------------------------------------------------------------------------------------
 	//	ゲームステージクラス
 	//--------------------------------------------------------------------------------------
-
-	class GameStage : public Stage {
-		TutorialTask::Task m_CurrentTask;
+	class TutorialStage : public GameStage {
+		shared_ptr<Sprite> CurrentExplain;
 		//ビューの作成
 		void CreateViewLight();
 		void CreateResorce();
+
 	public:
 		//構築と破棄
-		GameStage() :Stage() {}
-		virtual ~GameStage() {}
+		TutorialStage() :GameStage() {}
+		virtual ~TutorialStage() {}
 		//初期化
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;

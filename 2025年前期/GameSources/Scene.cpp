@@ -28,8 +28,8 @@ namespace basecross{
 
 			SoundManager::GetInstance().RegisterSounds();
 			//クリアする色を設定
-			Col4 Col;
-			Col.set(31.0f / 255.0f, 30.0f / 255.0f, 71.0f / 255.0f, 255.0f / 255.0f);
+			Col4 Col = Col4(0, 0, 0, 1);
+			//Col.set(31.0f / 255.0f, 30.0f / 255.0f, 71.0f / 255.0f, 255.0f / 255.0f);
 			SetClearColor(Col);
 			//自分自身にイベントを送る
 			//これにより各ステージやオブジェクトがCreate時にシーンにアクセスできる
