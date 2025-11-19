@@ -191,11 +191,11 @@ namespace basecross
 
 	};
 
-	class GimmickCourseCorrection : public Gimmicks
+	class GimmickArrow : public Gimmicks
 	{
 	public:
-		GimmickCourseCorrection(const shared_ptr<Stage>& ptrGimmick);
-		~GimmickCourseCorrection();
+		GimmickArrow(const shared_ptr<Stage>& ptrGimmick);
+		~GimmickArrow();
 		/*!
 		@brief ƒMƒ~ƒbƒN‚ÌŽí—Þ‚ðŽæ“¾
 		@return GimmickObjects::CourseCorrection
@@ -215,6 +215,15 @@ namespace basecross
 
 	class GimmickTeleporter : public Gimmicks
 	{
+		shared_ptr<Effect> m_TeleportFastEffect;
+		shared_ptr<Effect> m_TeleportEndEffect;
+
+		Vec3 m_PlayerVal;
+
+		bool m_IsFastTeleport;
+		bool m_WasStepped = false;
+
+		float m_Time;
 	public:
 		GimmickTeleporter(const shared_ptr<Stage>& ptrGimmick);
 		~GimmickTeleporter();
@@ -228,6 +237,7 @@ namespace basecross
 		};
 		virtual void OnCreate();
 		virtual void Begin();
+		virtual void OnUpdate();
 		virtual void Update();
 		virtual void End() {}
 	};
