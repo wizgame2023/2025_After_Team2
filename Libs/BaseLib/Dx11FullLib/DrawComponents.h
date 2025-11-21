@@ -789,6 +789,9 @@ namespace basecross {
 		//--------------------------------------------------------------------------------------
 		void SetTextureResource(const wstring& TextureKey);
 		void AddTextureResource(const wstring& TextureKey);
+		void ClearTextureResourceVec() {
+			m_AddTexture.clear();
+		}
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief	テクスチャリソースの取得

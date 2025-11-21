@@ -25,6 +25,7 @@
 #include "OkawaraStage.h"
 #include "TitleStage.h"
 #include "SelectStage.h"
+#include "TutrialStage.h"
 #include "MenuStage.h"
 #include "Map.h"
 #include "MainCamera.h"
