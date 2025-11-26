@@ -8,16 +8,15 @@
 #include "Sprite.h"
 namespace basecross{
 	class GimmickHand;
-	
+	struct TutorialTask;
+
 	enum class GameState {
 		Put,Game,Over,Clear
 	};
 
 	class GameManager : public SingletonBase<GameManager> {
 		friend class SingletonBase<GameManager>;
-		GameManager():m_Tick(0.0f),m_UpdateTicks(0.5f), m_TickRate(1.0f){
-			
-		}
+		GameManager() :m_Tick(0.0f), m_UpdateTicks(0.5f), m_TickRate(1.0f) {}
 
 		shared_ptr<Stage> m_Stage;
 		shared_ptr<Stage> m_MenuStage;
@@ -35,6 +34,7 @@ namespace basecross{
 
 		vector<pair<int, int>> m_GimmickColorPairs;
 		vector<pair<int, int>> m_BeforeGimmickColorPairs;
+		vector<TutorialTask> m_TutorialTasks;
 
 		float m_Tick;
 		float m_UpdateTicks;
@@ -45,6 +45,8 @@ namespace basecross{
 
 		Json m_KeyConfigFile;
 		Json m_MapFile;
+
+		void CreateTutorials();
 
 		bool IsUpdate();
 		void MapUpdate();
@@ -67,6 +69,7 @@ namespace basecross{
 		/// ìoò^Ç≥ÇÍÇƒÇ¢ÇÈèÓïÒÇèâä˙âªÇ∑ÇÈ
 		/// </summary>
 		void Reset() {
+			m_TutorialTasks.clear();
 			m_Cubes.clear();
 			m_Hand = nullptr;
 			m_Map = nullptr;
@@ -202,6 +205,10 @@ namespace basecross{
 
 		Json GetMapJsonData()const {
 			return m_MapFile;
+		}
+
+		vector<TutorialTask> GetTutorials()const {
+			return m_TutorialTasks;
 		}
 
 		void DrawGoalEffect();

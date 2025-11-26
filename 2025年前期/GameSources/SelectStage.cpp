@@ -27,9 +27,19 @@ namespace basecross {
 		PtrMultiLight->SetDefaultLighting();
 	}
 
+	void SelectStage::Json()
+	{
+		ResourceManager::Load(L"selectResource.json");
+
+		ResourceManager::RegisterTexture(L"UI");
+	}
+
 	void SelectStage::SpriteCreate()
 	{
+		Json();
 
+		auto backBoardSp = AddGameObject<Sprite>(L"BackBoard", Vec3(0.0f), Vec2(1280, 800), Anchor::Center);
+		backBoardSp->SetDiffuse(Col4(0.0f, 0.0f, 0.0f, 1.0f));
 		auto selectSp = AddGameObject<Sprite>(L"SelectUI", Vec3(-640.0f, 400.0f, 0.0f), Vec2(256, 64), Anchor::TopLeft);
 		m_StageNum = 10;        // 表示する数字の数
 		int maxPerRow = 5;         // 1行に表示する最大数
@@ -71,6 +81,7 @@ namespace basecross {
 	void SelectStage::OnCreate()
 	{
 		try {
+
 			//ビューとライトの作成
 			CreateViewLight();
 

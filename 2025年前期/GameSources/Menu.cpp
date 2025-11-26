@@ -70,7 +70,7 @@ namespace basecross{
 				Anchor::Center);
 			sprite->SetLayer(2);
 			auto explain = m_MenuStage->AddGameObject<Sprite>(
-				L"ICON_EXPLAIN",
+				L"ICON_EXPLAIN_FRAME",
 				Vec3(gimmickPosition.x + iconSize.x, gimmickPosition.y - i * duretionY, 0.0f), iconSize,
 				Anchor::Center);
 			explain->SetLayer(2);
@@ -80,8 +80,16 @@ namespace basecross{
 				wstring direKey = L"ICON_" + direction;
 				explain->GetComponent<PCTSpriteDraw>()->AddTextureResource(direKey);
 			}
-
-			explain->GetComponent<PCTSpriteDraw>()->AddTextureResource(L"ICON_TWO");
+			else {
+				explain->GetComponent<PCTSpriteDraw>()->AddTextureResource(L"ICON_NO_DIRE");
+			}
+			int count = cards[i]->GetCount();
+			if (count > 0) {
+				explain->GetComponent<PCTSpriteDraw>()->AddTextureResource(L"ICON_" + to_wstring(count));
+			}
+			else {
+				explain->GetComponent<PCTSpriteDraw>()->AddTextureResource(L"ICON_NO_NUMBER");
+			}
 
 			auto handler = m_MenuStage->AddGameObject<Sprite>(
 				L"HANDLER",
@@ -499,7 +507,7 @@ namespace basecross{
 		Vec2 explainTabSize = Vec2(200, 50);
 		Vec3 topLeft = static_cast<Vec3>(m_BackGround->GetAnchorPosition(Anchor::TopLeft) + Vec3(50,-50,0));
 		for (int i = 0; i < m_ExplainDatas.size(); i++) {
-			ButtonManager::Create(m_MenuStage, L"EXPLAIN", m_ExplainDatas[i].m_MenuIconKey, L"ICON_EXPLAIN", topLeft - Vec3(0, explainTabSize.y, 0) * i, explainTabSize,
+			ButtonManager::Create(m_MenuStage, L"EXPLAIN", m_ExplainDatas[i].m_MenuIconKey, L"ICON_EXPLAIN_FRAME", topLeft - Vec3(0, explainTabSize.y, 0) * i, explainTabSize,
 				[](shared_ptr<ObjectInterface>& object) {
 				});
 		}
