@@ -66,6 +66,8 @@ namespace basecross {
 			auto menuStage = AddChileStage<MenuStage>();
 
 			GameManager::GetInstance().SetMenuStage(menuStage);
+
+			//TutorialManager::GetInstance().RegisterStep(L"sample", make_shared<TutorialStep>(menuStage, Vec3(100.0f,200.0f,0.0f), 400, 200));
 		}
 		catch (...) {
 			throw;

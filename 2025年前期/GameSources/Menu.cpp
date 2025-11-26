@@ -105,7 +105,7 @@ namespace basecross{
 			m_ExplainIcons.push_back(explain);
 		}
 
-		m_Cursor = m_MenuStage->AddGameObject<Coursor>(L"MOUSE_CURSOR");
+		m_Cursor = m_MenuStage->AddGameObject<Cursor>(L"MOUSE_CURSOR");
 		m_Cursor->SetCoursorSize(25.0f);
 		m_Cursor->SetMoveSpeed(450.0f);
 		m_Cursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), m_ExplainBox->GetAnchorPosition(Anchor::TopLeft));
@@ -119,6 +119,11 @@ namespace basecross{
 
 		m_MovieWindow->SetPosition(windowPosition + Vec3(20,20,0));
 		//m_MovieWindow->Play(App::GetApp()->GetDataDirWString() + L"Movies/preview.mp4");
+
+		TutorialManager::GetInstance().RegisterStep(L"sample", 
+			make_shared<PutGimmickTutorial>(m_MenuStage,
+				array<shared_ptr<Sprite>,2>{ m_GimmickIcons[0],m_ColorPalette[1] },
+				1.0f,1.0f));
 	}
 	void GameMenu::OnUpdate() {
 		auto& input = InputManager::GetInputManager();
@@ -216,6 +221,7 @@ namespace basecross{
 					}
 					m_Lines.push_back({ m_CurrentLine,pair<int,int>{m_ColorHandle,m_GimmickHandle} });
 					SoundManager::GetInstance().PlaySE(L"Put");
+					TutorialManager::GetInstance().Start(L"sample");
 				}
 				else {
 					m_MenuStage->RemoveGameObject<Sprite>(m_CurrentLine);
@@ -547,55 +553,55 @@ namespace basecross{
 	}
 
 
-	void Coursor::OnCreate() {
-		m_Coursor = m_MenuStage->AddGameObject<Sprite>(m_CoursorTexture, Vec3(), Vec2(), Anchor::TopLeft);
-		m_Coursor->SetLayer(3);
+	void Cursor::OnCreate() {
+		m_Cursor = m_MenuStage->AddGameObject<Sprite>(m_CoursorTexture, Vec3(), Vec2(), Anchor::TopLeft);
+		m_Cursor->SetLayer(10);
 	}
-	void Coursor::OnUpdate() {
+	void Cursor::OnUpdate() {
 		auto& input = InputManager::GetInputManager();
 		float elpased = App::GetApp()->GetElapsedTime();
 		if (m_Mode == CoursorMode::Stick) {
 			Vec2 stick = input->GetLStick();
 			if (stick.length() > 0.1f) {
 				stick = stick.normalize();
-				Vec3 position = m_Coursor->GetPosition();
+				Vec3 position = m_Cursor->GetPosition();
 				position += static_cast<Vec3>(stick) * m_MoveSpeed * elpased;
 
-				m_Coursor->SetPosition(position);
+				m_Cursor->SetPosition(position);
 				LimitMoveArea();
 			}
 		}
 	}
 
-	Vec3 Coursor::LimitMoveArea() {
-		Vec2 position = m_Coursor->GetAnchorPosition(Anchor::Center);
+	Vec3 Cursor::LimitMoveArea() {
+		Vec2 position = m_Cursor->GetAnchorPosition(Anchor::Center);
 
-		Vec2 left = m_Coursor->GetAnchorPosition(Anchor::Left);
-		Vec2 right = m_Coursor->GetAnchorPosition(Anchor::Right);
-		Vec2 top = m_Coursor->GetAnchorPosition(Anchor::Top);
-		Vec2 bottom = m_Coursor->GetAnchorPosition(Anchor::Bottom);
+		Vec2 left = m_Cursor->GetAnchorPosition(Anchor::Left);
+		Vec2 right = m_Cursor->GetAnchorPosition(Anchor::Right);
+		Vec2 top = m_Cursor->GetAnchorPosition(Anchor::Top);
+		Vec2 bottom = m_Cursor->GetAnchorPosition(Anchor::Bottom);
 
 		if (left.x < m_MoveArea.m_Min.x) {
-			m_Coursor->SetAnchorPosition(Vec3(m_MoveArea.m_Min.x, position.y, 0), Anchor::Left);
-			position = m_Coursor->GetPosition();
+			m_Cursor->SetAnchorPosition(Vec3(m_MoveArea.m_Min.x, position.y, 0), Anchor::Left);
+			position = m_Cursor->GetPosition();
 		}
 		if (right.x > m_MoveArea.m_Max.x) {
-			m_Coursor->SetAnchorPosition(Vec3(m_MoveArea.m_Max.x, position.y, 0), Anchor::Right);
-			position = m_Coursor->GetPosition();
+			m_Cursor->SetAnchorPosition(Vec3(m_MoveArea.m_Max.x, position.y, 0), Anchor::Right);
+			position = m_Cursor->GetPosition();
 		}
 		if (top.y > m_MoveArea.m_Max.y) {
-			m_Coursor->SetAnchorPosition(Vec3(position.x,m_MoveArea.m_Max.y, 0), Anchor::Top);
-			position = m_Coursor->GetPosition();
+			m_Cursor->SetAnchorPosition(Vec3(position.x,m_MoveArea.m_Max.y, 0), Anchor::Top);
+			position = m_Cursor->GetPosition();
 		}
 		if (bottom.y < m_MoveArea.m_Min.y) {
-			m_Coursor->SetAnchorPosition(Vec3(position.x,m_MoveArea.m_Min.y, 0), Anchor::Bottom);
-			position = m_Coursor->GetPosition();
+			m_Cursor->SetAnchorPosition(Vec3(position.x,m_MoveArea.m_Min.y, 0), Anchor::Bottom);
+			position = m_Cursor->GetPosition();
 		}
 		return {};
 	}
 
-	bool Coursor::IsOnArea(Vec2 max, Vec2 min) {
-		Vec3 position = m_Coursor->GetPosition();
+	bool Cursor::IsOnArea(Vec2 max, Vec2 min) {
+		Vec3 position = m_Cursor->GetPosition();
 
 		if (max.x < position.x || min.x > position.x) {
 			return false;

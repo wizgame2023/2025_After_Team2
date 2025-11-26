@@ -20,21 +20,58 @@ namespace basecross{
 		void Update();
 		void End();
 
-		void RegisterStep(const wstring& name, shared_ptr<TutorialStep>& step);
+		void RegisterStep(const wstring& name, const shared_ptr<TutorialStep>& step);
 	};
 
 	class TutorialStep {
+	protected:
 		shared_ptr<Stage> m_Stage;
+
+		shared_ptr<Sprite> m_CloseIcon;
+		shared_ptr<Sprite> m_Window;
 		bool m_IsCompleted;
+		Vec2 m_WindowSize;
+		Vec3 m_Position;
 	public:
-		TutorialStep(const shared_ptr<Stage>& ptr) : m_Stage(ptr), m_IsCompleted(false){}
+		TutorialStep(const shared_ptr<Stage>& ptr,Vec3 position = Vec3(), float width = 100, float height = 100) : m_Stage(ptr),
+			m_IsCompleted(false),
+			m_Position(position),m_WindowSize(width, height){ }
 		virtual ~TutorialStep(){}
 
-		void Start(){}
-		void Update(){}
-		void End(){}
+		virtual void Start();
+		virtual void Update();
+		virtual void End();
+
+		bool IsCompleted() {
+			return m_IsCompleted;
+		}
 	};
 
+	class Cursor;
+	class PutGimmickTutorial : public TutorialStep {
+		shared_ptr<Cursor> m_Cursor;
+		shared_ptr<Sprite> m_Line;
+		shared_ptr<Sprite> m_BackGround;
+
+		array<shared_ptr<Sprite>, 2> m_Sprites;
+
+		float m_LoopTime;
+		float m_ResetTime;
+		float m_Timer;
+	public:
+		PutGimmickTutorial(const shared_ptr<Stage>& ptr,const array<shared_ptr<Sprite>, 2>& array, float loop, float reset = 0.5f) :
+			TutorialStep(ptr, Vec3(50.0f, 200.0f, 0.0f), 400, 200),
+			m_Sprites(array),
+			m_Timer(0.0f), m_ResetTime(reset),m_LoopTime(loop)
+		{ }
+		virtual ~PutGimmickTutorial() {}
+
+		virtual void Start();
+		virtual void Update();
+		virtual void End();
+
+	};
+	
 
 }
 //end basecross

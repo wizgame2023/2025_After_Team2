@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 namespace basecross{
-	class Coursor;
+	class Cursor;
 	class PoseMenu;
 	class MovieWindow;
 	class ExplainMenu;
@@ -22,7 +22,7 @@ namespace basecross{
 
 		map<GimmickObjects, wstring> m_GimmickTextures;
 		shared_ptr<Stage> m_MenuStage;
-		shared_ptr<Coursor> m_Cursor;
+		shared_ptr<Cursor> m_Cursor;
 		shared_ptr<Sprite> m_CurrentLine;
 
 
@@ -154,8 +154,8 @@ namespace basecross{
 	enum class CoursorMode {
 		Stick,Mouse
 	};
-	class Coursor : public Object {
-		shared_ptr<Sprite> m_Coursor;
+	class Cursor : public Object {
+		shared_ptr<Sprite> m_Cursor;
 		CoursorMode m_Mode;
 		shared_ptr<Stage> m_MenuStage;
 
@@ -164,17 +164,17 @@ namespace basecross{
 		AABB m_MoveArea;
 		float m_MoveSpeed;
 	public:
-		Coursor(const shared_ptr<Stage>& ptr,const wstring& coursorTex) : 
+		Cursor(const shared_ptr<Stage>& ptr,const wstring& coursorTex) : 
 			Object(ptr),m_MenuStage(ptr), m_Mode(CoursorMode::Stick),m_CoursorTexture(coursorTex){}
 
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
 		Vec3 GetPosition() {
-			return m_Coursor->GetPosition();
+			return m_Cursor->GetPosition();
 		}
 		void SetPosition(Vec3 position) {
-			m_Coursor->SetPosition(position);
+			m_Cursor->SetPosition(position);
 		}
 
 		void SetCoursorMode(CoursorMode mode) {
@@ -185,13 +185,13 @@ namespace basecross{
 			m_MoveArea.m_Max = max;
 			m_MoveArea.m_Min = min;
 			auto center = m_MoveArea.GetCenter();
-			m_Coursor->SetPosition(center);
+			m_Cursor->SetPosition(center);
 		}
 		void SetMoveSpeed(float speed) {
 			m_MoveSpeed = speed;
 		}
 		void SetCoursorSize(float size) {
-			m_Coursor->SetSize(Vec2(size));
+			m_Cursor->SetSize(Vec2(size));
 		}
 		Vec3 LimitMoveArea();
 
@@ -199,10 +199,17 @@ namespace basecross{
 
 		void SetUpdateActive(bool flag) {
 			Object::SetUpdateActive(flag);
-			m_Coursor->SetDrawActive(flag);
+			m_Cursor->SetDrawActive(flag);
+		}
+		void SetDrawActive(bool flag) {
+			Object::SetDrawActive(flag);
+			m_Cursor->SetDrawActive(flag);
 		}
 
-
+		void Destroy() {
+			m_MenuStage->RemoveGameObject<Sprite>(m_Cursor);
+			m_MenuStage->RemoveGameObject<Cursor>(GetThis<Cursor>());
+		}
 	};
 }
 //end basecross
