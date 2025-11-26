@@ -8,11 +8,7 @@
 
 namespace basecross{
 	void GameManager::CreateTutorials() {
-		//false,タスク名,テクスチャ名,出現位置
-		m_TutorialTasks.push_back({ false,L"connect",L"",Vec3(0,0,0),TutorialTask::Task::Connect });
-		m_TutorialTasks.push_back({ false,L"put",L"",Vec3(0,0,0),TutorialTask::Task::Put });
-		m_TutorialTasks.push_back({ false,L"put_color",L"",Vec3(0,0,0),TutorialTask::Task::Put_Color });
-		m_TutorialTasks.push_back({ false,L"param",L"",Vec3(0,0,0),TutorialTask::Task::Param });
+		
 	}
 	bool GameManager::IsUpdate() {
 		for (auto& cube : m_Cubes) {

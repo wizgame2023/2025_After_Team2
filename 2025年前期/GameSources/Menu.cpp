@@ -20,19 +20,21 @@ namespace basecross{
 		Vec2 screenSize = Vec2(App::GetApp()->GetGameWidth(), App::GetApp()->GetGameHeight());
 		Vec2 menuSize = Vec2(screenSize.x - mainViewSize.x, screenSize.y);
 		Vec3 menuPosition = Vec3(screenSize.x / 2.0f - menuSize.x, 0, 0);
-		m_BackGround = m_MenuStage->AddGameObject<Sprite>(m_BackGroundTexture, menuPosition, menuSize,Anchor::Left);
-		m_BackGround->SetLayer(0);
-		float duretionY = 70.0f;
+
 		float paletteStartPositionY = 75.0f;
 		Vec2 colorPalettePosition = Vec2(menuPosition.x + 100.0f, menuPosition.y + menuSize.y / 2.0f - paletteStartPositionY);
 		Vec2 gimmickPosition = Vec2(menuPosition.x + menuSize.x - 150.0f, menuPosition.y + menuSize.y / 2.0f - paletteStartPositionY);
-
-		m_ExpainBox = m_MenuStage->AddGameObject<Sprite>(L"MENU_EXPLAIN", Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f, 0.0f), Vec2(menuSize.x, menuSize.y * 0.25f), Anchor::TopLeft);
-		m_ExpainBox->SetLayer(0);
-		m_CurrentExpain = m_MenuStage->AddGameObject<Sprite>(L"EXPAIN_PL", Vec3(), Vec2(menuSize.x, menuSize.y * 0.25f) * 0.9f, Anchor::Center);
-		m_CurrentExpain->SetAnchorPosition(static_cast<Vec3>(m_ExpainBox->GetAnchorPosition(Anchor::Center)) - Vec3(0,20,0), Anchor::Center);
-		m_CurrentExpain->SetLayer(1);
 		Vec2 iconSize = Vec2(50.0f, 50.0f);
+
+		m_BackGround = m_MenuStage->AddGameObject<Sprite>(m_BackGroundTexture, menuPosition, menuSize,Anchor::Left);
+		m_BackGround->SetLayer(0);
+		float durationY = 70.0f;
+
+		m_ExplainBox = m_MenuStage->AddGameObject<Sprite>(L"MENU_EXPLAIN", Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f, 0.0f), Vec2(menuSize.x, menuSize.y * 0.25f), Anchor::TopLeft);
+		m_ExplainBox->SetLayer(0);
+		m_CurrentExplain = m_MenuStage->AddGameObject<Sprite>(L"EXPAIN_PL", Vec3(), Vec2(menuSize.x, menuSize.y * 0.25f) * 0.9f, Anchor::Center);
+		m_CurrentExplain->SetAnchorPosition(static_cast<Vec3>(m_ExplainBox->GetAnchorPosition(Anchor::Center)) - Vec3(0,20,0), Anchor::Center);
+		m_CurrentExplain->SetLayer(1);
 		m_ConnectOffsetX = iconSize.x / 2.0f;
 
 		auto& gameManager = GameManager::GetInstance();
@@ -46,7 +48,7 @@ namespace basecross{
 
 			auto sprite = m_MenuStage->AddGameObject<Sprite>(
 				m_ColorTexture,
-				Vec3(colorPalettePosition.x, colorPalettePosition.y - i * duretionY,0.0f), iconSize,
+				Vec3(colorPalettePosition.x, colorPalettePosition.y - i * durationY,0.0f), iconSize,
 				Anchor::Center);
 			sprite->SetDiffuse(color);
 			sprite->SetLayer(2);
@@ -66,29 +68,31 @@ namespace basecross{
 		for (int i = 0; i < cards.size(); i++) {
 			auto sprite = m_MenuStage->AddGameObject<Sprite>(
 				m_GimmickTextures[cards[i]->GetType()],
-				Vec3(gimmickPosition.x, gimmickPosition.y - i * duretionY, 0.0f), iconSize,
+				Vec3(gimmickPosition.x, gimmickPosition.y - i * durationY, 0.0f), iconSize,
 				Anchor::Center);
 			sprite->SetLayer(2);
 			auto explain = m_MenuStage->AddGameObject<Sprite>(
 				L"ICON_EXPLAIN_FRAME",
-				Vec3(gimmickPosition.x + iconSize.x, gimmickPosition.y - i * duretionY, 0.0f), iconSize,
+				Vec3(gimmickPosition.x + iconSize.x, gimmickPosition.y - i * durationY, 0.0f), iconSize,
 				Anchor::Center);
 			explain->SetLayer(2);
+
+			auto draw = explain->GetComponent<PCTSpriteDraw>();
 			wstring direction = gameManager.DirectionVecToStr(cards[i]->GetVelocity());
 			if (!direction.empty()) {
 				transform(direction.begin(), direction.end(), direction.begin(), ::toupper);
 				wstring direKey = L"ICON_" + direction;
-				explain->GetComponent<PCTSpriteDraw>()->AddTextureResource(direKey);
+				draw->AddTextureResource(direKey);
 			}
 			else {
-				explain->GetComponent<PCTSpriteDraw>()->AddTextureResource(L"ICON_NO_DIRE");
+				draw->AddTextureResource(L"ICON_NO_DIRE");
 			}
 			int count = cards[i]->GetCount();
 			if (count > 0) {
-				explain->GetComponent<PCTSpriteDraw>()->AddTextureResource(L"ICON_" + to_wstring(count));
+				draw->AddTextureResource(L"ICON_" + to_wstring(count));
 			}
 			else {
-				explain->GetComponent<PCTSpriteDraw>()->AddTextureResource(L"ICON_NO_NUMBER");
+				draw->AddTextureResource(L"ICON_NO_NUMBER");
 			}
 
 			auto handler = m_MenuStage->AddGameObject<Sprite>(
@@ -96,7 +100,7 @@ namespace basecross{
 				static_cast<Vec3>(sprite->GetAnchorPosition(Anchor::Left)), iconSize / 2.0f,
 				Anchor::Center);
 			handler->SetLayer(1);
-			m_GimmcikSprites.push_back(sprite);
+			m_GimmickIcons.push_back(sprite);
 			m_HandlerSprites.push_back(handler);
 			m_ExplainIcons.push_back(explain);
 		}
@@ -104,13 +108,13 @@ namespace basecross{
 		m_Cursor = m_MenuStage->AddGameObject<Coursor>(L"MOUSE_CURSOR");
 		m_Cursor->SetCoursorSize(25.0f);
 		m_Cursor->SetMoveSpeed(450.0f);
-		m_Cursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), m_ExpainBox->GetAnchorPosition(Anchor::TopLeft));
+		m_Cursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), m_ExplainBox->GetAnchorPosition(Anchor::TopLeft));
 	
 
 		m_PoseMenu = m_MenuStage->AddGameObject<PoseMenu>(GetThis<GameMenu>(),menuPosition + Vec3(screenSize.x / 10.0f,screenSize.y / 2.0f - 50,0), Vec2(120.0f, 60.0f));
 		
 		m_MovieWindow = m_MenuStage->AddGameObject<MovieWindow>(Vec2(menuSize.x, menuSize.y * 0.25f) * 0.8f);
-		Vec3 windowPosition = static_cast<Vec3>(m_ExpainBox->GetAnchorPosition(Anchor::TopLeft) + Vec2(640,-400));
+		Vec3 windowPosition = static_cast<Vec3>(m_ExplainBox->GetAnchorPosition(Anchor::TopLeft) + Vec2(640,-400));
 		windowPosition.y = windowPosition.y < 0 ? fabs(windowPosition.y) : windowPosition.y;
 
 		m_MovieWindow->SetPosition(windowPosition + Vec3(20,20,0));
@@ -167,25 +171,25 @@ namespace basecross{
 				m_Cursor->SetPosition(m_ColorPalette[index]->GetPosition());
 			}
 			else {
-				m_Cursor->SetPosition(m_GimmcikSprites[index]->GetPosition());
+				m_Cursor->SetPosition(m_GimmickIcons[index]->GetPosition());
 			}
 		}
 		
 
-		if (m_ColorHandle != -1 || m_GimmikcHandle != -1) {
+		if (m_ColorHandle != -1 || m_GimmickHandle != -1) {
 			if (!m_CurrentLine)return;
 
 			Vec3 coursorPosition = m_Cursor->GetPosition();
 			Vec3 handlePosition;
 			if (m_ColorHandle != -1) {
 				handlePosition = m_ColorPalette[m_ColorHandle]->GetAnchorPosition(Anchor::Right);
-				int handle = OnCoursorHandle(m_GimmcikSprites);
+				int handle = OnCoursorHandle(m_GimmickIcons);
 				if (handle != -1) {
-					coursorPosition = m_GimmcikSprites[handle]->GetAnchorPosition(Anchor::Left);
+					coursorPosition = m_GimmickIcons[handle]->GetAnchorPosition(Anchor::Left);
 				}
 			}
 			else {
-				handlePosition = m_GimmcikSprites[m_GimmikcHandle]->GetAnchorPosition(Anchor::Left);
+				handlePosition = m_GimmickIcons[m_GimmickHandle]->GetAnchorPosition(Anchor::Left);
 				int handle = OnCoursorHandle(m_ColorPalette);
 				if (handle != -1) {
 					coursorPosition = m_ColorPalette[handle]->GetAnchorPosition(Anchor::Right);
@@ -197,11 +201,11 @@ namespace basecross{
 			DrawLine(handlePosition, coursorPosition);
 
 			if (input->GetUpButton(gameManager.GetKeyConfig(L"putGimmick"))) {
-				if (UpdateOnCoursorHandle() && m_ColorHandle != -1 && m_GimmikcHandle != -1) {
+				if (UpdateOnCoursorHandle() && m_ColorHandle != -1 && m_GimmickHandle != -1) {
 					stack<vector<Line>::iterator> eraseIteraters;
 					for (auto it = m_Lines.begin(); it != m_Lines.end(); it++) {
 						auto& pair = (*it).m_PairHandle;
-						if (pair.first == m_ColorHandle || pair.second == m_GimmikcHandle) {
+						if (pair.first == m_ColorHandle || pair.second == m_GimmickHandle) {
 							m_MenuStage->RemoveGameObject<Sprite>((*it).m_Line);
 							eraseIteraters.push(it);
 						}
@@ -210,14 +214,14 @@ namespace basecross{
 						m_Lines.erase(eraseIteraters.top());
 						eraseIteraters.pop();
 					}
-					m_Lines.push_back({ m_CurrentLine,pair<int,int>{m_ColorHandle,m_GimmikcHandle} });
+					m_Lines.push_back({ m_CurrentLine,pair<int,int>{m_ColorHandle,m_GimmickHandle} });
 					SoundManager::GetInstance().PlaySE(L"Put");
 				}
 				else {
 					m_MenuStage->RemoveGameObject<Sprite>(m_CurrentLine);
 				}
 				m_CurrentLine = nullptr;
-				m_ColorHandle = m_GimmikcHandle = -1;
+				m_ColorHandle = m_GimmickHandle = -1;
 			}
 		}
 
@@ -234,7 +238,7 @@ namespace basecross{
 
 	bool GameMenu::UpdateOnCoursorHandle() {
 		int colorHandle = OnCoursorHandle(m_ColorPalette);
-		int gimmickHandle = OnCoursorHandle(m_GimmcikSprites);
+		int gimmickHandle = OnCoursorHandle(m_GimmickIcons);
 		
 		if (colorHandle == -1 && gimmickHandle == -1) return false;
 
@@ -248,7 +252,7 @@ namespace basecross{
 			m_CurrentLine->SetDiffuse(m_ColorPalette[colorHandle]->GetDiffuse());
 		}
 		if (gimmickHandle >= 0) {
-			m_GimmikcHandle = gimmickHandle;
+			m_GimmickHandle = gimmickHandle;
 		}
 		return true;
 	}
@@ -269,7 +273,7 @@ namespace basecross{
 		for (auto& colorPalette : m_ColorPalette) {
 			colorPalette->SetDrawActive(flag);
 		}
-		for (auto& gimmickSprite : m_GimmcikSprites) {
+		for (auto& gimmickSprite : m_GimmickIcons) {
 			gimmickSprite->SetDrawActive(flag);
 		}
 		for (auto& handleSprite : m_HandlerSprites) {
@@ -281,8 +285,8 @@ namespace basecross{
 		for (auto& line : m_Lines) {
 			line.m_Line->SetDrawActive(flag);
 		}
-		m_CurrentExpain->SetDrawActive(flag);
-		m_ExpainBox->SetDrawActive(flag);
+		m_CurrentExplain->SetDrawActive(flag);
+		m_ExplainBox->SetDrawActive(flag);
 	}
 	vector<pair<int, int>> GameMenu::ConvertColorGimmickHandles(vector<Line>& lines) {
 		vector<pair<int, int>> p;
@@ -302,18 +306,18 @@ namespace basecross{
 	}
 	void GameMenu::DrawExpain() {
 		auto cards = GameManager::GetInstance().GetHand()->GetCardData();
-		if (m_GimmikcHandle != -1) {
-			wstring key = cards[m_GimmikcHandle]->GetExpainKey();
+		if (m_GimmickHandle != -1) {
+			wstring key = cards[m_GimmickHandle]->GetExpainKey();
 			if (key != L"") {
-				m_CurrentExpain->SetTextureKey(key);
+				m_CurrentExplain->SetTextureKey(key);
 			}
 		}
 		else {
-			int handle = OnCoursorHandle(m_GimmcikSprites);
+			int handle = OnCoursorHandle(m_GimmickIcons);
 			if (handle != -1) {
 				wstring key = cards[handle]->GetExpainKey();
 				if (key != L"") {
-					m_CurrentExpain->SetTextureKey(key);
+					m_CurrentExplain->SetTextureKey(key);
 				}
 			}
 		}
@@ -398,7 +402,7 @@ namespace basecross{
 			{
 				if (id == cards[j]->GetId())
 				{
-					endPos = m_GimmcikSprites[j]->GetPosition();
+					endPos = m_GimmickIcons[j]->GetPosition();
 					gimmickIndex = static_cast<int>(j);
 					break;
 				}

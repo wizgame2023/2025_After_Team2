@@ -74,21 +74,7 @@ namespace basecross {
 
 	void GameStage::OnUpdate() {
 		GameManager::GetInstance().Update();
-
-		switch (m_CurrentTask) {
-		case TutorialTask::Task::Connect:
-			break;
-		}
-	}
-	void GameStage::OnEvent(const shared_ptr<Event>& event) {
-		auto& tasks = GameManager::GetInstance().GetTutorials();
-		for (auto task : tasks) {
-			if (task.m_IsCompleted) continue;
-			if (task.m_EventName != event->m_MsgStr) continue;
-
-			m_CurrentTask = task.m_Task;
-			task.m_IsCompleted = true;
-		}
+		TutorialManager::GetInstance().Update();
 	}
 }
 //end basecross

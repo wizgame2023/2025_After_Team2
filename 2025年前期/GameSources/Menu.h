@@ -26,12 +26,12 @@ namespace basecross{
 		shared_ptr<Sprite> m_CurrentLine;
 
 
-		shared_ptr<Sprite> m_CurrentExpain;
-		shared_ptr<Sprite> m_ExpainBox;
+		shared_ptr<Sprite> m_CurrentExplain;
+		shared_ptr<Sprite> m_ExplainBox;
 
 		shared_ptr<Sprite> m_BackGround;
 		vector<shared_ptr<Sprite>> m_ColorPalette;
-		vector<shared_ptr<Sprite>> m_GimmcikSprites;
+		vector<shared_ptr<Sprite>> m_GimmickIcons;
 		vector<shared_ptr<Sprite>> m_HandlerSprites;
 		vector<shared_ptr<Sprite>> m_ExplainIcons;
 		vector<Line> m_Lines;
@@ -44,7 +44,7 @@ namespace basecross{
 		shared_ptr<MovieWindow> m_MovieWindow;
 		shared_ptr<PoseMenu> m_PoseMenu;
 		int m_ColorHandle;	//指定中の色
-		int m_GimmikcHandle;//指定中のギミック
+		int m_GimmickHandle;//指定中のギミック
 		int m_CursorHandle;	//カーソルがある番号(色+ギミックの合計値が最大)
 
 		float m_ConnectOffsetX;
@@ -58,15 +58,13 @@ namespace basecross{
 			: Object(ptr),
 			m_ColorTexture(colorTex),m_BackGroundTexture(backGroundTex),m_MainViewPort(mainViewport), 
 			m_ConnectOffsetX(0),
-			m_MenuStage(ptr), m_ColorHandle(-1),m_GimmikcHandle(-1), m_IsCursor(true){}
+			m_MenuStage(ptr), m_ColorHandle(-1),m_GimmickHandle(-1), m_IsCursor(true){}
 		virtual ~GameMenu(){}
 
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
 		int OnCoursorHandle(vector<shared_ptr<Sprite>>& sprites);
-
-
 		void SetDrawActive(bool flag);
 
 		//ヒント
