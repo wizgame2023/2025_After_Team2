@@ -37,17 +37,30 @@ namespace basecross{
 	void TutorialStep::Start() {
 		m_Window = m_Stage->AddGameObject<Sprite>(L"MENU", m_Position, m_WindowSize, Anchor::Center);
 		m_Window->SetLayer(10);
-		m_Explain = m_Stage->AddGameObject<Sprite>(m_ExplainKey, m_Position, m_WindowSize * 0.85f, Anchor::Center);
+		m_Explain = m_Stage->AddGameObject<Sprite>(m_ExplainKeys[m_PageIndex], m_Position, m_WindowSize * 0.85f, Anchor::Center);
 		m_Explain->SetLayer(11);
-		
-		m_CloseIcon = m_Stage->AddGameObject<Sprite>(L"TUTORIAL_CLOSE",m_Position,m_WindowSize * 0.85f,Anchor::Center);
+		if (m_ExplainKeys.size() > 1) {
+			m_CloseIcon = m_Stage->AddGameObject<Sprite>(L"TUTORIAL_NEXT", m_Position, m_WindowSize * 0.85f, Anchor::Center);
+		}
+		else {
+			m_CloseIcon = m_Stage->AddGameObject<Sprite>(L"TUTORIAL_CLOSE", m_Position, m_WindowSize * 0.85f, Anchor::Center);
+		}
 		m_CloseIcon->SetLayer(10);
 
 	}
 	void TutorialStep::Update() {
 		auto& input = InputManager::GetInputManager();
 		if (input->GetDownButton(L"A")) {
-			TutorialManager::GetInstance().End();
+			if(m_PageIndex + 1 < static_cast<int>(m_ExplainKeys.size())){
+				m_PageIndex++;
+				m_Explain->SetTextureKey(m_ExplainKeys[m_PageIndex]);
+				if(m_PageIndex == static_cast<int>(m_ExplainKeys.size()) - 1){
+					m_CloseIcon->SetTextureKey(L"TUTORIAL_CLOSE");
+				}
+			}
+			else {
+				TutorialManager::GetInstance().End();
+			}
 		}
 	}
 	void TutorialStep::End() {
