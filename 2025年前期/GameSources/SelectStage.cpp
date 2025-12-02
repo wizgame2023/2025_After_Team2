@@ -38,9 +38,14 @@ namespace basecross {
 	{
 		Json();
 
-		auto backBoardSp = AddGameObject<Sprite>(L"BackBoard", Vec3(0.0f), Vec2(1280, 800), Anchor::Center);
-		backBoardSp->SetDiffuse(Col4(0.0f, 0.0f, 0.0f, 1.0f));
+		auto backBoardSp = AddGameObject<Sprite>(L"SelectBackGround", Vec3(0.0f), Vec2(1280, 800), Anchor::Center);
 		auto selectSp = AddGameObject<Sprite>(L"SelectUI", Vec3(-640.0f, 400.0f, 0.0f), Vec2(256, 64), Anchor::TopLeft);
+
+		m_RollSpRight = AddGameObject<Sprite>(L"RollUI", Vec3(600.0f, 600.0f, 0.0f), Vec2(900, 900), Anchor::Center);
+		m_RollSpLeft = AddGameObject<Sprite>(L"RollUI", Vec3(-700.0f, -560.0f, 0.0f), Vec2(900, 900), Anchor::Center);
+		m_RollSpRight->VectorToward(Vec2(cos(m_Angle100), sin(XM_PI + (m_Angle100))));
+
+
 		m_StageNum = 10;        // ï\é¶Ç∑ÇÈêîéöÇÃêî
 		int maxPerRow = 5;         // 1çsÇ…ï\é¶Ç∑ÇÈç≈ëÂêî
 		float baseWidth = 100.0f;
@@ -70,7 +75,7 @@ namespace basecross {
 
 			if (m_BackSp == nullptr)
 			{
-				m_BackSp = AddGameObject<Sprite>(L"CursorUI", Vec3(position.x, position.y, position.z), size, Anchor::TopLeft);
+				m_BackSp = AddGameObject<Sprite>(L"SelectCursorUI", position, size, Anchor::TopLeft);
 			}
 
 		}
@@ -96,6 +101,32 @@ namespace basecross {
 	{
 		auto& input = InputManager::GetInputManager();
 
+		m_RollVelocity -= 0.5f;
+
+		if (m_IsNextRoll)
+		{
+			if (m_Angle100 + XMConvertToRadians(m_RollVelocity) <= m_RollSpEndRight)
+			{
+				m_IsNextRoll = false;
+				m_RollVelocity = 0.0f;
+			}
+
+			m_RollSpLeft->VectorToward(Vec2(cos(m_Angle270 + XMConvertToRadians(m_RollVelocity)), sin(m_Angle270 + XMConvertToRadians(m_RollVelocity))));
+
+
+		}
+		else if(!m_IsNextRoll)
+		{
+			if (m_Angle100 + XMConvertToRadians(m_RollVelocity) <= m_RollSpEndRight)
+			{
+				m_IsNextRoll = true;
+				m_RollVelocity = 0.0f;
+			}
+
+			m_RollSpRight->VectorToward(Vec2(cos(m_Angle100 + XMConvertToRadians(m_RollVelocity)), sin(m_Angle100 + XMConvertToRadians(m_RollVelocity))));
+
+		}
+		
 
 		if (input->GetDownButton(L"A") && !m_IsButton)
 		{

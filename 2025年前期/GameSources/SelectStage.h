@@ -22,6 +22,18 @@ namespace basecross {
 
 		bool m_IsStick = false;
 		bool m_IsButton = true;
+		bool m_IsNextRoll = true;
+
+		float m_Angle100 = XMConvertToRadians(100);
+		float m_RollSpEndRight = 0.0f;
+
+		float m_Angle270 = XM_PI + (XM_PI * 0.5f);
+		float m_RollSpEndLeft = XM_PI;
+
+
+		float m_RollVelocity = 0.0f;
+
+
 
 		vector<Vec3> m_NumPositions;
 
@@ -29,6 +41,10 @@ namespace basecross {
 		shared_ptr<NumberSprite> m_NumSp;
 
 		shared_ptr<Sprite> m_BackSp;
+		shared_ptr<Sprite> m_RollSpRight;
+		shared_ptr<Sprite> m_RollSpLeft;
+
+
 		//ÉrÉÖÅ[ÇÃçÏê¨
 		void CreateViewLight();
 	public:
