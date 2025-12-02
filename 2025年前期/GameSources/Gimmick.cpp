@@ -357,6 +357,7 @@ namespace basecross{
 		{
 			// 踏んだ瞬間だけ処理
 			Vec3 pos = m_Transform->GetPosition();
+			m_Cube->SetDrawActive(false);
 			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cube側は単純な移動だけでOK
 
 			// エフェクト開始

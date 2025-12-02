@@ -35,6 +35,7 @@
 #include "GameManager.h"
 #include "ResourceManager.h"
 #include "SoundManager.h"
+#include "TutorialManager.h"
 #include "Json.h"
 #include "Card.h"
 #include "Menu.h"
