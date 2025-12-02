@@ -40,7 +40,6 @@ namespace basecross {
 			CreateViewLight();
 			CreateResorce();
 
-
 			auto stageMap = AddGameObject<Map>();
 			stageMap->Load();
 
@@ -67,7 +66,8 @@ namespace basecross {
 
 			GameManager::GetInstance().SetMenuStage(menuStage);
 
-			//TutorialManager::GetInstance().RegisterStep(L"sample", make_shared<TutorialStep>(menuStage, Vec3(100.0f,200.0f,0.0f), 400, 200));
+			SoundManager::GetInstance().PlayBGM(L"GameBGM");
+
 		}
 		catch (...) {
 			throw;

@@ -21,7 +21,7 @@ namespace basecross{
 		Vec2 menuSize = Vec2(screenSize.x - mainViewSize.x, screenSize.y);
 		Vec3 menuPosition = Vec3(screenSize.x / 2.0f - menuSize.x, 0, 0);
 
-		float paletteStartPositionY = 75.0f;
+		float paletteStartPositionY = 100.0f;
 		Vec2 colorPalettePosition = Vec2(menuPosition.x + 100.0f, menuPosition.y + menuSize.y / 2.0f - paletteStartPositionY);
 		Vec2 gimmickPosition = Vec2(menuPosition.x + menuSize.x - 150.0f, menuPosition.y + menuSize.y / 2.0f - paletteStartPositionY);
 		Vec2 iconSize = Vec2(50.0f, 50.0f);
@@ -110,8 +110,8 @@ namespace basecross{
 		m_Cursor->SetMoveSpeed(450.0f);
 		m_Cursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), m_ExplainBox->GetAnchorPosition(Anchor::TopLeft));
 	
-
-		m_PoseMenu = m_MenuStage->AddGameObject<PoseMenu>(GetThis<GameMenu>(),menuPosition + Vec3(screenSize.x / 10.0f,screenSize.y / 2.0f - 50,0), Vec2(120.0f, 60.0f));
+		Vec2 poseMenuButtonSize = Vec2(200.0f, 60.0f);
+		m_PoseMenu = m_MenuStage->AddGameObject<PoseMenu>(GetThis<GameMenu>(),menuPosition + Vec3(menuSize.x / 2.0f - poseMenuButtonSize.x / 2.0f, screenSize.y / 2.0f - 50,0.0f), poseMenuButtonSize);
 		
 		m_MovieWindow = m_MenuStage->AddGameObject<MovieWindow>(Vec2(menuSize.x, menuSize.y * 0.25f) * 0.8f);
 		Vec3 windowPosition = static_cast<Vec3>(m_ExplainBox->GetAnchorPosition(Anchor::TopLeft) + Vec2(640,-400));
@@ -427,37 +427,37 @@ namespace basecross{
 		Vec3 duration = Vec3(0.0f,m_ButtonSize.y / 2.0f,0.0f);
 		duration.y += m_ButtonSize.y;
 		//音量
-		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_SOUND_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition, m_ButtonSize,GetThis<PoseMenu>(),
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_SOUND_MENU", L"SELECT_SOUND_MENU", m_TopLeftPosition, m_ButtonSize,GetThis<PoseMenu>(),
 			[](shared_ptr<ObjectInterface>& object) {
 				auto pose = dynamic_pointer_cast<PoseMenu>(object);
 				pose->SettingSound();
 			});
 		//タイトルに戻る
-		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_TITLE_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration, m_ButtonSize, GetThis<PoseMenu>(),
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_TITLE_MENU", L"SELECT_TITLE_MENU", m_TopLeftPosition - duration, m_ButtonSize, GetThis<PoseMenu>(),
 			[](shared_ptr<ObjectInterface>& object) {
 				auto pose = dynamic_pointer_cast<PoseMenu>(object);
 				pose->MoveTitleStage();
 			});
 		//セレクトステージに戻る
-		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_SELECT_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration * 2.0f, m_ButtonSize, GetThis<PoseMenu>(),
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_SELECT_MENU", L"SELECT_SELECT_MENU", m_TopLeftPosition - duration * 2.0f, m_ButtonSize, GetThis<PoseMenu>(),
 			[](shared_ptr<ObjectInterface>& object) {
 				auto pose = dynamic_pointer_cast<PoseMenu>(object);
 				pose->MoveSelectStage();
 			});
 		//最初から始める
-		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_NEW_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration * 3.0f, m_ButtonSize, GetThis<PoseMenu>(),
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_NEW_MENU", L"SELECT_NEW_MENU", m_TopLeftPosition - duration * 3.0f, m_ButtonSize, GetThis<PoseMenu>(),
 			[](shared_ptr<ObjectInterface>& object) {
 				auto pose = dynamic_pointer_cast<PoseMenu>(object);
 				pose->CloseNewGame();
 			});
 		//ギミック解説
-		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_EXPAIN_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration * 4.0f, m_ButtonSize, GetThis<PoseMenu>(),
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_EXPAIN_MENU", L"SELECT_EXPAIN_MENU", m_TopLeftPosition - duration * 4.0f, m_ButtonSize, GetThis<PoseMenu>(),
 			[](shared_ptr<ObjectInterface>& object) {
 				auto pose = dynamic_pointer_cast<PoseMenu>(object);
 				pose->OpenExpainGimmicks();
 			});
 		//ゲームに戻る
-		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_BACK_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration * 5.0f, m_ButtonSize, GetThis<PoseMenu>(),
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_BACK_MENU", L"SELECT_BACK_MENU", m_TopLeftPosition - duration * 5.0f, m_ButtonSize, GetThis<PoseMenu>(),
 			[](shared_ptr<ObjectInterface>& object) {
 				auto pose = dynamic_pointer_cast<PoseMenu>(object);
 				pose->Close();

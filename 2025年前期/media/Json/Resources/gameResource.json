@@ -10,12 +10,13 @@
   "UI": {
     "HintLine.png": "HintLine",
 
-    "Expains/GimmickExpain_PL.png": "EXPAIN_PL",
-    "Expains/GimmickExpain_GL.png": "EXPAIN_GL",
-    "Expains/GimmickExpain_ARRW.png": "EXPAIN_ARRW",
-    "Expains/GimmickExpain_TP.png": "EXPAIN_TP",
-    "Expains/GimmickExpain_INV.png": "EXPAIN_INV",
-    "Expains/GimmickExpain_ROLL.png": "EXPAIN_ROLL",
+    "Expains/Pose/GimmickExpain_PL.png": "EXPAIN_PL",
+    "Expains/Pose/GimmickExpain_GL.png": "EXPAIN_GL",
+    "Expains/Pose/GimmickExpain_ARRW.png": "EXPAIN_ARRW",
+    "Expains/Pose/GimmickExpain_TP.png": "EXPAIN_TP",
+    "Expains/Pose/GimmickExpain_INV.png": "EXPAIN_INV",
+    "Expains/Pose/GimmickExpain_ROLL.png": "EXPAIN_ROLL",
+    "Expains/Tutorial/ExplainPut.png": "TUTORIAL_PUT",
 
     "Icons/Icon_Explain_North.png": "ICON_NORTH",
     "Icons/Icon_Explain_South.png": "ICON_SOUTH",

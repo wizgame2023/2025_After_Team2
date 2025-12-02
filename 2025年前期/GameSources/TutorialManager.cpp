@@ -36,6 +36,9 @@ namespace basecross{
 	void TutorialStep::Start() {
 		m_Window = m_Stage->AddGameObject<Sprite>(L"MENU", m_Position, m_WindowSize, Anchor::Center);
 		m_Window->SetLayer(10);
+		m_Explain = m_Stage->AddGameObject<Sprite>(m_ExplainKey, m_Position, m_WindowSize * 0.85f, Anchor::Center);
+		m_Explain->SetLayer(11);
+
 		Vec2 closeIconPosition = m_Window->GetAnchorPosition(Anchor::BottomRight);
 		
 		m_CloseIcon = m_Stage->AddGameObject<Sprite>(L"ICON_ARROW",
@@ -54,6 +57,7 @@ namespace basecross{
 	void TutorialStep::End() {
 		m_IsCompleted = true;
 		m_Stage->RemoveGameObject<Sprite>(m_Window);
+		m_Stage->RemoveGameObject<Sprite>(m_Explain);
 		m_Stage->RemoveGameObject<Sprite>(m_CloseIcon);
 	}
 

@@ -29,12 +29,15 @@ namespace basecross{
 
 		shared_ptr<Sprite> m_CloseIcon;
 		shared_ptr<Sprite> m_Window;
+		shared_ptr<Sprite> m_Explain;
+
 		bool m_IsCompleted;
 		Vec2 m_WindowSize;
 		Vec3 m_Position;
+		wstring m_ExplainKey;
 	public:
-		TutorialStep(const shared_ptr<Stage>& ptr,Vec3 position = Vec3(), float width = 100, float height = 100) : m_Stage(ptr),
-			m_IsCompleted(false),
+		TutorialStep(const shared_ptr<Stage>& ptr,const wstring& explain = L"",Vec3 position = Vec3(), float width = 100, float height = 100) : m_Stage(ptr),
+			m_IsCompleted(false), m_ExplainKey(explain),
 			m_Position(position),m_WindowSize(width, height){ }
 		virtual ~TutorialStep(){}
 
@@ -60,7 +63,7 @@ namespace basecross{
 		float m_Timer;
 	public:
 		PutGimmickTutorial(const shared_ptr<Stage>& ptr,const array<shared_ptr<Sprite>, 2>& array, float loop, float reset = 0.5f) :
-			TutorialStep(ptr, Vec3(50.0f, 200.0f, 0.0f), 400, 200),
+			TutorialStep(ptr,L"TUTORIAL_PUT", Vec3(-100.0f, 200.0f, 0.0f), 600, 300),
 			m_Sprites(array),
 			m_Timer(0.0f), m_ResetTime(reset),m_LoopTime(loop)
 		{ }
