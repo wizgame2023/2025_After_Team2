@@ -20,6 +20,10 @@ namespace basecross{
 		void Update();
 		void End();
 
+		bool IsActive() {
+			return m_CurrentStep != nullptr;
+		}
+
 		void RegisterStep(const wstring& name, const shared_ptr<TutorialStep>& step);
 	};
 
@@ -35,9 +39,12 @@ namespace basecross{
 		Vec2 m_WindowSize;
 		Vec3 m_Position;
 		wstring m_ExplainKey;
+
+		float m_DrawDelayTime;
+		float m_DelayTimer;
 	public:
-		TutorialStep(const shared_ptr<Stage>& ptr,const wstring& explain = L"",Vec3 position = Vec3(), float width = 100, float height = 100) : m_Stage(ptr),
-			m_IsCompleted(false), m_ExplainKey(explain),
+		TutorialStep(const shared_ptr<Stage>& ptr,const wstring& explain = L"",Vec3 position = Vec3(), float width = 100, float height = 100,float delayTime = 0.0f) : m_Stage(ptr),
+			m_IsCompleted(false), m_ExplainKey(explain), m_DelayTimer(0.0f), m_DrawDelayTime(delayTime),
 			m_Position(position),m_WindowSize(width, height){ }
 		virtual ~TutorialStep(){}
 

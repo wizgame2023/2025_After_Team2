@@ -187,7 +187,10 @@ namespace basecross{
 				{
 					auto menu = m_Stage->GetChileStageVec()[0];
 					auto backBoardUI = menu->AddGameObject<Sprite>(L"ResultBackBoardUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 600), Anchor::Center);
+					backBoardUI->SetLayer(10);
 					auto starCoverUI = menu->AddGameObject<Sprite>(L"StarCoverUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 180), Anchor::Center);
+					starCoverUI->SetLayer(10);
+
 					m_EffectSprite.push_back(backBoardUI);
 					m_EffectSprite.push_back(starCoverUI);
 					effect->EffectDelete();
@@ -208,10 +211,12 @@ namespace basecross{
 				auto starUI = menu->AddGameObject<Sprite>(L"StarUI", Vec3(-200, 0.0f, 0.0f), Vec2(200, 180), Anchor::Center);
 				starUI->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, 0.0f));
 				starUI->CreateAnimationUV(Vec2(3, 1));
+				starUI->SetLayer(11);
 
 				auto evaluationUI = menu->AddGameObject<Sprite>(L"EvaluationUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(500.0f, 78.0f), Anchor::Top);
 				evaluationUI->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, 1.0f));
 				evaluationUI->CreateAnimationUV(Vec2(1, 3));
+				evaluationUI->SetLayer(11);
 
 				if (i == 1)
 				{

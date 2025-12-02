@@ -124,13 +124,16 @@ namespace basecross{
 			make_shared<PutGimmickTutorial>(m_MenuStage,
 				array<shared_ptr<Sprite>,2>{ m_GimmickIcons[0],m_ColorPalette[1] },
 				1.0f,1.0f));
+
+		TutorialManager::GetInstance().Start(L"sample");
+
 	}
 	void GameMenu::OnUpdate() {
 		auto& input = InputManager::GetInputManager();
 		auto& gameManager = GameManager::GetInstance();
 
 		if (!gameManager.CompareState(GameState::Put))return;
-
+		if (TutorialManager::GetInstance().IsActive()) return;
 		
 		if (!m_PoseMenu->IsOpen()) {
 			if (input->GetDownButton(gameManager.GetKeyConfig(L"undo")) && m_Lines.size() > 0) {
@@ -221,7 +224,6 @@ namespace basecross{
 					}
 					m_Lines.push_back({ m_CurrentLine,pair<int,int>{m_ColorHandle,m_GimmickHandle} });
 					SoundManager::GetInstance().PlaySE(L"Put");
-					TutorialManager::GetInstance().Start(L"sample");
 				}
 				else {
 					m_MenuStage->RemoveGameObject<Sprite>(m_CurrentLine);

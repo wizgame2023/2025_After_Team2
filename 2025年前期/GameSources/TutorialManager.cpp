@@ -30,6 +30,7 @@ namespace basecross{
 	}
 
 	void TutorialManager::RegisterStep(const wstring& name, const shared_ptr<TutorialStep>& step) {
+		if (m_StepMap.find(name) != m_StepMap.end()) return;
 		m_StepMap[name] = step;
 	}
 
@@ -38,13 +39,8 @@ namespace basecross{
 		m_Window->SetLayer(10);
 		m_Explain = m_Stage->AddGameObject<Sprite>(m_ExplainKey, m_Position, m_WindowSize * 0.85f, Anchor::Center);
 		m_Explain->SetLayer(11);
-
-		Vec2 closeIconPosition = m_Window->GetAnchorPosition(Anchor::BottomRight);
 		
-		m_CloseIcon = m_Stage->AddGameObject<Sprite>(L"ICON_ARROW",
-			Vec3(closeIconPosition.x, closeIconPosition.y, 0),
-			Vec2(m_WindowSize.x / 3.0f, closeIconPosition.y / 10.0f),
-			Anchor::BottomRight);
+		m_CloseIcon = m_Stage->AddGameObject<Sprite>(L"TUTORIAL_CLOSE",m_Position,m_WindowSize * 0.85f,Anchor::Center);
 		m_CloseIcon->SetLayer(10);
 
 	}

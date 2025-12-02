@@ -78,5 +78,8 @@ namespace basecross {
 		GameManager::GetInstance().Update();
 		TutorialManager::GetInstance().Update();
 	}
+	void GameStage::OnDestroy() {
+		SoundManager::GetInstance().StopAll();
+	}
 }
 //end basecross
