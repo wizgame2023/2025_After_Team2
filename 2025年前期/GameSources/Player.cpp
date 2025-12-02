@@ -82,6 +82,7 @@ namespace basecross{
 			m_TeleportTimer += elapsed;
 			if (m_TeleportTimer > m_TeleportTime) {
 				position = m_TelepoteTarget;
+				SetDrawActive(true);
 				m_CurrentHeight = position.y;
 				if (m_AfterTeloprotTime > 0) {
 					m_TeleportTime = m_AfterTeloprotTime;

@@ -40,7 +40,6 @@ namespace basecross {
 			CreateViewLight();
 			CreateResorce();
 
-
 			auto stageMap = AddGameObject<Map>();
 			stageMap->Load();
 
@@ -66,6 +65,9 @@ namespace basecross {
 			auto menuStage = AddChileStage<MenuStage>();
 
 			GameManager::GetInstance().SetMenuStage(menuStage);
+
+			SoundManager::GetInstance().PlayBGM(L"GameBGM");
+
 		}
 		catch (...) {
 			throw;
@@ -74,21 +76,10 @@ namespace basecross {
 
 	void GameStage::OnUpdate() {
 		GameManager::GetInstance().Update();
-
-		switch (m_CurrentTask) {
-		case TutorialTask::Task::Connect:
-			break;
-		}
+		TutorialManager::GetInstance().Update();
 	}
-	void GameStage::OnEvent(const shared_ptr<Event>& event) {
-		auto& tasks = GameManager::GetInstance().GetTutorials();
-		for (auto task : tasks) {
-			if (task.m_IsCompleted) continue;
-			if (task.m_EventName != event->m_MsgStr) continue;
-
-			m_CurrentTask = task.m_Task;
-			task.m_IsCompleted = true;
-		}
+	void GameStage::OnDestroy() {
+		SoundManager::GetInstance().StopAll();
 	}
 }
 //end basecross

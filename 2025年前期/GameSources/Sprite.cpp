@@ -120,8 +120,10 @@ namespace basecross {
 
 	void Sprite::SetPosition(Vec3 pos) {
 		m_Transform->SetPosition(pos);
+		m_Pos = pos;
 	}
 	void Sprite::VectorToward(Vec2 vec) {
+		if (vec.length() == 0) return;
 		float rad = atan2f(-vec.x, vec.y);
 		auto rot = XMMatrixRotationAxis(Vec3(0,0,1), rad);
 		auto world = m_Transform->GetWorldMatrix();
