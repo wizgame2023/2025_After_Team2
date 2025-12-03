@@ -29,7 +29,7 @@ namespace basecross {
 
 	void TitleStage::SpriteCreate()
 	{
-		auto titleSp = AddGameObject<Sprite>(L"TitleLogoUI", Vec3(0.0f), Vec2(1280, 300), Anchor::Bottom);
+		auto titleSp = AddGameObject<Sprite>(L"TitleLogoUI", Vec3(0.0f), Vec2(1000, 500), Anchor::Bottom);
 		m_StartSprite = AddGameObject<Sprite>(L"StartUI", Vec3(0.0f,-100.0f,0.0f), Vec2(512, 128), Anchor::Center);
 
 	}

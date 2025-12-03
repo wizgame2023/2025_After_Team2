@@ -489,6 +489,12 @@ namespace basecross{
 				number->SetDiffuse(color);
 			}
 		}
+		Col4 GetDiffuse() {
+			for (auto& number : m_Numbers) {
+				return number->GetDiffuse();
+			}
+		}
+
 		void SetActive(bool flag) {
 			for (auto& number : m_Numbers) {
 				number->SetDrawActive(flag);

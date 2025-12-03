@@ -156,7 +156,6 @@ namespace basecross{
 		Gimmicks::OnUpdate();
 
 		auto scene = App::GetApp()->GetScene<Scene>();
-		wstringstream wss;
 
 		if (m_Goal)
 		{
@@ -168,8 +167,6 @@ namespace basecross{
 
 			if (m_GoalEffect)
 			{
-				wss << L"\nƒCƒ“ƒXƒ^ƒ“ƒX” :" << m_GoalEffect->GetEffectInstance() << endl;
-				scene->SetDebugString(wss.str());
 				GameManager::GetInstance().DrawGoalEffect();
 				if (m_GoalEffect->EffectEnd())
 				{
@@ -208,7 +205,7 @@ namespace basecross{
 		{
 			Vec3 playerVel = m_Cube->GetVelocity();
 
-			// ƒ[ƒƒxƒNƒgƒ‹‚Å‚È‚¢‚±‚Æ‚ðŠm”F
+			// ï¿½[ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½mï¿½F
 			if (playerVel.lengthSqr() > 0.0001f)
 			{
 				Vec3 normalizedVel = playerVel.normalize();
@@ -216,7 +213,7 @@ namespace basecross{
 
 				float dot = normalizedVel.dot(goalDir);
 
-				if (dot > 0.9f) // ‚ ‚é’ö“x‹tŒü‚«‚Æ‚Ý‚È‚·è‡’l
+				if (dot > 0.9f) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½tï¿½ï¿½ï¿½ï¿½ï¿½Æ‚Ý‚È‚ï¿½è‡’l
 				{
 					m_Goal = true;
 					m_Cube = nullptr;
@@ -379,12 +376,12 @@ namespace basecross{
 		bool isStepped = CheckCount();
 		if (isStepped && !m_WasStepped)
 		{
-			// “¥‚ñ‚¾uŠÔ‚¾‚¯ˆ—
+			// ï¿½ï¿½ï¿½ñ‚¾uï¿½Ô‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			Vec3 pos = m_Transform->GetPosition();
 			m_Cube->SetDrawActive(false);
-			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cube‘¤‚Í’Pƒ‚ÈˆÚ“®‚¾‚¯‚ÅOK
+			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cubeï¿½ï¿½ï¿½Í’Pï¿½ï¿½ï¿½ÈˆÚ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½OK
 
-			// ƒGƒtƒFƒNƒgŠJŽn
+			// ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½Jï¿½n
 			m_TeleportFastEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickFastEffect.efk", m_Cube->GetPosition());
 			m_TeleportFastEffect->SetEffectSize(Vec3(0.5f));
 			m_TeleportFastEffect->SetEffectSpeed(1.7f);
