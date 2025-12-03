@@ -156,7 +156,6 @@ namespace basecross{
 		Gimmicks::OnUpdate();
 
 		auto scene = App::GetApp()->GetScene<Scene>();
-		wstringstream wss;
 
 		if (m_Goal)
 		{
@@ -168,8 +167,6 @@ namespace basecross{
 
 			if (m_GoalEffect)
 			{
-				wss << L"\nインスタンス数 :" << m_GoalEffect->GetEffectInstance() << endl;
-				scene->SetDebugString(wss.str());
 				GameManager::GetInstance().DrawGoalEffect();
 				if (m_GoalEffect->EffectEnd())
 				{
