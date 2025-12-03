@@ -17,7 +17,9 @@
     "Expains/Pose/GimmickExpain_INV.png": "EXPAIN_INV",
     "Expains/Pose/GimmickExpain_ROLL.png": "EXPAIN_ROLL",
     "Expains/Tutorial/CloseTab.png": "TUTORIAL_CLOSE",
+    "Expains/Tutorial/NextTab.png": "TUTORIAL_NEXT",
     "Expains/Tutorial/ExplainPut.png": "TUTORIAL_PUT",
+    "Expains/Tutorial/ExplainInfo.png": "TUTORIAL_INFO",
 
     "Icons/Icon_Explain_North.png": "ICON_NORTH",
     "Icons/Icon_Explain_South.png": "ICON_SOUTH",
@@ -49,7 +51,8 @@
     "Icons/IconHandler.png": "HANDLER",
 
     "Menu.png": "MENU",
-    "Menu_Explain.png": "MENU_EXPLAIN"
+    "Menu_Explain.png": "MENU_EXPLAIN",
+    "TutorialBackBord.png": "MENU_GIMMICK"
 
   }
 }

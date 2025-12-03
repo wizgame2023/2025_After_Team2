@@ -93,8 +93,10 @@ namespace basecross{
 	void GameManager::RestartGame(bool isAll) {
 		StartFade();
 		for (auto& sphere : m_Cubes) {
-			//プレイヤーを稼働開始
 			m_Stage->RemoveGameObject<MoveCube>(sphere);
+		}
+		for (auto& gimmick : m_Map->GetGimmicks()) {
+			gimmick->SetDrawActive(true);
 		}
 		m_Cubes.clear();
 	}

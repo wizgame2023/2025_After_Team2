@@ -503,7 +503,7 @@ namespace basecross{
 
 	void ExplainMenu::OnCreate(){
 		m_ExplainStr = m_MenuStage->AddGameObject<Sprite>(L"", Vec3(-120,-100,0), Vec2(300, 300), Anchor::Center);
-		m_BackGround = m_MenuStage->AddGameObject<Sprite>(L"MENU", Vec3(-640,400,0), Vec2(800, 800), Anchor::TopLeft);
+		m_BackGround = m_MenuStage->AddGameObject<Sprite>(L"MENU_GIMMICK", Vec3(-640,400,0), Vec2(800, 800), Anchor::TopLeft);
 		m_BackGround->SetLayer(-1);
 
 		AddExplain(ExplainData{ L"ICON_PL",L"",L"EXPAIN_PL" });

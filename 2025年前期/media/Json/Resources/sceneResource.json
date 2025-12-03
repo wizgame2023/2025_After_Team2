@@ -1,7 +1,25 @@
 {
   "Model": {
-    "Player.bmf": { "model": "PLAYER_MD", "texture": "",  "type": "static"},
-    "Goal.bmf": {   "model": "GOAL_MD", "texture": "",  "type": "static"}
+    "Player.bmf": {
+      "model": "PLAYER_MD",
+      "texture": "",
+      "type": "static"
+    },
+    "Goal.bmf": {
+      "model": "GOAL_MD",
+      "texture": "",
+      "type": "static"
+    },
+    "Direction.bmf": {
+      "model": "DIRECTION_MD",
+      "texture": "",
+      "type": "static"
+    },
+    "NoDirection.bmf": {
+      "model": "NO_DIRECTION_MD",
+      "texture": "",
+      "type": "static"
+    }
   },
   "Texture": {
     "arrow_Orbit.png": "TEMP_ARROW_SPRITE"
