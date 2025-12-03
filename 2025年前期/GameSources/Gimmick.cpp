@@ -156,7 +156,6 @@ namespace basecross{
 		Gimmicks::OnUpdate();
 
 		auto scene = App::GetApp()->GetScene<Scene>();
-		wstringstream wss;
 
 		if (m_Goal)
 		{
@@ -168,8 +167,6 @@ namespace basecross{
 
 			if (m_GoalEffect)
 			{
-				wss << L"\nインスタンス数 :" << m_GoalEffect->GetEffectInstance() << endl;
-				scene->SetDebugString(wss.str());
 				GameManager::GetInstance().DrawGoalEffect();
 				if (m_GoalEffect->EffectEnd())
 				{
@@ -208,7 +205,7 @@ namespace basecross{
 		{
 			Vec3 playerVel = m_Cube->GetVelocity();
 
-			// ゼロベクトルでないことを確認
+			// �[���x�N�g���łȂ����Ƃ��m�F
 			if (playerVel.lengthSqr() > 0.0001f)
 			{
 				Vec3 normalizedVel = playerVel.normalize();
@@ -216,7 +213,7 @@ namespace basecross{
 
 				float dot = normalizedVel.dot(goalDir);
 
-				if (dot > 0.9f) // ある程度逆向きとみなす閾値
+				if (dot > 0.9f) // ������x�t�����Ƃ݂Ȃ�臒l
 				{
 					m_Goal = true;
 					m_Cube = nullptr;
@@ -243,9 +240,30 @@ namespace basecross{
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
-		draw->SetDiffuse(Col4(1, 0, 0, 1));
+		draw->SetMeshResource(L"PLAYER_MD");
+		Mat4x4 mat;
+		mat.affineTransformation(Vec3(0.4f), Vec3(), Vec3(0, -XM_PIDIV2, 0), Vec3(0.0f, -0.5f, 0.25f));
+		draw->SetMeshToTransformMatrix(mat);
+	}
+	void GimmickSetPlayer::OnUpdate() {
+		Gimmicks::OnUpdate();
 
+		float angle = 0.0f;
+		if (m_Value == Vec3(-1, 0, 0)) {
+			angle = XM_PIDIV2;
+		}
+		else if (m_Value == Vec3(1, 0, 0)) {
+			angle = -XM_PIDIV2;
+		}
+		else if (m_Value == Vec3(0, 0, 1)) {
+			angle = XM_PI;
+		}
+		auto rot = XMMatrixRotationAxis(Vec3(0, 1, 0), angle);
+
+		auto world = m_Transform->GetWorldMatrix();
+		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
+
+		m_Transform->SetQuaternion(world.quatInMatrix());
 	}
 	void GimmickSetPlayer::Begin()
 	{
@@ -255,6 +273,9 @@ namespace basecross{
 
 		player->Spawn(pos);
 		player->SetVelocity(m_Value);
+
+		auto draw = GetComponent<PNTStaticDraw>();
+		draw->SetDrawActive(false);
 	}
 	void GimmickSetPlayer::Update()
 	{
@@ -355,11 +376,12 @@ namespace basecross{
 		bool isStepped = CheckCount();
 		if (isStepped && !m_WasStepped)
 		{
-			// 踏んだ瞬間だけ処理
+			// ���񂾏u�Ԃ�������
 			Vec3 pos = m_Transform->GetPosition();
-			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cube側は単純な移動だけでOK
+			m_Cube->SetDrawActive(false);
+			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cube���͒P���Ȉړ�������OK
 
-			// エフェクト開始
+			// �G�t�F�N�g�J�n
 			m_TeleportFastEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickFastEffect.efk", m_Cube->GetPosition());
 			m_TeleportFastEffect->SetEffectSize(Vec3(0.5f));
 			m_TeleportFastEffect->SetEffectSpeed(1.7f);

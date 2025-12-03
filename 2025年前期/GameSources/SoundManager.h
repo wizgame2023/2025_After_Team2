@@ -11,7 +11,7 @@ namespace basecross{
 	class SoundManager : public SingletonBase<SoundManager> {
 	protected:
 		friend class SingletonBase<SoundManager>;
-		SoundManager() : m_SEVolume(1.0f), m_BGMVolume(1.0f) {}
+		SoundManager() : m_SEVolume(1.0f), m_BGMVolume(0.5f) {}
 	public:
 		void RegisterSounds();
 		void RegisterSound(const wstring& key, const wstring& fileName);

@@ -141,6 +141,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)TutrialStage.h">
       <Filter>Stage</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)TutorialManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -221,6 +222,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)TutrialStage.cpp">
       <Filter>Stage</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)TutorialManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json">

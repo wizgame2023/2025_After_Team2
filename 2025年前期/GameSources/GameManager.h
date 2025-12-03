@@ -8,7 +8,6 @@
 #include "Sprite.h"
 namespace basecross{
 	class GimmickHand;
-	struct TutorialTask;
 
 	enum class GameState {
 		Put,Game,Over,Clear
@@ -34,7 +33,6 @@ namespace basecross{
 
 		vector<pair<int, int>> m_GimmickColorPairs;
 		vector<pair<int, int>> m_BeforeGimmickColorPairs;
-		vector<TutorialTask> m_TutorialTasks;
 
 		float m_Tick;
 		float m_UpdateTicks;
@@ -69,7 +67,6 @@ namespace basecross{
 		/// “o˜^‚³‚ê‚Ä‚¢‚éî•ñ‚ğ‰Šú‰»‚·‚é
 		/// </summary>
 		void Reset() {
-			m_TutorialTasks.clear();
 			m_Cubes.clear();
 			m_Hand = nullptr;
 			m_Map = nullptr;
@@ -207,10 +204,6 @@ namespace basecross{
 			return m_MapFile;
 		}
 
-		vector<TutorialTask> GetTutorials()const {
-			return m_TutorialTasks;
-		}
-
 		void DrawGoalEffect();
 		void DrawOverEffect();
 
@@ -228,5 +221,13 @@ namespace basecross{
 		}
 
 	};
+
+	class GameFlowManager {
+
+	};
+	class ResultManager {
+
+	};
+
 }
 //end basecross

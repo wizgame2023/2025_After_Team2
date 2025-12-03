@@ -1,7 +1,25 @@
 {
   "Model": {
-    "Player.bmf": { "model": "PLAYER_MD", "texture": "",  "type": "static"},
-    "Goal.bmf": {   "model": "GOAL_MD", "texture": "",  "type": "static"}
+    "Player.bmf": {
+      "model": "PLAYER_MD",
+      "texture": "",
+      "type": "static"
+    },
+    "Goal.bmf": {
+      "model": "GOAL_MD",
+      "texture": "",
+      "type": "static"
+    },
+    "Direction.bmf": {
+      "model": "DIRECTION_MD",
+      "texture": "",
+      "type": "static"
+    },
+    "NoDirection.bmf": {
+      "model": "NO_DIRECTION_MD",
+      "texture": "",
+      "type": "static"
+    }
   },
   "Texture": {
     "arrow_Orbit.png": "TEMP_ARROW_SPRITE"
@@ -9,7 +27,8 @@
   "Sound": {
     "put4.wav": "Put",
     "playerDead2.wav": "Dead",
-    "clear2.wav": "Clear"
+    "clear2.wav": "Clear",
+    "BGM/BGM3.wav": "GameBGM"
   },
   "UI": {
     "TitleLogo.png": "TitleLogoUI",
@@ -21,12 +40,19 @@
     "StarCover.png": "StarCoverUI",
     "Star.png": "StarUI",
     "Evaluation.png": "EvaluationUI",
-    "tempBackGame.png": "TEMP_BACK_MENU",
-    "tempMenuExpain.png": "TEMP_EXPAIN_MENU",
-    "tempMenuNewGame.png": "TEMP_NEW_MENU",
-    "tempMenuSelect.png": "TEMP_SELECT_MENU",
-    "tempMenuSound.png": "TEMP_SOUND_MENU",
-    "tempMenuTitle.png": "TEMP_TITLE_MENU",
+
+    "BackGame.png": "TEMP_BACK_MENU",
+    "MenuExpain.png": "TEMP_EXPAIN_MENU",
+    "MenuNewGame.png": "TEMP_NEW_MENU",
+    "MenuSelect.png": "TEMP_SELECT_MENU",
+    "MenuSound.png": "TEMP_SOUND_MENU",
+    "MenuTitle.png": "TEMP_TITLE_MENU",
+    "select_BackGame.png": "SELECT_BACK_MENU",
+    "select_MenuExpain.png": "SELECT_EXPAIN_MENU",
+    "select_MenuNewGame.png": "SELECT_NEW_MENU",
+    "select_MenuSelect.png": "SELECT_SELECT_MENU",
+    "select_MenuSound.png": "SELECT_SOUND_MENU",
+    "select_MenuTitle.png": "SELECT_TITLE_MENU",
     "MouseCursor.png": "MOUSE_CURSOR"
   }
 }

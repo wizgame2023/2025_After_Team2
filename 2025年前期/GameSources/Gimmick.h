@@ -185,6 +185,7 @@ namespace basecross
 		};
 
 		virtual void OnCreate();
+		virtual void OnUpdate();
 		virtual void Begin();
 		virtual void Update();
 		virtual void End() {}
