@@ -168,7 +168,7 @@ namespace basecross{
 
 			if (m_GoalEffect)
 			{
-				wss << L"\nã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ•° :" << m_GoalEffect->GetEffectInstance() << endl;
+				wss << L"\nƒCƒ“ƒXƒ^ƒ“ƒX” :" << m_GoalEffect->GetEffectInstance() << endl;
 				scene->SetDebugString(wss.str());
 				GameManager::GetInstance().DrawGoalEffect();
 				if (m_GoalEffect->EffectEnd())
@@ -208,7 +208,7 @@ namespace basecross{
 		{
 			Vec3 playerVel = m_Cube->GetVelocity();
 
-			// ã‚¼ãƒ­ãƒ™ã‚¯ãƒˆãƒ«ã§ãªã„ã“ã¨ã‚’ç¢ºèª
+			// ƒ[ƒƒxƒNƒgƒ‹‚Å‚È‚¢‚±‚Æ‚ðŠm”F
 			if (playerVel.lengthSqr() > 0.0001f)
 			{
 				Vec3 normalizedVel = playerVel.normalize();
@@ -216,7 +216,7 @@ namespace basecross{
 
 				float dot = normalizedVel.dot(goalDir);
 
-				if (dot > 0.9f) // ã‚ã‚‹ç¨‹åº¦é€†å‘ãã¨ã¿ãªã™é–¾å€¤
+				if (dot > 0.9f) // ‚ ‚é’ö“x‹tŒü‚«‚Æ‚Ý‚È‚·è‡’l
 				{
 					m_Goal = true;
 					m_Cube = nullptr;
@@ -243,9 +243,30 @@ namespace basecross{
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
-		draw->SetDiffuse(Col4(1, 0, 0, 1));
+		draw->SetMeshResource(L"PLAYER_MD");
+		Mat4x4 mat;
+		mat.affineTransformation(Vec3(0.4f), Vec3(), Vec3(0, -XM_PIDIV2, 0), Vec3(0.0f, -0.5f, 0.25f));
+		draw->SetMeshToTransformMatrix(mat);
+	}
+	void GimmickSetPlayer::OnUpdate() {
+		Gimmicks::OnUpdate();
 
+		float angle = 0.0f;
+		if (m_Value == Vec3(-1, 0, 0)) {
+			angle = XM_PIDIV2;
+		}
+		else if (m_Value == Vec3(1, 0, 0)) {
+			angle = -XM_PIDIV2;
+		}
+		else if (m_Value == Vec3(0, 0, 1)) {
+			angle = XM_PI;
+		}
+		auto rot = XMMatrixRotationAxis(Vec3(0, 1, 0), angle);
+
+		auto world = m_Transform->GetWorldMatrix();
+		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
+
+		m_Transform->SetQuaternion(world.quatInMatrix());
 	}
 	void GimmickSetPlayer::Begin()
 	{
@@ -255,6 +276,9 @@ namespace basecross{
 
 		player->Spawn(pos);
 		player->SetVelocity(m_Value);
+
+		auto draw = GetComponent<PNTStaticDraw>();
+		draw->SetDrawActive(false);
 	}
 	void GimmickSetPlayer::Update()
 	{
@@ -355,12 +379,12 @@ namespace basecross{
 		bool isStepped = CheckCount();
 		if (isStepped && !m_WasStepped)
 		{
-			// è¸ã‚“ã çž¬é–“ã ã‘å‡¦ç†
+			// “¥‚ñ‚¾uŠÔ‚¾‚¯ˆ—
 			Vec3 pos = m_Transform->GetPosition();
 			m_Cube->SetDrawActive(false);
-			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cubeå´ã¯å˜ç´”ãªç§»å‹•ã ã‘ã§OK
+			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cube‘¤‚Í’Pƒ‚ÈˆÚ“®‚¾‚¯‚ÅOK
 
-			// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆé–‹å§‹
+			// ƒGƒtƒFƒNƒgŠJŽn
 			m_TeleportFastEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickFastEffect.efk", m_Cube->GetPosition());
 			m_TeleportFastEffect->SetEffectSize(Vec3(0.5f));
 			m_TeleportFastEffect->SetEffectSpeed(1.7f);
