@@ -77,7 +77,7 @@ namespace basecross {
 
 			if (m_BackSp == nullptr)
 			{
-				m_BackSp = AddGameObject<Sprite>(L"SelectCursorUI", position, size, Anchor::TopLeft);
+				m_BackSp = AddGameObject<Sprite>(L"SelectCursorUI", position + m_OffsetPos, size * 1.6f, Anchor::Center);
 				m_BackSp->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, 10.0f));
 			}
 
@@ -166,7 +166,7 @@ namespace basecross {
 				if (m_Count >= m_StageNum) m_Count = 0;
 
 				auto targetPos = m_NumPositions[m_Count];
-				m_BackSp->SetPosition(targetPos);
+				m_BackSp->SetPosition(targetPos+ m_OffsetPos);
 
 
 				m_IsStick = true;
