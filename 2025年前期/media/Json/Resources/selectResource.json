@@ -12,7 +12,8 @@
   "UI": {
     "SelectLogo.png": "SelectUI",
     "Number.png": "NumUI",
-    "BackBoard.png": "BackBoard",
-    "TestCursor.png": "CursorUI"
+    "SelectBackGround.png": "SelectBackGround",
+    "RollUI.png": "RollUI",
+    "Cursor.png": "SelectCursorUI"
   }
 }
