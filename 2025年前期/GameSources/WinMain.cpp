@@ -57,6 +57,16 @@ HWND InitInstance(HINSTANCE hInstance, int nCmdShow, bool isFullScreen, int iCli
 {
 
 	HWND hWnd = 0;
+	isFullScreen = TRUE;
+	
+	RECT rect;
+	HWND desktop = GetDesktopWindow();
+	GetWindowRect(desktop, &rect);
+	UINT dpi = GetDpiForSystem();
+	float scale = (float)(dpi / 96);
+	iClientWidth = (UINT)((float)rect.right * scale);
+	iClientHeight = (UINT)((float)rect.bottom * scale);
+
 	// ウィンドウの作成
 	if (isFullScreen) { // フルスクリーン
 						// 画面全体の幅と高さを取得

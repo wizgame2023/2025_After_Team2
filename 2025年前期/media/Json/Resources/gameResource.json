@@ -16,6 +16,7 @@
     "Expains/Pose/GimmickExpain_TP.png": "EXPAIN_TP",
     "Expains/Pose/GimmickExpain_INV.png": "EXPAIN_INV",
     "Expains/Pose/GimmickExpain_ROLL.png": "EXPAIN_ROLL",
+    "TutorialWindow.png": "TUTORIAL_WINDOW",
     "Expains/Tutorial/CloseTab.png": "TUTORIAL_CLOSE",
     "Expains/Tutorial/NextTab.png": "TUTORIAL_NEXT",
     "Expains/Tutorial/ExplainPut.png": "TUTORIAL_PUT",
@@ -53,6 +54,5 @@
     "Menu.png": "MENU",
     "Menu_Explain.png": "MENU_EXPLAIN",
     "TutorialBackBord.png": "MENU_GIMMICK"
-
   }
 }

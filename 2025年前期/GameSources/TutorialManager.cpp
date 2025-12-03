@@ -35,15 +35,16 @@ namespace basecross{
 	}
 
 	void TutorialStep::Start() {
-		m_Window = m_Stage->AddGameObject<Sprite>(L"MENU", m_Position, m_WindowSize, Anchor::Center);
+		m_Window = m_Stage->AddGameObject<Sprite>(L"TUTORIAL_WINDOW", m_Position, m_WindowSize, Anchor::Center);
 		m_Window->SetLayer(10);
-		m_Explain = m_Stage->AddGameObject<Sprite>(m_ExplainKeys[m_PageIndex], m_Position, m_WindowSize * 0.85f, Anchor::Center);
+		Vec3 explainPosition = m_Position + Vec3(0, 25, 0);
+		m_Explain = m_Stage->AddGameObject<Sprite>(m_ExplainKeys[m_PageIndex], explainPosition, m_WindowSize * 0.85f, Anchor::Center);
 		m_Explain->SetLayer(11);
 		if (m_ExplainKeys.size() > 1) {
-			m_CloseIcon = m_Stage->AddGameObject<Sprite>(L"TUTORIAL_NEXT", m_Position, m_WindowSize * 0.85f, Anchor::Center);
+			m_CloseIcon = m_Stage->AddGameObject<Sprite>(L"TUTORIAL_NEXT", explainPosition, m_WindowSize * 0.85f, Anchor::Center);
 		}
 		else {
-			m_CloseIcon = m_Stage->AddGameObject<Sprite>(L"TUTORIAL_CLOSE", m_Position, m_WindowSize * 0.85f, Anchor::Center);
+			m_CloseIcon = m_Stage->AddGameObject<Sprite>(L"TUTORIAL_CLOSE", explainPosition, m_WindowSize * 0.85f, Anchor::Center);
 		}
 		m_CloseIcon->SetLayer(10);
 
