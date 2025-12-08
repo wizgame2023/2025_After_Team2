@@ -22,12 +22,12 @@ namespace basecross{
 		mat.affineTransformation(Vec3(0.4f), Vec3(), Vec3(0,-XM_PIDIV2,0), Vec3(0.0f,-0.5f,0.25f));
 		m_Draw->SetMeshToTransformMatrix(mat);
 
-		Vec3 mapSize = GameManager::GetInstance().GetMap()->GetMapSize();
+		Vec3 mapSize = GameManager::GetInstance().GetLevelManager()->GetMapSize();
 
 		SetMoveArea(AABB(Vec3(-1.0f, -100.0f, -mapSize.z), Vec3(mapSize.x, 5.0f, 1.0f)));
 
 		SetMoveSec(0.5f);
-		GameManager::GetInstance().AddCube(GetThis<MoveCube>());
+		GameManager::GetInstance().GetEntityManager()->AddPlayer(GetThis<MoveCube>());
 
 
 	}
@@ -107,10 +107,10 @@ namespace basecross{
 		}
 	
 		if (m_IsBeforeEffecting && !m_IsEffecting) {
-			auto mapData = GameManager::GetInstance().GetMap()->
-				GetMapData(Vec2(static_cast<int>(position.x), static_cast<int>(-position.z)));
-			if (mapData.m_Gimmik) {
-				mapData.m_Gimmik->End();
+			auto mapData = GameManager::GetInstance().GetLevelManager()->GetMap()
+				->GetMapData(Vec2(static_cast<int>(position.x), static_cast<int>(-position.z)));
+			if (mapData.m_Gimmick) {
+				mapData.m_Gimmick->End();
 			}
 		}
 		m_IsBeforeEffecting = m_IsEffecting;
@@ -146,7 +146,7 @@ namespace basecross{
 
 		m_State = MoveState::ChangeVelocity;
 		m_TargetVelocity = velocity;
-		m_MoveVelocitySpeed = (m_TargetVelocity - m_Velocity) / GameManager::GetInstance().GetGameSpeed();
+		m_MoveVelocitySpeed = (m_TargetVelocity - m_Velocity) / GameManager::GetInstance().GetFlowManager()->GetGameTick();
 	}
 	void MoveCube::Move() {
 		if (m_IsEffecting) return;
@@ -157,14 +157,16 @@ namespace basecross{
 			m_Target = GetPosition();
 		}
 		m_Target = GetPosition() + m_Velocity.normalize();
-		m_MoveSpeed = (m_Target - GetPosition()).length() / GameManager::GetInstance().GetGameSpeed();
-		m_RotateSpeed = XM_PIDIV2 / GameManager::GetInstance().GetGameSpeed();
+
+		float gameTick = GameManager::GetInstance().GetFlowManager()->GetGameTick();
+		m_MoveSpeed = (m_Target - GetPosition()).length() / gameTick;
+		m_RotateSpeed = XM_PIDIV2 / gameTick;
 		m_RotateRad = 0;
 		m_State = MoveState::Move;
 	}
 	void MoveCube::Destroy() {
 		SoundManager::GetInstance().PlaySE(L"Dead");
-		GameManager::GetInstance().DeleteCube(GetThis<MoveCube>());
+		GameManager::GetInstance().GetEntityManager()->DestroyPlayer(GetThis<MoveCube>());
 	}
 }
 //end basecross

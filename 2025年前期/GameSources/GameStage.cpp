@@ -33,26 +33,33 @@ namespace basecross {
 
 	void GameStage::OnCreate() {
 		try {
-			GameManager::GetInstance().Reset();
-			GameManager::GetInstance().SetGameStage(GetThis<GameStage>());
-			auto mapJson = GameManager::GetInstance().LoadStage(L"TestMap");
-
 			CreateViewLight();
 			CreateResorce();
 
-			auto stageMap = AddGameObject<Map>();
-			stageMap->Load();
+
+			auto& gameManager = GameManager::GetInstance();
+			gameManager.Reset();
+			gameManager.SetGameStage(GetThis<GameStage>());
+			auto& levelManager = gameManager.GetLevelManager();
+			levelManager->Load(m_StageFilename);
+
+			//auto mapJson = levelManager->GetJson();
+			//auto mapJson = GameManager::GetInstance().LoadStage(L"TestMap");
+
+
+			/*auto stageMap = AddGameObject<Map>();
+			stageMap->Load();*/
 
 			auto camera = static_pointer_cast<MainCamera>(GetView()->GetTargetCamera());
-			camera->SetFixedPoint(stageMap);
+			camera->SetFixedPoint(levelManager->GetMap());
 
-			auto hand = AddGameObject<GimmickHand>();
-			hand->SetCardSize(Vec2(200, 300));
+			/*auto hand = AddGameObject<GimmickHand>();
+			hand->SetCardSize(Vec2(200, 300));*/
 
-			hand->LoadHands(mapJson.At<JsonArray>(L"items"));
+			//hand->LoadHands(mapJson.At<JsonArray>(L"items"));
 
-			GameManager::GetInstance().SetHand(hand);
-			GameManager::GetInstance().SetMap(stageMap);
+			//GameManager::GetInstance().SetHand(hand);
+			//GameManager::GetInstance().SetMap(stageMap);
 			auto view = dynamic_pointer_cast<SingleView>(GetView());
 			Viewport viewport = view->GetTargetViewport();
 			viewport.Height;

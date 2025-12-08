@@ -15,9 +15,11 @@ namespace basecross {
 		//ƒrƒ…[‚Ìì¬
 		void CreateViewLight();
 		void CreateResorce();
+
+		wstring m_StageFilename;
 	public:
 		//\’z‚Æ”jŠü
-		GameStage() :Stage() {}
+		GameStage(const wstring& filename = L"TestMap") :Stage(), m_StageFilename(filename) {}
 		virtual ~GameStage() {}
 		//‰Šú‰»
 		virtual void OnCreate()override;

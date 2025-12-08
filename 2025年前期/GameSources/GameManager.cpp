@@ -7,67 +7,179 @@
 #include "Project.h"
 
 namespace basecross{
-	void GameManager::CreateTutorials() {
-		
-	}
-	bool GameManager::IsUpdate() {
-		for (auto& cube : m_Cubes) {
-			if (cube->IsEffecting()) {
-				return false;
+	void EntityManager::Update() {
+		auto& levelManager = GameManager::GetInstance().GetLevelManager();
+
+		auto& map = levelManager->GetMap();
+		for (auto& gimmick : map->GetGimmicks()) {
+			gimmick->Update();
+		}
+
+		bool isOver = true;
+		for (auto& player : m_Players) {
+			//一つでも動けるキューブがいたらfalse
+			if (player->CheckArea()) isOver = false;
+			player->Move();
+		}
+		if (isOver) {
+			auto stage = GameManager::GetInstance().GetGameStage();
+			for (auto& player : m_Players) {
+				stage->RemoveGameObject<MoveCube>(player);
 			}
+			m_Players.clear();
+			GameManager::GetInstance().GetFlowManager()->GameOver();
+		}
+	}
+	bool EntityManager::IsUpdate() {
+		for (auto& player : m_Players) {
+			if (player->IsEffecting()) return false;
 		}
 		return true;
 	}
-	void GameManager::MapUpdate() {
-		//前のフレームから消えた物を削除
-		for (int i = 0; i < m_BeforeGimmickColorPairs.size(); i++) {
-			if (find(
-				m_GimmickColorPairs.begin(), m_GimmickColorPairs.end(),
-				m_BeforeGimmickColorPairs[i]) == m_GimmickColorPairs.end()) {
+	void EntityManager::StartPlayer() {
+		for (auto& player : m_Players) {
+			player->SetUpdateActive(true);
+		}
+	}
+	void EntityManager::StopPlayer() {
+		for (auto& player : m_Players) {
+			player->SetUpdateActive(false);
+		}
+	}
+	void EntityManager::DestroyPlayer(shared_ptr<MoveCube>& player) {
+		auto it = find(m_Players.begin(), m_Players.end(), player);
+		if (it != m_Players.end()) {
+			m_Players.erase(it);
+			auto stage = GameManager::GetInstance().GetGameStage();
+			stage->RemoveGameObject<MoveCube>(player);
+		}
+	}
+	void GameFlowManager::Update() {
+		m_Tick += App::GetApp()->GetElapsedTime();
+		float updateTick = m_UpdateTicks / m_Rate;
+		if (m_Tick <= updateTick) return;
 
-				m_Map->RecoverGimmick(m_BeforeGimmickColorPairs[i].first);
+		auto& entityManager = GameManager::GetInstance().GetEntityManager();
+
+		if (!entityManager->IsUpdate()) return;
+		m_Tick = 0;
+
+		entityManager->Update();
+	}
+	void GameFlowManager::GameClear() {
+		m_GameState = GameState::Clear;
+	}
+	void GameFlowManager::GameOver() {
+		m_GameState = GameState::Over;
+
+		GameManager::GetInstance().RestartGame();
+	}
+	void GameFlowManager::GameRestart() {
+		m_GameState = GameState::Put;
+	}
+	void GameFlowManager::GameStart() {
+		m_GameState = GameState::Game;
+	}
+
+	void LevelManager::Update() {
+		//前のフレームから消えた物を削除
+		for (int i = 0; i < m_BeforePairs.size(); i++) {
+			if (find(
+				m_CurrentPairs.begin(), m_CurrentPairs.end(),
+				m_BeforePairs[i]) == m_CurrentPairs.end()) {
+
+				m_Map->RecoverGimmick(m_BeforePairs[i].first);
 			}
 		}
 		//前のフレームから消えたものを追加
-		for (int i = 0; i < m_GimmickColorPairs.size(); i++) {
+		for (int i = 0; i < m_CurrentPairs.size(); i++) {
 			if (find(
-				m_BeforeGimmickColorPairs.begin(), m_BeforeGimmickColorPairs.end(),
-				m_GimmickColorPairs[i]) == m_BeforeGimmickColorPairs.end()) {
+				m_BeforePairs.begin(), m_BeforePairs.end(),
+				m_CurrentPairs[i]) == m_BeforePairs.end()) {
 
-				m_Map->PutGimmick(m_GimmickColorPairs[i].first, m_Hand->Get(m_GimmickColorPairs[i].second));
+				m_Map->PutGimmick(m_CurrentPairs[i].first, m_Hand->Get(m_CurrentPairs[i].second));
 			}
 		}
-		m_BeforeGimmickColorPairs = m_GimmickColorPairs;
+		m_BeforePairs = m_CurrentPairs;
 	}
-	void GameManager::GimmickUpdate() {
-		for (auto& gimmick : m_Map->GetGimmicks()) {
-			gimmick->Update();
-		}
-	}
-	void GameManager::CubeUpdate() {
-		//ゲームオーバー判定
-		bool isOver = true;
-		for (auto& cube : m_Cubes) {
-			//一つでも動けるキューブがいたらfalse
-			if (cube->CheckArea()) isOver = false;
-			cube->Move();
-		}
+	void LevelManager::Load(const wstring& key) {
+		m_MapFile.Load(L"Level/" + key + L".json");
 
-		if (isOver) {
-			m_GameState = GameState::Over;
-			RestartGame();
-		}
-	}
-	void GameManager::StopCube() {
-		for (auto& cube : m_Cubes) {
-			cube->SetUpdateActive(false);
-		}
+		auto gameStage = GameManager::GetInstance().GetGameStage();
+		auto map = gameStage->AddGameObject<Map>();
+		map->Load(m_MapFile);
+
+		m_Map = map;
+
+		auto hand = gameStage->AddGameObject<GimmickHand>();
+
+		hand->LoadHands(m_MapFile.At<JsonArray>(L"items"));
+
+		m_Hand = hand;
 	}
 
+	Vec3 LevelManager::GetMapSize() { return m_Map->GetMapSize(); }
+	bool LevelManager::IsStart(){ return m_CurrentPairs.size() == m_Map->GetColorTable().size(); }
+
+	void LevelManager::AddPair(pair<int, int>& gimmickPair) {
+		RemovePair(gimmickPair.first, gimmickPair.second);
+		m_CurrentPairs.push_back(gimmickPair);
+	}
+	void LevelManager::RemovePair(pair<int, int>& gimmickPair) {
+		stack<vector<pair<int, int>>::iterator> eraseIterators;
+		for (auto& it = m_CurrentPairs.begin(); it != m_CurrentPairs.end(); it++) {
+			if (*it == gimmickPair) {
+				eraseIterators.push(it);
+			}
+		}
+		while (!eraseIterators.empty()) {
+			m_CurrentPairs.erase(eraseIterators.top());
+			eraseIterators.pop();
+		}
+	}
+	void LevelManager::RemovePair(int color, int gimmick) {
+		stack<vector<pair<int, int>>::iterator> eraseIterators;
+		for (auto& it = m_CurrentPairs.begin(); it != m_CurrentPairs.end(); it++) {
+			auto& pair = (*it);
+			if (pair.first == color || pair.second == gimmick) {
+				eraseIterators.push(it);
+			}
+		}
+		while (!eraseIterators.empty()) {
+			m_CurrentPairs.erase(eraseIterators.top());
+			eraseIterators.pop();
+		}
+	}
+
+
+	void GameManager::Reset() {
+		m_LevelManager = make_shared<LevelManager>();
+		m_GameFlowManager = make_shared<GameFlowManager>();
+		m_EntityManager = make_shared<EntityManager>();
+
+		m_GameFlowManager->SetTickRate(1.0f);
+		m_GameFlowManager->SetUpdateTick(0.5f);
+
+		m_Stage = nullptr;
+		m_IsFading = false;
+
+		m_DirectionMap[L"south"] = Vec3(0, 0, -1);
+		m_DirectionMap[L"north"] = Vec3(0, 0, 1);
+		m_DirectionMap[L"east"] = Vec3(1, 0, 0);
+		m_DirectionMap[L"west"] = Vec3(-1, 0, 0);
+
+		m_KeyConfigFile.Load(L"Json/keyconfig.json");
+
+		m_StarSp.clear();
+		m_EvaluationSp.clear();
+
+		m_GameEvaluation = 3;
+		m_CurrentStarIndex = 0;
+	}
 
 	void GameManager::ResultUpdate()
 	{
-		if (!CompareState(GameState::Clear)) return;
+		if (!m_GameFlowManager->IsClear()) return;
 
 		m_ResultTime += App::GetApp()->GetElapsedTime();
 
@@ -92,87 +204,73 @@ namespace basecross{
 	}
 	void GameManager::RestartGame(bool isAll) {
 		StartFade();
-		for (auto& sphere : m_Cubes) {
-			m_Stage->RemoveGameObject<MoveCube>(sphere);
-		}
-		for (auto& gimmick : m_Map->GetGimmicks()) {
+
+		auto& map = m_LevelManager->GetMap();
+		for (auto& gimmick : map->GetGimmicks()) {
 			gimmick->SetDrawActive(true);
 		}
-		m_Cubes.clear();
 	}
 	void GameManager::Start() {
-		for (auto& gimmick : m_Map->GetGimmicks()) {
+		auto& map = m_LevelManager->GetMap();
+		for (auto& gimmick : map->GetGimmicks()) {
 			auto draw = gimmick->GetComponent<SmBaseDraw>();
 			auto color = draw->GetDiffuse();
 			color.w = 1.0f;
 			draw->SetDiffuse(color);
 			gimmick->Begin();
 		}
-		for (auto& sphere : m_Cubes) {
-			//プレイヤーを稼働開始
-			sphere->SetUpdateActive(true);
-		}
-		m_GameState = GameState::Game;
+		m_EntityManager->StartPlayer();
+		m_GameFlowManager->GameStart();
 	}
 	void GameManager::Update() {
 		m_KeyConfigFile.Load(L"Json/keyconfig.json");
 		InputUpdate();
 		ResultUpdate();
-		MapUpdate();
+		m_LevelManager->Update();
 
 		if (m_IsFading) {
 			if (m_SpriteFade->IsFinish()) {
 				m_IsFading = false;
-				m_GameState = GameState::Put;
+				m_GameFlowManager->GameRestart();
 			}
 		}
 		//ここから下はゲーム進行中の処理
-		if (!CompareState(GameState::Game))return;
+		if (!m_GameFlowManager->IsGame())return;
 
-		m_Tick += App::GetApp()->GetElapsedTime();
-		float updateTick = m_UpdateTicks / m_TickRate;
-		if (m_Tick <= updateTick) return;
-
-
-		if (!IsUpdate()) return;
-		m_Tick = 0;
-		
-		GimmickUpdate();
-		CubeUpdate();
+		m_GameFlowManager->Update();
 	}
 
 	void GameManager::InputUpdate() {
 
-
 		auto& input = InputManager::GetInputManager();
-		if (CompareState(GameState::Clear) || CompareState(GameState::Over)) {
+		if (m_GameFlowManager->IsFinished()) {
 			if (input->GetDownButton(GetKeyConfig(L"restart"))) {
 				m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage");
 			}
 		}
 		if (input->GetDownButton(GetKeyConfig(L"start"))) {
-			if (CompareState(GameState::Put)) {
-				if (m_GimmickColorPairs.size() == m_Map->GetColorTable().size()) {
+			if (m_GameFlowManager->IsPut()) {
+				if (m_LevelManager->IsStart()) {
 					Start();
 				}
 			}
 		}
 
-		if (!CompareState(GameState::Game)) return;
+		if (!m_GameFlowManager->IsGame()) return;
 
 		if (input->GetButton(GetKeyConfig(L"fastMove"))) {
-			m_TickRate = 3.0f;
+			m_GameFlowManager->SetTickRate(3.0f);
 		}
 		else {
-			m_TickRate = 1.0f;
+			m_GameFlowManager->SetTickRate(1.0f);
 		}
 
 	}
 
 	void GameManager::DrawGoalEffect() {
-		if (!CompareState(GameState::Game)) return;
+		if (!m_GameFlowManager->IsGame()) return;
 
-		StopCube();
+		m_EntityManager->StopPlayer();
 
 		auto gameObjectVec = m_Stage->GetGameObjectVec();
 
@@ -196,7 +294,7 @@ namespace basecross{
 					m_EffectSprite.push_back(backBoardUI);
 					m_EffectSprite.push_back(starCoverUI);
 					effect->EffectDelete();
-					m_GameState = GameState::Clear;
+					m_GameFlowManager->GameClear();
 					break;
 				}
 			}

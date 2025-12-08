@@ -1,0 +1,26 @@
+{
+    "tutorial":[
+        {"number":1,"file":"TestMap"},
+        {"number":2,"file":"TestMap"},
+        {"number":3,"file":"TestMap"},
+        {"number":4,"file":"TestMap"},
+        {"number":5,"file":"TestMap"},
+        {"number":6,"file":"TestMap"},
+        {"number":7,"file":"TestMap"},
+        {"number":8,"file":"TestMap"},
+        {"number":9,"file":"TestMap"},
+        {"number":10,"file":"TestMap"}
+    ],
+    "easy":[
+        {"number":1,"file":"TestMap"},
+        {"number":2,"file":"TestMap"},
+        {"number":3,"file":"TestMap"},
+        {"number":4,"file":"TestMap"},
+        {"number":5,"file":"TestMap"},
+        {"number":6,"file":"TestMap"},
+        {"number":7,"file":"TestMap"},
+        {"number":8,"file":"TestMap"},
+        {"number":9,"file":"TestMap"},
+        {"number":10,"file":"TestMap"}
+    ]
+}

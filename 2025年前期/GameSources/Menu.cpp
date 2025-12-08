@@ -39,7 +39,7 @@ namespace basecross{
 
 		auto& gameManager = GameManager::GetInstance();
 
-		auto colorTable = gameManager.GetMap()->GetColorTable();
+		auto colorTable = gameManager.GetLevelManager()->GetMap()->GetColorTable();
 		Json colorJson = Json(L"Json/color.json");
 
 		for (int i = 0; i < colorTable.size(); i++){
@@ -64,7 +64,7 @@ namespace basecross{
 		}
 
 
-		auto cards = gameManager.GetHand()->GetCardData();
+		auto cards = gameManager.GetLevelManager()->GetHand()->GetCardData();
 		for (int i = 0; i < cards.size(); i++) {
 			auto sprite = m_MenuStage->AddGameObject<Sprite>(
 				m_GimmickTextures[cards[i]->GetType()],
@@ -132,7 +132,7 @@ namespace basecross{
 		auto& input = InputManager::GetInputManager();
 		auto& gameManager = GameManager::GetInstance();
 
-		if (!gameManager.CompareState(GameState::Put))return;
+		if (!gameManager.GetFlowManager()->IsPut())return;
 		if (TutorialManager::GetInstance().IsActive()) return;
 		
 		if (!m_PoseMenu->IsOpen()) {
@@ -140,6 +140,7 @@ namespace basecross{
 				auto line = m_Lines.back();
 				m_Lines.pop_back();
 				m_MenuStage->RemoveGameObject<Sprite>(line.m_Line);
+				gameManager.GetLevelManager()->RemovePair(line.m_PairHandle);
 			}
 			if (input->GetDownButton(gameManager.GetKeyConfig(L"putGimmick"))) {
 				UpdateOnCoursorHandle();
@@ -222,6 +223,7 @@ namespace basecross{
 						m_Lines.erase(eraseIteraters.top());
 						eraseIteraters.pop();
 					}
+					gameManager.GetLevelManager()->AddPair(pair<int, int>{m_ColorHandle, m_GimmickHandle});
 					m_Lines.push_back({ m_CurrentLine,pair<int,int>{m_ColorHandle,m_GimmickHandle} });
 					SoundManager::GetInstance().PlaySE(L"Put");
 				}
@@ -233,7 +235,7 @@ namespace basecross{
 			}
 		}
 
-		gameManager.UpdatePair(ConvertColorGimmickHandles(m_Lines));
+		//gameManager.UpdatePair(ConvertColorGimmickHandles(m_Lines));
 		DrawExpain();
 		if (input->GetDownButton(L"Y"))
 		{
@@ -313,7 +315,7 @@ namespace basecross{
 
 	}
 	void GameMenu::DrawExpain() {
-		auto cards = GameManager::GetInstance().GetHand()->GetCardData();
+		auto cards = GameManager::GetInstance().GetLevelManager()->GetHand()->GetCardData();
 		if (m_GimmickHandle != -1) {
 			wstring key = cards[m_GimmickHandle]->GetExpainKey();
 			if (key != L"") {
@@ -380,11 +382,11 @@ namespace basecross{
 	void GameMenu::LoadHintData()
 	{
 		auto& gameManager = GameManager::GetInstance();
-		auto colorTable = gameManager.GetMap()->GetColorTable();
-		Json levelJson = gameManager.GetMapJsonData();
+		auto colorTable = gameManager.GetLevelManager()->GetMap()->GetColorTable();
+		Json levelJson = gameManager.GetLevelManager()->GetJson();
 		auto hintArray = levelJson.At<JsonArray>(L"hint");
 		auto objectArray = hintArray->GetObjectArray();
-		auto cards = gameManager.GetHand()->GetCardData();
+		auto cards = gameManager.GetLevelManager()->GetHand()->GetCardData();
 
 		for (const auto& hintObj : objectArray)
 		{
