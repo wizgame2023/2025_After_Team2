@@ -2,37 +2,39 @@
 @file TitleStage.h
 @brief タイトルステージ
 */
-
 #pragma once
 #include "stdafx.h"
 
-namespace basecross {
-	class Sprite;
+namespace basecross 
+{
+    class Sprite;
 
-	//--------------------------------------------------------------------------------------
-	//	タイトルステージクラス
-	//--------------------------------------------------------------------------------------
-	class TitleStage : public Stage {
+    class TitleStage : public Stage 
+    {
+        void CreateViewLight();
 
-		//ビューの作成
-		void CreateViewLight();
+        shared_ptr<Sprite> m_StartSprite;
+        shared_ptr<Sprite> m_Cursor;
+        shared_ptr<Sprite> m_Line;
+        vector<shared_ptr<Sprite>> m_ColorPalettes;
+        vector<shared_ptr<Sprite>> m_Handlers;
 
-		shared_ptr<Sprite> m_StartSprite;
-
-		float m_Fade;
-
-	public:
-		//構築と破棄
-		TitleStage() :Stage() {}
-		virtual ~TitleStage() {}
-		//初期化
-		virtual void OnCreate()override;
-		virtual void OnUpdate()override;
-
-		void SpriteCreate();
-	};
+        Vec3 m_StartPos;
+        float m_Fade = 0.0f;
+        bool m_IsBlinking = true; // スタート文字点滅制御
+		bool m_IsAPushed = false;
+        bool m_IsConfirmed = false;
 
 
+    public:
+        TitleStage() :Stage() {}
+        virtual ~TitleStage() {}
+        virtual void OnCreate()override;
+        virtual void OnUpdate()override;
+
+    private:
+        void SpriteCreate();
+        void StartSpriteCreate();
+        void Json();
+    };
 }
-//end basecross
-
