@@ -40,10 +40,10 @@ namespace basecross{
 			m_PutEffect = m_Stage->AddGameObject<Effect>(L"PutGimmickEffect.efk", GetPosition() + Vec3(0, 0.75f, 0));
 			m_PutEffect->SetEffectSize(Vec3(0.7f));
 		}
-
+		m_Board->GetDraw()->SetDrawActive(false);
+		return;
 		if (m_Value.lengthSqr() == 0) {
-			m_Board->GetDraw()->SetDrawActive(false);
-			return;
+			
 		}
 
 		m_Board->GetTrans()->SetPosition(GetPosition() + Vec3(0, 0.75f, 0));
@@ -295,8 +295,12 @@ namespace basecross{
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
-		draw->SetDiffuse(Col4(0, 0, 1, 1));
+		draw->SetMeshResource(L"DIRECTION_MD");
+		draw->SetDiffuse(Col4(1, 0, 0, 1));
+		Mat4x4 mat;
+		mat.affineTransformation(Vec3(1.0f), Vec3(), Vec3(0, XM_PIDIV2, 0), Vec3(0.0f, -0.75f, 0.0f));
+		draw->SetMeshToTransformMatrix(mat);
+
 
 	}
 

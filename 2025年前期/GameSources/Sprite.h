@@ -53,8 +53,8 @@ namespace basecross{
 
 				if (m_CurrentOrder < 0 || m_CurrentOrder >= m_Order.size()) {
 					EndAnimation();
-					return true;
 				}
+				return true;
 			}
 
 			return false;
