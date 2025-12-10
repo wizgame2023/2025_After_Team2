@@ -61,8 +61,9 @@ namespace basecross {
 			SoundManager::GetInstance().PlayBGM(L"GameBGM");
 
 
-			/*auto skyCube = AddGameObject<SkyCube>(L"FLOOR");
-			skyCube->SetPosition(map->GetMapCenter());*/
+			auto skyCube = AddGameObject<SkyCube>(L"FLOOR");
+			skyCube->SetPosition(map->GetMapCenter());
+
 		}
 		catch (...) {
 			throw;

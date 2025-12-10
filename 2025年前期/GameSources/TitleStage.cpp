@@ -40,6 +40,15 @@ namespace basecross {
 			//ビューとライトの作成
 			CreateViewLight();
 			SpriteCreate();
+
+			auto sprite = AddGameObject<Sprite>(L"StartUI", Vec3(0.0f, -200.0f, 0.0f), Vec2(512, 128), Anchor::Center);
+			sprite->SetAnimationActive(true);
+			sprite->CreateAnimationUV(Vec2(3, 2));
+			sprite->AddAnimation(L"anim1", 0, 5, 0.1f,true);
+			sprite->AddAnimation(L"anim2", { 0,1,2,3,4,5 }, 0.1f, true);
+
+			sprite->SetCurrentAnimation(L"anim2");
+
 		}
 		catch (...) {
 			throw;
