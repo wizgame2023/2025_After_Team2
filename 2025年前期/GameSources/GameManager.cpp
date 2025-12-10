@@ -245,7 +245,8 @@ namespace basecross{
 		auto& input = InputManager::GetInputManager();
 		if (m_GameFlowManager->IsFinished()) {
 			if (input->GetDownButton(GetKeyConfig(L"restart"))) {
-				m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+				int number = m_LevelManager->GetStageNumber();
+				m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage", make_shared<int>(number));
 			}
 		}
 		if (input->GetDownButton(GetKeyConfig(L"start"))) {

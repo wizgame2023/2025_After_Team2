@@ -1,8 +1,8 @@
 {
     "tutorial":[
         {"number":1,"file":"TestMap"},
-        {"number":2,"file":"TestMap"},
-        {"number":3,"file":"TestMap"},
+        {"number":2,"file":"map"},
+        {"number":3,"file":"level1"},
         {"number":4,"file":"TestMap"},
         {"number":5,"file":"TestMap"},
         {"number":6,"file":"TestMap"},

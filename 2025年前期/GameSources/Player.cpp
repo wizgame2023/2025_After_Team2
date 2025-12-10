@@ -95,17 +95,29 @@ namespace basecross{
 			}
 			break;
 		}
+		//ax * sin(0) - ay * cos(0),ax * cos(0) + ay * sin(0);
 		case MoveState::ChangeVelocity: {
-			Vec3 direction = m_TargetVelocity - m_Velocity;
-			Vec3 moveAmount = elapsed * m_MoveVelocitySpeed;
-			if (moveAmount.length() > direction.length()) {
-				moveAmount = direction;
+			if (!m_MoveVelocityAngleSpeed) {
+				m_IsEffecting = false;
+				break;
+			}
+			Vec3 currentCross = cross(m_Velocity, m_TargetVelocity);
+			currentCross.normalize();
+			if (currentCross.length() == 0) {
+				currentCross = Vec3(0, 1, 0);
+				m_MoveVelocityAngleSpeed *= -1;
+			}
+			float sita = elapsed * m_MoveVelocityAngleSpeed;
+			m_Velocity = XMVector3Rotate(m_Velocity, XMQuaternionRotationAxis(currentCross, sita));
+			Vec3 afterCross = cross(m_Velocity, m_TargetVelocity);
+			afterCross.normalize();
+			if (afterCross != currentCross) {
+				m_Velocity = m_TargetVelocity;
 				m_IsEffecting = false;
 			}
-			m_Velocity += moveAmount;
+			break;
 		}
 		}
-	
 		if (m_IsBeforeEffecting && !m_IsEffecting) {
 			auto mapData = GameManager::GetInstance().GetLevelManager()->GetMap()
 				->GetMapData(Vec2(static_cast<int>(position.x), static_cast<int>(-position.z)));
@@ -146,7 +158,10 @@ namespace basecross{
 
 		m_State = MoveState::ChangeVelocity;
 		m_TargetVelocity = velocity;
-		m_MoveVelocitySpeed = (m_TargetVelocity - m_Velocity) / GameManager::GetInstance().GetFlowManager()->GetGameTick();
+
+		float angle1 = atan2f(m_Velocity.z, m_Velocity.x);
+		float angle2 = atan2f(m_TargetVelocity.z, m_TargetVelocity.x);
+		m_MoveVelocityAngleSpeed = (angle1 - angle2) / GameManager::GetInstance().GetFlowManager()->GetGameTick();
 	}
 	void MoveCube::Move() {
 		if (m_IsEffecting) return;

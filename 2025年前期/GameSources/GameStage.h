@@ -16,10 +16,10 @@ namespace basecross {
 		void CreateViewLight();
 		void CreateResorce();
 
-		wstring m_StageFilename;
+		shared_ptr<JsonObject> m_StageData;
 	public:
 		//\’z‚Æ”jŠü
-		GameStage(const wstring& filename = L"TestMap") :Stage(), m_StageFilename(filename) {}
+		GameStage(const shared_ptr<JsonObject> data = nullptr) :Stage(), m_StageData(data) {}
 		virtual ~GameStage() {}
 		//‰Šú‰»
 		virtual void OnCreate()override;

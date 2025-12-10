@@ -120,12 +120,12 @@ namespace basecross{
 		m_MovieWindow->SetPosition(windowPosition + Vec3(20,20,0));
 		//m_MovieWindow->Play(App::GetApp()->GetDataDirWString() + L"Movies/preview.mp4");
 
-		TutorialManager::GetInstance().RegisterStep(L"sample", 
+		/*TutorialManager::GetInstance().RegisterStep(L"sample", 
 			make_shared<PutGimmickTutorial>(m_MenuStage,
 				array<shared_ptr<Sprite>,2>{ m_GimmickIcons[0],m_ColorPalette[1] },
 				1.0f,1.0f));
 
-		TutorialManager::GetInstance().Start(L"sample");
+		TutorialManager::GetInstance().Start(L"sample");*/
 
 	}
 	void GameMenu::OnUpdate() {

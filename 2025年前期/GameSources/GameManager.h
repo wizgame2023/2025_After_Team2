@@ -84,13 +84,16 @@ namespace basecross{
 		shared_ptr<GimmickHand> m_Hand;	//ギミックデータ
 		shared_ptr<Map> m_Map;	//マップデータ
 
+		int m_StageNumber;
 		vector<pair<int, int>> m_CurrentPairs;	//現在の組み合わせ
 		vector<pair<int, int>> m_BeforePairs;	//前フレームの組み合わせ
 	public:
-		LevelManager() : m_MapFile{} {}
+		LevelManager() : m_MapFile{}, m_StageNumber(-1){}
 
 		void Update();
 		void Load(const wstring& key);
+		void SetStageNumber(int number) { m_StageNumber = number; }
+		int GetStageNumber()const { return m_StageNumber; }
 
 		Json GetJson()const { return m_MapFile; }
 		shared_ptr<Map> GetMap()const { return m_Map; }

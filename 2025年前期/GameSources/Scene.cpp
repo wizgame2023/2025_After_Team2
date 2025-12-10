@@ -61,7 +61,7 @@ namespace basecross{
 
 			auto data = dataArray->GetObjectArray()[index];
 			
-			ResetActiveStage<GameStage>(data->At<JsonString>(L"file")->GetValue());
+			ResetActiveStage<GameStage>(data);
 		}
 		if (event->m_MsgStr == L"ToTitleStage")
 		{
