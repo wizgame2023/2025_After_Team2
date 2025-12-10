@@ -2,8 +2,8 @@
   "mapSize": [ 5, 5 ],
   "items": [
     {"id": "player","count": 1, "direction" :  "east"},
-    {"id": "goal","count": 1,"direction": "south"},
-    {"id": "course","count": 1,"direction": "south"}
+    {"id": "goal","count": 1,"direction": "north"},
+    {"id": "arrow","count": 1,"direction": "south"}
   ],
   "map": [
     {"pos": [ 0, 0 ],"color": "red","height": 0},
