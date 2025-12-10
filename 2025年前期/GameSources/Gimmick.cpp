@@ -76,7 +76,7 @@ namespace basecross{
 	}
 	void Gimmicks::Update()
 	{
-		auto playerVec = GameManager::GetInstance().GetCubes();
+		auto playerVec = GameManager::GetInstance().GetEntityManager()->GetPlayers();
 		auto pos = GetPosition();
 		shared_ptr<MoveCube> cube;
 
@@ -205,7 +205,7 @@ namespace basecross{
 		{
 			Vec3 playerVel = m_Cube->GetVelocity();
 
-			// �[���x�N�g���łȂ����Ƃ��m�F
+			// ?[???x?N?g????????????m?F
 			if (playerVel.lengthSqr() > 0.0001f)
 			{
 				Vec3 normalizedVel = playerVel.normalize();
@@ -213,7 +213,7 @@ namespace basecross{
 
 				float dot = normalizedVel.dot(goalDir);
 
-				if (dot > 0.9f) // ������x�t�����Ƃ݂Ȃ�臒l
+				if (dot > 0.9f) // ??????x?t??????????l
 				{
 					m_Goal = true;
 					m_Cube = nullptr;
@@ -242,7 +242,7 @@ namespace basecross{
 		auto draw = AddComponent<PNTStaticDraw>();
 		draw->SetMeshResource(L"PLAYER_MD");
 		Mat4x4 mat;
-		mat.affineTransformation(Vec3(0.4f), Vec3(), Vec3(0, -XM_PIDIV2, 0), Vec3(0.0f, -0.5f, 0.25f));
+		mat.affineTransformation(Vec3(0.8f), Vec3(), Vec3(0, -XM_PIDIV2, 0), Vec3(0.0f, -0.75f, 0.25f));
 		draw->SetMeshToTransformMatrix(mat);
 	}
 	void GimmickSetPlayer::OnUpdate() {
@@ -376,12 +376,12 @@ namespace basecross{
 		bool isStepped = CheckCount();
 		if (isStepped && !m_WasStepped)
 		{
-			// ���񂾏u�Ԃ�������
+			// ?????u?????????
 			Vec3 pos = m_Transform->GetPosition();
 			m_Cube->SetDrawActive(false);
-			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cube���͒P���Ȉړ�������OK
+			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cube????P????????????OK
 
-			// �G�t�F�N�g�J�n
+			// ?G?t?F?N?g?J?n
 			m_TeleportFastEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickFastEffect.efk", m_Cube->GetPosition());
 			m_TeleportFastEffect->SetEffectSize(Vec3(0.5f));
 			m_TeleportFastEffect->SetEffectSpeed(1.7f);
@@ -405,9 +405,6 @@ namespace basecross{
 	void GimmickKiller::OnCreate()
 	{
 		Gimmicks::OnCreate();
-		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
-		draw->SetDiffuse(Col4(0, 1, 1, 1));
 	}
 
 	void GimmickKiller::Begin()
@@ -501,7 +498,7 @@ namespace basecross{
 
 		if (CheckCount())
 		{
-			auto CourseCorrectionVec = GameManager::GetInstance().GetMap()->GetGimmicks<GimmickArrow>();
+			auto CourseCorrectionVec = GameManager::GetInstance().GetLevelManager()->GetMap()->GetGimmicks<GimmickArrow>();
 
 			for (auto& course : CourseCorrectionVec)
 			{

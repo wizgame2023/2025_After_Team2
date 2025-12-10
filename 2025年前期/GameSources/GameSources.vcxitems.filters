@@ -142,6 +142,7 @@
       <Filter>Stage</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)TutorialManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SkyCube.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -223,6 +224,7 @@
       <Filter>Stage</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)TutorialManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SkyCube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json">
@@ -251,6 +253,9 @@
     </None>
     <None Include="$(MSBuildThisFileDirectory)..\media\Level\TestMap.json">
       <Filter>Json\Level</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\stage.json">
+      <Filter>Json\Resource</Filter>
     </None>
   </ItemGroup>
 </Project>

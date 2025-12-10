@@ -133,7 +133,8 @@ namespace basecross {
 
 		if (input->GetDownButton(L"A") && !m_IsButton)
 		{
-			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+			shared_ptr<int> index = make_shared<int>(m_Count);
+			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage",index);
 		}
 		else if (input->GetDownButton(L"B") && !m_IsButton)
 		{

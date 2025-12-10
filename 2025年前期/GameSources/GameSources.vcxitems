@@ -40,6 +40,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Map.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SelectStage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SkyCube.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SoundManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Sprite.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)TitleStage.h" />
@@ -70,6 +71,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Scene.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Map.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)SelectStage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SkyCube.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)SoundManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Sprite.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)TitleStage.cpp" />
@@ -85,6 +87,7 @@
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\selectResource.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\titleResource.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\setting.json" />
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\stage.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Level\level1.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Level\TestMap.json" />
   </ItemGroup>
