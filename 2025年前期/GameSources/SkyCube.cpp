@@ -11,7 +11,7 @@ namespace basecross{
 	void SkyCube::OnCreate() {
 		Object::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_SPHERE");
+		draw->SetMeshResource(L"DEFAULT_CUBE");
 		draw->SetTextureResource(m_TexKey);
 		draw->SetRasterizerState(RasterizerState::CullFront);
 
