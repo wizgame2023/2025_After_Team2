@@ -33,29 +33,21 @@ namespace basecross {
 
 	void GameStage::OnCreate() {
 		try {
-			GameManager::GetInstance().Reset();
-			GameManager::GetInstance().SetGameStage(GetThis<GameStage>());
-			auto mapJson = GameManager::GetInstance().LoadStage(L"TestMap");
-
 			CreateViewLight();
 			CreateResorce();
 
-			auto stageMap = AddGameObject<Map>();
-			stageMap->Load();
-
+			auto& gameManager = GameManager::GetInstance();
+			gameManager.Reset();
+			gameManager.SetGameStage(GetThis<GameStage>());
+			auto& levelManager = gameManager.GetLevelManager();
+			levelManager->Load(m_StageData->At<JsonString>(L"file")->GetValue());
+			levelManager->SetStageNumber(m_StageData->At<JsonNumber>(L"number")->GetIntValue() - 1);
+			auto map = levelManager->GetMap();
 			auto camera = static_pointer_cast<MainCamera>(GetView()->GetTargetCamera());
-			camera->SetFixedPoint(stageMap);
+			camera->SetFixedPoint(map);
 
-			auto hand = AddGameObject<GimmickHand>();
-			hand->SetCardSize(Vec2(200, 300));
-
-			hand->LoadHands(mapJson.At<JsonArray>(L"items"));
-
-			GameManager::GetInstance().SetHand(hand);
-			GameManager::GetInstance().SetMap(stageMap);
 			auto view = dynamic_pointer_cast<SingleView>(GetView());
 			Viewport viewport = view->GetTargetViewport();
-			viewport.Height;
 			viewport.Width /= 1.5f;
 			viewport.TopLeftY = 0;
 			view->SetViewport(viewport);
@@ -67,6 +59,10 @@ namespace basecross {
 			GameManager::GetInstance().SetMenuStage(menuStage);
 
 			SoundManager::GetInstance().PlayBGM(L"GameBGM");
+
+
+			auto skyCube = AddGameObject<SkyCube>(L"FLOOR");
+			skyCube->SetPosition(map->GetMapCenter());
 
 		}
 		catch (...) {

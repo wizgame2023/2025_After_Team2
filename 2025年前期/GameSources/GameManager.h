@@ -9,48 +9,146 @@
 namespace basecross{
 	class GimmickHand;
 
+
+	class EntityManager {
+		vector<shared_ptr<MoveCube>> m_Players;
+	public:
+		void Update();
+
+		bool IsUpdate();
+
+		void StartPlayer();
+		void StopPlayer();
+
+		void AddPlayer(shared_ptr<MoveCube>& player) {
+			m_Players.push_back(player);
+		}
+		vector<shared_ptr<MoveCube>> GetPlayers() { return m_Players; }
+
+		void DestroyPlayer(shared_ptr<MoveCube>& player);
+	};
+
+
 	enum class GameState {
-		Put,Game,Over,Clear
+		Put, Game, Over, Clear
+	};
+	class GameFlowManager {
+		GameState m_GameState;
+
+		float m_UpdateTicks;
+		float m_Tick;
+		float m_Rate;
+	public:
+		GameFlowManager():
+			m_GameState(GameState::Put),
+			m_UpdateTicks(0.0f),m_Tick(0.0f),m_Rate(1.0f){ }
+
+		void SetUpdateTick(float ticks) { m_UpdateTicks = ticks; }
+		void SetTickRate(float rate) { m_Rate = rate; }
+
+		void Update();
+
+		bool CompareState(GameState state) {
+			return m_GameState == state;
+		}
+
+		float GetGameTick() { return m_UpdateTicks / m_Rate; }
+
+		bool IsPut() {
+			return CompareState(GameState::Put);
+		}
+		bool IsGame() { 
+			return CompareState(GameState::Game);
+		}
+		bool IsClear() {
+			return CompareState(GameState::Clear);
+		}
+		bool IsOver() {
+			return CompareState(GameState::Over);
+		}
+		bool IsFinished() {
+			return IsClear() || IsOver();
+		}
+
+
+		void GameClear();
+		void GameOver();
+		void GameRestart();
+		void GameStart();
+	};
+
+
+	class LevelManager {
+		Json m_MapFile;	//Jsonファイルデータ
+
+		shared_ptr<GimmickHand> m_Hand;	//ギミックデータ
+		shared_ptr<Map> m_Map;	//マップデータ
+
+		int m_StageNumber;
+		vector<pair<int, int>> m_CurrentPairs;	//現在の組み合わせ
+		vector<pair<int, int>> m_BeforePairs;	//前フレームの組み合わせ
+	public:
+		LevelManager() : m_MapFile{}, m_StageNumber(-1){}
+
+		void Update();
+		void Load(const wstring& key);
+		void SetStageNumber(int number) { m_StageNumber = number; }
+		int GetStageNumber()const { return m_StageNumber; }
+
+		Json GetJson()const { return m_MapFile; }
+		shared_ptr<Map> GetMap()const { return m_Map; }
+		shared_ptr<GimmickHand> GetHand()const { return m_Hand; }
+		
+		Vec3 GetMapSize();
+
+		vector<pair<int, int>> GetCurrentPairs()const { return m_CurrentPairs; }
+		vector<pair<int, int>> GetBeforePairs()const { return m_BeforePairs; }
+
+		/// <summary>
+		/// 開始可能か判別
+		/// </summary>
+		/// <returns>開始判定</returns>
+		bool IsStart();
+
+		/// <summary>
+		/// 組み合わせに追加
+		/// </summary>
+		/// <param name="gimmickPair">組み合わせ</param>
+		void AddPair(pair<int,int>& gimmickPair);
+
+		/// <summary>
+		/// 組み合わせから削除
+		/// </summary>
+		/// <param name="gimmickPair">組み合わせ</param>
+		void RemovePair(pair<int, int>& gimmickPair);
+
+		/// <summary>
+		/// 重複した色とギミックを使用した組み合わせを削除
+		/// </summary>
+		/// <param name="color">色の番号</param>
+		/// <param name="gimmick">ギミックの番号</param>
+		void RemovePair(int color, int gimmick);
 	};
 
 	class GameManager : public SingletonBase<GameManager> {
 		friend class SingletonBase<GameManager>;
-		GameManager() :m_Tick(0.0f), m_UpdateTicks(0.5f), m_TickRate(1.0f) {}
+		GameManager() {}
 
 		shared_ptr<Stage> m_Stage;
 		shared_ptr<Stage> m_MenuStage;
 
-		vector<shared_ptr<MoveCube>> m_Cubes;
-
-		shared_ptr<GimmickHand> m_Hand;
-
-		shared_ptr<Map> m_Map;
+		shared_ptr<LevelManager> m_LevelManager;
+		shared_ptr<GameFlowManager> m_GameFlowManager;
+		shared_ptr<EntityManager> m_EntityManager;
 
 		vector<shared_ptr<Sprite>> m_EffectSprite;
 		shared_ptr<SpriteFade> m_SpriteFade;
 
 		map<wstring, Vec3> m_DirectionMap;
 
-		vector<pair<int, int>> m_GimmickColorPairs;
-		vector<pair<int, int>> m_BeforeGimmickColorPairs;
-
-		float m_Tick;
-		float m_UpdateTicks;
-		float m_TickRate;
-		bool m_IsGameClear;
 		bool m_IsFading;
-		GameState m_GameState;
 
 		Json m_KeyConfigFile;
-		Json m_MapFile;
-
-		void CreateTutorials();
-
-		bool IsUpdate();
-		void MapUpdate();
-		void GimmickUpdate();
-		void CubeUpdate();
-		void StopCube();
 
 		//リザルト
 		void ResultCreate();
@@ -66,96 +164,17 @@ namespace basecross{
 		/// <summary>
 		/// 登録されている情報を初期化する
 		/// </summary>
-		void Reset() {
-			m_Cubes.clear();
-			m_Hand = nullptr;
-			m_Map = nullptr;
-			m_Stage = nullptr;
-			m_IsGameClear = false;
-			m_IsFading = false;
-			m_GameState = GameState::Put;
+		void Reset();
 
-			m_DirectionMap[L"south"] = Vec3(0, 0, -1);
-			m_DirectionMap[L"north"] = Vec3(0, 0, 1);
-			m_DirectionMap[L"east"] = Vec3(1, 0, 0);
-			m_DirectionMap[L"west"] = Vec3(-1, 0, 0);
-
-			m_KeyConfigFile.Load(L"Json/keyconfig.json");
-
-			m_StarSp.clear();
-			m_EvaluationSp.clear();
-
-			m_GameEvaluation = 3;
-			m_CurrentStarIndex = 0;
-		}
-		Json LoadStage(const wstring& levelName) {
-			m_MapFile.Load(L"Level/" + levelName + L".json");
-			return m_MapFile;
-		}
+		shared_ptr<LevelManager> GetLevelManager()const { return m_LevelManager; }
+		shared_ptr<GameFlowManager> GetFlowManager()const { return m_GameFlowManager; }
+		shared_ptr<EntityManager> GetEntityManager()const { return m_EntityManager; }
 
 		/// <summary>
 		/// ゲームをリスタートする。
 		/// </summary>
 		/// <param name="isAll">すべて最初からにするか</param>
 		void RestartGame(bool isAll = false);
-		/// <summary>
-		/// プレイヤーを登録
-		/// </summary>
-		/// <param name="sphere">プレイヤー</param>
-		void AddCube(const shared_ptr<MoveCube> sphere) {
-			m_Cubes.push_back(sphere);
-		}
-
-		/// <summary>
-		/// プレイヤーの情報を取得
-		/// </summary>
-		/// <returns>プレイヤーデータ</returns>
-		vector<shared_ptr<MoveCube>> GetCubes()const {
-			return m_Cubes;
-		}
-		void DeleteCube(shared_ptr<MoveCube>& cube) {
-			auto it = find(m_Cubes.begin(), m_Cubes.end(), cube);
-			if (it != m_Cubes.end()) {
-				m_Cubes.erase(it);
-				m_Stage->RemoveGameObject<MoveCube>(cube);
-			}
-		}
-
-		/// <summary>
-		/// 手札を登録
-		/// </summary>
-		/// <param name="hand">手札</param>
-		void SetHand(shared_ptr<GimmickHand> hand) {
-			m_Hand = hand;
-		}
-
-		/// <summary>
-		/// 手札を取得
-		/// </summary>
-		/// <returns>手札</returns>
-		shared_ptr<GimmickHand> GetHand()const {
-			return m_Hand;
-		}
-
-		void UpdatePair(vector<pair<int, int>> gimmickPair) {
-			m_GimmickColorPairs = gimmickPair;
-		}
-
-		/// <summary>
-		/// ステージマップを登録
-		/// </summary>
-		/// <param name="map">ステージマップ</param>
-		void SetMap(shared_ptr<Map> map) {
-			m_Map = map;
-		}
-
-		/// <summary>
-		/// ステージマップを取得
-		/// </summary>
-		/// <returns>ステージマップ</returns>
-		shared_ptr<Map> GetMap() const{
-			return m_Map;
-		}
 
 		void SetGameStage(const shared_ptr<Stage>& stage) {
 			m_Stage = stage;
@@ -163,13 +182,11 @@ namespace basecross{
 		void SetMenuStage(const shared_ptr<Stage>& stage) {
 			m_MenuStage = stage;
 		}
-
-		bool IsClear() {
-			return m_IsGameClear;
+		shared_ptr<GameStage> GetGameStage() {
+			return dynamic_pointer_cast<GameStage>(m_Stage);
 		}
-
-		bool CompareState(GameState state) {
-			return m_GameState == state;
+		shared_ptr<MenuStage> GetMenuStage() {
+			return dynamic_pointer_cast<MenuStage>(m_MenuStage);
 		}
 
 		Vec3 DirectionStrToVec(const wstring& str) {
@@ -184,10 +201,6 @@ namespace basecross{
 			return L"";
 		}
 
-		float GetGameSpeed()const {
-			return m_UpdateTicks / m_TickRate;
-		}
-
 		void Start();
 		/// <summary>
 		/// 更新処理
@@ -200,12 +213,7 @@ namespace basecross{
 			return m_KeyConfigFile.At<JsonString>(key)->GetValue();
 		}
 
-		Json GetMapJsonData()const {
-			return m_MapFile;
-		}
-
 		void DrawGoalEffect();
-		void DrawOverEffect();
 
 		void DeleteEffectSprite() {
 			for (int i = 0; i < m_EffectSprite.size(); i++) {
@@ -214,18 +222,10 @@ namespace basecross{
 			m_EffectSprite.clear();
 		}
 
-
 		void SetGameEvaluation(int eval)
 		{
 			m_GameEvaluation = eval;
 		}
-
-	};
-
-	class GameFlowManager {
-
-	};
-	class ResultManager {
 
 	};
 

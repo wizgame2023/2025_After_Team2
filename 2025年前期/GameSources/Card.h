@@ -137,6 +137,17 @@ namespace basecross {
 			return gimmick;
 		}
 	};
+	class KillerCard : public CardData {
+	public:
+		KillerCard(const wstring& id) : CardData(id){}
+		virtual GimmickObjects GetType() { return GimmickObjects::Killer; }
+		virtual wstring GetExpainKey() { return L""; }
+		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
+			auto gimmick = stage->AddGameObject<GimmickKiller>();
+			return gimmick;
+		}
+
+	};
 
 
 	class CardFactory {
@@ -166,10 +177,10 @@ namespace basecross {
 
 		REGISTER_CARD(L"player", PlayerCard)
 		REGISTER_CARD(L"goal", GoalCard)
-		REGISTER_CARD(L"course", CourseCard)
+		REGISTER_CARD(L"arrow", CourseCard)
 		REGISTER_CARD(L"teleporter", TeleportCard)
 		REGISTER_CARD(L"inverter", InverterCard)
 		REGISTER_CARD(L"roll",RollCard)
-
+		REGISTER_CARD(L"killer",KillerCard)
 }
 

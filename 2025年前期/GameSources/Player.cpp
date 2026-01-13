@@ -22,12 +22,12 @@ namespace basecross{
 		mat.affineTransformation(Vec3(0.4f), Vec3(), Vec3(0,-XM_PIDIV2,0), Vec3(0.0f,-0.5f,0.25f));
 		m_Draw->SetMeshToTransformMatrix(mat);
 
-		Vec3 mapSize = GameManager::GetInstance().GetMap()->GetMapSize();
+		Vec3 mapSize = GameManager::GetInstance().GetLevelManager()->GetMapSize();
 
 		SetMoveArea(AABB(Vec3(-1.0f, -100.0f, -mapSize.z), Vec3(mapSize.x, 5.0f, 1.0f)));
 
 		SetMoveSec(0.5f);
-		GameManager::GetInstance().AddCube(GetThis<MoveCube>());
+		GameManager::GetInstance().GetEntityManager()->AddPlayer(GetThis<MoveCube>());
 
 
 	}
@@ -95,22 +95,34 @@ namespace basecross{
 			}
 			break;
 		}
+		//ax * sin(0) - ay * cos(0),ax * cos(0) + ay * sin(0);
 		case MoveState::ChangeVelocity: {
-			Vec3 direction = m_TargetVelocity - m_Velocity;
-			Vec3 moveAmount = elapsed * m_MoveVelocitySpeed;
-			if (moveAmount.length() > direction.length()) {
-				moveAmount = direction;
+			if (!m_MoveVelocityAngleSpeed) {
+				m_IsEffecting = false;
+				break;
+			}
+			Vec3 currentCross = cross(m_Velocity, m_TargetVelocity);
+			currentCross.normalize();
+			if (currentCross.length() == 0) {
+				currentCross = Vec3(0, 1, 0);
+				m_MoveVelocityAngleSpeed *= -1;
+			}
+			float sita = elapsed * m_MoveVelocityAngleSpeed;
+			m_Velocity = XMVector3Rotate(m_Velocity, XMQuaternionRotationAxis(currentCross, sita));
+			Vec3 afterCross = cross(m_Velocity, m_TargetVelocity);
+			afterCross.normalize();
+			if (afterCross != currentCross) {
+				m_Velocity = m_TargetVelocity;
 				m_IsEffecting = false;
 			}
-			m_Velocity += moveAmount;
+			break;
 		}
 		}
-	
 		if (m_IsBeforeEffecting && !m_IsEffecting) {
-			auto mapData = GameManager::GetInstance().GetMap()->
-				GetMapData(Vec2(static_cast<int>(position.x), static_cast<int>(-position.z)));
-			if (mapData.m_Gimmik) {
-				mapData.m_Gimmik->End();
+			auto mapData = GameManager::GetInstance().GetLevelManager()->GetMap()
+				->GetMapData(Vec2(static_cast<int>(position.x), static_cast<int>(-position.z)));
+			if (mapData.m_Gimmick) {
+				mapData.m_Gimmick->End();
 			}
 		}
 		m_IsBeforeEffecting = m_IsEffecting;
@@ -146,7 +158,10 @@ namespace basecross{
 
 		m_State = MoveState::ChangeVelocity;
 		m_TargetVelocity = velocity;
-		m_MoveVelocitySpeed = (m_TargetVelocity - m_Velocity) / GameManager::GetInstance().GetGameSpeed();
+
+		float angle1 = atan2f(m_Velocity.z, m_Velocity.x);
+		float angle2 = atan2f(m_TargetVelocity.z, m_TargetVelocity.x);
+		m_MoveVelocityAngleSpeed = (angle1 - angle2) / GameManager::GetInstance().GetFlowManager()->GetGameTick();
 	}
 	void MoveCube::Move() {
 		if (m_IsEffecting) return;
@@ -157,14 +172,16 @@ namespace basecross{
 			m_Target = GetPosition();
 		}
 		m_Target = GetPosition() + m_Velocity.normalize();
-		m_MoveSpeed = (m_Target - GetPosition()).length() / GameManager::GetInstance().GetGameSpeed();
-		m_RotateSpeed = XM_PIDIV2 / GameManager::GetInstance().GetGameSpeed();
+
+		float gameTick = GameManager::GetInstance().GetFlowManager()->GetGameTick();
+		m_MoveSpeed = (m_Target - GetPosition()).length() / gameTick;
+		m_RotateSpeed = XM_PIDIV2 / gameTick;
 		m_RotateRad = 0;
 		m_State = MoveState::Move;
 	}
 	void MoveCube::Destroy() {
 		SoundManager::GetInstance().PlaySE(L"Dead");
-		GameManager::GetInstance().DeleteCube(GetThis<MoveCube>());
+		GameManager::GetInstance().GetEntityManager()->DestroyPlayer(GetThis<MoveCube>());
 	}
 }
 //end basecross

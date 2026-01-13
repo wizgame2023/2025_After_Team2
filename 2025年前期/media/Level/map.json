@@ -1,0 +1,25 @@
+{
+    "mapSize": [9, 7],
+    "map": [
+        {"pos": [1, 0], "color": "black"},
+        {"pos": [2, 0], "color": "red"},
+        {"pos": [8, 0], "color": "red"},
+        {"pos": [2, 1], "color": "green"},
+        {"pos": [3, 1], "color": "black"},
+        {"pos": [8, 1], "color": "blue"},
+        {"pos": [2, 2], "color": "blue"},
+        {"pos": [5, 2], "color": "black"},
+        {"pos": [0, 3], "color": "green"},
+        {"pos": [3, 3], "color": "green"},
+        {"pos": [0, 4], "color": "green"},
+        {"pos": [1, 4], "color": "blue"},
+        {"pos": [6, 4], "color": "black"},
+        {"pos": [2, 5], "color": "green"},
+        {"pos": [3, 5], "color": "black"}
+    ],
+    "items": [
+        {"id": "player", "direction": "south", "value": 0, "count": 1},
+        {"id": "goal", "direction": "north", "value": 0, "count": 1},
+        {"id": "arrow", "direction": "north", "value": 0, "count": 1}
+    ]
+}

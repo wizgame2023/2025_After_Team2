@@ -16,7 +16,7 @@ namespace basecross{
 
 		shared_ptr<Floor> m_Floor;
 		shared_ptr<CardData> m_GimmickType;
-		shared_ptr<Gimmicks> m_Gimmik;
+		shared_ptr<Gimmicks> m_Gimmick;
 	};
 	class Map : public Object {
 		vector<vector<MapData>> m_Map;
@@ -34,14 +34,14 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
-		void Load();
+		void Load(Json& map);
 
 		template<class GimmickType>
 		vector<shared_ptr<GimmickType>> GetGimmicks() {
 			vector<shared_ptr<GimmickType>> gimmicks;
 			for (auto& mapVec : m_Map) {
 				for (auto& map : mapVec) {
-					if (auto casted = dynamic_pointer_cast<GimmickType>(map.m_Gimmik)) {
+					if (auto casted = dynamic_pointer_cast<GimmickType>(map.m_Gimmick)) {
 						gimmicks.push_back(casted);
 					}
 				}
@@ -52,8 +52,8 @@ namespace basecross{
 			vector<shared_ptr<Gimmicks>> gimmicks;
 			for (auto& mapVec : m_Map) {
 				for (auto& map : mapVec) {
-					if (map.m_Gimmik) {
-						gimmicks.push_back(map.m_Gimmik);
+					if (map.m_Gimmick) {
+						gimmicks.push_back(map.m_Gimmick);
 					}
 				}
 			}
@@ -94,7 +94,7 @@ namespace basecross{
 			for (auto& mapVec : m_Map) {
 				for (auto& map : mapVec) {
 					if (color == map.m_ColorStr) {
-						if (map.m_Gimmik != nullptr) {
+						if (map.m_Gimmick != nullptr) {
 							return true;
 						}
 					}
@@ -111,6 +111,7 @@ namespace basecross{
 
 		shared_ptr<CardData> RecoverGimmick();
 		shared_ptr<CardData> RecoverGimmick(int colorIdx);
+
 	};
 
 

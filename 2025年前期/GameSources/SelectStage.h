@@ -31,6 +31,8 @@ namespace basecross {
 
         float m_RollVelocity = 0.0f;
 
+		Vec3 m_OffsetPos = Vec3(50.0f, -60.0f, 0.0f);
+
         vector<Vec3> m_NumPositions;
         vector<shared_ptr<NumberSprite>> m_NumSpList; // 数字スプライトリスト
 
