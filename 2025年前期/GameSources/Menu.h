@@ -11,6 +11,7 @@ namespace basecross{
 	class PoseMenu;
 	class MovieWindow;
 	class ExplainMenu;
+	class SoundMenu;
 
 	struct Line {
 		shared_ptr<Sprite> m_Line;
@@ -100,6 +101,8 @@ namespace basecross{
 		shared_ptr<GameMenu> m_GameMenu;
 		shared_ptr<Stage> m_MenuStage;
 		shared_ptr<ExplainMenu> m_ExplainMenu;
+		shared_ptr<SoundMenu> m_SoundMenu;
+
 		Vec3 m_TopLeftPosition;
 		Vec2 m_ButtonSize;
 	public:
@@ -109,7 +112,9 @@ namespace basecross{
 
 		virtual void OnCreate()override;
 
-
+		void SetSoundMenu(const shared_ptr<SoundMenu>& menu) {
+			m_SoundMenu = menu;
+		}
 		bool IsOpen() {
 			return GetDrawActive();
 		}
@@ -151,9 +156,32 @@ namespace basecross{
 		void Open();
 		void Close();
 	};
+
+	class SoundMenu : public Object {
+		shared_ptr<Sprite> m_SoundMenu;
+		array<shared_ptr<Sprite>, 2> m_SoundBars;
+		array<shared_ptr<Sprite>, 2> m_SoundBarFrames;
+		shared_ptr<Stage> m_MenuStage;
+
+		Vec2 m_MenuSize;
+		Vec3 m_MenuPosition;
+
+		Vec2 m_BarSize;
+	public:
+		SoundMenu(const shared_ptr<Stage>& ptr,Vec3 menuPosition,Vec2 menuSize) :m_MenuStage(ptr),
+			m_MenuPosition(menuPosition),m_MenuSize(menuSize), m_BarSize(1,1), Object(ptr) {}
+
+		virtual void OnCreate();
+		virtual void OnUpdate();
+
+		void Open();
+		void Close();
+	};
+
 	enum class CoursorMode {
 		Stick,Mouse
 	};
+
 	class Cursor : public Object {
 		shared_ptr<Sprite> m_Cursor;
 		CoursorMode m_Mode;
@@ -211,5 +239,8 @@ namespace basecross{
 			m_MenuStage->RemoveGameObject<Cursor>(GetThis<Cursor>());
 		}
 	};
+
+
+	
 }
 //end basecross

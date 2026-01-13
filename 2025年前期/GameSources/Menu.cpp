@@ -111,8 +111,13 @@ namespace basecross{
 		m_Cursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), m_ExplainBox->GetAnchorPosition(Anchor::TopLeft));
 	
 		Vec2 poseMenuButtonSize = Vec2(200.0f, 60.0f);
-		m_PoseMenu = m_MenuStage->AddGameObject<PoseMenu>(GetThis<GameMenu>(),menuPosition + Vec3(menuSize.x / 2.0f - poseMenuButtonSize.x / 2.0f, screenSize.y / 2.0f - 50,0.0f), poseMenuButtonSize);
+		m_PoseMenu = m_MenuStage->AddGameObject<PoseMenu>(GetThis<GameMenu>(),menuPosition + Vec3(menuSize.x / 2.0f - poseMenuButtonSize.x / 2.0f, screenSize.y / 2.0f - 100,0.0f), poseMenuButtonSize);
 		
+		auto soundMenu = m_MenuStage->AddGameObject<SoundMenu>(menuPosition, menuSize);
+		soundMenu->Close();
+		m_PoseMenu->SetSoundMenu(soundMenu);
+		m_PoseMenu->Close();
+
 		m_MovieWindow = m_MenuStage->AddGameObject<MovieWindow>(Vec2(menuSize.x, menuSize.y * 0.25f) * 0.8f);
 		Vec3 windowPosition = static_cast<Vec3>(m_ExplainBox->GetAnchorPosition(Anchor::TopLeft) + Vec2(640,-400));
 		windowPosition.y = windowPosition.y < 0 ? fabs(windowPosition.y) : windowPosition.y;
@@ -494,7 +499,7 @@ namespace basecross{
 		PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
 	}
 	void PoseMenu::SettingSound() {
-
+		m_SoundMenu->Open();
 	}
 	void PoseMenu::CloseNewGame() {
 		PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage");
@@ -518,8 +523,8 @@ namespace basecross{
 		CreateExplain();
 	}
 	void ExplainMenu::CreateExplain() {
-		Vec2 explainTabSize = Vec2(200, 50);
-		Vec3 topLeft = static_cast<Vec3>(m_BackGround->GetAnchorPosition(Anchor::TopLeft) + Vec3(50,-50,0));
+		Vec2 explainTabSize = Vec2(100, 100);
+		Vec3 topLeft = static_cast<Vec3>(m_BackGround->GetAnchorPosition(Anchor::TopLeft) + Vec3(100,-50,0));
 		for (int i = 0; i < m_ExplainDatas.size(); i++) {
 			ButtonManager::Create(m_MenuStage, L"EXPLAIN", m_ExplainDatas[i].m_MenuIconKey, L"ICON_EXPLAIN_FRAME", topLeft - Vec3(0, explainTabSize.y, 0) * i, explainTabSize,
 				[](shared_ptr<ObjectInterface>& object) {
@@ -554,6 +559,93 @@ namespace basecross{
 		m_ExplainStr->SetDrawActive(false);
 		ButtonManager::instance->Close(L"EXPLAIN");
 		ButtonManager::instance->OpenAndUse(L"POSE");
+	}
+
+
+	void SoundMenu::OnCreate() {
+		m_SoundMenu = m_MenuStage->AddGameObject<Sprite>(L"SOUND_MENU", m_MenuPosition, m_MenuSize, Anchor::Left);
+
+		m_SoundBars = { nullptr,nullptr };
+		m_SoundBarFrames = { nullptr,nullptr };
+
+		m_BarSize = Vec2(m_MenuSize.x * 0.5f, 0);
+		m_BarSize.y = m_BarSize.x * 0.16f;
+		Vec3 barPosition = m_MenuPosition + Vec3(m_MenuSize.x / 3.25f, 85, 0);
+		Vec3 barPosition2 = barPosition - Vec3(0, 150, 0);
+		m_SoundBars[0] = m_MenuStage->AddGameObject<Sprite>(L"SOUND_BAR",barPosition , m_BarSize, Anchor::TopLeft);
+		m_SoundBarFrames[0] = m_MenuStage->AddGameObject<Sprite>(L"SOUND_BAR_FRAME",barPosition , m_BarSize, Anchor::TopLeft);
+		m_SoundBars[1] = m_MenuStage->AddGameObject<Sprite>(L"SOUND_BAR", barPosition2, m_BarSize, Anchor::TopLeft);
+		m_SoundBarFrames[1] = m_MenuStage->AddGameObject<Sprite>(L"SOUND_BAR_FRAME", barPosition2, m_BarSize, Anchor::TopLeft);
+
+
+		Vec2 poseMenuButtonSize = Vec2(200.0f, 60.0f);
+		Vec3 offset = Vec3(-poseMenuButtonSize.x / 1.5f, poseMenuButtonSize.y, 0);
+		ButtonManager::Create(m_MenuStage, L"SOUND", L"SOUND_BGM", L"SOUND_BGM_SELECT", barPosition + offset, poseMenuButtonSize,
+			[](shared_ptr<ObjectInterface>& object) {
+			});
+		ButtonManager::Create(m_MenuStage, L"SOUND", L"SOUND_SE", L"SOUND_SE_SELECT", barPosition2 + offset, poseMenuButtonSize,
+			[](shared_ptr<ObjectInterface>& object) {
+			});
+
+		ButtonManager::instance->SetInput(L"SOUND", InputData(XINPUT_GAMEPAD_DPAD_DOWN, 1));//選択(上)
+		ButtonManager::instance->SetInput(L"SOUND", InputData(XINPUT_GAMEPAD_DPAD_UP, -1));//選択(下)
+		ButtonManager::instance->SetInput(L"SOUND", InputData(StickMode::LY, 1, 0.5f));//選択(左スティック)
+		ButtonManager::instance->SetLoop(true);
+
+
+	}
+	void SoundMenu::OnUpdate() {
+		if (!m_SoundMenu->GetDrawActive()) return;
+		auto& input = InputManager::GetInputManager();
+		if (input->GetDownButton(L"Start")) {
+			Close();
+			return;
+		}
+		float stickX = input->GetLStick().x;
+		if (fabs(stickX) > 0.5f) {
+			int selectIndex = ButtonManager::instance->GetSelectIndex(L"SOUND");
+			if (stickX > 0) {
+				if (selectIndex == 0) {
+					SoundManager::GetInstance().BGMVolumeUp(0.01f);
+				}
+				else {
+					SoundManager::GetInstance().SEVolumeUp(0.01f);
+				}
+			}
+			else {
+				if (selectIndex == 0) {
+					SoundManager::GetInstance().BGMVolumeDown(0.01f);
+				}
+				else {
+					SoundManager::GetInstance().SEVolumeDown(0.01f);
+				}
+			}
+		}
+		
+		float seVolume = SoundManager::GetInstance().GetSEVolume();
+		float bgmVolume = SoundManager::GetInstance().GetBGMVolume();
+
+		m_SoundBars[0]->SetSize(Vec2(m_BarSize.x * bgmVolume, m_BarSize.y));
+		m_SoundBars[1]->SetSize(Vec2(m_BarSize.x * seVolume, m_BarSize.y));
+	}
+
+	void SoundMenu::Open() {
+		ButtonManager::instance->Close(L"POSE");
+		ButtonManager::instance->OpenAndUse(L"SOUND");
+		m_SoundMenu->SetDrawActive(true);
+		m_SoundBars[0]->SetDrawActive(true);
+		m_SoundBars[1]->SetDrawActive(true);
+		m_SoundBarFrames[0]->SetDrawActive(true);
+		m_SoundBarFrames[1]->SetDrawActive(true);
+	}
+	void SoundMenu::Close() {
+		ButtonManager::instance->Close(L"SOUND");
+		ButtonManager::instance->OpenAndUse(L"POSE");
+		m_SoundMenu->SetDrawActive(false);
+		m_SoundBars[0]->SetDrawActive(false);
+		m_SoundBars[1]->SetDrawActive(false);
+		m_SoundBarFrames[0]->SetDrawActive(false);
+		m_SoundBarFrames[1]->SetDrawActive(false);
 	}
 
 
