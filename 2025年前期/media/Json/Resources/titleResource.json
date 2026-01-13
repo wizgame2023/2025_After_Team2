@@ -12,7 +12,14 @@
   "UI": {
     "TitleLogo.png": "TitleLogoUI",
     "Start.png": "StartUI",
-    "tempColorPalette.png": "ColorPaletteUI"
+    "tempColorPalette.png": "ColorPaletteUI",
+    "ShootingStar.png": "ShootingStarUI",
+    "StarBackGround.png": "StarBackGroundUI",
+    "FadeBlueStar.png": "FadeBlueStarUI",
+    "FadeRedStar.png": "FadeRedStarUI",
+    "FadeYellowStar.png": "FadeYellowStarUI",
+    "Stick.png": "StinkUI",
+    "A_Button.png": "A_ButtonUI"
 
   }
 }
