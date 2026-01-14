@@ -192,23 +192,15 @@ namespace basecross{
 
 
 	void GameManager::StartFade() {
-		if (!m_SpriteFade) {
-			auto sprite = m_MenuStage->AddGameObject<Sprite>(L"MENU",Vec3(),Vec2(),Anchor::Center);
-			sprite->MatchToScreenSize();
-			sprite->SetDiffuse(Col4(0, 0, 0, 1));
-			sprite->SetLayer(10);
-			m_SpriteFade = sprite->AddComponent<SpriteFade>(1.0f);
-		}
-		m_SpriteFade->StartFade(FadeState::OutToIn);
-		m_IsFading = true;
+		m_MenuStage->AddGameObject<FadeSystem>(1.5f, [&]() {
+			m_GameFlowManager->GameRestart();
+			auto& map = m_LevelManager->GetMap();
+			for (auto& gimmick : map->GetGimmicks()) {
+				gimmick->Reset();
+			}});
 	}
 	void GameManager::RestartGame(bool isAll) {
 		StartFade();
-
-		auto& map = m_LevelManager->GetMap();
-		for (auto& gimmick : map->GetGimmicks()) {
-			gimmick->SetDrawActive(true);
-		}
 	}
 	void GameManager::Start() {
 		auto& map = m_LevelManager->GetMap();
@@ -228,12 +220,6 @@ namespace basecross{
 		ResultUpdate();
 		m_LevelManager->Update();
 
-		if (m_IsFading) {
-			if (m_SpriteFade->IsFinish()) {
-				m_IsFading = false;
-				m_GameFlowManager->GameRestart();
-			}
-		}
 		//‚±‚±‚©‚ç‰º‚ÍƒQ[ƒ€is’†‚Ìˆ—
 		if (!m_GameFlowManager->IsGame())return;
 
@@ -304,7 +290,6 @@ namespace basecross{
 				}
 			}
 		}
-		//SoundManager::GetInstance().PlaySE(L"Clear");
 	}
 	void GameManager::ResultCreate()
 	{

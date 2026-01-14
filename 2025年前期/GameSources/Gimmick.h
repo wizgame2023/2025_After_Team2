@@ -22,6 +22,16 @@ namespace basecross
 		Roll,				// 回転ギミック
 		Inverter			// 矢印の方向の反転
 	};
+	struct GimmickData {
+		GimmickObjects m_Type;
+		Vec3 m_Direction;
+		GimmickData();
+		GimmickData(const shared_ptr<Gimmicks>& gimmick);
+
+		bool operator==(GimmickData& other) {
+			return this->m_Type == other.m_Type && this->m_Direction == other.m_Direction;
+		}
+	};
 
 	/*!
 	@brief ギミックの基底クラス
@@ -119,6 +129,21 @@ namespace basecross
 			m_MaxCount = count;
 			m_Count = m_MaxCount;
 		}
+		/*!
+		@brief リセット
+		@return なし
+		*/
+		virtual void Reset()
+		{
+			m_Count = m_MaxCount;
+			GetComponent<SmBaseDraw>()->SetDrawActive(true);
+			SetUpdateActive(true);
+		}
+		/*!
+		@brief 自身をプレイヤーのパスに追加
+		@return なし
+		*/
+		void AddPlayerPath();
 	protected:
 		bool CheckCount()
 		{

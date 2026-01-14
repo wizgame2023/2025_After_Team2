@@ -41,3 +41,4 @@
 #include "Menu.h"
 #include "MovieWindow.h"
 #include "SkyCube.h"
+#include "FadeSystem.h"
