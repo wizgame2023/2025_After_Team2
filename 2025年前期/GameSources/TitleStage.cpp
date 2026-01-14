@@ -40,7 +40,7 @@ namespace basecross {
 		Json();
 		FadeStarSpriteCreate();
 
-		auto titleSp = AddGameObject<Sprite>(L"TitleLogoUI", Vec3(0.0f), Vec2(1000, 400), Anchor::Bottom);
+		auto titleSp = AddGameObject<Sprite>(L"TitleLogoUI", Vec3(0.0f,-130,0), Vec2(1000, 500), Anchor::Bottom);
 		auto starBackSp = AddGameObject<Sprite>(L"StarBackGroundUI", Vec3(0.0f), Vec2(1280, 800), Anchor::Center);
 		m_Cursor = AddGameObject<Sprite>(L"MOUSE_CURSOR", Vec3(0.0f, -100.0f, 0.0f), Vec2(30, 30), Anchor::Center);
 		m_Cursor->SetLayer(3);
@@ -120,13 +120,13 @@ namespace basecross {
 			CreateViewLight();
 			SpriteCreate();
 
-			auto sprite = AddGameObject<Sprite>(L"StartUI", Vec3(0.0f, -200.0f, 0.0f), Vec2(512, 128), Anchor::Center);
-			sprite->SetAnimationActive(true);
-			sprite->CreateAnimationUV(Vec2(3, 2));
-			sprite->AddAnimation(L"anim1", 0, 5, 0.1f,true);
-			sprite->AddAnimation(L"anim2", { 0,1,2,3,4,5 }, 0.1f, true);
+			//auto sprite = AddGameObject<Sprite>(L"StartUI", Vec3(0.0f, -200.0f, 0.0f), Vec2(512, 128), Anchor::Center);
+			//sprite->SetAnimationActive(true);
+			//sprite->CreateAnimationUV(Vec2(3, 2));
+			//sprite->AddAnimation(L"anim1", 0, 5, 0.1f,true);
+			//sprite->AddAnimation(L"anim2", { 0,1,2,3,4,5 }, 0.1f, true);
 
-			sprite->SetCurrentAnimation(L"anim2");
+			//sprite->SetCurrentAnimation(L"anim2");
 
 		}
 		catch (...) {
