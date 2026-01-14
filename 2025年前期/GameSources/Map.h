@@ -103,6 +103,9 @@ namespace basecross{
 			return false;
 		}
 
+		wstring GetFloorColor(const shared_ptr<JsonObject>& data);
+		void CreateFloor(vector<int>& cellPosition, const wstring& color,const shared_ptr<JsonObject>& gimmickObject);
+
 		void HighlightBox(const wstring& colorText);
 
 		//引数にはギミックのオブジェクト

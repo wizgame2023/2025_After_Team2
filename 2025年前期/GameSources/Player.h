@@ -7,6 +7,9 @@
 #include "stdafx.h"
 namespace basecross{
 	class Board;
+	class Gimmicks;
+	struct GimmickData;
+
 	enum class MoveState {
 		Telepote,
 		Move,
@@ -35,6 +38,8 @@ namespace basecross{
 		MoveState m_State;		//åªç›ÇÃçsìÆ
 
 		shared_ptr<PNTStaticModelDraw> m_Draw;
+
+		vector<GimmickData> m_GimmickPath;
 	public:
 		MoveCube(const shared_ptr<Stage>& ptr);
 		virtual ~MoveCube(){}
@@ -101,6 +106,9 @@ namespace basecross{
 		}
 
 		void Destroy();
+
+		void AddGimmickPath(const shared_ptr<Gimmicks>& gimmick);
+		const vector<GimmickData>& GetGimmickPath();
 	};
 }
 //end basecross

@@ -221,7 +221,6 @@ namespace basecross{
 			}
 			else {
 				return nullptr;
-				//throw BaseException(L"ГLБ[В™СґНЁВµВ№ВєВс", key, L"JsonObject::At(const wstring&)");
 			}
 		}
 

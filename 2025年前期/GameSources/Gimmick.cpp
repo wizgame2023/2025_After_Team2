@@ -7,6 +7,11 @@
 #include "Project.h"
 
 namespace basecross{
+	GimmickData::GimmickData():m_Type(GimmickObjects::None),m_Direction(Vec3()){}
+	GimmickData::GimmickData(const shared_ptr<Gimmicks>& gimmick) {
+		m_Type = gimmick->GetGimmickType();
+		m_Direction = gimmick->GetValue();
+	}
 
 	Gimmicks::Gimmicks(const shared_ptr<Stage>& ptrStage) :
 	Object(ptrStage),
@@ -122,7 +127,11 @@ namespace basecross{
 		}
 		m_Stage->RemoveGameObject<Gimmicks>(GetThis<Gimmicks>());
 	}
+	void Gimmicks::AddPlayerPath() {
+		if (!m_Cube) return;
 
+		m_Cube->AddGimmickPath(GetThis<Gimmicks>());
+	}
 
 
 	GimmickGoal::GimmickGoal(const shared_ptr<Stage>& ptrStage) :
@@ -217,6 +226,7 @@ namespace basecross{
 				{
 					m_Goal = true;
 					m_Cube = nullptr;
+					AddPlayerPath();
 				}
 				else
 				{
@@ -273,6 +283,7 @@ namespace basecross{
 
 		player->Spawn(pos);
 		player->SetVelocity(m_Value);
+		player->AddGimmickPath(GetThis<Gimmicks>());
 
 		auto draw = GetComponent<PNTStaticDraw>();
 		draw->SetDrawActive(false);
@@ -320,6 +331,7 @@ namespace basecross{
 		if (CheckCount())
 		{
 			m_Cube->ChangeVelocity(m_Value);
+			AddPlayerPath();
 		}
 	}
 	GimmickTeleporter::GimmickTeleporter(const shared_ptr<Stage>& ptrStage) :
@@ -391,6 +403,7 @@ namespace basecross{
 			m_TeleportFastEffect->SetEffectSpeed(1.7f);
 
 			m_IsFastTeleport = true;
+			AddPlayerPath();
 		}
 
 		m_WasStepped = isStepped;
@@ -455,6 +468,7 @@ namespace basecross{
 		Gimmicks::Update();
 		if (CheckCount())
 		{
+			AddPlayerPath();
 			if (m_IsLeftRoll)
 			{
 				Vec3 CubeVel = m_Cube->GetVelocity();
@@ -502,6 +516,7 @@ namespace basecross{
 
 		if (CheckCount())
 		{
+			AddPlayerPath();
 			auto CourseCorrectionVec = GameManager::GetInstance().GetLevelManager()->GetMap()->GetGimmicks<GimmickArrow>();
 
 			for (auto& course : CourseCorrectionVec)

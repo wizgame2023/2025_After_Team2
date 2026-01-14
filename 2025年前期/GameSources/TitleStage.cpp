@@ -1,6 +1,6 @@
 /*!
 @file TitleStage.cpp
-@brief ƒ^ƒCƒgƒ‹ƒXƒe[ƒW‚ÌÀ‘Ì
+@brief ã‚¿ã‚¤ãƒˆãƒ«ã‚¹ãƒ†ãƒ¼ã‚¸ã®å®Ÿä½“
 */
 
 #include "stdafx.h"
@@ -9,21 +9,21 @@
 namespace basecross {
 
 	//--------------------------------------------------------------------------------------
-	//	ƒ^ƒCƒgƒ‹ƒXƒe[ƒWÀ‘Ì
+	//	ã‚¿ã‚¤ãƒˆãƒ«ã‚¹ãƒ†ãƒ¼ã‚¸å®Ÿä½“
 	//--------------------------------------------------------------------------------------
 	void TitleStage::CreateViewLight()
 	{
 		const Vec3 eye(0.0f, 5.0f, -5.0f);
 		const Vec3 at(0.0f);
 		auto PtrView = CreateView<SingleView>();
-		//ƒrƒ…[‚ÌƒJƒƒ‰‚Ìİ’è
+		//ãƒ“ãƒ¥ãƒ¼ã®ã‚«ãƒ¡ãƒ©ã®è¨­å®š
 		auto PtrCamera = ObjectFactory::Create<Camera>();
 		PtrView->SetCamera(PtrCamera);
 		PtrCamera->SetEye(eye);
 		PtrCamera->SetAt(at);
-		//ƒ}ƒ‹ƒ`ƒ‰ƒCƒg‚Ìì¬
+		//ãƒãƒ«ãƒãƒ©ã‚¤ãƒˆã®ä½œæˆ
 		auto PtrMultiLight = CreateLight<MultiLight>();
-		//ƒfƒtƒHƒ‹ƒg‚Ìƒ‰ƒCƒeƒBƒ“ƒO‚ğw’è
+		//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ©ã‚¤ãƒ†ã‚£ãƒ³ã‚°ã‚’æŒ‡å®š
 		PtrMultiLight->SetDefaultLighting();
 	}
 
@@ -116,7 +116,7 @@ namespace basecross {
 	void TitleStage::OnCreate()
 	{
 		try {
-			//ƒrƒ…[‚Æƒ‰ƒCƒg‚Ìì¬
+			//ãƒ“ãƒ¥ãƒ¼ã¨ãƒ©ã‚¤ãƒˆã®ä½œæˆ
 			CreateViewLight();
 			SpriteCreate();
 
@@ -127,7 +127,6 @@ namespace basecross {
 			//sprite->AddAnimation(L"anim2", { 0,1,2,3,4,5 }, 0.1f, true);
 
 			//sprite->SetCurrentAnimation(L"anim2");
-
 		}
 		catch (...) {
 			throw;

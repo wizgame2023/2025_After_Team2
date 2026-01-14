@@ -14,7 +14,7 @@ namespace basecross {
 	public:
 		CardData() = default;
 		CardData(const wstring& id): m_Id(id){}
-		virtual void Load(shared_ptr<JsonObject>& data) {}
+		virtual void Load(const shared_ptr<JsonObject>& data) {}
 		virtual GimmickObjects GetType() { return GimmickObjects::None; }
 		virtual wstring GetExpainKey() { return L""; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage) { return nullptr; }
@@ -27,7 +27,7 @@ namespace basecross {
 		Vec3 m_Velocity;
 	public:
 		PlayerCard(const wstring& id) : CardData(id) {}
-		virtual void Load(shared_ptr<JsonObject>& data) {
+		virtual void Load(const shared_ptr<JsonObject>& data) {
 			auto str = data->At<JsonString>(L"direction")->GetValue();
 			m_Velocity = GameManager::GetInstance().DirectionStrToVec(str);
 		}
@@ -50,7 +50,7 @@ namespace basecross {
 		Vec3 m_Direction;
 	public:
 		GoalCard(const wstring& id) : CardData(id) {}
-		virtual void Load(shared_ptr<JsonObject>& data) {
+		virtual void Load(const shared_ptr<JsonObject>& data) {
 			auto str = data->At<JsonString>(L"direction")->GetValue();
 			m_Direction = GameManager::GetInstance().DirectionStrToVec(str);
 		}
@@ -70,7 +70,7 @@ namespace basecross {
 		Vec3 m_Direction;
 	public:
 		CourseCard(const wstring& id) : CardData(id) {}
-		virtual void Load(shared_ptr<JsonObject>& data) {
+		virtual void Load(const shared_ptr<JsonObject>& data) {
 			auto str = data->At<JsonString>(L"direction")->GetValue();
 			m_Direction = GameManager::GetInstance().DirectionStrToVec(str);
 		}
@@ -88,7 +88,7 @@ namespace basecross {
 	class InverterCard : public CardData {
 	public:
 		InverterCard(const wstring& id) : CardData(id) {}
-		virtual void Load(shared_ptr<JsonObject>& data) {}
+		virtual void Load(const shared_ptr<JsonObject>& data) {}
 		virtual GimmickObjects GetType() { return GimmickObjects::Inverter; }
 		virtual wstring GetExpainKey() { return L"EXPAIN_INV"; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
@@ -102,7 +102,7 @@ namespace basecross {
 		int m_Length;
 	public:
 		TeleportCard(const wstring& id) : CardData(id) {}
-		virtual void Load(shared_ptr<JsonObject>& data) {
+		virtual void Load(const shared_ptr<JsonObject>& data) {
 			auto str = data->At<JsonString>(L"direction")->GetValue();
 			auto direction = GameManager::GetInstance().DirectionStrToVec(str);
 			m_Length = data->At<JsonNumber>(L"value")->GetIntValue();
@@ -126,7 +126,7 @@ namespace basecross {
 	public:
 		RollCard(const wstring& id): CardData(id){}
 		virtual GimmickObjects GetType() { return GimmickObjects::Roll; }
-		virtual void Load(shared_ptr<JsonObject>& data) {
+		virtual void Load(const shared_ptr<JsonObject>& data) {
 			m_RollCount = data->At<JsonNumber>(L"value")->GetIntValue();
 		}
 		virtual wstring GetExpainKey() { return L"EXPAIN_ROLL"; }
