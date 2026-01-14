@@ -502,7 +502,8 @@ namespace basecross{
 		m_SoundMenu->Open();
 	}
 	void PoseMenu::CloseNewGame() {
-		PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+		int stageNumber = GameManager::GetInstance().GetLevelManager()->GetStageNumber();
+		PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage", make_shared<int>(stageNumber));
 	}
 	void PoseMenu::OpenExpainGimmicks() {
 		m_ExplainMenu->Open();

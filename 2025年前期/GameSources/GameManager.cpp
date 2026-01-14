@@ -207,7 +207,7 @@ namespace basecross{
 
 		auto& map = m_LevelManager->GetMap();
 		for (auto& gimmick : map->GetGimmicks()) {
-			gimmick->SetDrawActive(true);
+			gimmick->Reset();
 		}
 	}
 	void GameManager::Start() {
