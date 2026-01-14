@@ -198,7 +198,8 @@ namespace basecross{
 		void SetSize(Vec2 size);
 
 		void MatchToScreenSize() {
-			SetSize(m_ScreenHalfSize * 2.0f);
+			//データ上のサイズと実際の画面サイズが合わないためちょっと大きめ
+			SetSize(m_ScreenHalfSize * 2.1f);
 		}
 		/// <summary>
 		/// 表示サイズ取得
@@ -599,6 +600,7 @@ namespace basecross{
 		float m_FadeSpeed;
 		bool m_IsFadeOut;
 		bool m_IsFinished;
+		bool m_HalfFinished;
 		FadeState m_FadeState;
 	public:
 		SpriteFade(const shared_ptr<GameObject>& ptr,float fadeSpeed) : SpriteAction(ptr),m_FadeSpeed(fadeSpeed),m_IsFadeOut(true),m_IsFinished(false), m_FadeState(FadeState::In){}
@@ -621,6 +623,7 @@ namespace basecross{
 		void FadeOut() {
 			m_IsFadeOut = true;
 			m_IsFinished = false;
+			m_HalfFinished = false;
 			Col4 coler = m_Draw->GetDiffuse();
 			coler.w = 0.0f;
 			m_Draw->SetDiffuse(coler);
@@ -628,12 +631,16 @@ namespace basecross{
 		void FadeIn() {
 			m_IsFadeOut = false;
 			m_IsFinished = false;
+			m_HalfFinished = false;
 			Col4 coler = m_Draw->GetDiffuse();
 			coler.w = 1.0f;
 			m_Draw->SetDiffuse(coler);
 		}
 		bool IsFinish() {
 			return m_IsFinished;
+		}
+		bool IsHalfFinish() {
+			return m_HalfFinished;
 		}
 	};
 	//----------------------------------------------------------

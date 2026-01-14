@@ -1,26 +1,26 @@
 {
     "tutorial":[
-        {"number":1,"file":"TestMap"},
-        {"number":2,"file":"map"},
-        {"number":3,"file":"level1"},
-        {"number":4,"file":"TestMap"},
-        {"number":5,"file":"TestMap"},
-        {"number":6,"file":"TestMap"},
-        {"number":7,"file":"TestMap"},
-        {"number":8,"file":"TestMap"},
-        {"number":9,"file":"TestMap"},
-        {"number":10,"file":"TestMap"}
+        {"number":1,"file":"Stage1","anser": 1},
+        {"number":2,"file":"Stage2","anser": 1},
+        {"number":3,"file":"Stage3","anser": 1},
+        {"number":4,"file":"Stage4","anser": 1},
+        {"number":5,"file":"Stage5","anser": 1},
+        {"number":6,"file":"Stage6","anser": 1},
+        {"number":7,"file":"TestMap","anser": 1},
+        {"number":8,"file":"TestMap","anser": 1},
+        {"number":9,"file":"TestMap","anser": 1},
+        {"number":10,"file":"TestMap","anser": 1}
     ],
     "easy":[
-        {"number":1,"file":"TestMap"},
-        {"number":2,"file":"TestMap"},
-        {"number":3,"file":"TestMap"},
-        {"number":4,"file":"TestMap"},
-        {"number":5,"file":"TestMap"},
-        {"number":6,"file":"TestMap"},
-        {"number":7,"file":"TestMap"},
-        {"number":8,"file":"TestMap"},
-        {"number":9,"file":"TestMap"},
-        {"number":10,"file":"TestMap"}
+        {"number":1,"file":"TestMap","anser": 1},
+        {"number":2,"file":"TestMap","anser": 1},
+        {"number":3,"file":"TestMap","anser": 1},
+        {"number":4,"file":"TestMap","anser": 1},
+        {"number":5,"file":"TestMap","anser": 1},
+        {"number":6,"file":"TestMap","anser": 1},
+        {"number":7,"file":"TestMap","anser": 1},
+        {"number":8,"file":"TestMap","anser": 1},
+        {"number":9,"file":"TestMap","anser": 1},
+        {"number":10,"file":"TestMap","anser": 1}
     ]
 }

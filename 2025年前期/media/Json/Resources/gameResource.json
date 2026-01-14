@@ -49,10 +49,16 @@
     "Icons/Icon_Teleporter.png": "ICON_TL",
     "Icons/Icon_Upper.png": "ICON_UPPER",
     "Icons/Icon_Lower.png": "ICON_LOWER",
-    "Icons/IconHandler.png": "HANDLER",
 
     "Menu.png": "MENU",
     "Menu_Explain.png": "MENU_EXPLAIN",
-    "TutorialBackBord.png": "MENU_GIMMICK"
+    "TutorialBackBord.png": "MENU_GIMMICK",
+    "SoundMenu.png": "SOUND_MENU",
+    "SoundSE.png": "SOUND_SE",
+    "SoundSESelect.png": "SOUND_SE_SELECT",
+    "SoundBGM.png": "SOUND_BGM",
+    "SoundBGMSelect.png": "SOUND_BGM_SELECT",
+    "SoundBar.png": "SOUND_BAR",
+    "SoundBarFrame.png": "SOUND_BAR_FRAME"
   }
 }
