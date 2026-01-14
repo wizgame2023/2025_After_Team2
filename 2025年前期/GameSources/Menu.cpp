@@ -15,6 +15,7 @@ namespace basecross{
 		m_GimmickTextures[GimmickObjects::Roll] = L"ICON_ROLL";
 		m_GimmickTextures[GimmickObjects::Killer] = L"ICON_KILL";
 		m_GimmickTextures[GimmickObjects::Teleporter] = L"ICON_TL";
+		m_GimmickTextures[GimmickObjects::Inverter] = L"ICON_INV";
 
 		Vec2 mainViewSize = Vec2(m_MainViewPort.Width, m_MainViewPort.Height);
 		Vec2 screenSize = Vec2(App::GetApp()->GetGameWidth(), App::GetApp()->GetGameHeight());

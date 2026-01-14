@@ -40,6 +40,8 @@ namespace basecross{
 	{
 		Object::OnUpdate();
 
+		RotateDirection();
+
 		if (m_PutEffect == nullptr)
 		{
 			m_PutEffect = m_Stage->AddGameObject<Effect>(L"PutGimmickEffect.efk", GetPosition() + Vec3(0, 0.75f, 0));
@@ -83,7 +85,7 @@ namespace basecross{
 	{
 		auto playerVec = GameManager::GetInstance().GetEntityManager()->GetPlayers();
 		auto pos = GetPosition();
-		shared_ptr<MoveCube> cube;
+		shared_ptr<MoveCube> cube = nullptr;
 
 		for (auto& ball : playerVec)
 		{
@@ -132,7 +134,16 @@ namespace basecross{
 
 		m_Cube->AddGimmickPath(GetThis<Gimmicks>());
 	}
+	void Gimmicks::RotateDirection() {
+		float angle = atan2f(-m_Value.x, -m_Value.z);
+		
+		auto rot = XMMatrixRotationAxis(Vec3(0, 1, 0), angle);
 
+		auto world = m_Transform->GetWorldMatrix();
+		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
+
+		m_Transform->SetQuaternion(world.quatInMatrix());
+	}
 
 	GimmickGoal::GimmickGoal(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage),
@@ -183,23 +194,6 @@ namespace basecross{
 				}
 			}
 		}
-
-		float angle = 0.0f;
-		if (m_Value == Vec3(-1, 0, 0)) {
-			angle = XM_PIDIV2;
-		}
-		else if (m_Value == Vec3(1, 0, 0)) {
-			angle = -XM_PIDIV2;
-		}
-		else if (m_Value == Vec3(0, 0, 1)) {
-			angle = XM_PI;
-		}
-		auto rot = XMMatrixRotationAxis(Vec3(0, 1, 0), angle);
-
-		auto world = m_Transform->GetWorldMatrix();
-		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
-
-		m_Transform->SetQuaternion(world.quatInMatrix());
 	}
 
 	void GimmickGoal::Begin()
@@ -462,7 +456,8 @@ namespace basecross{
 
 	void GimmickRoll::Update()
 	{
-		
+		Gimmicks::Update();
+		CheckCount();
 	}
 	void GimmickRoll::End() {
 		Gimmicks::Update();
