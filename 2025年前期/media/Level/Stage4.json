@@ -1,0 +1,18 @@
+{
+	"mapSize":[9,7],
+	"grid":
+	[
+		{"pos":[4,1],"color":"red"},
+		{"pos":[4,3],"color":"green"},
+		{"pos":[1,3],"color":"blue"},
+		{"pos":[4,5],"color":"yellow"},
+		{"pos":[7,5],"color":"magenta"}
+	],
+	"items" : [
+		{"id":"player","direction":"south","value":0,"count":1},
+		{"id":"goal","direction":"west","value":0,"count":1},
+		{"id":"roll","direction":"north","value":1,"count":1},
+		{"id":"roll","direction":"north","value":2,"count":1},
+		{"id":"roll","direction":"north","value":3,"count":1}
+	]
+}

@@ -183,6 +183,11 @@ namespace basecross{
 		SoundManager::GetInstance().PlaySE(L"Dead");
 		GameManager::GetInstance().GetEntityManager()->DestroyPlayer(GetThis<MoveCube>());
 	}
+
+	void MoveCube::AddGimmickPath(const shared_ptr<Gimmicks>& gimmick) {
+		m_GimmickPath.push_back(GimmickData(gimmick));
+	}
+	const vector<GimmickData>& MoveCube::GetGimmickPath() { return m_GimmickPath; }
 }
 //end basecross
 

@@ -314,11 +314,18 @@ namespace basecross {
 			}
 			if (color.w < 0.0f) {
 				if (m_FadeState == FadeState::OutToIn || m_FadeState == FadeState::In) m_IsFinished = true;
-				else if (m_FadeState == FadeState::InToOut) m_IsFadeOut = true;
+				else if (m_FadeState == FadeState::InToOut) {
+					m_IsFadeOut = true;
+					m_HalfFinished = true;
+				}
 			}
 			else if (color.w > 1.0f) {
 				if (m_FadeState == FadeState::InToOut || m_FadeState == FadeState::Out) m_IsFinished = true;
-				else if (m_FadeState == FadeState::OutToIn) m_IsFadeOut = false;
+				else if (m_FadeState == FadeState::OutToIn) {
+					m_IsFadeOut = false;
+					m_HalfFinished = true;
+				}
+
 			}
 			else {
 				m_IsFinished = false;
