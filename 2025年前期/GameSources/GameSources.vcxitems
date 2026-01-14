@@ -17,6 +17,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Card.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Effect.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)FadeSystem.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GameManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GameStage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Gimmick.h" />
@@ -51,6 +52,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Card.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Effect.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)FadeSystem.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Gimmick.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GimmickHand.cpp" />

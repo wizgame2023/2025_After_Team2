@@ -15,7 +15,7 @@ namespace basecross{
 		m_Transform->SetRotation(Vec3());
 		m_Transform->SetScale(Vec3(1.0f));
 
-		m_Stage = GetTypeStage<GameStage>();
+		//m_Stage = GetTypeStage<GameStage>();
 	}
 	void Object::OnUpdate() {
 

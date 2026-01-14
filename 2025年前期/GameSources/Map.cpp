@@ -23,7 +23,7 @@ namespace basecross{
 		int maxHeight = -100;
 
 		vector<int> mapSize = map.At<JsonArray>(L"mapSize")->GetIntArray();
-		auto mapData = map.At<JsonArray>(L"map")->GetObjectArray();
+		auto mapData = map.At<JsonArray>(L"grid")->GetObjectArray();
 		//ƒf[ƒ^‚Ì‰Šú‰»
 		for (int i = 0; i < mapSize[1]; i++) {
 			m_Map.push_back({});
