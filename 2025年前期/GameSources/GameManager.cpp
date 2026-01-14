@@ -248,6 +248,10 @@ namespace basecross{
 				int number = m_LevelManager->GetStageNumber();
 				m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage", make_shared<int>(number));
 			}
+			if (input->GetButton(L"Y"))
+			{
+				m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToSelectStage");
+			}
 		}
 		if (input->GetDownButton(GetKeyConfig(L"start"))) {
 			if (m_GameFlowManager->IsPut()) {

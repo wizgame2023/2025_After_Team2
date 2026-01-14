@@ -31,16 +31,11 @@
     "BGM/BGM3.wav": "GameBGM"
   },
   "UI": {
-    "TitleLogo.png": "TitleLogoUI",
-    "SelectLogo.png": "SelectUI",
-    "Start.png": "StartUI",
     "Number.png": "NumUI",
-    "TestCursor.png": "CursorUI",
     "ResultBackBoard.png": "ResultBackBoardUI",
     "StarCover.png": "StarCoverUI",
     "Star.png": "StarUI",
     "Evaluation.png": "EvaluationUI",
-
     "BackGame.png": "TEMP_BACK_MENU",
     "MenuExpain.png": "TEMP_EXPAIN_MENU",
     "MenuNewGame.png": "TEMP_NEW_MENU",
@@ -53,6 +48,9 @@
     "select_MenuSelect.png": "SELECT_SELECT_MENU",
     "select_MenuSound.png": "SELECT_SOUND_MENU",
     "select_MenuTitle.png": "SELECT_TITLE_MENU",
-    "MouseCursor.png": "MOUSE_CURSOR"
+    "MouseCursor.png": "MOUSE_CURSOR",
+    "Icons/IconHandler.png": "HANDLER",
+    "RollUI.png": "RollUI"
+
   }
 }
