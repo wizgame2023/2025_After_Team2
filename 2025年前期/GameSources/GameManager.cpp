@@ -185,7 +185,7 @@ namespace basecross{
 
 		if (m_ResultTime >= 0.05f)
 		{
-			ResultCreate();
+			//ResultCreate();
 			m_ResultTime = 0.0f;
 		}
 	}
@@ -231,12 +231,6 @@ namespace basecross{
 		auto& input = InputManager::GetInputManager();
 		if (m_GameFlowManager->IsFinished()) {
 			if (input->GetDownButton(GetKeyConfig(L"restart"))) {
-				int number = m_LevelManager->GetStageNumber();
-				m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage", make_shared<int>(number));
-			}
-			if (input->GetButton(L"Y"))
-			{
-				m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToSelectStage");
 			}
 		}
 		if (input->GetDownButton(GetKeyConfig(L"start"))) {
@@ -276,14 +270,48 @@ namespace basecross{
 
 				if (effect->EffectEnd())
 				{
-					auto menu = m_Stage->GetChileStageVec()[0];
+					auto menu = GetMenuStage();
 					auto backBoardUI = menu->AddGameObject<Sprite>(L"ResultBackBoardUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 600), Anchor::Center);
 					backBoardUI->SetLayer(10);
-					auto starCoverUI = menu->AddGameObject<Sprite>(L"StarCoverUI", Vec3(0.0f, 0.0f, 0.0f), Vec2(600, 180), Anchor::Center);
-					starCoverUI->SetLayer(10);
+
+					float buttonSize = 50;
+					Vec3 startPos = Vec3(-50.0f, 50.0f, 0.0f);
+					ButtonManager::Create(m_MenuStage, L"RESULT", L"SELECT_TRIANGLE", Col4(1,1,1,1), startPos, Vec2(buttonSize),
+						[&](shared_ptr<ObjectInterface>& object) {
+							int number = m_LevelManager->GetStageNumber() + 1;
+							m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage", make_shared<int>(number));
+						});
+					startPos += Vec3(0.0f, -buttonSize * 1.75, 0.0f);
+					ButtonManager::Create(m_MenuStage, L"RESULT", L"SELECT_TRIANGLE", Col4(1, 1, 1, 1), startPos, Vec2(buttonSize),
+						[&](shared_ptr<ObjectInterface>& object) {
+							int number = m_LevelManager->GetStageNumber();
+							m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage", make_shared<int>(number));
+						});
+					startPos += Vec3(0.0f, -buttonSize * 1.75, 0.0f);
+					ButtonManager::Create(m_MenuStage, L"RESULT", L"SELECT_TRIANGLE", Col4(1, 1, 1, 1), startPos, Vec2(buttonSize),
+						[&](shared_ptr<ObjectInterface>& object) {
+							m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToSelectStage");
+						});
+					ButtonManager::instance->SetInput(L"RESULT", InputData(XINPUT_GAMEPAD_DPAD_UP, -1));
+					ButtonManager::instance->SetInput(L"RESULT", InputData(XINPUT_GAMEPAD_DPAD_DOWN, 1));
+					ButtonManager::instance->SetInput(L"RESULT", InputData(StickMode::LY, 1, 0.1f));
+
+					ButtonManager::instance->AddAcceptButton(L"RESULT", XINPUT_GAMEPAD_A);
+
+					ButtonManager::instance->OpenAndUse(L"RESULT");
+
+
+					shared_ptr<Sprite> numbers[2];
+					Vec3 numberPos = Vec3(-150,-100,0.0f);
+					float numberSize = 300;
+					numbers[0] = menu->AddGameObject<Sprite>(L"ICON_1", numberPos, Vec2(numberSize), Anchor::Center);
+					numbers[1] = menu->AddGameObject<Sprite>(L"ICON_1", numberPos + Vec3(-numberSize / 2.0f, numberSize / 2.0f,0.0f), Vec2(numberSize), Anchor::Center);
+					numbers[0]->SetLayer(10);
+					numbers[1]->SetLayer(10);
 
 					m_EffectSprite.push_back(backBoardUI);
-					m_EffectSprite.push_back(starCoverUI);
+					m_EffectSprite.push_back(numbers[0]);
+					m_EffectSprite.push_back(numbers[1]);
 					effect->EffectDelete();
 					m_GameFlowManager->GameClear();
 					break;

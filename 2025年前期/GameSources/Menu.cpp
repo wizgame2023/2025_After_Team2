@@ -22,7 +22,7 @@ namespace basecross{
 
 		m_BackGround = m_MenuStage->AddGameObject<Sprite>(m_BackGroundTexture, menuPosition, menuSize,Anchor::Left);
 		m_BackGround->SetLayer(0);
-		float durationY = 70.0f;
+		float durationY = 65.0f;
 
 		m_ExplainBox = m_MenuStage->AddGameObject<Sprite>(L"MENU_EXPLAIN", Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f, 0.0f), Vec2(menuSize.x, menuSize.y * 0.25f), Anchor::TopLeft);
 		m_ExplainBox->SetLayer(0);
@@ -30,6 +30,9 @@ namespace basecross{
 		m_CurrentExplain->SetAnchorPosition(static_cast<Vec3>(m_ExplainBox->GetAnchorPosition(Anchor::Center)) - Vec3(5,0,0), Anchor::Center);
 		m_CurrentExplain->SetLayer(1);
 		m_ConnectOffsetX = iconSize.x / 2.0f;
+
+		m_OperateInfo = m_MenuStage->AddGameObject<Sprite>(L"OPERATE_INFO", Vec3(), Vec2(menuSize.y * 0.3f, menuSize.y * 0.3f) * 0.9f, Anchor::Center);
+		m_OperateInfo->SetAnchorPosition(static_cast<Vec3>(m_BackGround->GetAnchorPosition(Anchor::TopLeft)) - Vec3(20.0f,10.0f,0.0f), Anchor::TopRight);
 
 		auto& gameManager = GameManager::GetInstance();
 
@@ -296,6 +299,7 @@ namespace basecross{
 		}
 		m_CurrentExplain->SetDrawActive(flag);
 		m_ExplainBox->SetDrawActive(flag);
+		m_OperateInfo->SetDrawActive(flag);
 	}
 	vector<pair<int, int>> GameMenu::ConvertColorGimmickHandles(vector<Line>& lines) {
 		vector<pair<int, int>> p;

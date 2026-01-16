@@ -6,7 +6,9 @@
 		{"pos":[4,2],"color":"red"},
 		{"pos":[4,4],"color":"green"},
 		{"pos":[1,5],"color":"blue"},
-		{"pos":[1,1],"color":"yellow"}
+		{"pos":[1,1],"color":"yellow"},
+		{"posTL":[3,0],"posBR":[3,6]}
+
 	],
 	"items" : [
 		{"id":"player","direction":"south","value":0,"count":1},

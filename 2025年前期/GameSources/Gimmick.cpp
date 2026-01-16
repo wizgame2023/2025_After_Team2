@@ -141,7 +141,7 @@ namespace basecross{
 		auto draw = AddComponent<PNTStaticModelDraw>();
 		draw->SetMeshResource(L"GOAL_MD");
 		SetAlphaActive(true);
-		draw->SetDiffuse(Col4(1, 1, 1, 0.75f));
+		draw->SetDiffuse(Col4(1, 1, 1, 1.0f));
 
 		Mat4x4 mat;
 		mat.affineTransformation(Vec3(0.9f), Vec3(), Vec3(0,XM_PIDIV2,0), Vec3(0.0f, -0.9f, 0.0f));

@@ -1,6 +1,6 @@
 /*!
 @file TitleStage.h
-@brief ƒ^ƒCƒgƒ‹ƒXƒe[ƒW
+@brief ã‚¿ã‚¤ãƒˆãƒ«ã‚¹ãƒ†ãƒ¼ã‚¸
 */
 #pragma once
 #include "stdafx.h"
@@ -44,8 +44,8 @@ namespace basecross
         float m_RollSpEnd = XM_PI;
         float m_Angle160 = XMConvertToRadians(160);
         float m_Angle270 = XM_PI + (XM_PI * 0.5f);
-        float m_BlinkingTime = 0.0f; // ƒXƒ^[ƒg•¶Žš“_–Å§Œä
-        float m_Blinking = 0.0f; // ƒXƒ^[ƒg•¶Žš“_–Å§Œä
+        float m_BlinkingTime = 0.0f; // ã‚¹ã‚¿ãƒ¼ãƒˆæ–‡å­—ç‚¹æ»…åˆ¶å¾¡
+        float m_Blinking = 0.0f; // ã‚¹ã‚¿ãƒ¼ãƒˆæ–‡å­—ç‚¹æ»…åˆ¶å¾¡
 		bool m_IsAPushed = false;
         bool m_IsConfirmed = false;
 
