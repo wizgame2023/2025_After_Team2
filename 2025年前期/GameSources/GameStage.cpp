@@ -64,7 +64,7 @@ namespace basecross {
 			SoundManager::GetInstance().PlayBGM(L"GameBGM");
 
 
-			auto skyCube = AddGameObject<SkyCube>(L"FLOOR");
+			auto skyCube = AddGameObject<SkyCube>(L"BACKGROUND");
 			skyCube->SetPosition(map->GetMapCenter());
 
 			Vec3 mapSize = map->GetMapSize();
