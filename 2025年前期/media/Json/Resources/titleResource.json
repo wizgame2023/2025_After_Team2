@@ -9,6 +9,7 @@
   "Sound": {
     "BGM/TitleBGM.wav": "TitleBGM",
     "decision.wav": "StartSE"
+
   },
   "UI": {
     "TitleLogo.png": "TitleLogoUI",
@@ -20,7 +21,7 @@
     "FadeRedStar.png": "FadeRedStarUI",
     "FadeYellowStar.png": "FadeYellowStarUI",
     "Stick.png": "StinkUI",
-    "A_Button.png": "A_ButtonUI"
-
+    "A_Button.png": "A_ButtonUI",
+    "BackBoard.png": "BackBoardUI"
   }
 }

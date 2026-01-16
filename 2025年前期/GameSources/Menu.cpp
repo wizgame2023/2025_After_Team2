@@ -471,6 +471,7 @@ namespace basecross{
 		ButtonManager::instance->SetInput(L"POSE", InputData(XINPUT_GAMEPAD_DPAD_UP, -1));//選択(下)
 		ButtonManager::instance->SetInput(L"POSE", InputData(StickMode::LY, 1, 0.1f));//選択(左スティック)
 		ButtonManager::instance->SetLoop(true);
+		ButtonManager::instance->SetSound(L"decision");
 
 		m_ExplainMenu = m_MenuStage->AddGameObject<ExplainMenu>();
 		m_ExplainMenu->Close();

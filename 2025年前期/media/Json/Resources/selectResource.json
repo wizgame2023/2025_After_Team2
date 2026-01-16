@@ -7,7 +7,7 @@
     "arrow_Orbit.png": "TEMP_ARROW_SPRITE"
   },
   "Sound": {
-
+    "BGM/SelectBGM.wav": "SelectBGM"
   },
   "UI": {
     "SelectLogo.png": "SelectUI",

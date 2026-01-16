@@ -31,6 +31,7 @@ namespace basecross {
 	{
 		ResourceManager::Load(L"selectResource.json");
 
+		ResourceManager::RegisterWav(L"Sound");
 		ResourceManager::RegisterTexture(L"UI");
 	}
 
@@ -94,6 +95,9 @@ namespace basecross {
 			CreateViewLight();
 
 			SpriteCreate();
+
+			SoundManager::GetInstance().PlayBGM(L"SelectBGM", 2.0f);
+
 		}
 		catch (...) {
 			throw;

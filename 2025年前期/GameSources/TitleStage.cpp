@@ -55,6 +55,10 @@ namespace basecross {
 		m_RollStarSp2 = AddGameObject<Sprite>(L"ShootingStarUI", Vec3(200,  0, 0.0f), starSize - Vec2(200), Anchor::Center);
 		m_RollStarSp3 = AddGameObject<Sprite>(L"ShootingStarUI", Vec3(150, -80, 0.0f), starSize - Vec2(100), Anchor::Center);
 
+
+		m_BackBoardSp = AddGameObject<Sprite>(L"BackBoardUI", Vec3(0.0f), Vec2(1280, 800), Anchor::Center);
+		m_BackBoardSp->SetDiffuse(Col4(0.0f, 0.0f, 0.0f, 0.0f));
+		m_BackBoardSp->SetLayer(3);
 	}
 
 	void TitleStage::StartSpriteCreate()
@@ -144,7 +148,6 @@ namespace basecross {
 		GameStartMaster();
 		UpdateRollSprite();
 		FadeStarSprite();
-
 	}
 
 	void TitleStage::OnDestroy()
@@ -301,12 +304,22 @@ namespace basecross {
 			else
 			{
 				m_IsAPushed = false;
-				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToSelectStage");
 
-				SoundManager::GetInstance().PlaySE(L"StartSE");
+				m_StartSE = SoundManager::GetInstance().PlaySE(L"StartSE");
+				m_Blinking = 0.5f;
+				m_BlinkingTime = 10.0f;
 
+				StartFade();
 			}
 		}
+		if (m_StartSE != nullptr)
+		{
+			if (m_BackBoardSp->GetComponent<SpriteFade>()->IsFinish())
+			{
+				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToSelectStage");
+			}
+		}
+
 	}
 
 	void TitleStage::UpdateStartSpriteBlink()
@@ -315,8 +328,7 @@ namespace basecross {
 		{
 			static float blinkTime = 0.0f;
 			blinkTime += App::GetApp()->GetElapsedTime();
-
-			float alpha = 0.5f + 0.3f * sinf(blinkTime * 5.0f);
+			float alpha = 0.5f + 0.3f * sinf(blinkTime * (5.0f + m_BlinkingTime));
 			m_StartSprite->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, alpha));
 		}
 
@@ -334,6 +346,12 @@ namespace basecross {
 		m_FadeStarRedSp->SetDiffuse(Col4(1.0f, 0.0f, 0.0f, alphaR));
 		m_FadeStarBlueSp->SetDiffuse(Col4(0.0f, 0.0f, 1.0f, alphaB));
 		m_FadeStarYellowSp->SetDiffuse(Col4(1.0f, 1.0f, 0.0f, alphaY));
+	}
+
+	void TitleStage::StartFade()
+	{
+		m_BackBoardSp->AddComponent<SpriteFade>(0.5f);
+		m_BackBoardSp->GetComponent<SpriteFade>()->StartFade(FadeState::Out);
 	}
 }
 //end basecross
