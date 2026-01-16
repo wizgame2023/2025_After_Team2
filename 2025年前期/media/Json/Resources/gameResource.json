@@ -3,7 +3,8 @@
   },
   "Texture": {
     "Floor.png": "FLOOR",
-    "Floor_WireFrame.png": "FLOOR_WIRE"
+    "Floor_WireFrame.png": "FLOOR_WIRE",
+    "BackGround.png": "BACKGROUND"
   },
   "Sound": {
 
@@ -11,6 +12,7 @@
   "UI": {
     "HintLine.png": "HintLine",
     "OperateInfo.png": "OPERATE_INFO",
+    "Select.png": "SELECT_TRIANGLE",
 
     "Expains/Pose/GimmickExpain_PL.png": "EXPAIN_PL",
     "Expains/Pose/GimmickExpain_GL.png": "EXPAIN_GL",

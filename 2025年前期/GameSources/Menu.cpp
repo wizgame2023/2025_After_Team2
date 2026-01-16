@@ -22,7 +22,7 @@ namespace basecross{
 
 		m_BackGround = m_MenuStage->AddGameObject<Sprite>(m_BackGroundTexture, menuPosition, menuSize,Anchor::Left);
 		m_BackGround->SetLayer(0);
-		float durationY = 70.0f;
+		float durationY = 65.0f;
 
 		m_ExplainBox = m_MenuStage->AddGameObject<Sprite>(L"MENU_EXPLAIN", Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f, 0.0f), Vec2(menuSize.x, menuSize.y * 0.25f), Anchor::TopLeft);
 		m_ExplainBox->SetLayer(0);
