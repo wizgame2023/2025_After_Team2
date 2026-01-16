@@ -7,9 +7,9 @@
         {"number":5,"file":"Stage5","anser": 1},
         {"number":6,"file":"Stage6","anser": 1},
         {"number":7,"file":"Stage7","anser": 1},
-        {"number":8,"file":"TestMap","anser": 1},
-        {"number":9,"file":"TestMap","anser": 1},
-        {"number":10,"file":"TestMap","anser": 1}
+        {"number":8,"file":"Stage8","anser": 1},
+        {"number":9,"file":"Stage8","anser": 1},
+        {"number":10,"file":"Stage10","anser": 1}
     ],
     "easy":[
         {"number":1,"file":"TestMap","anser": 1},
