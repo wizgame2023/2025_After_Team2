@@ -36,6 +36,7 @@ namespace basecross {
 			CreateViewLight();
 			CreateResorce();
 
+			//マネージャーの初期化
 			auto& gameManager = GameManager::GetInstance();
 			gameManager.Reset();
 			gameManager.SetGameStage(GetThis<GameStage>());
@@ -46,6 +47,7 @@ namespace basecross {
 			auto camera = static_pointer_cast<MainCamera>(GetView()->GetTargetCamera());
 			camera->SetFixedPoint(map);
 
+			//ゲーム本体の表示範囲を限定
 			auto view = dynamic_pointer_cast<SingleView>(GetView());
 			Viewport viewport = view->GetTargetViewport();
 			viewport.Width /= 1.5f;
@@ -54,6 +56,7 @@ namespace basecross {
 
 			App::GetApp()->GetScene<Scene>()->SetViewport(viewport);
 
+			//メニュー用のステージを作成
 			auto menuStage = AddChileStage<MenuStage>();
 
 			GameManager::GetInstance().SetMenuStage(menuStage);
@@ -64,6 +67,20 @@ namespace basecross {
 			auto skyCube = AddGameObject<SkyCube>(L"FLOOR");
 			skyCube->SetPosition(map->GetMapCenter());
 
+			Vec3 mapSize = map->GetMapSize();
+			Vec3 mapCenter = map->GetMapCenter();
+			float boardDist = 0.75f;
+
+			shared_ptr<Board> directionBoard[4] = {};
+			directionBoard[0] = AddGameObject<Board>(L"ICON_ARROW", Vec3(mapSize.x + boardDist, -0.5f, mapCenter.z), Vec3(1, 1, 1), false);// E
+			directionBoard[1] = AddGameObject<Board>(L"ICON_GOAL", Vec3(-1.0f - boardDist, -0.5f, mapCenter.z), Vec3(1, 1, 1), false);// W
+			directionBoard[2] = AddGameObject<Board>(L"ICON_INV", Vec3(mapCenter.x, -0.5f, 1.0f + boardDist), Vec3(1, 1, 1), false);// N
+			directionBoard[3] = AddGameObject<Board>(L"ICON_PL", Vec3(mapCenter.x, -0.5f, -mapSize.z - boardDist), Vec3(1, 1, 1), false);// S
+
+			for (auto& board : directionBoard) {
+				Vec3 position = board->GetTrans()->GetPosition();
+				board->RotateVector(mapCenter - position);
+			}
 		}
 		catch (...) {
 			throw;

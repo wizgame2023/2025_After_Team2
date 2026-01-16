@@ -165,6 +165,8 @@ namespace basecross
 	
 			return false;
 		}
+
+		void CreateBoard(const wstring& key);
 	};
 
 	/*!

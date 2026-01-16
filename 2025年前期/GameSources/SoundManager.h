@@ -48,6 +48,8 @@ namespace basecross{
 			m_BGMVolume = min(m_BGMVolume, 1.0f);
 			SetBGMVolume();
 		}
+
+		bool IsSoundRunning(const shared_ptr<SoundItem>& soundItem);
 	private:
 		vector<wstring> m_SoundKeys;
 		shared_ptr<XAudio2Manager> m_Audio;

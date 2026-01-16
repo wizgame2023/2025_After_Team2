@@ -143,6 +143,7 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)TutorialManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SkyCube.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)FadeSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -225,6 +226,7 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)TutorialManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)SkyCube.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)FadeSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json">

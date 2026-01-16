@@ -29,6 +29,6 @@
 	[
 		{"id":"player","direction":"east","value":0,"count":1},
 		{"id":"goal","direction":"west","value":0,"count":1},
-		{"id":"arrow","direction":"south","value":4,"count":1}
+		{"id":"teleporter","direction":"south","value":4,"count":1}
 	]
 }

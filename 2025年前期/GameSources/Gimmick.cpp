@@ -30,9 +30,6 @@ namespace basecross{
 	{
 		Object::OnCreate();
 
-		m_Board = m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1, 1, 0), false);
-		m_Board->AddComponent<UVScroll>(Vec2(0.0f, 1.0f), m_Board->GetVertices());
-
 		m_PutEffect.reset();
 	}
 
@@ -47,39 +44,17 @@ namespace basecross{
 			m_PutEffect = m_Stage->AddGameObject<Effect>(L"PutGimmickEffect.efk", GetPosition() + Vec3(0, 0.75f, 0));
 			m_PutEffect->SetEffectSize(Vec3(0.7f));
 		}
-		m_Board->GetDraw()->SetDrawActive(false);
-		return;
+		if (!m_Board) return;
+
 		if (m_Value.lengthSqr() == 0) {
 			
 		}
 
 		m_Board->GetTrans()->SetPosition(GetPosition() + Vec3(0, 0.75f, 0));
-		m_Board->RotateVector(Vec3(0, 1, 0));
-
-		Vec3 normalizeVec = (Vec3)XMVector3Normalize(m_Value);
-
-		float angle = 0.0f;  
-		if (normalizeVec == Vec3(-1, 0, 0)) {
-			angle = XM_PI;
-		}
-		else if (normalizeVec == Vec3(0, 0, 1)) {
-			angle = -XM_PIDIV2;
-		}
-		else if (normalizeVec == Vec3(0, 0, -1)) {
-			angle = XM_PIDIV2;
-		}
-		auto rot = XMMatrixRotationAxis(Vec3(0, 1, 0), angle);
-
-		auto world = m_Board->GetTrans()->GetWorldMatrix();
-		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
-
-		m_Board->GetTrans()->SetQuaternion(m_Board->GetTrans()->GetQuaternion() * world.quatInMatrix());
 	}
 
 	void Gimmicks::Begin()
 	{
-		//Object::OnCreate();
-
 	}
 	void Gimmicks::Update()
 	{
@@ -144,6 +119,10 @@ namespace basecross{
 
 		m_Transform->SetQuaternion(world.quatInMatrix());
 	}
+	void Gimmicks::CreateBoard(const wstring& key) {
+		auto cardSample = CardFactory::GetSamples();
+		m_Board = m_Stage->AddGameObject<Board>(cardSample[key]->GetIconKey(), Vec3(), Vec3(0.5f), true);
+	}
 
 	GimmickGoal::GimmickGoal(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage),
@@ -167,8 +146,6 @@ namespace basecross{
 		Mat4x4 mat;
 		mat.affineTransformation(Vec3(0.9f), Vec3(), Vec3(0,XM_PIDIV2,0), Vec3(0.0f, -0.9f, 0.0f));
 		draw->SetMeshToTransformMatrix(mat);
-
-		//Quat quat = XMQuaternionRotationAxis(Vec3(0, 1, 0), );
 	}
 
 	void GimmickGoal::OnUpdate()
@@ -208,7 +185,6 @@ namespace basecross{
 		{
 			Vec3 playerVel = m_Cube->GetVelocity();
 
-			// ?[???x?N?g????????????m?F
 			if (playerVel.lengthSqr() > 0.0001f)
 			{
 				Vec3 normalizedVel = playerVel.normalize();
@@ -216,7 +192,7 @@ namespace basecross{
 
 				float dot = normalizedVel.dot(goalDir);
 
-				if (dot > 0.9f) // ??????x?t??????????l
+				if (dot > 0.9f)
 				{
 					m_Goal = true;
 					m_Cube = nullptr;
@@ -251,23 +227,6 @@ namespace basecross{
 	}
 	void GimmickSetPlayer::OnUpdate() {
 		Gimmicks::OnUpdate();
-
-		float angle = 0.0f;
-		if (m_Value == Vec3(-1, 0, 0)) {
-			angle = XM_PIDIV2;
-		}
-		else if (m_Value == Vec3(1, 0, 0)) {
-			angle = -XM_PIDIV2;
-		}
-		else if (m_Value == Vec3(0, 0, 1)) {
-			angle = XM_PI;
-		}
-		auto rot = XMMatrixRotationAxis(Vec3(0, 1, 0), angle);
-
-		auto world = m_Transform->GetWorldMatrix();
-		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
-
-		m_Transform->SetQuaternion(world.quatInMatrix());
 	}
 	void GimmickSetPlayer::Begin()
 	{
@@ -301,12 +260,12 @@ namespace basecross{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
 		draw->SetMeshResource(L"DIRECTION_MD");
-		draw->SetDiffuse(Col4(1, 0, 0, 1));
+		draw->SetTextureResource(L"FLOOR");
 		Mat4x4 mat;
 		mat.affineTransformation(Vec3(1.0f), Vec3(), Vec3(0, XM_PIDIV2, 0), Vec3(0.0f, -0.75f, 0.0f));
 		draw->SetMeshToTransformMatrix(mat);
 
-
+		CreateBoard(L"arrow");
 	}
 
 	void GimmickArrow::Begin()
@@ -340,8 +299,14 @@ namespace basecross{
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
-		draw->SetDiffuse(Col4(1, 1, 0, 1));
+		draw->SetMeshResource(L"DIRECTION_MD");
+		draw->SetTextureResource(L"FLOOR");
+		Mat4x4 mat;
+		mat.affineTransformation(Vec3(1.0f), Vec3(), Vec3(0, XM_PIDIV2, 0), Vec3(0.0f, -0.75f, 0.0f));
+		draw->SetMeshToTransformMatrix(mat);
+
+
+		CreateBoard(L"teleporter");
 	}
 
 	void GimmickTeleporter::Begin()
@@ -445,8 +410,14 @@ namespace basecross{
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
+		draw->SetMeshResource(L"NO_DIRECTION_MD");
+		draw->SetTextureResource(L"FLOOR");
 		draw->SetDiffuse(Col4(1, 1, 1, 1));
+		Mat4x4 mat;
+		mat.affineTransformation(Vec3(1.0f), Vec3(), Vec3(0, XM_PIDIV2, 0), Vec3(0.0f, -0.75f, 0.0f));
+		draw->SetMeshToTransformMatrix(mat);
+
+		CreateBoard(L"roll");
 	}
 
 	void GimmickRoll::Begin()
@@ -496,8 +467,13 @@ namespace basecross{
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
-		draw->SetDiffuse(Col4(0, 0, 0, 1));
+		draw->SetMeshResource(L"NO_DIRECTION_MD");
+		draw->SetTextureResource(L"FLOOR");
+		Mat4x4 mat;
+		mat.affineTransformation(Vec3(1.0f), Vec3(), Vec3(0, XM_PIDIV2, 0), Vec3(0.0f, -0.75f, 0.0f));
+		draw->SetMeshToTransformMatrix(mat);
+
+		CreateBoard(L"inverter");
 	}
 
 	void GimmickInverter::Begin()

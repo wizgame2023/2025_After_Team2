@@ -528,17 +528,33 @@ namespace basecross {
 		}
 	}
 	void Board::OnCreate() {
-		m_Draw = AddComponent<PNTStaticDraw>();
+		m_Draw = AddComponent<PTStaticDraw>();
 		m_Draw->SetDepthStencilState(DepthStencilState::Read);
 		m_Draw->SetOriginalMeshUse(true);
 		m_Draw->SetModelDiffusePriority(true);
+		
 
 		m_Draw->SetDiffuse(Col4(1, 1, 1, 1));
 		m_Draw->SetEmissive(Col4(1, 1, 1, 1));
 		m_Draw->SetSpecular(Col4(1, 1, 1, 1));
 
 		vector<uint16_t> indices = {};
-		MeshUtill::CreateSquare(1.0f, m_Vertices, indices);
+		//MeshUtill::CreateSquare(1.0f, m_Vertices, indices);
+
+		float HelfSize = 0.5f;
+		//頂点配列
+		m_Vertices.push_back(VertexPositionTexture(bsm::Vec3(-HelfSize, HelfSize, 0), bsm::Vec2(0.0f, 0.0f)));
+		m_Vertices.push_back(VertexPositionTexture(bsm::Vec3(HelfSize, HelfSize, 0),  bsm::Vec2(1.0f, 0.0f)));
+		m_Vertices.push_back(VertexPositionTexture(bsm::Vec3(-HelfSize, -HelfSize, 0), bsm::Vec2(0.0f, 1.0f)));
+		m_Vertices.push_back(VertexPositionTexture(bsm::Vec3(HelfSize, -HelfSize, 0),  bsm::Vec2(1.0f, 1.0f)));
+		//インデックスを作成するための配列
+		indices.push_back((uint16_t)0);
+		indices.push_back((uint16_t)1);
+		indices.push_back((uint16_t)2);
+		indices.push_back((uint16_t)1);
+		indices.push_back((uint16_t)3);
+		indices.push_back((uint16_t)2);
+
 		m_Draw->CreateOriginalMesh(m_Vertices, indices);
 		if (m_TexKey != L"") {
 			m_Draw->SetTextureResource(m_TexKey);
