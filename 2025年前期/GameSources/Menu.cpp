@@ -9,12 +9,6 @@
 namespace basecross{
 
 	void GameMenu::OnCreate() {
-		m_GimmickTextures[GimmickObjects::Goal] = L"ICON_GOAL";
-		m_GimmickTextures[GimmickObjects::SetPlayer] = L"ICON_PL";
-		m_GimmickTextures[GimmickObjects::CourseCorrection] = L"ICON_ARROW";
-		m_GimmickTextures[GimmickObjects::Roll] = L"ICON_ROLL";
-		m_GimmickTextures[GimmickObjects::Killer] = L"ICON_KILL";
-		m_GimmickTextures[GimmickObjects::Teleporter] = L"ICON_TL";
 
 		Vec2 mainViewSize = Vec2(m_MainViewPort.Width, m_MainViewPort.Height);
 		Vec2 screenSize = Vec2(App::GetApp()->GetGameWidth(), App::GetApp()->GetGameHeight());
@@ -32,8 +26,8 @@ namespace basecross{
 
 		m_ExplainBox = m_MenuStage->AddGameObject<Sprite>(L"MENU_EXPLAIN", Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f, 0.0f), Vec2(menuSize.x, menuSize.y * 0.25f), Anchor::TopLeft);
 		m_ExplainBox->SetLayer(0);
-		m_CurrentExplain = m_MenuStage->AddGameObject<Sprite>(L"EXPAIN_PL", Vec3(), Vec2(menuSize.x, menuSize.y * 0.25f) * 0.9f, Anchor::Center);
-		m_CurrentExplain->SetAnchorPosition(static_cast<Vec3>(m_ExplainBox->GetAnchorPosition(Anchor::Center)) - Vec3(0,20,0), Anchor::Center);
+		m_CurrentExplain = m_MenuStage->AddGameObject<Sprite>(L"EXPAIN_PL", Vec3(), Vec2(menuSize.x * 0.9f, menuSize.y * 0.25f) * 0.9f, Anchor::Center);
+		m_CurrentExplain->SetAnchorPosition(static_cast<Vec3>(m_ExplainBox->GetAnchorPosition(Anchor::Center)) - Vec3(5,0,0), Anchor::Center);
 		m_CurrentExplain->SetLayer(1);
 		m_ConnectOffsetX = iconSize.x / 2.0f;
 
@@ -67,7 +61,7 @@ namespace basecross{
 		auto cards = gameManager.GetLevelManager()->GetHand()->GetCardData();
 		for (int i = 0; i < cards.size(); i++) {
 			auto sprite = m_MenuStage->AddGameObject<Sprite>(
-				m_GimmickTextures[cards[i]->GetType()],
+				cards[i]->GetIconKey(),
 				Vec3(gimmickPosition.x, gimmickPosition.y - i * durationY, 0.0f), iconSize,
 				Anchor::Center);
 			sprite->SetLayer(2);
@@ -322,7 +316,7 @@ namespace basecross{
 	void GameMenu::DrawExpain() {
 		auto cards = GameManager::GetInstance().GetLevelManager()->GetHand()->GetCardData();
 		if (m_GimmickHandle != -1) {
-			wstring key = cards[m_GimmickHandle]->GetExpainKey();
+			wstring key = cards[m_GimmickHandle]->GetExplainKey();
 			if (key != L"") {
 				m_CurrentExplain->SetTextureKey(key);
 			}
@@ -330,7 +324,7 @@ namespace basecross{
 		else {
 			int handle = OnCoursorHandle(m_GimmickIcons);
 			if (handle != -1) {
-				wstring key = cards[handle]->GetExpainKey();
+				wstring key = cards[handle]->GetExplainKey();
 				if (key != L"") {
 					m_CurrentExplain->SetTextureKey(key);
 				}
@@ -517,7 +511,7 @@ namespace basecross{
 		AddExplain(ExplainData{ L"ICON_PL",L"",L"EXPAIN_PL" });
 		AddExplain(ExplainData{ L"ICON_GOAL",L"",L"EXPAIN_GL" });
 		AddExplain(ExplainData{ L"ICON_ARROW",L"",L"EXPAIN_ARRW" });
-		AddExplain(ExplainData{ L"ICON_TL",L"",L"EXPAIN_TP" });
+		AddExplain(ExplainData{ L"ICON_TP",L"",L"EXPAIN_TP" });
 		AddExplain(ExplainData{ L"ICON_INV",L"",L"EXPAIN_INV" });
 		AddExplain(ExplainData{ L"ICON_ROLL",L"",L"EXPAIN_ROLL" });
 

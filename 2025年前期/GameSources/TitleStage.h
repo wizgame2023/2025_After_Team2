@@ -12,6 +12,7 @@ namespace basecross
     class TitleStage : public Stage 
     {
         void CreateViewLight();
+        shared_ptr<SoundItem> temp;
 
         shared_ptr<Sprite> m_StartSprite;
         shared_ptr<Sprite> m_Cursor;

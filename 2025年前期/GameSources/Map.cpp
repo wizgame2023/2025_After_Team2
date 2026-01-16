@@ -57,71 +57,15 @@ namespace basecross{
 					CreateFloor(vector<int>{ x,y }, colorStr, gimmick);
 				}
 			}
-
-			//vector<int> pos = data->At<JsonArray>(L"pos")->GetIntArray();
-			//float height = 0;
-			//wstring colorStr = L"clear";
-			//auto colorData = data->At<JsonString>(L"color");
-			//if (colorData) {
-			//	colorStr = colorData->GetValue();
-			//	//新しい色が来たら追加
-			//	if (colorStr != L"black" && find(m_ColorTable.begin(), m_ColorTable.end(), colorStr) == m_ColorTable.end()) {
-			//		m_ColorTable.push_back(colorStr);
-			//	}
-			//}
-			//else {
-			//	colorStr = L"black";
-			//}
-
-			//auto gimmick = data->At<JsonObject>(L"gimmick");
-			
-			////高さの最大値を更新
-			//if (maxHeight < height) {
-			//	maxHeight = height;
-			//}
-
-
-			//グリッドの生成
-		//	Vec3 position = Vec3(pos[0], m_GroundHeight - 0.5f, -pos[1]);
-		//	shared_ptr<Floor> box = nullptr;
-		//	if (colorStr != L"black") {
-		//		box = m_Stage->AddGameObject<Floor>(position, colorStr);
-		//		box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
-		//	}
-
-		//	wstring gimmickId = L"";
-		//	shared_ptr<Gimmicks> defaultGimmick = nullptr;
-		//	shared_ptr<CardData> defaultCard = nullptr;
-		//	if (gimmick) {
-		//		gimmickId = gimmick->At<JsonString>(L"id")->GetValue();
-
-		//		defaultCard = CardFactory::Create(gimmickId);
-		//		if (defaultCard) {
-		//			defaultCard->Load(gimmick);
-
-		//			defaultGimmick = defaultCard->CreateGimmick(GetStage());
-		//			defaultGimmick->SetPosition(position + Vec3(0.0f, height + 0.5f, 0.0f));
-		//			defaultGimmick->SetScale(Vec3(0.5f, 0.5f, 0.5f));
-		//		}
-		//	}
-
-		//	MapData m = { colorStr,height,position,box,defaultCard,defaultGimmick };
-		//	m_Map[pos[1]][pos[0]] = m;
-		//}
 		}
 		//無色部分の生成
 		for (int i = 0; i < mapSize[1]; i++) {
 			for (int j = 0; j < mapSize[0]; j++) {
 				if (m_Map[i][j].m_ColorStr == L"") {
 					CreateFloor(vector<int>{j, i}, L"clear", nullptr);
-					/*auto box = m_Stage->AddGameObject<Floor>(Vec3(j, m_GroundHeight - 0.5f, -i), L"clear");
-					box->SetScale(Vec3(1.0f, 0.1f, 1.0f));
-					m_Map[i][j].m_Floor = box;*/
 				}
 			}
 		}
-		//m_MapHeight = maxHeight;
-		//m_CenterY = m_GroundHeight + static_cast<float>(maxHeight) / 2.0f;
 	}
 	wstring Map::GetFloorColor(const shared_ptr<JsonObject>& data) {
 		wstring colorStr = L"clear";

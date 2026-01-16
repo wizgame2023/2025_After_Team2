@@ -144,6 +144,12 @@ namespace basecross
 		@return なし
 		*/
 		void AddPlayerPath();
+
+		/*!
+		@brief 自身をプレイヤーのパスに追加
+		@return なし
+		*/
+		void RotateDirection();
 	protected:
 		bool CheckCount()
 		{
@@ -159,6 +165,8 @@ namespace basecross
 	
 			return false;
 		}
+
+		void CreateBoard(const wstring& key);
 	};
 
 	/*!

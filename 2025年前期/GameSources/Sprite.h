@@ -1366,7 +1366,7 @@ namespace basecross{
 	//----------------------------------------------------------
 
 	class Board : public GameObject {
-		shared_ptr<PNTStaticDraw> m_Draw;
+		shared_ptr<PTStaticDraw> m_Draw;
 		shared_ptr<Transform> m_Trans;
 
 		Vec3 m_StartPos;
@@ -1375,7 +1375,7 @@ namespace basecross{
 		wstring m_TexKey;
 		bool m_IsBillBoard;
 
-		vector<VertexPositionNormalTexture> m_Vertices;
+		vector<VertexPositionTexture> m_Vertices;
 	public:
 		Board(shared_ptr<Stage>& ptr, const wstring& key,Vec3 pos, Vec3 size,const bool& isBillBoard = true) : 
 			GameObject(ptr),
@@ -1402,7 +1402,7 @@ namespace basecross{
 		void SetOffset(Vec3 offset) {
 			m_Offset = offset;
 		}
-		shared_ptr<PNTStaticDraw> GetDraw() {
+		shared_ptr<PTStaticDraw> GetDraw() {
 			return m_Draw;
 		}
 		shared_ptr<Transform> GetTrans() {
@@ -1411,7 +1411,7 @@ namespace basecross{
 		void SetColor(Col4 color) {
 			m_Draw->SetDiffuse(color);
 		}
-		vector<VertexPositionNormalTexture> GetVertices() {
+		vector<VertexPositionTexture> GetVertices() {
 			return m_Vertices;
 		}
 	};
