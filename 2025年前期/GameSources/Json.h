@@ -220,7 +220,7 @@ namespace basecross{
 				return it->second;
 			}
 			else {
-				throw BaseException(L"ÉLÅ[Ç™ë∂ç›ÇµÇ‹ÇπÇÒ", key, L"JsonObject::At(const wstring&)");
+				return nullptr;
 			}
 		}
 
@@ -233,6 +233,7 @@ namespace basecross{
 		template<class T>
 		inline shared_ptr<T> At(const wstring& key) {
 			auto value = At(key);
+			if (!value) return nullptr;
 			auto casted = dynamic_pointer_cast<T>(value);
 			if(!casted) throw BaseException(L"å^Ç™àŸÇ»ÇËÇ‹Ç∑", key + L"/" + Util::GetWSTypeName<T>(),L"JsonObject::At<T>(const wstring&)");
 			return casted;

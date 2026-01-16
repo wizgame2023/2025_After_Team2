@@ -22,6 +22,16 @@ namespace basecross
 		Roll,				// 回転ギミック
 		Inverter			// 矢印の方向の反転
 	};
+	struct GimmickData {
+		GimmickObjects m_Type;
+		Vec3 m_Direction;
+		GimmickData();
+		GimmickData(const shared_ptr<Gimmicks>& gimmick);
+
+		bool operator==(GimmickData& other) {
+			return this->m_Type == other.m_Type && this->m_Direction == other.m_Direction;
+		}
+	};
 
 	/*!
 	@brief ギミックの基底クラス
@@ -30,6 +40,8 @@ namespace basecross
 	class Gimmicks : public Object
 	{
 		shared_ptr<Board> m_Board;
+		
+		bool m_IsEffect;
 	protected:
 		shared_ptr<MoveCube> m_Cube;
 		Vec3 m_Value; // ギミックの方向ベクトルなどの値を格納する変数
@@ -37,6 +49,8 @@ namespace basecross
 		Vec3 m_RollVal;
 		int m_Count;
 		int m_MaxCount;
+
+		shared_ptr<Effect> m_PutEffect;
 	public:
 		/*!
 		@brief コンストラクタ
@@ -54,7 +68,7 @@ namespace basecross
 		*/
 		virtual void OnCreate();
 
-		/*
+		/*!
 		@brief オブジェクトの更新処理
 		*/
 		virtual void OnUpdate();
@@ -65,7 +79,7 @@ namespace basecross
 		virtual void Begin();
 
 		/*!
-		@brief 毎フレームの更新処理
+		@brief 毎ターンの更新処理
 		*/
 		virtual void Update();
 
@@ -115,6 +129,27 @@ namespace basecross
 			m_MaxCount = count;
 			m_Count = m_MaxCount;
 		}
+		/*!
+		@brief リセット
+		@return なし
+		*/
+		virtual void Reset()
+		{
+			m_Count = m_MaxCount;
+			GetComponent<SmBaseDraw>()->SetDrawActive(true);
+			SetUpdateActive(true);
+		}
+		/*!
+		@brief 自身をプレイヤーのパスに追加
+		@return なし
+		*/
+		void AddPlayerPath();
+
+		/*!
+		@brief 自身をプレイヤーのパスに追加
+		@return なし
+		*/
+		void RotateDirection();
 	protected:
 		bool CheckCount()
 		{
@@ -130,6 +165,8 @@ namespace basecross
 	
 			return false;
 		}
+
+		void CreateBoard(const wstring& key);
 	};
 
 	/*!
@@ -138,6 +175,9 @@ namespace basecross
 	*/
 	class GimmickGoal : public Gimmicks
 	{
+		shared_ptr<Effect> m_GoalEffect;
+
+		bool m_Goal;
 	public:
 		GimmickGoal(const shared_ptr<Stage>& ptrGimmick);
 		~GimmickGoal();
@@ -152,6 +192,7 @@ namespace basecross
 		};
 
 		virtual void OnCreate();
+		virtual void OnUpdate();
 		virtual void Begin();
 		virtual void Update();
 		virtual void End() {}
@@ -177,17 +218,18 @@ namespace basecross
 		};
 
 		virtual void OnCreate();
+		virtual void OnUpdate();
 		virtual void Begin();
 		virtual void Update();
 		virtual void End() {}
 
 	};
 
-	class GimmickCourseCorrection : public Gimmicks
+	class GimmickArrow : public Gimmicks
 	{
 	public:
-		GimmickCourseCorrection(const shared_ptr<Stage>& ptrGimmick);
-		~GimmickCourseCorrection();
+		GimmickArrow(const shared_ptr<Stage>& ptrGimmick);
+		~GimmickArrow();
 		/*!
 		@brief ギミックの種類を取得
 		@return GimmickObjects::CourseCorrection
@@ -198,7 +240,6 @@ namespace basecross
 		};
 
 		virtual void OnCreate();
-		virtual void OnUpdate(){}
 		virtual void Begin();
 		virtual void Update();
 		virtual void End();
@@ -207,6 +248,15 @@ namespace basecross
 
 	class GimmickTeleporter : public Gimmicks
 	{
+		shared_ptr<Effect> m_TeleportFastEffect;
+		shared_ptr<Effect> m_TeleportEndEffect;
+
+		Vec3 m_PlayerVal;
+
+		bool m_IsFastTeleport;
+		bool m_WasStepped = false;
+
+		float m_Time;
 	public:
 		GimmickTeleporter(const shared_ptr<Stage>& ptrGimmick);
 		~GimmickTeleporter();
@@ -220,6 +270,7 @@ namespace basecross
 		};
 		virtual void OnCreate();
 		virtual void Begin();
+		virtual void OnUpdate();
 		virtual void Update();
 		virtual void End() {}
 	};

@@ -118,6 +118,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ResourceManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Effect.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MenuStage.h">
       <Filter>Stage</Filter>
     </ClInclude>
@@ -132,10 +133,17 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Player.h">
       <Filter>Player</Filter>
-     </ClInclude>
+    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)SoundManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)MovieWindow.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)TutrialStage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)TutorialManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SkyCube.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)FadeSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -196,6 +204,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ResourceManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Effect.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MenuStage.cpp">
       <Filter>Stage</Filter>
     </ClCompile>
@@ -211,6 +220,13 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)SoundManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)MovieWindow.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)TutrialStage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)TutorialManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SkyCube.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)FadeSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\color.json">
@@ -235,6 +251,12 @@
       <Filter>Json\Resource</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\titleResource.json">
+      <Filter>Json\Resource</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Level\TestMap.json">
+      <Filter>Json\Level</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\stage.json">
       <Filter>Json\Resource</Filter>
     </None>
   </ItemGroup>

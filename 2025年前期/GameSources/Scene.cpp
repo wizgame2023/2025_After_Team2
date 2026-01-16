@@ -28,12 +28,17 @@ namespace basecross{
 
 			SoundManager::GetInstance().RegisterSounds();
 			//クリアする色を設定
-			Col4 Col;
+			Col4 Col = Col4(0, 0, 0, 1);
 			Col.set(31.0f / 255.0f, 30.0f / 255.0f, 71.0f / 255.0f, 255.0f / 255.0f);
 			SetClearColor(Col);
 			//自分自身にイベントを送る
 			//これにより各ステージやオブジェクトがCreate時にシーンにアクセスできる
 			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToTitleStage");
+
+
+			m_StageFile = Json(L"Json/stage.json");
+
+			CardFactory::CreateSample();
 		}
 		catch (...) {
 			throw;
@@ -52,8 +57,13 @@ namespace basecross{
 
 	void Scene::OnEvent(const shared_ptr<Event>& event) {
 		if (event->m_MsgStr == L"ToGameStage") {
-			//最初のアクティブステージの設定
-			ResetActiveStage<MStage>();
+			auto info = static_pointer_cast<int>(event->m_Info).get();
+			int index = *(info);
+			auto dataArray = m_StageFile.At<JsonArray>(L"tutorial");
+
+			auto data = dataArray->GetObjectArray()[index];
+			
+			ResetActiveStage<GameStage>(data);
 		}
 		if (event->m_MsgStr == L"ToTitleStage")
 		{

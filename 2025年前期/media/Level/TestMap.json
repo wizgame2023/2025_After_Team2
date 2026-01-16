@@ -1,0 +1,25 @@
+{
+	"mapSize":[7,5],
+	"grid":
+	[
+		{"pos":[0,0],"color":"red"},
+		{"pos":[4,0],"color":"green"},
+		{"pos":[2,2],"color":"green"},
+		{"pos":[6,2],"color":"blue"},
+		{"pos":[0,4],"color":"yellow"},
+		{"pos":[4,4],"color":"magenta"},
+		{"pos":[6,4],"color":"blue"},
+		{"pos": [ 6, 1 ],"color": "black"}
+	],
+	"items" : [
+		{"id":"player","direction":"east","value":0,"count":1},
+		{"id":"goal","direction":"east","value":0,"count":1},
+		{"id":"teleporter","direction":"south","value":2,"count":1},
+		{"id":"teleporter","direction":"north","value":2,"count":1},
+		{"id":"roll","direction":"east","value":1,"count":1}
+	],
+  "hint": [
+    {"color": "red","id": "player"},
+    {"color": "yellow","id": "goal"}
+  ]
+}

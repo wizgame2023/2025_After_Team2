@@ -53,8 +53,8 @@ namespace basecross{
 
 				if (m_CurrentOrder < 0 || m_CurrentOrder >= m_Order.size()) {
 					EndAnimation();
-					return true;
 				}
+				return true;
 			}
 
 			return false;
@@ -198,7 +198,8 @@ namespace basecross{
 		void SetSize(Vec2 size);
 
 		void MatchToScreenSize() {
-			SetSize(m_ScreenHalfSize * 2.0f);
+			//データ上のサイズと実際の画面サイズが合わないためちょっと大きめ
+			SetSize(m_ScreenHalfSize * 2.1f);
 		}
 		/// <summary>
 		/// 表示サイズ取得
@@ -489,6 +490,12 @@ namespace basecross{
 				number->SetDiffuse(color);
 			}
 		}
+		Col4 GetDiffuse() {
+			for (auto& number : m_Numbers) {
+				return number->GetDiffuse();
+			}
+		}
+
 		void SetActive(bool flag) {
 			for (auto& number : m_Numbers) {
 				number->SetDrawActive(flag);
@@ -593,6 +600,7 @@ namespace basecross{
 		float m_FadeSpeed;
 		bool m_IsFadeOut;
 		bool m_IsFinished;
+		bool m_HalfFinished;
 		FadeState m_FadeState;
 	public:
 		SpriteFade(const shared_ptr<GameObject>& ptr,float fadeSpeed) : SpriteAction(ptr),m_FadeSpeed(fadeSpeed),m_IsFadeOut(true),m_IsFinished(false), m_FadeState(FadeState::In){}
@@ -615,6 +623,7 @@ namespace basecross{
 		void FadeOut() {
 			m_IsFadeOut = true;
 			m_IsFinished = false;
+			m_HalfFinished = false;
 			Col4 coler = m_Draw->GetDiffuse();
 			coler.w = 0.0f;
 			m_Draw->SetDiffuse(coler);
@@ -622,12 +631,16 @@ namespace basecross{
 		void FadeIn() {
 			m_IsFadeOut = false;
 			m_IsFinished = false;
+			m_HalfFinished = false;
 			Col4 coler = m_Draw->GetDiffuse();
 			coler.w = 1.0f;
 			m_Draw->SetDiffuse(coler);
 		}
 		bool IsFinish() {
 			return m_IsFinished;
+		}
+		bool IsHalfFinish() {
+			return m_HalfFinished;
 		}
 	};
 	//----------------------------------------------------------
@@ -1353,7 +1366,7 @@ namespace basecross{
 	//----------------------------------------------------------
 
 	class Board : public GameObject {
-		shared_ptr<PNTStaticDraw> m_Draw;
+		shared_ptr<PTStaticDraw> m_Draw;
 		shared_ptr<Transform> m_Trans;
 
 		Vec3 m_StartPos;
@@ -1362,7 +1375,7 @@ namespace basecross{
 		wstring m_TexKey;
 		bool m_IsBillBoard;
 
-		vector<VertexPositionNormalTexture> m_Vertices;
+		vector<VertexPositionTexture> m_Vertices;
 	public:
 		Board(shared_ptr<Stage>& ptr, const wstring& key,Vec3 pos, Vec3 size,const bool& isBillBoard = true) : 
 			GameObject(ptr),
@@ -1389,7 +1402,7 @@ namespace basecross{
 		void SetOffset(Vec3 offset) {
 			m_Offset = offset;
 		}
-		shared_ptr<PNTStaticDraw> GetDraw() {
+		shared_ptr<PTStaticDraw> GetDraw() {
 			return m_Draw;
 		}
 		shared_ptr<Transform> GetTrans() {
@@ -1398,7 +1411,7 @@ namespace basecross{
 		void SetColor(Col4 color) {
 			m_Draw->SetDiffuse(color);
 		}
-		vector<VertexPositionNormalTexture> GetVertices() {
+		vector<VertexPositionTexture> GetVertices() {
 			return m_Vertices;
 		}
 	};

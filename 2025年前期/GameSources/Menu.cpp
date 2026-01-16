@@ -9,34 +9,31 @@
 namespace basecross{
 
 	void GameMenu::OnCreate() {
-		m_GimmickTextures[GimmickObjects::Goal] = L"ICON_GOAL";
-		m_GimmickTextures[GimmickObjects::SetPlayer] = L"ICON_PL";
-		m_GimmickTextures[GimmickObjects::CourseCorrection] = L"ICON_ARROW";
-		m_GimmickTextures[GimmickObjects::Roll] = L"ICON_ROLL";
-		m_GimmickTextures[GimmickObjects::Killer] = L"ICON_KILL";
-		m_GimmickTextures[GimmickObjects::Teleporter] = L"ICON_TL";
 
 		Vec2 mainViewSize = Vec2(m_MainViewPort.Width, m_MainViewPort.Height);
 		Vec2 screenSize = Vec2(App::GetApp()->GetGameWidth(), App::GetApp()->GetGameHeight());
 		Vec2 menuSize = Vec2(screenSize.x - mainViewSize.x, screenSize.y);
 		Vec3 menuPosition = Vec3(screenSize.x / 2.0f - menuSize.x, 0, 0);
+
+		float paletteStartPositionY = 100.0f;
+		Vec2 colorPalettePosition = Vec2(menuPosition.x + 100.0f, menuPosition.y + menuSize.y / 2.0f - paletteStartPositionY);
+		Vec2 gimmickPosition = Vec2(menuPosition.x + menuSize.x - 150.0f, menuPosition.y + menuSize.y / 2.0f - paletteStartPositionY);
+		Vec2 iconSize = Vec2(50.0f, 50.0f);
+
 		m_BackGround = m_MenuStage->AddGameObject<Sprite>(m_BackGroundTexture, menuPosition, menuSize,Anchor::Left);
 		m_BackGround->SetLayer(0);
-		float duretionY = 75.0f;
-		Vec2 colorPalettePosition = Vec2(menuPosition.x + 100.0f, menuPosition.y + menuSize.y / 2.0f - 100.0f);
-		Vec2 gimmickPosition = Vec2(menuPosition.x + menuSize.x - 100.0f, menuPosition.y + menuSize.y / 2.0f - 100.0f);
+		float durationY = 70.0f;
 
-		m_ExpainBox = m_MenuStage->AddGameObject<Sprite>(L"MENU_EXPLAIN", Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f, 0.0f), Vec2(menuSize.x, menuSize.y * 0.25f), Anchor::TopLeft);
-		m_ExpainBox->SetLayer(0);
-		m_CurrentExpain = m_MenuStage->AddGameObject<Sprite>(L"EXPAIN_PL", Vec3(), Vec2(menuSize.x, menuSize.y * 0.25f) * 0.9f, Anchor::Center);
-		m_CurrentExpain->SetAnchorPosition(static_cast<Vec3>(m_ExpainBox->GetAnchorPosition(Anchor::Center)) - Vec3(0,20,0), Anchor::Center);
-		m_CurrentExpain->SetLayer(1);
-		Vec2 iconSize = Vec2(50.0f, 50.0f);
+		m_ExplainBox = m_MenuStage->AddGameObject<Sprite>(L"MENU_EXPLAIN", Vec3(menuPosition.x, menuPosition.y - screenSize.y * 0.25f, 0.0f), Vec2(menuSize.x, menuSize.y * 0.25f), Anchor::TopLeft);
+		m_ExplainBox->SetLayer(0);
+		m_CurrentExplain = m_MenuStage->AddGameObject<Sprite>(L"EXPAIN_PL", Vec3(), Vec2(menuSize.x * 0.9f, menuSize.y * 0.25f) * 0.9f, Anchor::Center);
+		m_CurrentExplain->SetAnchorPosition(static_cast<Vec3>(m_ExplainBox->GetAnchorPosition(Anchor::Center)) - Vec3(5,0,0), Anchor::Center);
+		m_CurrentExplain->SetLayer(1);
 		m_ConnectOffsetX = iconSize.x / 2.0f;
 
 		auto& gameManager = GameManager::GetInstance();
 
-		auto colorTable = gameManager.GetMap()->GetColorTable();
+		auto colorTable = gameManager.GetLevelManager()->GetMap()->GetColorTable();
 		Json colorJson = Json(L"Json/color.json");
 
 		for (int i = 0; i < colorTable.size(); i++){
@@ -45,59 +42,104 @@ namespace basecross{
 
 			auto sprite = m_MenuStage->AddGameObject<Sprite>(
 				m_ColorTexture,
-				Vec3(colorPalettePosition.x, colorPalettePosition.y - i * duretionY,0.0f), iconSize,
+				Vec3(colorPalettePosition.x, colorPalettePosition.y - i * durationY,0.0f), iconSize,
 				Anchor::Center);
 			sprite->SetDiffuse(color);
 			sprite->SetLayer(2);
 
 			auto handler = m_MenuStage->AddGameObject<Sprite>(
 				L"HANDLER",
-				static_cast<Vec3>(sprite->GetAnchorPosition(Anchor::Right)) + Vec3(m_ConnectOffsetX, 0, 0), iconSize / 2.0f,
+				static_cast<Vec3>(sprite->GetAnchorPosition(Anchor::Right)), iconSize / 2.0f,
 				Anchor::Center);
-			handler->SetLayer(2);
+			handler->SetLayer(1);
 
 			m_ColorPalette.push_back(sprite);
 			m_HandlerSprites.push_back(handler);
 		}
 
 
-		auto cards = gameManager.GetHand()->GetCardData();
+		auto cards = gameManager.GetLevelManager()->GetHand()->GetCardData();
 		for (int i = 0; i < cards.size(); i++) {
 			auto sprite = m_MenuStage->AddGameObject<Sprite>(
-				m_GimmickTextures[cards[i]->GetType()],
-				Vec3(gimmickPosition.x, gimmickPosition.y - i * duretionY, 0.0f), iconSize,
+				cards[i]->GetIconKey(),
+				Vec3(gimmickPosition.x, gimmickPosition.y - i * durationY, 0.0f), iconSize,
 				Anchor::Center);
 			sprite->SetLayer(2);
+			auto explain = m_MenuStage->AddGameObject<Sprite>(
+				L"ICON_EXPLAIN_FRAME",
+				Vec3(gimmickPosition.x + iconSize.x, gimmickPosition.y - i * durationY, 0.0f), iconSize,
+				Anchor::Center);
+			explain->SetLayer(2);
+
+			auto draw = explain->GetComponent<PCTSpriteDraw>();
+			wstring direction = gameManager.DirectionVecToStr(cards[i]->GetVelocity());
+			if (!direction.empty()) {
+				transform(direction.begin(), direction.end(), direction.begin(), ::toupper);
+				wstring direKey = L"ICON_" + direction;
+				draw->AddTextureResource(direKey);
+			}
+			else {
+				draw->AddTextureResource(L"ICON_NO_DIRE");
+			}
+			int count = cards[i]->GetCount();
+			if (count > 0) {
+				draw->AddTextureResource(L"ICON_" + to_wstring(count));
+			}
+			else {
+				draw->AddTextureResource(L"ICON_NO_NUMBER");
+			}
+
 			auto handler = m_MenuStage->AddGameObject<Sprite>(
 				L"HANDLER",
-				static_cast<Vec3>(sprite->GetAnchorPosition(Anchor::Left)) - Vec3(m_ConnectOffsetX, 0, 0), iconSize / 2.0f,
+				static_cast<Vec3>(sprite->GetAnchorPosition(Anchor::Left)), iconSize / 2.0f,
 				Anchor::Center);
-			handler->SetLayer(2);
-			m_GimmcikSprites.push_back(sprite);
+			handler->SetLayer(1);
+			m_GimmickIcons.push_back(sprite);
 			m_HandlerSprites.push_back(handler);
+			m_ExplainIcons.push_back(explain);
 		}
 
-		m_Cursor = m_MenuStage->AddGameObject<Coursor>(L"MOUSE_CURSOR");
+		m_Cursor = m_MenuStage->AddGameObject<Cursor>(L"MOUSE_CURSOR");
 		m_Cursor->SetCoursorSize(25.0f);
 		m_Cursor->SetMoveSpeed(450.0f);
-		m_Cursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), m_ExpainBox->GetAnchorPosition(Anchor::TopLeft));
+		m_Cursor->SetMoveArea(m_BackGround->GetAnchorPosition(Anchor::TopRight), m_ExplainBox->GetAnchorPosition(Anchor::TopLeft));
 	
-
-		m_PoseMenu = m_MenuStage->AddGameObject<PoseMenu>(GetThis<GameMenu>(),menuPosition + Vec3(screenSize.x / 10.0f,screenSize.y / 2.0f - 50,0), Vec2(120.0f, 60.0f));
+		Vec2 poseMenuButtonSize = Vec2(200.0f, 60.0f);
+		m_PoseMenu = m_MenuStage->AddGameObject<PoseMenu>(GetThis<GameMenu>(),menuPosition + Vec3(menuSize.x / 2.0f - poseMenuButtonSize.x / 2.0f, screenSize.y / 2.0f - 100,0.0f), poseMenuButtonSize);
 		
+		auto soundMenu = m_MenuStage->AddGameObject<SoundMenu>(menuPosition, menuSize);
+		soundMenu->Close();
+		m_PoseMenu->SetSoundMenu(soundMenu);
+		m_PoseMenu->Close();
+
+		m_MovieWindow = m_MenuStage->AddGameObject<MovieWindow>(Vec2(menuSize.x, menuSize.y * 0.25f) * 0.8f);
+		Vec3 windowPosition = static_cast<Vec3>(m_ExplainBox->GetAnchorPosition(Anchor::TopLeft) + Vec2(640,-400));
+		windowPosition.y = windowPosition.y < 0 ? fabs(windowPosition.y) : windowPosition.y;
+
+		m_MovieWindow->SetPosition(windowPosition + Vec3(20,20,0));
+		//m_MovieWindow->Play(App::GetApp()->GetDataDirWString() + L"Movies/preview.mp4");
+
+		/*TutorialManager::GetInstance().RegisterStep(L"sample", 
+			make_shared<PutGimmickTutorial>(m_MenuStage,
+				array<shared_ptr<Sprite>,2>{ m_GimmickIcons[0],m_ColorPalette[1] },
+				1.0f,1.0f));
+
+		TutorialManager::GetInstance().Start(L"sample");*/
+
 	}
 	void GameMenu::OnUpdate() {
 		auto& input = InputManager::GetInputManager();
 		auto& gameManager = GameManager::GetInstance();
 
-		if (!gameManager.CompareState(GameState::Put))return;
-
+		if (!gameManager.GetFlowManager()->IsPut())return;
+		if (TutorialManager::GetInstance().IsActive()) return;
 		
 		if (!m_PoseMenu->IsOpen()) {
 			if (input->GetDownButton(gameManager.GetKeyConfig(L"undo")) && m_Lines.size() > 0) {
 				auto line = m_Lines.back();
 				m_Lines.pop_back();
 				m_MenuStage->RemoveGameObject<Sprite>(line.m_Line);
+				gameManager.GetLevelManager()->RemovePair(line.m_PairHandle);
 			}
 			if (input->GetDownButton(gameManager.GetKeyConfig(L"putGimmick"))) {
 				UpdateOnCoursorHandle();
@@ -116,14 +158,17 @@ namespace basecross{
 			if (input->GetDownButton(L"DDown")) {
 				m_IsCursor = false;
 				if(m_CursorHandle < m_ColorPalette.size() * 2 - 1) m_CursorHandle++;
+				//m_MovieWindow->Stop();
 			}
 			if (input->GetDownButton(L"DRight")) {
 				m_IsCursor = false;
 				if(m_CursorHandle < m_ColorPalette.size()) m_CursorHandle += m_ColorPalette.size();
+				//m_MovieWindow->Play(App::GetApp()->GetDataDirWString() + L"Movies/PV.mp4");
 			}
 			if (input->GetDownButton(L"DLeft")) {
 				m_IsCursor = false;
 				if(m_CursorHandle > m_ColorPalette.size() - 1) m_CursorHandle -= m_ColorPalette.size();
+				//m_MovieWindow->Play(App::GetApp()->GetDataDirWString() + L"Movies/preview.mp4");
 			}
 		}
 		if (!m_IsCursor) {
@@ -134,32 +179,28 @@ namespace basecross{
 				m_Cursor->SetPosition(m_ColorPalette[index]->GetPosition());
 			}
 			else {
-				m_Cursor->SetPosition(m_GimmcikSprites[index]->GetPosition());
+				m_Cursor->SetPosition(m_GimmickIcons[index]->GetPosition());
 			}
 		}
 		
 
-		if (m_ColorHandle != -1 || m_GimmikcHandle != -1) {
+		if (m_ColorHandle != -1 || m_GimmickHandle != -1) {
 			if (!m_CurrentLine)return;
 
 			Vec3 coursorPosition = m_Cursor->GetPosition();
 			Vec3 handlePosition;
 			if (m_ColorHandle != -1) {
 				handlePosition = m_ColorPalette[m_ColorHandle]->GetAnchorPosition(Anchor::Right);
-				handlePosition.x += m_ConnectOffsetX;
-				int handle = OnCoursorHandle(m_GimmcikSprites);
+				int handle = OnCoursorHandle(m_GimmickIcons);
 				if (handle != -1) {
-					coursorPosition = m_GimmcikSprites[handle]->GetAnchorPosition(Anchor::Left);
-					coursorPosition.x -= m_ConnectOffsetX;
+					coursorPosition = m_GimmickIcons[handle]->GetAnchorPosition(Anchor::Left);
 				}
 			}
 			else {
-				handlePosition = m_GimmcikSprites[m_GimmikcHandle]->GetAnchorPosition(Anchor::Left);
-				handlePosition.x -= m_ConnectOffsetX;
+				handlePosition = m_GimmickIcons[m_GimmickHandle]->GetAnchorPosition(Anchor::Left);
 				int handle = OnCoursorHandle(m_ColorPalette);
 				if (handle != -1) {
 					coursorPosition = m_ColorPalette[handle]->GetAnchorPosition(Anchor::Right);
-					coursorPosition.x += m_ConnectOffsetX;
 				}
 			}
 			
@@ -168,11 +209,11 @@ namespace basecross{
 			DrawLine(handlePosition, coursorPosition);
 
 			if (input->GetUpButton(gameManager.GetKeyConfig(L"putGimmick"))) {
-				if (UpdateOnCoursorHandle() && m_ColorHandle != -1 && m_GimmikcHandle != -1) {
+				if (UpdateOnCoursorHandle() && m_ColorHandle != -1 && m_GimmickHandle != -1) {
 					stack<vector<Line>::iterator> eraseIteraters;
 					for (auto it = m_Lines.begin(); it != m_Lines.end(); it++) {
 						auto& pair = (*it).m_PairHandle;
-						if (pair.first == m_ColorHandle || pair.second == m_GimmikcHandle) {
+						if (pair.first == m_ColorHandle || pair.second == m_GimmickHandle) {
 							m_MenuStage->RemoveGameObject<Sprite>((*it).m_Line);
 							eraseIteraters.push(it);
 						}
@@ -181,18 +222,19 @@ namespace basecross{
 						m_Lines.erase(eraseIteraters.top());
 						eraseIteraters.pop();
 					}
-					m_Lines.push_back({ m_CurrentLine,pair<int,int>{m_ColorHandle,m_GimmikcHandle} });
+					gameManager.GetLevelManager()->AddPair(pair<int, int>{m_ColorHandle, m_GimmickHandle});
+					m_Lines.push_back({ m_CurrentLine,pair<int,int>{m_ColorHandle,m_GimmickHandle} });
 					SoundManager::GetInstance().PlaySE(L"Put");
 				}
 				else {
 					m_MenuStage->RemoveGameObject<Sprite>(m_CurrentLine);
 				}
 				m_CurrentLine = nullptr;
-				m_ColorHandle = m_GimmikcHandle = -1;
+				m_ColorHandle = m_GimmickHandle = -1;
 			}
 		}
 
-		gameManager.UpdatePair(ConvertColorGimmickHandles(m_Lines));
+		//gameManager.UpdatePair(ConvertColorGimmickHandles(m_Lines));
 		DrawExpain();
 		if (input->GetDownButton(L"Y"))
 		{
@@ -205,7 +247,7 @@ namespace basecross{
 
 	bool GameMenu::UpdateOnCoursorHandle() {
 		int colorHandle = OnCoursorHandle(m_ColorPalette);
-		int gimmickHandle = OnCoursorHandle(m_GimmcikSprites);
+		int gimmickHandle = OnCoursorHandle(m_GimmickIcons);
 		
 		if (colorHandle == -1 && gimmickHandle == -1) return false;
 
@@ -219,7 +261,7 @@ namespace basecross{
 			m_CurrentLine->SetDiffuse(m_ColorPalette[colorHandle]->GetDiffuse());
 		}
 		if (gimmickHandle >= 0) {
-			m_GimmikcHandle = gimmickHandle;
+			m_GimmickHandle = gimmickHandle;
 		}
 		return true;
 	}
@@ -240,17 +282,20 @@ namespace basecross{
 		for (auto& colorPalette : m_ColorPalette) {
 			colorPalette->SetDrawActive(flag);
 		}
-		for (auto& gimmickSprite : m_GimmcikSprites) {
+		for (auto& gimmickSprite : m_GimmickIcons) {
 			gimmickSprite->SetDrawActive(flag);
 		}
 		for (auto& handleSprite : m_HandlerSprites) {
 			handleSprite->SetDrawActive(flag);
 		}
+		for (auto& eplainIcon : m_ExplainIcons) {
+			eplainIcon->SetDrawActive(flag);
+		}
 		for (auto& line : m_Lines) {
 			line.m_Line->SetDrawActive(flag);
 		}
-		m_CurrentExpain->SetDrawActive(flag);
-		m_ExpainBox->SetDrawActive(flag);
+		m_CurrentExplain->SetDrawActive(flag);
+		m_ExplainBox->SetDrawActive(flag);
 	}
 	vector<pair<int, int>> GameMenu::ConvertColorGimmickHandles(vector<Line>& lines) {
 		vector<pair<int, int>> p;
@@ -269,19 +314,19 @@ namespace basecross{
 
 	}
 	void GameMenu::DrawExpain() {
-		auto cards = GameManager::GetInstance().GetHand()->GetCardData();
-		if (m_GimmikcHandle != -1) {
-			wstring key = cards[m_GimmikcHandle]->GetExpainKey();
+		auto cards = GameManager::GetInstance().GetLevelManager()->GetHand()->GetCardData();
+		if (m_GimmickHandle != -1) {
+			wstring key = cards[m_GimmickHandle]->GetExplainKey();
 			if (key != L"") {
-				m_CurrentExpain->SetTextureKey(key);
+				m_CurrentExplain->SetTextureKey(key);
 			}
 		}
 		else {
-			int handle = OnCoursorHandle(m_GimmcikSprites);
+			int handle = OnCoursorHandle(m_GimmickIcons);
 			if (handle != -1) {
-				wstring key = cards[handle]->GetExpainKey();
+				wstring key = cards[handle]->GetExplainKey();
 				if (key != L"") {
-					m_CurrentExpain->SetTextureKey(key);
+					m_CurrentExplain->SetTextureKey(key);
 				}
 			}
 		}
@@ -336,12 +381,11 @@ namespace basecross{
 	void GameMenu::LoadHintData()
 	{
 		auto& gameManager = GameManager::GetInstance();
-		auto colorTable = gameManager.GetMap()->GetColorTable();
-		Json levelJson;
-		levelJson.Load(L"Level/level1.json");
+		auto colorTable = gameManager.GetLevelManager()->GetMap()->GetColorTable();
+		Json levelJson = gameManager.GetLevelManager()->GetJson();
 		auto hintArray = levelJson.At<JsonArray>(L"hint");
 		auto objectArray = hintArray->GetObjectArray();
-		auto cards = gameManager.GetHand()->GetCardData();
+		auto cards = gameManager.GetLevelManager()->GetHand()->GetCardData();
 
 		for (const auto& hintObj : objectArray)
 		{
@@ -367,7 +411,7 @@ namespace basecross{
 			{
 				if (id == cards[j]->GetId())
 				{
-					endPos = m_GimmcikSprites[j]->GetPosition();
+					endPos = m_GimmickIcons[j]->GetPosition();
 					gimmickIndex = static_cast<int>(j);
 					break;
 				}
@@ -386,37 +430,37 @@ namespace basecross{
 		Vec3 duration = Vec3(0.0f,m_ButtonSize.y / 2.0f,0.0f);
 		duration.y += m_ButtonSize.y;
 		//音量
-		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_SOUND_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition, m_ButtonSize,GetThis<PoseMenu>(),
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_SOUND_MENU", L"SELECT_SOUND_MENU", m_TopLeftPosition, m_ButtonSize,GetThis<PoseMenu>(),
 			[](shared_ptr<ObjectInterface>& object) {
 				auto pose = dynamic_pointer_cast<PoseMenu>(object);
 				pose->SettingSound();
 			});
 		//タイトルに戻る
-		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_TITLE_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration, m_ButtonSize, GetThis<PoseMenu>(),
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_TITLE_MENU", L"SELECT_TITLE_MENU", m_TopLeftPosition - duration, m_ButtonSize, GetThis<PoseMenu>(),
 			[](shared_ptr<ObjectInterface>& object) {
 				auto pose = dynamic_pointer_cast<PoseMenu>(object);
 				pose->MoveTitleStage();
 			});
 		//セレクトステージに戻る
-		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_SELECT_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration * 2.0f, m_ButtonSize, GetThis<PoseMenu>(),
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_SELECT_MENU", L"SELECT_SELECT_MENU", m_TopLeftPosition - duration * 2.0f, m_ButtonSize, GetThis<PoseMenu>(),
 			[](shared_ptr<ObjectInterface>& object) {
 				auto pose = dynamic_pointer_cast<PoseMenu>(object);
 				pose->MoveSelectStage();
 			});
 		//最初から始める
-		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_NEW_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration * 3.0f, m_ButtonSize, GetThis<PoseMenu>(),
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_NEW_MENU", L"SELECT_NEW_MENU", m_TopLeftPosition - duration * 3.0f, m_ButtonSize, GetThis<PoseMenu>(),
 			[](shared_ptr<ObjectInterface>& object) {
 				auto pose = dynamic_pointer_cast<PoseMenu>(object);
 				pose->CloseNewGame();
 			});
 		//ギミック解説
-		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_EXPAIN_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration * 4.0f, m_ButtonSize, GetThis<PoseMenu>(),
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_EXPAIN_MENU", L"SELECT_EXPAIN_MENU", m_TopLeftPosition - duration * 4.0f, m_ButtonSize, GetThis<PoseMenu>(),
 			[](shared_ptr<ObjectInterface>& object) {
 				auto pose = dynamic_pointer_cast<PoseMenu>(object);
 				pose->OpenExpainGimmicks();
 			});
 		//ゲームに戻る
-		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_BACK_MENU", L"TEMP_COLOR_PALETTE", m_TopLeftPosition - duration * 5.0f, m_ButtonSize, GetThis<PoseMenu>(),
+		ButtonManager::Create(m_MenuStage, L"POSE", L"TEMP_BACK_MENU", L"SELECT_BACK_MENU", m_TopLeftPosition - duration * 5.0f, m_ButtonSize, GetThis<PoseMenu>(),
 			[](shared_ptr<ObjectInterface>& object) {
 				auto pose = dynamic_pointer_cast<PoseMenu>(object);
 				pose->Close();
@@ -427,6 +471,9 @@ namespace basecross{
 		ButtonManager::instance->SetInput(L"POSE", InputData(XINPUT_GAMEPAD_DPAD_UP, -1));//選択(下)
 		ButtonManager::instance->SetInput(L"POSE", InputData(StickMode::LY, 1, 0.1f));//選択(左スティック)
 		ButtonManager::instance->SetLoop(true);
+
+		m_ExplainMenu = m_MenuStage->AddGameObject<ExplainMenu>();
+		m_ExplainMenu->Close();
 
 		Close();
 	}
@@ -446,65 +493,206 @@ namespace basecross{
 		PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
 	}
 	void PoseMenu::SettingSound() {
-
+		m_SoundMenu->Open();
 	}
 	void PoseMenu::CloseNewGame() {
-		PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage");
+		int stageNumber = GameManager::GetInstance().GetLevelManager()->GetStageNumber();
+		PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage", make_shared<int>(stageNumber));
 	}
 	void PoseMenu::OpenExpainGimmicks() {
+		m_ExplainMenu->Open();
+	}
 
+	void ExplainMenu::OnCreate(){
+		m_ExplainStr = m_MenuStage->AddGameObject<Sprite>(L"", Vec3(-120,-100,0), Vec2(300, 300), Anchor::Center);
+		m_BackGround = m_MenuStage->AddGameObject<Sprite>(L"MENU_GIMMICK", Vec3(-640,400,0), Vec2(800, 800), Anchor::TopLeft);
+		m_BackGround->SetLayer(-1);
+
+		AddExplain(ExplainData{ L"ICON_PL",L"",L"EXPAIN_PL" });
+		AddExplain(ExplainData{ L"ICON_GOAL",L"",L"EXPAIN_GL" });
+		AddExplain(ExplainData{ L"ICON_ARROW",L"",L"EXPAIN_ARRW" });
+		AddExplain(ExplainData{ L"ICON_TP",L"",L"EXPAIN_TP" });
+		AddExplain(ExplainData{ L"ICON_INV",L"",L"EXPAIN_INV" });
+		AddExplain(ExplainData{ L"ICON_ROLL",L"",L"EXPAIN_ROLL" });
+
+		CreateExplain();
+	}
+	void ExplainMenu::CreateExplain() {
+		Vec2 explainTabSize = Vec2(100, 100);
+		Vec3 topLeft = static_cast<Vec3>(m_BackGround->GetAnchorPosition(Anchor::TopLeft) + Vec3(100,-50,0));
+		for (int i = 0; i < m_ExplainDatas.size(); i++) {
+			ButtonManager::Create(m_MenuStage, L"EXPLAIN", m_ExplainDatas[i].m_MenuIconKey, L"ICON_EXPLAIN_FRAME", topLeft - Vec3(0, explainTabSize.y, 0) * i, explainTabSize,
+				[](shared_ptr<ObjectInterface>& object) {
+				});
+		}
+		
+
+		ButtonManager::instance->SetInput(L"EXPLAIN", InputData(XINPUT_GAMEPAD_DPAD_DOWN, 1));//選択(上)
+		ButtonManager::instance->SetInput(L"EXPLAIN", InputData(XINPUT_GAMEPAD_DPAD_UP, -1));//選択(下)
+		ButtonManager::instance->SetInput(L"EXPLAIN", InputData(StickMode::LY, 1, 0.1f));//選択(左スティック)
+
+	}
+	void ExplainMenu::OnUpdate() {
+		if (!ButtonManager::instance->CompareUseGroup(L"EXPLAIN")) return;
+
+		int index = ButtonManager::instance->GetSelectIndex(L"EXPLAIN");
+
+		m_ExplainStr->SetTextureKey(m_ExplainDatas[index].m_ExplainKey);
+
+		if (InputManager::GetInputManager()->GetDownButton(L"Start")) {
+			Close();
+		}
+	}
+
+	void ExplainMenu::Open() {
+		m_BackGround->SetDrawActive(true);
+		m_ExplainStr->SetDrawActive(true);
+		ButtonManager::instance->OpenAndUse(L"EXPLAIN");
+	}
+	void ExplainMenu::Close() {
+		m_BackGround->SetDrawActive(false);
+		m_ExplainStr->SetDrawActive(false);
+		ButtonManager::instance->Close(L"EXPLAIN");
+		ButtonManager::instance->OpenAndUse(L"POSE");
 	}
 
 
-	void Coursor::OnCreate() {
-		m_Coursor = m_MenuStage->AddGameObject<Sprite>(m_CoursorTexture, Vec3(), Vec2(), Anchor::TopLeft);
-		m_Coursor->SetLayer(3);
+	void SoundMenu::OnCreate() {
+		m_SoundMenu = m_MenuStage->AddGameObject<Sprite>(L"SOUND_MENU", m_MenuPosition, m_MenuSize, Anchor::Left);
+
+		m_SoundBars = { nullptr,nullptr };
+		m_SoundBarFrames = { nullptr,nullptr };
+
+		m_BarSize = Vec2(m_MenuSize.x * 0.5f, 0);
+		m_BarSize.y = m_BarSize.x * 0.16f;
+		Vec3 barPosition = m_MenuPosition + Vec3(m_MenuSize.x / 3.25f, 85, 0);
+		Vec3 barPosition2 = barPosition - Vec3(0, 150, 0);
+		m_SoundBars[0] = m_MenuStage->AddGameObject<Sprite>(L"SOUND_BAR",barPosition , m_BarSize, Anchor::TopLeft);
+		m_SoundBarFrames[0] = m_MenuStage->AddGameObject<Sprite>(L"SOUND_BAR_FRAME",barPosition , m_BarSize, Anchor::TopLeft);
+		m_SoundBars[1] = m_MenuStage->AddGameObject<Sprite>(L"SOUND_BAR", barPosition2, m_BarSize, Anchor::TopLeft);
+		m_SoundBarFrames[1] = m_MenuStage->AddGameObject<Sprite>(L"SOUND_BAR_FRAME", barPosition2, m_BarSize, Anchor::TopLeft);
+
+
+		Vec2 poseMenuButtonSize = Vec2(200.0f, 60.0f);
+		Vec3 offset = Vec3(-poseMenuButtonSize.x / 1.5f, poseMenuButtonSize.y, 0);
+		ButtonManager::Create(m_MenuStage, L"SOUND", L"SOUND_BGM", L"SOUND_BGM_SELECT", barPosition + offset, poseMenuButtonSize,
+			[](shared_ptr<ObjectInterface>& object) {
+			});
+		ButtonManager::Create(m_MenuStage, L"SOUND", L"SOUND_SE", L"SOUND_SE_SELECT", barPosition2 + offset, poseMenuButtonSize,
+			[](shared_ptr<ObjectInterface>& object) {
+			});
+
+		ButtonManager::instance->SetInput(L"SOUND", InputData(XINPUT_GAMEPAD_DPAD_DOWN, 1));//選択(上)
+		ButtonManager::instance->SetInput(L"SOUND", InputData(XINPUT_GAMEPAD_DPAD_UP, -1));//選択(下)
+		ButtonManager::instance->SetInput(L"SOUND", InputData(StickMode::LY, 1, 0.5f));//選択(左スティック)
+		ButtonManager::instance->SetLoop(true);
+
+
 	}
-	void Coursor::OnUpdate() {
+	void SoundMenu::OnUpdate() {
+		if (!m_SoundMenu->GetDrawActive()) return;
+		auto& input = InputManager::GetInputManager();
+		if (input->GetDownButton(L"Start")) {
+			Close();
+			return;
+		}
+		float stickX = input->GetLStick().x;
+		if (fabs(stickX) > 0.5f) {
+			int selectIndex = ButtonManager::instance->GetSelectIndex(L"SOUND");
+			if (stickX > 0) {
+				if (selectIndex == 0) {
+					SoundManager::GetInstance().BGMVolumeUp(0.01f);
+				}
+				else {
+					SoundManager::GetInstance().SEVolumeUp(0.01f);
+				}
+			}
+			else {
+				if (selectIndex == 0) {
+					SoundManager::GetInstance().BGMVolumeDown(0.01f);
+				}
+				else {
+					SoundManager::GetInstance().SEVolumeDown(0.01f);
+				}
+			}
+		}
+		
+		float seVolume = SoundManager::GetInstance().GetSEVolume();
+		float bgmVolume = SoundManager::GetInstance().GetBGMVolume();
+
+		m_SoundBars[0]->SetSize(Vec2(m_BarSize.x * bgmVolume, m_BarSize.y));
+		m_SoundBars[1]->SetSize(Vec2(m_BarSize.x * seVolume, m_BarSize.y));
+	}
+
+	void SoundMenu::Open() {
+		ButtonManager::instance->Close(L"POSE");
+		ButtonManager::instance->OpenAndUse(L"SOUND");
+		m_SoundMenu->SetDrawActive(true);
+		m_SoundBars[0]->SetDrawActive(true);
+		m_SoundBars[1]->SetDrawActive(true);
+		m_SoundBarFrames[0]->SetDrawActive(true);
+		m_SoundBarFrames[1]->SetDrawActive(true);
+	}
+	void SoundMenu::Close() {
+		ButtonManager::instance->Close(L"SOUND");
+		ButtonManager::instance->OpenAndUse(L"POSE");
+		m_SoundMenu->SetDrawActive(false);
+		m_SoundBars[0]->SetDrawActive(false);
+		m_SoundBars[1]->SetDrawActive(false);
+		m_SoundBarFrames[0]->SetDrawActive(false);
+		m_SoundBarFrames[1]->SetDrawActive(false);
+	}
+
+
+	void Cursor::OnCreate() {
+		m_Cursor = m_MenuStage->AddGameObject<Sprite>(m_CoursorTexture, Vec3(), Vec2(), Anchor::TopLeft);
+		m_Cursor->SetLayer(10);
+	}
+	void Cursor::OnUpdate() {
 		auto& input = InputManager::GetInputManager();
 		float elpased = App::GetApp()->GetElapsedTime();
 		if (m_Mode == CoursorMode::Stick) {
 			Vec2 stick = input->GetLStick();
 			if (stick.length() > 0.1f) {
 				stick = stick.normalize();
-				Vec3 position = m_Coursor->GetPosition();
+				Vec3 position = m_Cursor->GetPosition();
 				position += static_cast<Vec3>(stick) * m_MoveSpeed * elpased;
 
-				m_Coursor->SetPosition(position);
+				m_Cursor->SetPosition(position);
 				LimitMoveArea();
 			}
 		}
 	}
 
-	Vec3 Coursor::LimitMoveArea() {
-		Vec2 position = m_Coursor->GetAnchorPosition(Anchor::Center);
+	Vec3 Cursor::LimitMoveArea() {
+		Vec2 position = m_Cursor->GetAnchorPosition(Anchor::Center);
 
-		Vec2 left = m_Coursor->GetAnchorPosition(Anchor::Left);
-		Vec2 right = m_Coursor->GetAnchorPosition(Anchor::Right);
-		Vec2 top = m_Coursor->GetAnchorPosition(Anchor::Top);
-		Vec2 bottom = m_Coursor->GetAnchorPosition(Anchor::Bottom);
+		Vec2 left = m_Cursor->GetAnchorPosition(Anchor::Left);
+		Vec2 right = m_Cursor->GetAnchorPosition(Anchor::Right);
+		Vec2 top = m_Cursor->GetAnchorPosition(Anchor::Top);
+		Vec2 bottom = m_Cursor->GetAnchorPosition(Anchor::Bottom);
 
 		if (left.x < m_MoveArea.m_Min.x) {
-			m_Coursor->SetAnchorPosition(Vec3(m_MoveArea.m_Min.x, position.y, 0), Anchor::Left);
-			position = m_Coursor->GetPosition();
+			m_Cursor->SetAnchorPosition(Vec3(m_MoveArea.m_Min.x, position.y, 0), Anchor::Left);
+			position = m_Cursor->GetPosition();
 		}
 		if (right.x > m_MoveArea.m_Max.x) {
-			m_Coursor->SetAnchorPosition(Vec3(m_MoveArea.m_Max.x, position.y, 0), Anchor::Right);
-			position = m_Coursor->GetPosition();
+			m_Cursor->SetAnchorPosition(Vec3(m_MoveArea.m_Max.x, position.y, 0), Anchor::Right);
+			position = m_Cursor->GetPosition();
 		}
 		if (top.y > m_MoveArea.m_Max.y) {
-			m_Coursor->SetAnchorPosition(Vec3(position.x,m_MoveArea.m_Max.y, 0), Anchor::Top);
-			position = m_Coursor->GetPosition();
+			m_Cursor->SetAnchorPosition(Vec3(position.x,m_MoveArea.m_Max.y, 0), Anchor::Top);
+			position = m_Cursor->GetPosition();
 		}
 		if (bottom.y < m_MoveArea.m_Min.y) {
-			m_Coursor->SetAnchorPosition(Vec3(position.x,m_MoveArea.m_Min.y, 0), Anchor::Bottom);
-			position = m_Coursor->GetPosition();
+			m_Cursor->SetAnchorPosition(Vec3(position.x,m_MoveArea.m_Min.y, 0), Anchor::Bottom);
+			position = m_Cursor->GetPosition();
 		}
 		return {};
 	}
 
-	bool Coursor::IsOnArea(Vec2 max, Vec2 min) {
-		Vec3 position = m_Coursor->GetPosition();
+	bool Cursor::IsOnArea(Vec2 max, Vec2 min) {
+		Vec3 position = m_Cursor->GetPosition();
 
 		if (max.x < position.x || min.x > position.x) {
 			return false;

@@ -5,7 +5,7 @@
 #pragma once
 
 #include "stdafx.h"
-
+#include "Json.h"
 namespace basecross{
 
 	//--------------------------------------------------------------------------------------
@@ -14,6 +14,8 @@ namespace basecross{
 	class Scene : public SceneBase{
 
 		Viewport m_GameViewport;
+
+		Json m_StageFile;
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!

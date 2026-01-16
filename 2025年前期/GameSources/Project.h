@@ -5,6 +5,11 @@
 
 #pragma once
 
+// Effkekseer
+#include <Effekseer.h>
+#include <EffekseerRendererDX11.h>
+//Effect
+#include "Effect.h"
 
 #include "ProjectShader.h"
 #include "ProjectBehavior.h"
@@ -20,6 +25,7 @@
 #include "OkawaraStage.h"
 #include "TitleStage.h"
 #include "SelectStage.h"
+#include "TutrialStage.h"
 #include "MenuStage.h"
 #include "Map.h"
 #include "MainCamera.h"
@@ -29,6 +35,10 @@
 #include "GameManager.h"
 #include "ResourceManager.h"
 #include "SoundManager.h"
+#include "TutorialManager.h"
 #include "Json.h"
 #include "Card.h"
 #include "Menu.h"
+#include "MovieWindow.h"
+#include "SkyCube.h"
+#include "FadeSystem.h"

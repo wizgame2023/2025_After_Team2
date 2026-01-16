@@ -16,6 +16,8 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Card.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Effect.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)FadeSystem.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GameManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GameStage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Gimmick.h" />
@@ -27,6 +29,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Managers.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Menu.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MenuStage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MovieWindow.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MunakataStage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Object.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)OkawaraStage.h" />
@@ -38,13 +41,18 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Map.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SelectStage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SkyCube.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SoundManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Sprite.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)TitleStage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)TutorialManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)TutrialStage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Card.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Effect.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)FadeSystem.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Gimmick.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GimmickHand.cpp" />
@@ -54,6 +62,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)MainCamera.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Menu.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MenuStage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MovieWindow.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MunakataStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Object.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)OkawaraStage.cpp" />
@@ -64,9 +73,12 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Scene.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Map.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)SelectStage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SkyCube.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)SoundManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Sprite.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)TitleStage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)TutorialManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)TutrialStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +89,8 @@
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\selectResource.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\Resources\titleResource.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Json\setting.json" />
+    <None Include="$(MSBuildThisFileDirectory)..\media\Json\stage.json" />
     <None Include="$(MSBuildThisFileDirectory)..\media\Level\level1.json" />
+    <None Include="$(MSBuildThisFileDirectory)..\media\Level\TestMap.json" />
   </ItemGroup>
 </Project>

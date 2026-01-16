@@ -7,6 +7,9 @@
 #include "stdafx.h"
 namespace basecross{
 	class Board;
+	class Gimmicks;
+	struct GimmickData;
+
 	enum class MoveState {
 		Telepote,
 		Move,
@@ -18,7 +21,7 @@ namespace basecross{
 		bool m_IsDead;			//死亡判定
 		Vec3 m_TelepoteTarget;	//テレポート先
 		Vec3 m_TargetVelocity;	//移動方向の変更時の値
-		Vec3 m_MoveVelocitySpeed;	//移動方向の変更速度
+		float m_MoveVelocityAngleSpeed;	//移動方向の変更速度
 		Vec3 m_Velocity;		//移動方向
 		Vec3 m_Target;			//通常移動先
 		AABB m_MoveArea;		//移動範囲
@@ -28,10 +31,15 @@ namespace basecross{
 		float m_RotateSpeed;	//回転速度
 		float m_RotateRad;		//現在の回転角度(ラジアン)
 		float m_CurrentHeight;	//現在の高さ
+		float m_TeleportTimer;
+		float m_AfterTeloprotTime;
+		float m_TeleportTime;
 
 		MoveState m_State;		//現在の行動
 
 		shared_ptr<PNTStaticModelDraw> m_Draw;
+
+		vector<GimmickData> m_GimmickPath;
 	public:
 		MoveCube(const shared_ptr<Stage>& ptr);
 		virtual ~MoveCube(){}
@@ -84,10 +92,12 @@ namespace basecross{
 		}
 
 		void Move();
-		void Telepote(Vec3 target) {
+		void Telepote(Vec3 target,float time,float afterTime = 0.0f) {
 			if (m_IsEffecting || m_IsDead) return;
 			m_IsEffecting = true;
-
+			m_TeleportTime = time;
+			m_AfterTeloprotTime = afterTime;
+			m_TeleportTimer = 0.0f;
 			if (target.y < 0) {
 				target.y = 0;
 			}
@@ -96,6 +106,9 @@ namespace basecross{
 		}
 
 		void Destroy();
+
+		void AddGimmickPath(const shared_ptr<Gimmicks>& gimmick);
+		const vector<GimmickData>& GetGimmickPath();
 	};
 }
 //end basecross

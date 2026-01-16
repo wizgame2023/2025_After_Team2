@@ -643,22 +643,19 @@ namespace basecross {
 		}
 
 
-		HWND CleateMobieWnd(RECT* rec = nullptr) {
+		HWND CleateMobieWnd(RECT* rect = nullptr) {
 			auto hInst = App::GetApp()->GetHInstance();
 			movie::RegisterChild(App::GetApp()->GetHInstance(),
 				movie::ChildProc,
 				L"BaseCrossChildClass");
 			auto ParHWnd = App::GetApp()->GetHWnd();
 			RECT rectPar;
-			if (rec == nullptr)
-			{
+			if (rect == nullptr) {
 				GetClientRect(ParHWnd, &rectPar);
 			}
-			else
-			{
-				rectPar = *rec;
+			else {
+				rectPar = *rect;
 			}
-
 			data::ChildHWnd = CreateWindowExW(
 				WS_EX_TOPMOST,
 				L"BaseCrossChildClass",
@@ -666,8 +663,8 @@ namespace basecross {
 				WS_CHILD,    //ウィンドウの種類
 				rectPar.left,    //Ｘ座標
 				rectPar.top,    //Ｙ座標
-				rectPar.right,    //幅
-				rectPar.bottom,    //高さ
+				rectPar.right - rectPar.left,    //幅
+				rectPar.bottom - rectPar.top,    //高さ
 				ParHWnd,            //親ウィンドウのハンドル、親を作るときはNULL
 				0, //メニューハンドル、子供のID
 				hInst,            //インスタンスハンドル
@@ -791,22 +788,15 @@ namespace basecross {
 			}
 			data::ChildHWnd = NULL;
 		}
-
-		void PlayMovie(const wstring& MovieFileName) {
-
-			RECT r;
-			r.right = 704;
-			r.left = 320;
-			r.bottom = 464;
-			r.top = 100;
-
-			//auto hwnd = CleateMobieWnd();
+		void PlayMovie(const wstring& MovieFileName, RECT* rect = nullptr) {
 
 			HRESULT hr = S_OK;
 
 			// Create the MFPlayer object.
 			if (data::Player == nullptr)
 			{
+				auto hwnd = CleateMobieWnd(rect);
+
 				data::PlayerCB = new (std::nothrow) movie::MediaPlayerCallback();
 
 				if (data::PlayerCB == nullptr)
@@ -817,13 +807,13 @@ namespace basecross {
 						L"App::PlayMovie()"
 					);
 				}
-				auto a = App::GetApp()->GetHWnd();
+
 				hr = MFPCreateMediaPlayer(
 					NULL,
 					FALSE,          // Start playback automatically?
 					0,              // Flags
 					data::PlayerCB.Get(),    // Callback pointer
-					a,           // Video window
+					hwnd,           // Video window
 					&data::Player
 				);
 
@@ -1000,7 +990,6 @@ namespace basecross {
 			}
 			////デバイスリソースの構築
 			m_DeviceResources = shared_ptr<DeviceResources>(new DeviceResources(hWnd, FullScreen, Width, Height));
-			
 			//オーディオマネージャの取得
 			GetXAudio2Manager();
 			//イベント配送クラス
@@ -1023,11 +1012,6 @@ namespace basecross {
 				m_App.reset(new App(hInstance, hWnd, FullScreen, Width, Height));
 				m_App->AfterInitContents(ShadowActive);
 
-			}
-			else {
-				//自分自身の構築
-				m_App.reset(new App(hInstance, hWnd, FullScreen, Width, Height));
-				m_App->AfterInitContents(ShadowActive);
 			}
 			return m_App;
 		}
@@ -1263,8 +1247,8 @@ namespace basecross {
 		movie::ClearMovie();
 	}
 
-	void App::PlayMovie(const wstring& MovieFileName) {
-		movie::PlayMovie(MovieFileName);
+	void App::PlayMovie(const wstring& MovieFileName,RECT* rect) {
+		movie::PlayMovie(MovieFileName, rect);
 	}
 
 	void App::UpdateMovie() {

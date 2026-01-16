@@ -11,7 +11,7 @@ namespace basecross{
 	class SoundManager : public SingletonBase<SoundManager> {
 	protected:
 		friend class SingletonBase<SoundManager>;
-		SoundManager() : m_SEVolume(1.0f), m_BGMVolume(1.0f) {}
+		SoundManager() : m_SEVolume(1.0f), m_BGMVolume(0.5f) {}
 	public:
 		void RegisterSounds();
 		void RegisterSound(const wstring& key, const wstring& fileName);
@@ -48,6 +48,8 @@ namespace basecross{
 			m_BGMVolume = min(m_BGMVolume, 1.0f);
 			SetBGMVolume();
 		}
+
+		bool IsSoundRunning(const shared_ptr<SoundItem>& soundItem);
 	private:
 		vector<wstring> m_SoundKeys;
 		shared_ptr<XAudio2Manager> m_Audio;

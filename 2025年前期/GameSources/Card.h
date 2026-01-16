@@ -14,10 +14,13 @@ namespace basecross {
 	public:
 		CardData() = default;
 		CardData(const wstring& id): m_Id(id){}
-		virtual void Load(shared_ptr<JsonObject>& data) {}
+		virtual void Load(const shared_ptr<JsonObject>& data) {}
 		virtual GimmickObjects GetType() { return GimmickObjects::None; }
-		virtual wstring GetExpainKey() { return L""; }
+		virtual wstring GetExplainKey() { return L""; }
+		virtual wstring GetIconKey() { return L""; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage) { return nullptr; }
+		virtual Vec3 GetVelocity() { return {}; }
+		virtual int GetCount() { return 0; }
 		wstring GetId() { return m_Id; }
 	};
 
@@ -25,12 +28,15 @@ namespace basecross {
 		Vec3 m_Velocity;
 	public:
 		PlayerCard(const wstring& id) : CardData(id) {}
-		virtual void Load(shared_ptr<JsonObject>& data) {
+		virtual void Load(const shared_ptr<JsonObject>& data) {
 			auto str = data->At<JsonString>(L"direction")->GetValue();
 			m_Velocity = GameManager::GetInstance().DirectionStrToVec(str);
 		}
 		virtual GimmickObjects GetType() { return GimmickObjects::SetPlayer; }
-		virtual wstring GetExpainKey() { return L"EXPAIN_PL"; }
+		virtual wstring GetExplainKey() { return L"EXPAIN_PL"; }
+		virtual wstring GetIconKey() { return L"ICON_PL"; }
+
+		virtual Vec3 GetVelocity() { return m_Velocity; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
 
 			auto gimmick = stage->AddGameObject<GimmickSetPlayer>();
@@ -47,13 +53,15 @@ namespace basecross {
 		Vec3 m_Direction;
 	public:
 		GoalCard(const wstring& id) : CardData(id) {}
-		virtual void Load(shared_ptr<JsonObject>& data) {
+		virtual void Load(const shared_ptr<JsonObject>& data) {
 			auto str = data->At<JsonString>(L"direction")->GetValue();
 			m_Direction = GameManager::GetInstance().DirectionStrToVec(str);
 		}
 
 		virtual GimmickObjects GetType() { return GimmickObjects::Goal; }
-		virtual wstring GetExpainKey() { return L"EXPAIN_GL"; }
+		virtual wstring GetExplainKey() { return L"EXPAIN_GL"; }
+		virtual wstring GetIconKey() { return L"ICON_GOAL"; }
+		virtual Vec3 GetVelocity() { return m_Direction; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
 			auto gimmick = stage->AddGameObject<GimmickGoal>();
 			gimmick->SetValue(m_Direction);
@@ -66,14 +74,16 @@ namespace basecross {
 		Vec3 m_Direction;
 	public:
 		CourseCard(const wstring& id) : CardData(id) {}
-		virtual void Load(shared_ptr<JsonObject>& data) {
+		virtual void Load(const shared_ptr<JsonObject>& data) {
 			auto str = data->At<JsonString>(L"direction")->GetValue();
 			m_Direction = GameManager::GetInstance().DirectionStrToVec(str);
 		}
 		virtual GimmickObjects GetType() { return GimmickObjects::CourseCorrection; }
-		virtual wstring GetExpainKey() { return L"EXPAIN_ARRW"; }
+		virtual wstring GetExplainKey() { return L"EXPAIN_ARRW"; }
+		virtual wstring GetIconKey() { return L"ICON_ARROW"; }
+		virtual Vec3 GetVelocity() { return m_Direction; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
-			auto gimmick = stage->AddGameObject<GimmickCourseCorrection>();
+			auto gimmick = stage->AddGameObject<GimmickArrow>();
 			gimmick->SetValue(m_Direction);
 			gimmick->SetCount(1);
 			return gimmick;
@@ -83,9 +93,10 @@ namespace basecross {
 	class InverterCard : public CardData {
 	public:
 		InverterCard(const wstring& id) : CardData(id) {}
-		virtual void Load(shared_ptr<JsonObject>& data) {}
+		virtual void Load(const shared_ptr<JsonObject>& data) {}
 		virtual GimmickObjects GetType() { return GimmickObjects::Inverter; }
-		virtual wstring GetExpainKey() { return L""; }
+		virtual wstring GetExplainKey() { return L"EXPAIN_INV"; }
+		virtual wstring GetIconKey() { return L"ICON_INV"; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
 			auto gimmick = stage->AddGameObject<GimmickInverter>();
 			return gimmick;
@@ -94,18 +105,54 @@ namespace basecross {
 
 	class TeleportCard : public CardData {
 		Vec3 m_TeleportTarget;
+		int m_Length;
 	public:
 		TeleportCard(const wstring& id) : CardData(id) {}
-		virtual void Load(shared_ptr<JsonObject>& data) {
-			auto target = data->At<JsonArray>(L"target")->GetFloatArray();
-			m_TeleportTarget = Vec3(target[0], target[1], target[2]);
+		virtual void Load(const shared_ptr<JsonObject>& data) {
+			auto str = data->At<JsonString>(L"direction")->GetValue();
+			auto direction = GameManager::GetInstance().DirectionStrToVec(str);
+			m_Length = data->At<JsonNumber>(L"value")->GetIntValue();
+			m_TeleportTarget = direction * m_Length;
 		}
 
 		virtual GimmickObjects GetType() { return GimmickObjects::Teleporter; }
-		virtual wstring GetExpainKey() { return L""; }
+		virtual wstring GetExplainKey() { return L"EXPAIN_TP"; }
+		virtual wstring GetIconKey() { return L"ICON_TP"; }
+		virtual Vec3 GetVelocity() { return (Vec3)XMVector3Normalize(m_TeleportTarget); }
+		virtual int GetCount() { return m_Length; }
 		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
 			auto gimmick = stage->AddGameObject<GimmickTeleporter>();
 			gimmick->SetValue(m_TeleportTarget);
+			return gimmick;
+		}
+
+	};
+
+	class RollCard : public CardData {
+		int m_RollCount;
+	public:
+		RollCard(const wstring& id): CardData(id){}
+		virtual GimmickObjects GetType() { return GimmickObjects::Roll; }
+		virtual void Load(const shared_ptr<JsonObject>& data) {
+			m_RollCount = data->At<JsonNumber>(L"value")->GetIntValue();
+		}
+		virtual wstring GetExplainKey() { return L"EXPAIN_ROLL"; }
+		virtual wstring GetIconKey() { return L"ICON_ROLL"; }
+		virtual int GetCount() { return m_RollCount; }
+		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
+			auto gimmick = stage->AddGameObject<GimmickRoll>();
+			gimmick->SetCount(m_RollCount);
+			return gimmick;
+		}
+	};
+	class KillerCard : public CardData {
+	public:
+		KillerCard(const wstring& id) : CardData(id){}
+		virtual GimmickObjects GetType() { return GimmickObjects::Killer; }
+		virtual wstring GetExplainKey() { return L""; }
+		virtual wstring GetIconKey() { return L""; }
+		virtual shared_ptr<Gimmicks> CreateGimmick(shared_ptr<Stage>& stage)override {
+			auto gimmick = stage->AddGameObject<GimmickKiller>();
 			return gimmick;
 		}
 
@@ -127,9 +174,19 @@ namespace basecross {
 			}
 			return nullptr;
 		}
+		static void CreateSample() {
+			auto& samples = GetSamples();
+			for (auto& map : GetMap()) {
+				samples[map.first] = map.second(map.first);
+			}
+		}
 
 		static map<wstring, Factory>& GetMap() {
 			static map<wstring, Factory> map;
+			return map;
+		}
+		static map<wstring, shared_ptr<CardData>>& GetSamples() {
+			static map<wstring, shared_ptr<CardData>> map;
 			return map;
 		}
 	};
@@ -137,11 +194,12 @@ namespace basecross {
 #define REGISTER_CARD(name,type) \
 	static bool reg_##type = CardFactory::Register(name, [](const wstring& id) {return make_shared<type>(id); });
 
-		REGISTER_CARD(L"player", PlayerCard)
+	REGISTER_CARD(L"player", PlayerCard)
 		REGISTER_CARD(L"goal", GoalCard)
-		REGISTER_CARD(L"course", CourseCard)
+		REGISTER_CARD(L"arrow", CourseCard)
 		REGISTER_CARD(L"teleporter", TeleportCard)
 		REGISTER_CARD(L"inverter", InverterCard)
-
+		REGISTER_CARD(L"roll", RollCard)
+		REGISTER_CARD(L"killer", KillerCard)
 }
 

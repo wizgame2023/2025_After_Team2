@@ -1,48 +1,16 @@
 {
   "mapSize": [ 9, 9 ],
   "items": [
-    {
-      "id": "player",
-      "count": 1,
-      "direction" :  "east"
-    },
-    {
-      "id": "goal",
-      "count": 1,
-      "direction": "south"
-    },
-    {
-      "id": "course",
-      "count": 1,
-      "direction": "north"
-    }
+    {"id": "player","count": 1, "direction" :  "east"},
+    {"id": "goal","count": 1,"direction": "north"},
+    {"id": "arrow","count": 1,"direction": "south"}
   ],
   "map": [
-    {
-      "pos": [ 0, 0 ],
-      "color": "red",
-      "height": 0
-    },
-    {
-      "pos": [ 4, 4 ],
-      "color": "blue",
-      "height": 0
-    },
-    {
-      "pos": [ 4, 0 ],
-      "color": "green",
-      "height": 0
-    },
-    {
-      "pos": [ 2, 2 ],
-      "color": "red",
-      "height": 0
-    },
-    {
-      "pos": [ 2, 4 ],
-      "color": "blue",
-      "height": 0
-    }
+    {"pos": [ 0, 0 ],"color": "red","height": 0},
+    {"pos": [ 4, 4 ],"color": "blue","height": 0},
+    {"pos": [ 4, 0 ],"color": "green","height": 0},
+    {"pos": [ 2, 2 ],"color": "red","height": 0},
+    {"pos": [ 2, 4 ],"color": "blue","height": 0}
   ],
   "hint": [
     {"color": "red","id": "player"},

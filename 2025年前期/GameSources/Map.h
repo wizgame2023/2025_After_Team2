@@ -16,7 +16,7 @@ namespace basecross{
 
 		shared_ptr<Floor> m_Floor;
 		shared_ptr<CardData> m_GimmickType;
-		shared_ptr<Gimmicks> m_Gimmik;
+		shared_ptr<Gimmicks> m_Gimmick;
 	};
 	class Map : public Object {
 		vector<vector<MapData>> m_Map;
@@ -34,14 +34,14 @@ namespace basecross{
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
-		void Load();
+		void Load(Json& map);
 
 		template<class GimmickType>
 		vector<shared_ptr<GimmickType>> GetGimmicks() {
 			vector<shared_ptr<GimmickType>> gimmicks;
 			for (auto& mapVec : m_Map) {
 				for (auto& map : mapVec) {
-					if (auto casted = dynamic_pointer_cast<GimmickType>(map.m_Gimmik)) {
+					if (auto casted = dynamic_pointer_cast<GimmickType>(map.m_Gimmick)) {
 						gimmicks.push_back(casted);
 					}
 				}
@@ -52,8 +52,8 @@ namespace basecross{
 			vector<shared_ptr<Gimmicks>> gimmicks;
 			for (auto& mapVec : m_Map) {
 				for (auto& map : mapVec) {
-					if (map.m_Gimmik) {
-						gimmicks.push_back(map.m_Gimmik);
+					if (map.m_Gimmick) {
+						gimmicks.push_back(map.m_Gimmick);
 					}
 				}
 			}
@@ -72,7 +72,7 @@ namespace basecross{
 		}
 		Vec3 GetMapCenter() {
 			Vec2 size = Vec2(static_cast<float>(m_Map[0].size() - 1), static_cast<float>(m_Map.size() - 1));
-			return Vec3(size.x / 2.0f, m_CenterY, size.x / 2.0f);
+			return Vec3(size.x / 2.0f, m_CenterY, -size.y / 2.0f);
 		}
 		Vec3 GetMapSize() {
 			return Vec3(static_cast<float>(m_Map[0].size()), m_MapHeight, static_cast<float>(m_Map.size()));
@@ -94,7 +94,7 @@ namespace basecross{
 			for (auto& mapVec : m_Map) {
 				for (auto& map : mapVec) {
 					if (color == map.m_ColorStr) {
-						if (map.m_Gimmik != nullptr) {
+						if (map.m_Gimmick != nullptr) {
 							return true;
 						}
 					}
@@ -102,6 +102,9 @@ namespace basecross{
 			}
 			return false;
 		}
+
+		wstring GetFloorColor(const shared_ptr<JsonObject>& data);
+		void CreateFloor(vector<int>& cellPosition, const wstring& color,const shared_ptr<JsonObject>& gimmickObject);
 
 		void HighlightBox(const wstring& colorText);
 
@@ -111,6 +114,7 @@ namespace basecross{
 
 		shared_ptr<CardData> RecoverGimmick();
 		shared_ptr<CardData> RecoverGimmick(int colorIdx);
+
 	};
 
 

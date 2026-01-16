@@ -7,6 +7,11 @@
 #include "Project.h"
 
 namespace basecross{
+	GimmickData::GimmickData():m_Type(GimmickObjects::None),m_Direction(Vec3()){}
+	GimmickData::GimmickData(const shared_ptr<Gimmicks>& gimmick) {
+		m_Type = gimmick->GetGimmickType();
+		m_Direction = gimmick->GetValue();
+	}
 
 	Gimmicks::Gimmicks(const shared_ptr<Stage>& ptrStage) :
 	Object(ptrStage),
@@ -25,48 +30,37 @@ namespace basecross{
 	{
 		Object::OnCreate();
 
-		m_Board = m_Stage->AddGameObject<Board>(L"TEMP_ARROW_SPRITE", Vec3(), Vec3(1, 1, 0), false);
-		m_Board->AddComponent<UVScroll>(Vec2(0.0f, 1.0f), m_Board->GetVertices());
+		m_PutEffect.reset();
 	}
 
 	void Gimmicks::OnUpdate()
 	{
 		Object::OnUpdate();
+
+		RotateDirection();
+
+		if (m_PutEffect == nullptr)
+		{
+			m_PutEffect = m_Stage->AddGameObject<Effect>(L"PutGimmickEffect.efk", GetPosition() + Vec3(0, 0.75f, 0));
+			m_PutEffect->SetEffectSize(Vec3(0.7f));
+		}
+		if (!m_Board) return;
+
 		if (m_Value.lengthSqr() == 0) {
-			m_Board->GetDraw()->SetDrawActive(false);
-			return;
+			
 		}
+
 		m_Board->GetTrans()->SetPosition(GetPosition() + Vec3(0, 0.75f, 0));
-		m_Board->RotateVector(Vec3(0, 1, 0));
-
-		float angle = 0.0f;
-		if (m_Value == Vec3(-1, 0, 0)) {
-			angle = XM_PI;
-		}
-		else if (m_Value == Vec3(0, 0, 1)) {
-			angle = -XM_PIDIV2;
-		}
-		else if (m_Value == Vec3(0, 0, -1)) {
-			angle = XM_PIDIV2;
-		}
-		auto rot = XMMatrixRotationAxis(Vec3(0, 1, 0), angle);
-
-		auto world = m_Board->GetTrans()->GetWorldMatrix();
-		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
-
-		m_Board->GetTrans()->SetQuaternion(m_Board->GetTrans()->GetQuaternion() * world.quatInMatrix());
 	}
 
 	void Gimmicks::Begin()
 	{
-		//Object::OnCreate();
-
 	}
 	void Gimmicks::Update()
 	{
-		auto playerVec = GameManager::GetInstance().GetCubes();
+		auto playerVec = GameManager::GetInstance().GetEntityManager()->GetPlayers();
 		auto pos = GetPosition();
-		shared_ptr<MoveCube> cube;
+		shared_ptr<MoveCube> cube = nullptr;
 
 		for (auto& ball : playerVec)
 		{
@@ -105,13 +99,35 @@ namespace basecross{
 
 	void Gimmicks::GimmickDelete()
 	{
+		if (m_Board) {
+			m_Stage->RemoveGameObject<Board>(m_Board);
+		}
 		m_Stage->RemoveGameObject<Gimmicks>(GetThis<Gimmicks>());
 	}
+	void Gimmicks::AddPlayerPath() {
+		if (!m_Cube) return;
 
+		m_Cube->AddGimmickPath(GetThis<Gimmicks>());
+	}
+	void Gimmicks::RotateDirection() {
+		float angle = atan2f(-m_Value.x, -m_Value.z);
+		
+		auto rot = XMMatrixRotationAxis(Vec3(0, 1, 0), angle);
 
+		auto world = m_Transform->GetWorldMatrix();
+		world.rotation((Quat)XMQuaternionRotationMatrix(rot));
+
+		m_Transform->SetQuaternion(world.quatInMatrix());
+	}
+	void Gimmicks::CreateBoard(const wstring& key) {
+		auto cardSample = CardFactory::GetSamples();
+		m_Board = m_Stage->AddGameObject<Board>(cardSample[key]->GetIconKey(), Vec3(), Vec3(0.5f), true);
+	}
 
 	GimmickGoal::GimmickGoal(const shared_ptr<Stage>& ptrStage) :
-		Gimmicks(ptrStage)
+		Gimmicks(ptrStage),
+		m_GoalEffect(nullptr),
+		m_Goal(false)
 	{
 	}
 	GimmickGoal::~GimmickGoal()
@@ -130,8 +146,31 @@ namespace basecross{
 		Mat4x4 mat;
 		mat.affineTransformation(Vec3(0.9f), Vec3(), Vec3(0,XM_PIDIV2,0), Vec3(0.0f, -0.9f, 0.0f));
 		draw->SetMeshToTransformMatrix(mat);
+	}
 
-		//Quat quat = XMQuaternionRotationAxis(Vec3(0, 1, 0), );
+	void GimmickGoal::OnUpdate()
+	{
+		Gimmicks::OnUpdate();
+
+		auto scene = App::GetApp()->GetScene<Scene>();
+
+		if (m_Goal)
+		{
+			if (!m_GoalEffect)
+			{
+				m_GoalEffect = m_Stage->AddGameObject<Effect>(L"GoalGimmickEffect.efk", GetPosition());
+				SoundManager::GetInstance().PlaySE(L"Clear");
+			}
+
+			if (m_GoalEffect)
+			{
+				GameManager::GetInstance().DrawGoalEffect();
+				if (m_GoalEffect->EffectEnd())
+				{
+					m_Goal = false;
+				}
+			}
+		}
 	}
 
 	void GimmickGoal::Begin()
@@ -146,7 +185,6 @@ namespace basecross{
 		{
 			Vec3 playerVel = m_Cube->GetVelocity();
 
-			// ゼロベクトルでないことを確認
 			if (playerVel.lengthSqr() > 0.0001f)
 			{
 				Vec3 normalizedVel = playerVel.normalize();
@@ -154,10 +192,11 @@ namespace basecross{
 
 				float dot = normalizedVel.dot(goalDir);
 
-				if (dot > 0.9f) // ある程度逆向きとみなす閾値
+				if (dot > 0.9f)
 				{
-					GameManager::GetInstance().DrawGoalEffect();
+					m_Goal = true;
 					m_Cube = nullptr;
+					AddPlayerPath();
 				}
 				else
 				{
@@ -181,9 +220,13 @@ namespace basecross{
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
-		draw->SetDiffuse(Col4(1, 0, 0, 1));
-
+		draw->SetMeshResource(L"PLAYER_MD");
+		Mat4x4 mat;
+		mat.affineTransformation(Vec3(0.8f), Vec3(), Vec3(0, -XM_PIDIV2, 0), Vec3(0.0f, -0.75f, 0.25f));
+		draw->SetMeshToTransformMatrix(mat);
+	}
+	void GimmickSetPlayer::OnUpdate() {
+		Gimmicks::OnUpdate();
 	}
 	void GimmickSetPlayer::Begin()
 	{
@@ -192,7 +235,11 @@ namespace basecross{
 		auto pos = GetPosition();
 
 		player->Spawn(pos);
-		player->SetVelocity(/*Vec3(1.0f, 0.0f, 0.0f)*/m_Value);
+		player->SetVelocity(m_Value);
+		player->AddGimmickPath(GetThis<Gimmicks>());
+
+		auto draw = GetComponent<PNTStaticDraw>();
+		draw->SetDrawActive(false);
 	}
 	void GimmickSetPlayer::Update()
 	{
@@ -200,39 +247,44 @@ namespace basecross{
 	}
 
 
-	GimmickCourseCorrection::GimmickCourseCorrection(const shared_ptr<Stage>& ptrStage) :
+	GimmickArrow::GimmickArrow(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage)
 	{
 	}
-	GimmickCourseCorrection::~GimmickCourseCorrection()
+	GimmickArrow::~GimmickArrow()
 	{
 	}
 
-	void GimmickCourseCorrection::OnCreate()
+	void GimmickArrow::OnCreate()
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
-		draw->SetDiffuse(Col4(0, 0, 1, 1));
+		draw->SetMeshResource(L"DIRECTION_MD");
+		draw->SetTextureResource(L"FLOOR");
+		Mat4x4 mat;
+		mat.affineTransformation(Vec3(1.0f), Vec3(), Vec3(0, XM_PIDIV2, 0), Vec3(0.0f, -0.75f, 0.0f));
+		draw->SetMeshToTransformMatrix(mat);
 
+		CreateBoard(L"arrow");
 	}
 
-	void GimmickCourseCorrection::Begin()
+	void GimmickArrow::Begin()
 	{
 		Gimmicks::Begin();
 	}
 
-	void GimmickCourseCorrection::Update()
+	void GimmickArrow::Update()
 	{
 		Gimmicks::Update();
 		CheckCount();
 	}
-	void GimmickCourseCorrection::End() {
+	void GimmickArrow::End() {
 		Gimmicks::End();
 		Gimmicks::Update();
 		if (CheckCount())
 		{
 			m_Cube->ChangeVelocity(m_Value);
+			AddPlayerPath();
 		}
 	}
 	GimmickTeleporter::GimmickTeleporter(const shared_ptr<Stage>& ptrStage) :
@@ -247,27 +299,76 @@ namespace basecross{
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
-		draw->SetDiffuse(Col4(1, 1, 0, 1));
+		draw->SetMeshResource(L"DIRECTION_MD");
+		draw->SetTextureResource(L"FLOOR");
+		Mat4x4 mat;
+		mat.affineTransformation(Vec3(1.0f), Vec3(), Vec3(0, XM_PIDIV2, 0), Vec3(0.0f, -0.75f, 0.0f));
+		draw->SetMeshToTransformMatrix(mat);
+
+
+		CreateBoard(L"teleporter");
 	}
 
 	void GimmickTeleporter::Begin()
 	{
 		Gimmicks::Begin();
+		m_TeleportFastEffect = nullptr;
+		m_TeleportEndEffect = nullptr;
+
 	}
+
+	void GimmickTeleporter::OnUpdate()
+	{
+		Gimmicks::OnUpdate();
+
+		if (m_IsFastTeleport)
+		{
+			if (m_TeleportFastEffect && m_TeleportFastEffect->EffectEnd())
+			{
+				m_TeleportFastEffect->EffectDelete();
+				m_TeleportFastEffect = nullptr;
+
+				Vec3 endPos = m_Transform->GetPosition() + m_Value;
+				m_TeleportEndEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickEndEffect.efk", endPos);
+				m_TeleportEndEffect->SetEffectSize(Vec3(0.5f));
+				m_TeleportEndEffect->SetEffectSpeed(1.7f);
+			}
+
+			if (m_TeleportEndEffect && m_TeleportEndEffect->EffectEnd())
+			{
+				m_TeleportEndEffect->EffectDelete();
+				m_TeleportEndEffect = nullptr;
+				m_IsFastTeleport = false;
+			}
+		}
+	}
+
+
 	void GimmickTeleporter::Update()
 	{
 		Gimmicks::Update();
-		if (CheckCount())
-		{
-			Vec3 pos = m_Transform->GetPosition();
 
-			m_Cube->Telepote(pos + /*m_Value*/ Vec3(0.0f, 1.0f, 0.0f));
+		bool isStepped = CheckCount();
+		if (isStepped && !m_WasStepped)
+		{
+			// ?????u?????????
+			Vec3 pos = m_Transform->GetPosition();
+			m_Cube->SetDrawActive(false);
+			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cube????P????????????OK
+
+			// ?G?t?F?N?g?J?n
+			m_TeleportFastEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickFastEffect.efk", m_Cube->GetPosition());
+			m_TeleportFastEffect->SetEffectSize(Vec3(0.5f));
+			m_TeleportFastEffect->SetEffectSpeed(1.7f);
+
+			m_IsFastTeleport = true;
+			AddPlayerPath();
 		}
 
+		m_WasStepped = isStepped;
 	}
 
-
+	
 
 	GimmickKiller::GimmickKiller(const shared_ptr<Stage>& ptrStage) :
 		Gimmicks(ptrStage)
@@ -280,9 +381,6 @@ namespace basecross{
 	void GimmickKiller::OnCreate()
 	{
 		Gimmicks::OnCreate();
-		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
-		draw->SetDiffuse(Col4(0, 1, 1, 1));
 	}
 
 	void GimmickKiller::Begin()
@@ -312,8 +410,14 @@ namespace basecross{
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
+		draw->SetMeshResource(L"NO_DIRECTION_MD");
+		draw->SetTextureResource(L"FLOOR");
 		draw->SetDiffuse(Col4(1, 1, 1, 1));
+		Mat4x4 mat;
+		mat.affineTransformation(Vec3(1.0f), Vec3(), Vec3(0, XM_PIDIV2, 0), Vec3(0.0f, -0.75f, 0.0f));
+		draw->SetMeshToTransformMatrix(mat);
+
+		CreateBoard(L"roll");
 	}
 
 	void GimmickRoll::Begin()
@@ -323,12 +427,14 @@ namespace basecross{
 
 	void GimmickRoll::Update()
 	{
-		
+		Gimmicks::Update();
+		CheckCount();
 	}
 	void GimmickRoll::End() {
 		Gimmicks::Update();
 		if (CheckCount())
 		{
+			AddPlayerPath();
 			if (m_IsLeftRoll)
 			{
 				Vec3 CubeVel = m_Cube->GetVelocity();
@@ -361,8 +467,13 @@ namespace basecross{
 	{
 		Gimmicks::OnCreate();
 		auto draw = AddComponent<PNTStaticDraw>();
-		draw->SetMeshResource(L"DEFAULT_CUBE");
-		draw->SetDiffuse(Col4(0, 0, 0, 1));
+		draw->SetMeshResource(L"NO_DIRECTION_MD");
+		draw->SetTextureResource(L"FLOOR");
+		Mat4x4 mat;
+		mat.affineTransformation(Vec3(1.0f), Vec3(), Vec3(0, XM_PIDIV2, 0), Vec3(0.0f, -0.75f, 0.0f));
+		draw->SetMeshToTransformMatrix(mat);
+
+		CreateBoard(L"inverter");
 	}
 
 	void GimmickInverter::Begin()
@@ -376,7 +487,8 @@ namespace basecross{
 
 		if (CheckCount())
 		{
-			auto CourseCorrectionVec = GameManager::GetInstance().GetMap()->GetGimmicks<GimmickCourseCorrection>();
+			AddPlayerPath();
+			auto CourseCorrectionVec = GameManager::GetInstance().GetLevelManager()->GetMap()->GetGimmicks<GimmickArrow>();
 
 			for (auto& course : CourseCorrectionVec)
 			{

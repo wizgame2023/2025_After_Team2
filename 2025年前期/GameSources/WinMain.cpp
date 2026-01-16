@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "Project.h"
+#include <chrono>
 
 using namespace basecross;
 
@@ -56,6 +57,16 @@ HWND InitInstance(HINSTANCE hInstance, int nCmdShow, bool isFullScreen, int iCli
 {
 
 	HWND hWnd = 0;
+	isFullScreen = TRUE;
+	
+	RECT rect;
+	HWND desktop = GetDesktopWindow();
+	GetWindowRect(desktop, &rect);
+	UINT dpi = GetDpiForSystem();
+	float scale = (float)(dpi / 96);
+	iClientWidth = (UINT)((float)rect.right * scale);
+	iClientHeight = (UINT)((float)rect.bottom * scale);
+
 	// ウィンドウの作成
 	if (isFullScreen) { // フルスクリーン
 						// 画面全体の幅と高さを取得
@@ -114,7 +125,22 @@ HWND InitInstance(HINSTANCE hInstance, int nCmdShow, bool isFullScreen, int iCli
 	UpdateWindow(hWnd);
 	return hWnd;
 }
+void RegulateFrameRate(std::chrono::high_resolution_clock::time_point& lastTime, double targetMs)
+{
+	using clock = std::chrono::high_resolution_clock;
+	// 現在時刻
+	auto now = clock::now();
+	// 経過時間を ms 単位で取得
+	double elapsed = std::chrono::duration<double, std::milli>(now - lastTime).count();
+	double delay = targetMs - elapsed;
 
+	// 残余時間が1ms以上あれば Sleep
+	if (delay > 1.0) {
+		Sleep(static_cast<DWORD>(delay));
+	}
+	// 次フレーム用に lastTime を更新
+	lastTime = clock::now();
+}
 
 //--------------------------------------------------------------------------------------
 //	int MainLoop(HINSTANCE hInstance, HWND hWnd, bool isFullScreen, int iClientWidth, int iClientHeight);
@@ -144,8 +170,11 @@ int MainLoop(HINSTANCE hInstance, HWND hWnd, bool isFullScreen, int iClientWidth
 		//キーボード入力用
 		//ここに設定したキーボード入力を得る
 		vector<DWORD> UseKeyVec = {};
-		float fps = 60.0f;
-		float timer = 0.0f;
+		// フレームレート制御準備
+		using clock = std::chrono::high_resolution_clock;
+		const double targetMs = 1000.0 / 60.0; // 60fps
+		timeBeginPeriod(1);                     // Sleep 精度を向上
+		auto lastTime = clock::now();
 		while (WM_QUIT != msg.message) {
 			if (!App::GetApp()->ResetInputState(hWnd, UseKeyVec)) {
 				//キー状態が何もなければウインドウメッセージを得る
@@ -155,8 +184,8 @@ int MainLoop(HINSTANCE hInstance, HWND hWnd, bool isFullScreen, int iClientWidth
 					DispatchMessage(&msg);
 				}
 			}
-			timer += App::GetApp()->GetElapsedTime();
-			//if (timer < fps) continue;
+			RegulateFrameRate(lastTime, targetMs);
+
 			//更新描画処理
 			App::GetApp()->UpdateDraw(1);
 		}

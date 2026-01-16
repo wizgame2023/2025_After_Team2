@@ -1,0 +1,16 @@
+{
+	"mapSize":[7,5],
+	"grid":
+	[
+		{"pos":[1,1],"color":"red"},
+		{"pos":[3,1],"color":"green"},
+		{"pos":[5,1],"color":"blue"},
+		{"pos":[5,3],"color":"yellow"}
+	],
+	"items" : [
+		{"id":"player","direction":"east","value":0,"count":1},
+		{"id":"goal","direction":"north","value":0,"count":1},
+		{"id":"arrow","direction":"north","value":0,"count":1},
+		{"id":"inverter","direction":"north","value":0,"count":1}
+	]
+}

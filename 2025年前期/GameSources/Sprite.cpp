@@ -120,8 +120,10 @@ namespace basecross {
 
 	void Sprite::SetPosition(Vec3 pos) {
 		m_Transform->SetPosition(pos);
+		m_Pos = pos;
 	}
 	void Sprite::VectorToward(Vec2 vec) {
+		if (vec.length() == 0) return;
 		float rad = atan2f(-vec.x, vec.y);
 		auto rot = XMMatrixRotationAxis(Vec3(0,0,1), rad);
 		auto world = m_Transform->GetWorldMatrix();
@@ -312,11 +314,18 @@ namespace basecross {
 			}
 			if (color.w < 0.0f) {
 				if (m_FadeState == FadeState::OutToIn || m_FadeState == FadeState::In) m_IsFinished = true;
-				else if (m_FadeState == FadeState::InToOut) m_IsFadeOut = true;
+				else if (m_FadeState == FadeState::InToOut) {
+					m_IsFadeOut = true;
+					m_HalfFinished = true;
+				}
 			}
 			else if (color.w > 1.0f) {
 				if (m_FadeState == FadeState::InToOut || m_FadeState == FadeState::Out) m_IsFinished = true;
-				else if (m_FadeState == FadeState::OutToIn) m_IsFadeOut = false;
+				else if (m_FadeState == FadeState::OutToIn) {
+					m_IsFadeOut = false;
+					m_HalfFinished = true;
+				}
+
 			}
 			else {
 				m_IsFinished = false;
@@ -519,17 +528,33 @@ namespace basecross {
 		}
 	}
 	void Board::OnCreate() {
-		m_Draw = AddComponent<PNTStaticDraw>();
+		m_Draw = AddComponent<PTStaticDraw>();
 		m_Draw->SetDepthStencilState(DepthStencilState::Read);
 		m_Draw->SetOriginalMeshUse(true);
 		m_Draw->SetModelDiffusePriority(true);
+		
 
 		m_Draw->SetDiffuse(Col4(1, 1, 1, 1));
 		m_Draw->SetEmissive(Col4(1, 1, 1, 1));
 		m_Draw->SetSpecular(Col4(1, 1, 1, 1));
 
 		vector<uint16_t> indices = {};
-		MeshUtill::CreateSquare(1.0f, m_Vertices, indices);
+		//MeshUtill::CreateSquare(1.0f, m_Vertices, indices);
+
+		float HelfSize = 0.5f;
+		//頂点配列
+		m_Vertices.push_back(VertexPositionTexture(bsm::Vec3(-HelfSize, HelfSize, 0), bsm::Vec2(0.0f, 0.0f)));
+		m_Vertices.push_back(VertexPositionTexture(bsm::Vec3(HelfSize, HelfSize, 0),  bsm::Vec2(1.0f, 0.0f)));
+		m_Vertices.push_back(VertexPositionTexture(bsm::Vec3(-HelfSize, -HelfSize, 0), bsm::Vec2(0.0f, 1.0f)));
+		m_Vertices.push_back(VertexPositionTexture(bsm::Vec3(HelfSize, -HelfSize, 0),  bsm::Vec2(1.0f, 1.0f)));
+		//インデックスを作成するための配列
+		indices.push_back((uint16_t)0);
+		indices.push_back((uint16_t)1);
+		indices.push_back((uint16_t)2);
+		indices.push_back((uint16_t)1);
+		indices.push_back((uint16_t)3);
+		indices.push_back((uint16_t)2);
+
 		m_Draw->CreateOriginalMesh(m_Vertices, indices);
 		if (m_TexKey != L"") {
 			m_Draw->SetTextureResource(m_TexKey);

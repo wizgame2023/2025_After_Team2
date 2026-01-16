@@ -1,0 +1,12 @@
+{
+	"mapSize":[5,3],
+	"grid":
+	[
+		{"pos":[1,1],"color":"red"},
+		{"pos":[3,1],"color":"green"}
+	],
+	"items" : [
+		{"id":"player","direction":"east","value":0,"count":1},
+		{"id":"goal","direction":"west","value":0,"count":1}
+	]
+}
