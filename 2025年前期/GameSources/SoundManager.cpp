@@ -68,8 +68,8 @@ namespace basecross {
 		if (m_Bgm != nullptr) {
 			m_Audio->Stop(m_Bgm);
 			m_Bgm = nullptr;
-		}
 	}
+		}
 	void SoundManager::StopAll() {
 		StopBGM();
 		for (auto se : m_PlayingSE) {

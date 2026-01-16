@@ -43,12 +43,14 @@ namespace basecross
 		bool m_IsAPushed = false;
         bool m_IsConfirmed = false;
 
+        bool m_IsSE = false;
 
     public:
         TitleStage() :Stage() {}
         virtual ~TitleStage() {}
         virtual void OnCreate()override;
         virtual void OnUpdate()override;
+        virtual void OnDestroy()override;
 
     private:
         void SpriteCreate();

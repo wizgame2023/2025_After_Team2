@@ -31,6 +31,7 @@ namespace basecross {
 	{
 		ResourceManager::Load(L"titleResource.json");
 
+		ResourceManager::RegisterWav(L"Sound");
 		ResourceManager::RegisterTexture(L"UI");
 	}
 
@@ -38,6 +39,7 @@ namespace basecross {
 	void TitleStage::SpriteCreate()
 	{
 		Json();
+
 		FadeStarSpriteCreate();
 
 		auto titleSp = AddGameObject<Sprite>(L"TitleLogoUI", Vec3(0.0f,-130,0), Vec2(1000, 500), Anchor::Bottom);
@@ -120,6 +122,9 @@ namespace basecross {
 			CreateViewLight();
 			SpriteCreate();
 
+			//BGMの再生
+			SoundManager::GetInstance().PlayBGM(L"TitleBGM",2.0f);
+
 			//auto sprite = AddGameObject<Sprite>(L"StartUI", Vec3(0.0f, -200.0f, 0.0f), Vec2(512, 128), Anchor::Center);
 			//sprite->SetAnimationActive(true);
 			//sprite->CreateAnimationUV(Vec2(3, 2));
@@ -140,6 +145,11 @@ namespace basecross {
 		UpdateRollSprite();
 		FadeStarSprite();
 
+	}
+
+	void TitleStage::OnDestroy()
+	{
+		SoundManager::GetInstance().StopBGM();
 	}
 
 	void TitleStage::UpdateRollSprite()
@@ -261,16 +271,18 @@ namespace basecross {
 			{
 				m_StartSprite = AddGameObject<Sprite>(L"StartUI", Vec3(0.0f, -50.0f, 0.0f), Vec2(512, 128), Anchor::Center);
 			}
+			if (!m_IsSE)
+			{
+				SoundManager::GetInstance().PlaySE(L"Put");
+				m_IsSE = true;
+			}
 		}
 		else
 		{
 			RemoveGameObject<Sprite>(m_StartSprite);
 			m_StartSprite = nullptr;
 			m_IsConfirmed = false;
-
-		if (m_ColorPalettes.size() >= 2)
-		{
-			}
+			m_IsSE = false;
 		}
 
 	}
@@ -290,6 +302,9 @@ namespace basecross {
 			{
 				m_IsAPushed = false;
 				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToSelectStage");
+
+				SoundManager::GetInstance().PlaySE(L"StartSE");
+
 			}
 		}
 	}
