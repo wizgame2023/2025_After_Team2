@@ -60,8 +60,11 @@ namespace basecross{
 			auto info = static_pointer_cast<int>(event->m_Info).get();
 			int index = *(info);
 			auto dataArray = m_StageFile.At<JsonArray>(L"tutorial");
-
-			auto data = dataArray->GetObjectArray()[index];
+			auto objectArray = dataArray->GetObjectArray();
+			if (index >= objectArray.size()) {
+				ResetActiveStage<SelectStage>();
+			}
+			auto data = objectArray[index];
 			
 			ResetActiveStage<GameStage>(data);
 		}
