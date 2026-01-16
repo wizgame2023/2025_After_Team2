@@ -278,7 +278,8 @@ namespace basecross{
 					Vec3 startPos = Vec3(-50.0f, 50.0f, 0.0f);
 					ButtonManager::Create(m_MenuStage, L"RESULT", L"SELECT_TRIANGLE", Col4(1,1,1,1), startPos, Vec2(buttonSize),
 						[&](shared_ptr<ObjectInterface>& object) {
-							m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToSelectStage");
+							int number = m_LevelManager->GetStageNumber() + 1;
+							m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToGameStage", make_shared<int>(number));
 						});
 					startPos += Vec3(0.0f, -buttonSize * 1.75, 0.0f);
 					ButtonManager::Create(m_MenuStage, L"RESULT", L"SELECT_TRIANGLE", Col4(1, 1, 1, 1), startPos, Vec2(buttonSize),
