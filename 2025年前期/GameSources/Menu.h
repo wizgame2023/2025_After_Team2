@@ -29,6 +29,7 @@ namespace basecross{
 
 		shared_ptr<Sprite> m_CurrentExplain;
 		shared_ptr<Sprite> m_ExplainBox;
+		shared_ptr<Sprite> m_OperateInfo;
 
 		shared_ptr<Sprite> m_BackGround;
 		vector<shared_ptr<Sprite>> m_ColorPalette;

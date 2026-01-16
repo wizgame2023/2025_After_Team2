@@ -139,7 +139,13 @@ namespace basecross{
 		if (position.z > m_MoveArea.m_Max.z || position.z < m_MoveArea.m_Min.z) {
 			return false;
 		}
+		Vec3 currentPosition = GetPosition();
+		auto& level = GameManager::GetInstance().GetLevelManager();
+		auto mapData = level->GetMap()->GetMapData(Vec2(currentPosition.x, -currentPosition.z));
 
+		if (mapData.m_ColorStr == L"black") {
+			return false;
+		}
 		return true;
 	}
 
@@ -160,8 +166,13 @@ namespace basecross{
 		m_TargetVelocity = velocity;
 
 		float angle1 = atan2f(m_Velocity.z, m_Velocity.x);
+		angle1 = angle1 < 0 ? angle1 + XM_PI : angle1;
 		float angle2 = atan2f(m_TargetVelocity.z, m_TargetVelocity.x);
+		angle2 = angle2 < 0 ? angle2 + XM_PI : angle2;
 		m_MoveVelocityAngleSpeed = (angle1 - angle2) / GameManager::GetInstance().GetFlowManager()->GetGameTick();
+		if (m_MoveVelocityAngleSpeed < 0) {
+			m_MoveVelocityAngleSpeed *= -1;
+		}
 	}
 	void MoveCube::Move() {
 		if (m_IsEffecting) return;

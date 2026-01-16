@@ -37,6 +37,8 @@ namespace basecross{
 
 
 			m_StageFile = Json(L"Json/stage.json");
+
+			CardFactory::CreateSample();
 		}
 		catch (...) {
 			throw;
