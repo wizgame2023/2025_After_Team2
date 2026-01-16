@@ -472,6 +472,7 @@ namespace basecross{
 		ButtonManager::instance->SetInput(L"POSE", InputData(StickMode::LY, 1, 0.1f));//選択(左スティック)
 		ButtonManager::instance->SetLoop(true);
 		ButtonManager::instance->SetSound(L"decision");
+		ButtonManager::instance->SetSelectSound(L"cursorMove");
 
 		m_ExplainMenu = m_MenuStage->AddGameObject<ExplainMenu>();
 		m_ExplainMenu->Close();
@@ -481,6 +482,7 @@ namespace basecross{
 	void PoseMenu::Open() {
 		ButtonManager::instance->OpenAndUse(L"POSE");
 		SetDrawActive(true);
+		SoundManager::GetInstance().PlaySE(L"decision");
 	}
 	void PoseMenu::Close() {
 		ButtonManager::instance->Close(L"POSE");
@@ -542,6 +544,7 @@ namespace basecross{
 
 		if (InputManager::GetInputManager()->GetDownButton(L"Start")) {
 			Close();
+			SoundManager::GetInstance().PlaySE(L"decision");
 		}
 	}
 
@@ -595,6 +598,7 @@ namespace basecross{
 		auto& input = InputManager::GetInputManager();
 		if (input->GetDownButton(L"Start")) {
 			Close();
+			SoundManager::GetInstance().PlaySE(L"decision");
 			return;
 		}
 		float stickX = input->GetLStick().x;

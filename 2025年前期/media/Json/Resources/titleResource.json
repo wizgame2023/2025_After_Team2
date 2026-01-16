@@ -8,7 +8,7 @@
   },
   "Sound": {
     "BGM/TitleBGM.wav": "TitleBGM",
-    "decision.wav": "StartSE"
+    "Start.wav": "StartSE"
 
   },
   "UI": {

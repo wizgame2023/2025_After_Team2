@@ -433,7 +433,7 @@ namespace basecross {
 			LimitIndex(checkButton);
 			if (m_ButtonGroup[m_UsingGroup][checkButton]->GetActive()) {
 				if (m_SelectSound != L"") {
-					//SoundManager::GetInstance().PlaySE(m_SelectSound);
+					SoundManager::GetInstance().PlaySE(m_SelectSound);
 				}
 				selectIndex = checkButton;
 			}
