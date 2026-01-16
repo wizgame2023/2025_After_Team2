@@ -1,5 +1,5 @@
 {
-	"mapSize":[5,5],
+	"mapSize":[7,5],
 	"grid":
 	[
 		{"pos":[1,1],"color":"red"},
