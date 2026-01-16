@@ -434,7 +434,7 @@ namespace basecross {
 			LimitIndex(checkButton);
 			if (m_ButtonGroup[m_UsingGroup][checkButton]->GetActive()) {
 				if (m_SelectSound != L"") {
-					//SoundManager::GetInstance().PlaySE(m_SelectSound);
+					SoundManager::GetInstance().PlaySE(m_SelectSound);
 				}
 				selectIndex = checkButton;
 			}
@@ -452,7 +452,7 @@ namespace basecross {
 		//Œˆ’è
 		if (PressAccept(m_UsingGroup, m_PressedAccept[m_UsingGroup])) {
 			if (m_ClickSound != L"") {
-				//SoundManager::GetInstance().PlaySE(m_ClickSound);
+				SoundManager::GetInstance().PlaySE(m_ClickSound);
 			}
 			m_ButtonGroup[m_UsingGroup][m_SelectIndexes[m_UsingGroup]]->Func();
 		}

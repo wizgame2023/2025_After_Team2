@@ -16,6 +16,7 @@ namespace basecross {
 	//--------------------------------------------------------------------------------------
     class SelectStage : public Stage
     {
+
         int m_StageNum = 1;
         int m_Count = 0;
 
@@ -39,7 +40,8 @@ namespace basecross {
         shared_ptr<Sprite> m_BackSp;
         shared_ptr<Sprite> m_RollSpRight;
         shared_ptr<Sprite> m_RollSpLeft;
-
+        shared_ptr<SoundItem> m_StartSE;
+        shared_ptr<Sprite> m_BackBoardSp;
         // スティック押しっぱなし対応
         float m_StickHoldTime = 0.0f;
 
@@ -57,6 +59,7 @@ namespace basecross {
     private:
         void SpriteCreate();
         void Json();
+        void StartFade();
     };
 
 
