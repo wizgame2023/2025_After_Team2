@@ -3,7 +3,8 @@
   },
   "Texture": {
     "Floor.png": "FLOOR",
-    "Floor_WireFrame.png": "FLOOR_WIRE"
+    "Floor_WireFrame.png": "FLOOR_WIRE",
+    "BackGround.png": "BACKGROUND"
   },
   "Sound": {
 
