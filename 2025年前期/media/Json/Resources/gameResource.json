@@ -2,13 +2,15 @@
   "Model": {
   },
   "Texture": {
-    "Floor.png": "FLOOR"
+    "Floor.png": "FLOOR",
+    "Floor_WireFrame.png": "FLOOR_WIRE"
   },
   "Sound": {
 
   },
   "UI": {
     "HintLine.png": "HintLine",
+    "OperateInfo.png": "OPERATE_INFO",
 
     "Expains/Pose/GimmickExpain_PL.png": "EXPAIN_PL",
     "Expains/Pose/GimmickExpain_GL.png": "EXPAIN_GL",
@@ -27,6 +29,10 @@
     "Icons/Icon_Explain_East.png": "ICON_EAST",
     "Icons/Icon_Explain_West.png": "ICON_WEST",
     "Icons/NoDirection.png": "ICON_NO_DIRE",
+    "Icons/MapDirection_N.png": "MAP_ICON_NORTH",
+    "Icons/MapDirection_S.png": "MAP_ICON_SOUTH",
+    "Icons/MapDirection_W.png": "MAP_ICON_WEST",
+    "Icons/MapDirection_E.png": "MAP_ICON_EAST",
 
     "Icons/Icon_Explain_1.png": "ICON_1",
     "Icons/Icon_Explain_2.png": "ICON_2",

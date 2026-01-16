@@ -31,6 +31,9 @@ namespace basecross{
 		m_CurrentExplain->SetLayer(1);
 		m_ConnectOffsetX = iconSize.x / 2.0f;
 
+		m_OperateInfo = m_MenuStage->AddGameObject<Sprite>(L"OPERATE_INFO", Vec3(), Vec2(menuSize.y * 0.3f, menuSize.y * 0.3f) * 0.9f, Anchor::Center);
+		m_OperateInfo->SetAnchorPosition(static_cast<Vec3>(m_BackGround->GetAnchorPosition(Anchor::TopLeft)) - Vec3(20.0f,10.0f,0.0f), Anchor::TopRight);
+
 		auto& gameManager = GameManager::GetInstance();
 
 		auto colorTable = gameManager.GetLevelManager()->GetMap()->GetColorTable();
@@ -296,6 +299,7 @@ namespace basecross{
 		}
 		m_CurrentExplain->SetDrawActive(flag);
 		m_ExplainBox->SetDrawActive(flag);
+		m_OperateInfo->SetDrawActive(flag);
 	}
 	vector<pair<int, int>> GameMenu::ConvertColorGimmickHandles(vector<Line>& lines) {
 		vector<pair<int, int>> p;

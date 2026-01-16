@@ -72,15 +72,14 @@ namespace basecross {
 			float boardDist = 0.75f;
 
 			shared_ptr<Board> directionBoard[4] = {};
-			directionBoard[0] = AddGameObject<Board>(L"ICON_ARROW", Vec3(mapSize.x + boardDist, -0.5f, mapCenter.z), Vec3(1, 1, 1), false);// E
-			directionBoard[1] = AddGameObject<Board>(L"ICON_GOAL", Vec3(-1.0f - boardDist, -0.5f, mapCenter.z), Vec3(1, 1, 1), false);// W
-			directionBoard[2] = AddGameObject<Board>(L"ICON_INV", Vec3(mapCenter.x, -0.5f, 1.0f + boardDist), Vec3(1, 1, 1), false);// N
-			directionBoard[3] = AddGameObject<Board>(L"ICON_PL", Vec3(mapCenter.x, -0.5f, -mapSize.z - boardDist), Vec3(1, 1, 1), false);// S
+			directionBoard[0] = AddGameObject<Board>(L"MAP_ICON_EAST", Vec3(mapSize.x + boardDist, -0.5f, mapCenter.z), Vec3(1, 1, 1), true);// E
+			directionBoard[1] = AddGameObject<Board>(L"MAP_ICON_WEST", Vec3(-1.0f - boardDist, -0.5f, mapCenter.z), Vec3(1, 1, 1), true);// W
+			directionBoard[2] = AddGameObject<Board>(L"MAP_ICON_NORTH", Vec3(mapCenter.x, -0.5f, 1.0f + boardDist), Vec3(1, 1, 1), true);// N
+			directionBoard[3] = AddGameObject<Board>(L"MAP_ICON_SOUTH", Vec3(mapCenter.x, -0.5f, -mapSize.z - boardDist), Vec3(1, 1, 1), true);// S
 
-			for (auto& board : directionBoard) {
-				Vec3 position = board->GetTrans()->GetPosition();
-				board->RotateVector(mapCenter - position);
-			}
+			shared_ptr<Board> floorBoard = AddGameObject<Board>(L"FLOOR_WIRE", Vec3(mapCenter.x, -0.5f, mapCenter.z), Vec3(mapSize.z, mapSize.x, 1.0f), false);// S
+
+			floorBoard->RotateVector(Vec3(0, 1, 0));
 		}
 		catch (...) {
 			throw;
