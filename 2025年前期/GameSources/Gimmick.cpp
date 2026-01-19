@@ -195,8 +195,16 @@ namespace basecross{
 				if (dot > 0.9f)
 				{
 					m_Goal = true;
-					m_Cube = nullptr;
 					AddPlayerPath();
+					
+					auto path = m_Cube->GetGimmickPath();
+					auto scene = App::GetApp()->GetScene<Scene>();
+					int stage = GameManager::GetInstance().GetLevelManager()->GetStageNumber();
+					scene->AddClearPath(stage, path);
+					/*if (scene->CheckClearPath(stage,path)) {
+						scene->AddClearPath(stage, path);
+					}*/
+					m_Cube = nullptr;
 				}
 				else
 				{

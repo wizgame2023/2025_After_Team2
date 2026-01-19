@@ -129,7 +129,7 @@ namespace basecross{
 		SetPosition(position);
 	}
 	bool MoveCube::CheckArea() {
-		Vec3 position = GetPosition() + m_Velocity.normalize();
+		Vec3 position = GetPosition();
 		if (position.x > m_MoveArea.m_Max.x || position.x < m_MoveArea.m_Min.x) {
 			return false;
 		}

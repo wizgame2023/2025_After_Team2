@@ -304,8 +304,16 @@ namespace basecross{
 					shared_ptr<Sprite> numbers[2];
 					Vec3 numberPos = Vec3(-150,-100,0.0f);
 					float numberSize = 300;
-					numbers[0] = menu->AddGameObject<Sprite>(L"ICON_1", numberPos, Vec2(numberSize), Anchor::Center);
-					numbers[1] = menu->AddGameObject<Sprite>(L"ICON_1", numberPos + Vec3(-numberSize / 2.0f, numberSize / 2.0f,0.0f), Vec2(numberSize), Anchor::Center);
+
+					auto scene = App::GetApp()->GetScene<Scene>();
+
+					int maxCount = scene->GetAnserCount(m_LevelManager->GetStageNumber());
+					int currentCount = scene->GetClearPath(m_LevelManager->GetStageNumber()).size();
+
+					wstring maxCountKey = L"ICON_" + to_wstring(maxCount);
+					wstring currentCountKey = L"ICON_" + to_wstring(currentCount);
+					numbers[0] = menu->AddGameObject<Sprite>(maxCountKey, numberPos, Vec2(numberSize), Anchor::Center);
+					numbers[1] = menu->AddGameObject<Sprite>(currentCountKey, numberPos + Vec3(-numberSize / 2.0f, numberSize / 2.0f,0.0f), Vec2(numberSize), Anchor::Center);
 					numbers[0]->SetLayer(10);
 					numbers[1]->SetLayer(10);
 
