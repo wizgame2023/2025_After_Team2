@@ -7,6 +7,8 @@
     "arrow_Orbit.png": "TEMP_ARROW_SPRITE"
   },
   "Sound": {
+    "BGM/TitleBGM.wav": "TitleBGM",
+    "Start.wav": "StartSE"
 
   },
   "UI": {
@@ -19,7 +21,7 @@
     "FadeRedStar.png": "FadeRedStarUI",
     "FadeYellowStar.png": "FadeYellowStarUI",
     "Stick.png": "StinkUI",
-    "A_Button.png": "A_ButtonUI"
-
+    "A_Button.png": "A_ButtonUI",
+    "BackBoard.png": "BackBoardUI"
   }
 }

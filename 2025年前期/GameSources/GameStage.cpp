@@ -1,6 +1,6 @@
 /*!
 @file GameStage.cpp
-@brief ƒQ[ƒ€ƒXƒe[ƒWÀ‘Ì
+@brief ã‚²ãƒ¼ãƒ ã‚¹ãƒ†ãƒ¼ã‚¸å®Ÿä½“
 */
 
 #include "stdafx.h"
@@ -8,20 +8,20 @@
 
 namespace basecross {
 	//--------------------------------------------------------------------------------------
-	//	ƒQ[ƒ€ƒXƒe[ƒWƒNƒ‰ƒXÀ‘Ì
+	//	ã‚²ãƒ¼ãƒ ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒ©ã‚¹å®Ÿä½“
 	//--------------------------------------------------------------------------------------
 	void GameStage::CreateViewLight() {
 		const Vec3 eye(0.0f, 5.0f, -5.0f);
 		const Vec3 at(0.0f);
 		auto PtrView = CreateView<SingleView>();
-		//ƒrƒ…[‚ÌƒJƒƒ‰‚Ìİ’è
+		//ãƒ“ãƒ¥ãƒ¼ã®ã‚«ãƒ¡ãƒ©ã®è¨­å®š
 		auto PtrCamera = ObjectFactory::Create<MainCamera>(XM_PI);
 		PtrView->SetCamera(PtrCamera);
 		PtrCamera->SetEye(eye);
 		PtrCamera->SetAt(at);
-		//ƒ}ƒ‹ƒ`ƒ‰ƒCƒg‚Ìì¬
+		//ãƒãƒ«ãƒãƒ©ã‚¤ãƒˆã®ä½œæˆ
 		auto PtrMultiLight = CreateLight<MultiLight>();
-		//ƒfƒtƒHƒ‹ƒg‚Ìƒ‰ƒCƒeƒBƒ“ƒO‚ğw’è
+		//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ©ã‚¤ãƒ†ã‚£ãƒ³ã‚°ã‚’æŒ‡å®š
 		PtrMultiLight->SetDefaultLighting();
 	}
 
@@ -36,7 +36,7 @@ namespace basecross {
 			CreateViewLight();
 			CreateResorce();
 
-			//ƒ}ƒl[ƒWƒƒ[‚Ì‰Šú‰»
+			//ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®åˆæœŸåŒ–
 			auto& gameManager = GameManager::GetInstance();
 			gameManager.Reset();
 			gameManager.SetGameStage(GetThis<GameStage>());
@@ -47,7 +47,7 @@ namespace basecross {
 			auto camera = static_pointer_cast<MainCamera>(GetView()->GetTargetCamera());
 			camera->SetFixedPoint(map);
 
-			//ƒQ[ƒ€–{‘Ì‚Ì•\¦”ÍˆÍ‚ğŒÀ’è
+			//ã‚²ãƒ¼ãƒ æœ¬ä½“ã®è¡¨ç¤ºç¯„å›²ã‚’é™å®š
 			auto view = dynamic_pointer_cast<SingleView>(GetView());
 			Viewport viewport = view->GetTargetViewport();
 			viewport.Width /= 1.5f;
@@ -56,7 +56,7 @@ namespace basecross {
 
 			App::GetApp()->GetScene<Scene>()->SetViewport(viewport);
 
-			//ƒƒjƒ…[—p‚ÌƒXƒe[ƒW‚ğì¬
+			//ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”¨ã®ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’ä½œæˆ
 			auto menuStage = AddChileStage<MenuStage>();
 
 			GameManager::GetInstance().SetMenuStage(menuStage);
@@ -72,6 +72,7 @@ namespace basecross {
 			float boardDist = 0.75f;
 
 			shared_ptr<Board> directionBoard[4] = {};
+
 			directionBoard[0] = AddGameObject<Board>(L"MAP_ICON_EAST", Vec3(mapSize.x + boardDist, -0.5f, mapCenter.z), Vec3(1, 1, 1), true);// E
 			directionBoard[1] = AddGameObject<Board>(L"MAP_ICON_WEST", Vec3(-1.0f - boardDist, -0.5f, mapCenter.z), Vec3(1, 1, 1), true);// W
 			directionBoard[2] = AddGameObject<Board>(L"MAP_ICON_NORTH", Vec3(mapCenter.x, -0.5f, 1.0f + boardDist), Vec3(1, 1, 1), true);// N
@@ -80,6 +81,7 @@ namespace basecross {
 			shared_ptr<Board> floorBoard = AddGameObject<Board>(L"FLOOR_WIRE", Vec3(mapCenter.x, -0.5f, mapCenter.z), Vec3(mapSize.z, mapSize.x, 1.0f), false);// S
 
 			floorBoard->RotateVector(Vec3(0, 1, 0));
+
 		}
 		catch (...) {
 			throw;
