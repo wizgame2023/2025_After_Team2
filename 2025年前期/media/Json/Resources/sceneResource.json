@@ -27,8 +27,11 @@
   "Sound": {
     "put4.wav": "Put",
     "playerDead2.wav": "Dead",
+    "decision.wav": "decision",
+    "cursorMove.wav": "cursorMove",
     "clear2.wav": "Clear",
     "BGM/BGM3.wav": "GameBGM"
+
   },
   "UI": {
     "Number.png": "NumUI",

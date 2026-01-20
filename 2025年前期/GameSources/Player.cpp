@@ -1,6 +1,6 @@
 /*!
 @file Player.cpp
-@brief ƒvƒŒƒCƒ„[‚È‚ÇŽÀ‘Ì
+@brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãªã©å®Ÿä½“
 */
 
 #include "stdafx.h"
@@ -32,10 +32,10 @@ namespace basecross{
 
 	}
 	void MoveCube::OnUpdate() {
-		//‰ñ“]Ž²
+		//å›žè»¢è»¸
 		Vec3 side = cross(Vec3(0, 1, 0), m_Velocity.normalize());
 		float angle = XM_PIDIV2;
-		//‰ñ“]s—ñ
+		//å›žè»¢è¡Œåˆ—
 		auto rot = XMMatrixRotationAxis(side, angle);
 
 		SetForward(m_Velocity);
@@ -53,7 +53,7 @@ namespace basecross{
 			float distance = move.length();
 
 			Vec3 moveAmount = move.normalize() * elapsed * m_MoveSpeed;
-			//ˆÚ“®—Ê‚ª–Ú•W‚Ü‚Å‚Ì‹——£‚æ‚è‘å‚«‚¢(–Ú•W’n“_‚ð’Ç‚¢‰z‚·)ê‡‚ÍˆÚ“®—Ê‚ð‹——£•ª‚ÉŽw’è
+			//ç§»å‹•é‡ãŒç›®æ¨™ã¾ã§ã®è·é›¢ã‚ˆã‚Šå¤§ãã„(ç›®æ¨™åœ°ç‚¹ã‚’è¿½ã„è¶Šã™)å ´åˆã¯ç§»å‹•é‡ã‚’è·é›¢åˆ†ã«æŒ‡å®š
 			if (moveAmount.length() > distance) {
 				moveAmount = move.normalize() * distance;
 				m_IsEffecting = false;
@@ -65,7 +65,7 @@ namespace basecross{
 			if (rotateAmount >= XM_PIDIV2 - m_RotateRad) {
 				rotateAmount = XM_PIDIV2 - m_RotateRad;
 			}
-			//90“xˆÈã‚Í‰ñ“]‚³‚¹‚È‚¢
+			//90åº¦ä»¥ä¸Šã¯å›žè»¢ã•ã›ãªã„
 			if (m_RotateRad >= XM_PIDIV2) rotateAmount = 0;
 
 			rot = XMMatrixRotationAxis(side, rotateAmount);
@@ -150,7 +150,7 @@ namespace basecross{
 	}
 
 	float MoveCube::CalcRotatingCenterY(float rot) {
-		//‰ñ“]‚ð0`90“x‚É
+		//å›žè»¢ã‚’0ï½ž90åº¦ã«
 		while (rot > XM_PIDIV2) {
 			rot -= XM_PIDIV2;
 		}
@@ -166,9 +166,11 @@ namespace basecross{
 		m_TargetVelocity = velocity;
 
 		float angle1 = atan2f(m_Velocity.z, m_Velocity.x);
+
 		angle1 += XM_PI;
 		float angle2 = atan2f(m_TargetVelocity.z, m_TargetVelocity.x);
 		angle2 += XM_PI;
+
 		m_MoveVelocityAngleSpeed = (angle1 - angle2) / GameManager::GetInstance().GetFlowManager()->GetGameTick();
 		if (m_MoveVelocityAngleSpeed < 0) {
 			m_MoveVelocityAngleSpeed *= -1;
