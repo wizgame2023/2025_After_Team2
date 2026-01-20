@@ -1,6 +1,6 @@
 {
     "tutorial":[
-        {"number":1,"file":"Stage1","anser": 9},
+        {"number":1,"file":"Stage1","anser": 1},
         {"number":2,"file":"Stage2","anser": 1},
         {"number":3,"file":"Stage3","anser": 1},
         {"number":4,"file":"Stage4","anser": 1},

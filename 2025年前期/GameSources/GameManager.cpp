@@ -22,11 +22,7 @@ namespace basecross{
 			player->Move();
 		}
 		if (isOver) {
-			auto stage = GameManager::GetInstance().GetGameStage();
-			for (auto& player : m_Players) {
-				stage->RemoveGameObject<MoveCube>(player);
-			}
-			m_Players.clear();
+			DestroyAllPlayer();
 			GameManager::GetInstance().GetFlowManager()->GameOver();
 		}
 	}
@@ -53,6 +49,13 @@ namespace basecross{
 			auto stage = GameManager::GetInstance().GetGameStage();
 			stage->RemoveGameObject<MoveCube>(player);
 		}
+	}
+	void EntityManager::DestroyAllPlayer() {
+		auto stage = GameManager::GetInstance().GetGameStage();
+		for (auto& player : m_Players) {
+			stage->RemoveGameObject<MoveCube>(player);
+		}
+		m_Players.clear();
 	}
 	void GameFlowManager::Update() {
 		m_Tick += App::GetApp()->GetElapsedTime();
@@ -194,6 +197,7 @@ namespace basecross{
 	void GameManager::StartFade() {
 		m_MenuStage->AddGameObject<FadeSystem>(1.5f, [&]() {
 			m_GameFlowManager->GameRestart();
+			m_EntityManager->DestroyAllPlayer();
 			auto& map = m_LevelManager->GetMap();
 			for (auto& gimmick : map->GetGimmicks()) {
 				gimmick->Reset();
@@ -238,6 +242,9 @@ namespace basecross{
 				if (m_LevelManager->IsStart()) {
 					Start();
 				}
+			}
+			else if (m_GameFlowManager->IsGame()) {
+				RestartGame();
 			}
 		}
 
