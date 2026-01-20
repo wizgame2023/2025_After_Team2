@@ -81,6 +81,7 @@ namespace basecross {
 			shared_ptr<Board> floorBoard = AddGameObject<Board>(L"FLOOR_WIRE", Vec3(mapCenter.x, -0.5f, mapCenter.z), Vec3(mapSize.z, mapSize.x, 1.0f), false);// S
 
 			floorBoard->RotateVector(Vec3(0, 1, 0));
+			StartFadeIn(0.75f);
 
 		}
 		catch (...) {
@@ -94,6 +95,28 @@ namespace basecross {
 	}
 	void GameStage::OnDestroy() {
 		SoundManager::GetInstance().StopAll();
+	}
+
+	void GameStage::StartFadeIn(float time) {
+		if (!m_StageFade) {
+			auto sprite = AddGameObject<Sprite>(L"MENU", Vec3(), Vec2(), Anchor::Center);
+			sprite->MatchToScreenSize();
+			sprite->SetDiffuse(Col4(0, 0, 0, 1));
+			sprite->SetLayer(11);
+			m_StageFade = sprite->AddComponent<SpriteFade>(time);
+		}
+		m_StageFade->StartFade(FadeState::In);
+	}
+	void GameStage::StartFadeOut(float time) {
+		if (!m_StageFade) {
+			auto sprite = AddGameObject<Sprite>(L"MENU", Vec3(), Vec2(), Anchor::Center);
+			sprite->MatchToScreenSize();
+			sprite->SetDiffuse(Col4(0, 0, 0, 1));
+			sprite->SetLayer(11);
+			m_StageFade = sprite->AddComponent<SpriteFade>(time);
+		}
+		m_StageFade->StartFade(FadeState::Out);
+
 	}
 }
 //end basecross

@@ -28,7 +28,7 @@ namespace basecross
 		GimmickData();
 		GimmickData(const shared_ptr<Gimmicks>& gimmick);
 
-		bool operator==(GimmickData& other) {
+		bool operator==(const GimmickData& other)const {
 			return this->m_Type == other.m_Type && this->m_Direction == other.m_Direction;
 		}
 	};
