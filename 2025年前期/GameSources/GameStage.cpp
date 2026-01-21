@@ -1,6 +1,6 @@
 /*!
 @file GameStage.cpp
-@brief ã‚²ãƒ¼ãƒ ã‚¹ãƒ†ãƒ¼ã‚¸å®Ÿä½“
+@brief ƒQ[ƒ€ƒXƒe[ƒWÀ‘Ì
 */
 
 #include "stdafx.h"
@@ -8,20 +8,20 @@
 
 namespace basecross {
 	//--------------------------------------------------------------------------------------
-	//	ã‚²ãƒ¼ãƒ ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒ©ã‚¹å®Ÿä½“
+	//	ƒQ[ƒ€ƒXƒe[ƒWƒNƒ‰ƒXÀ‘Ì
 	//--------------------------------------------------------------------------------------
 	void GameStage::CreateViewLight() {
 		const Vec3 eye(0.0f, 5.0f, -5.0f);
 		const Vec3 at(0.0f);
 		auto PtrView = CreateView<SingleView>();
-		//ãƒ“ãƒ¥ãƒ¼ã®ã‚«ãƒ¡ãƒ©ã®è¨­å®š
+		//ƒrƒ…[‚ÌƒJƒƒ‰‚Ìİ’è
 		auto PtrCamera = ObjectFactory::Create<MainCamera>(XM_PI);
 		PtrView->SetCamera(PtrCamera);
 		PtrCamera->SetEye(eye);
 		PtrCamera->SetAt(at);
-		//ãƒãƒ«ãƒãƒ©ã‚¤ãƒˆã®ä½œæˆ
+		//ƒ}ƒ‹ƒ`ƒ‰ƒCƒg‚Ìì¬
 		auto PtrMultiLight = CreateLight<MultiLight>();
-		//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ©ã‚¤ãƒ†ã‚£ãƒ³ã‚°ã‚’æŒ‡å®š
+		//ƒfƒtƒHƒ‹ƒg‚Ìƒ‰ƒCƒeƒBƒ“ƒO‚ğw’è
 		PtrMultiLight->SetDefaultLighting();
 	}
 
@@ -36,7 +36,7 @@ namespace basecross {
 			CreateViewLight();
 			CreateResorce();
 
-			//ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®åˆæœŸåŒ–
+			//ƒ}ƒl[ƒWƒƒ[‚Ì‰Šú‰»
 			auto& gameManager = GameManager::GetInstance();
 			gameManager.Reset();
 			gameManager.SetGameStage(GetThis<GameStage>());
@@ -47,7 +47,7 @@ namespace basecross {
 			auto camera = static_pointer_cast<MainCamera>(GetView()->GetTargetCamera());
 			camera->SetFixedPoint(map);
 
-			//ã‚²ãƒ¼ãƒ æœ¬ä½“ã®è¡¨ç¤ºç¯„å›²ã‚’é™å®š
+			//ƒQ[ƒ€–{‘Ì‚Ì•\¦”ÍˆÍ‚ğŒÀ’è
 			auto view = dynamic_pointer_cast<SingleView>(GetView());
 			Viewport viewport = view->GetTargetViewport();
 			viewport.Width /= 1.5f;
@@ -56,7 +56,7 @@ namespace basecross {
 
 			App::GetApp()->GetScene<Scene>()->SetViewport(viewport);
 
-			//ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”¨ã®ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’ä½œæˆ
+			//ƒƒjƒ…[—p‚ÌƒXƒe[ƒW‚ğì¬
 			auto menuStage = AddChileStage<MenuStage>();
 
 			GameManager::GetInstance().SetMenuStage(menuStage);
@@ -81,7 +81,6 @@ namespace basecross {
 			shared_ptr<Board> floorBoard = AddGameObject<Board>(L"FLOOR_WIRE", Vec3(mapCenter.x, -0.5f, mapCenter.z), Vec3(mapSize.z, mapSize.x, 1.0f), false);// S
 
 			floorBoard->RotateVector(Vec3(0, 1, 0));
-			StartFadeIn(0.75f);
 
 		}
 		catch (...) {
@@ -97,26 +96,5 @@ namespace basecross {
 		SoundManager::GetInstance().StopAll();
 	}
 
-	void GameStage::StartFadeIn(float time) {
-		if (!m_StageFade) {
-			auto sprite = AddGameObject<Sprite>(L"MENU", Vec3(), Vec2(), Anchor::Center);
-			sprite->MatchToScreenSize();
-			sprite->SetDiffuse(Col4(0, 0, 0, 1));
-			sprite->SetLayer(11);
-			m_StageFade = sprite->AddComponent<SpriteFade>(time);
-		}
-		m_StageFade->StartFade(FadeState::In);
-	}
-	void GameStage::StartFadeOut(float time) {
-		if (!m_StageFade) {
-			auto sprite = AddGameObject<Sprite>(L"MENU", Vec3(), Vec2(), Anchor::Center);
-			sprite->MatchToScreenSize();
-			sprite->SetDiffuse(Col4(0, 0, 0, 1));
-			sprite->SetLayer(11);
-			m_StageFade = sprite->AddComponent<SpriteFade>(time);
-		}
-		m_StageFade->StartFade(FadeState::Out);
-
-	}
 }
 //end basecross
