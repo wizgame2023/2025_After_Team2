@@ -123,6 +123,7 @@ HWND InitInstance(HINSTANCE hInstance, int nCmdShow, bool isFullScreen, int iCli
 		nCmdShow    //WinMain‚É“n‚³‚ê‚½ƒpƒ‰ƒ[ƒ^
 	);
 	UpdateWindow(hWnd);
+
 	return hWnd;
 }
 void RegulateFrameRate(std::chrono::high_resolution_clock::time_point& lastTime, double targetMs)

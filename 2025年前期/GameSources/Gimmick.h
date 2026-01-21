@@ -133,12 +133,7 @@ namespace basecross
 		@brief リセット
 		@return なし
 		*/
-		virtual void Reset()
-		{
-			m_Count = m_MaxCount;
-			GetComponent<SmBaseDraw>()->SetDrawActive(true);
-			SetUpdateActive(true);
-		}
+		virtual void Reset();
 		/*!
 		@brief 自身をプレイヤーのパスに追加
 		@return なし
