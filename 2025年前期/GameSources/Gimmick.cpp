@@ -55,6 +55,8 @@ namespace basecross{
 
 	void Gimmicks::Begin()
 	{
+		if(m_Board)
+			m_Board->SetDrawActive(false);
 	}
 	void Gimmicks::Update()
 	{
@@ -103,6 +105,14 @@ namespace basecross{
 			m_Stage->RemoveGameObject<Board>(m_Board);
 		}
 		m_Stage->RemoveGameObject<Gimmicks>(GetThis<Gimmicks>());
+	}
+	void Gimmicks::Reset()
+	{
+		m_Count = m_MaxCount;
+		GetComponent<SmBaseDraw>()->SetDrawActive(true);
+		SetUpdateActive(true);
+		if(m_Board)
+			m_Board->SetDrawActive(true);
 	}
 	void Gimmicks::AddPlayerPath() {
 		if (!m_Cube) return;
@@ -200,10 +210,9 @@ namespace basecross{
 					auto path = m_Cube->GetGimmickPath();
 					auto scene = App::GetApp()->GetScene<Scene>();
 					int stage = GameManager::GetInstance().GetLevelManager()->GetStageNumber();
-					scene->AddClearPath(stage, path);
-					/*if (scene->CheckClearPath(stage,path)) {
+					if (scene->CheckClearPath(stage,path)) {
 						scene->AddClearPath(stage, path);
-					}*/
+					}
 					m_Cube = nullptr;
 				}
 				else

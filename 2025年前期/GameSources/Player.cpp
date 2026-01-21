@@ -1,6 +1,6 @@
 /*!
 @file Player.cpp
-@brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãªã©å®Ÿä½“
+@brief ƒvƒŒƒCƒ„[‚È‚ÇŽÀ‘Ì
 */
 
 #include "stdafx.h"
@@ -32,10 +32,10 @@ namespace basecross{
 
 	}
 	void MoveCube::OnUpdate() {
-		//å›žè»¢è»¸
+		//‰ñ“]Ž²
 		Vec3 side = cross(Vec3(0, 1, 0), m_Velocity.normalize());
 		float angle = XM_PIDIV2;
-		//å›žè»¢è¡Œåˆ—
+		//‰ñ“]s—ñ
 		auto rot = XMMatrixRotationAxis(side, angle);
 
 		SetForward(m_Velocity);
@@ -53,19 +53,16 @@ namespace basecross{
 			float distance = move.length();
 
 			Vec3 moveAmount = move.normalize() * elapsed * m_MoveSpeed;
-			//ç§»å‹•é‡ãŒç›®æ¨™ã¾ã§ã®è·é›¢ã‚ˆã‚Šå¤§ãã„(ç›®æ¨™åœ°ç‚¹ã‚’è¿½ã„è¶Šã™)å ´åˆã¯ç§»å‹•é‡ã‚’è·é›¢åˆ†ã«æŒ‡å®š
+			//ˆÚ“®—Ê‚ª–Ú•W‚Ü‚Å‚Ì‹——£‚æ‚è‘å‚«‚¢(–Ú•W’n“_‚ð’Ç‚¢‰z‚·)ê‡‚ÍˆÚ“®—Ê‚ð‹——£•ª‚ÉŽw’è
 			if (moveAmount.length() > distance) {
 				moveAmount = move.normalize() * distance;
 				m_IsEffecting = false;
-				if (!CheckArea()) {
-					Destroy();
-				}
 			}
 			float rotateAmount = m_RotateSpeed * elapsed;
 			if (rotateAmount >= XM_PIDIV2 - m_RotateRad) {
 				rotateAmount = XM_PIDIV2 - m_RotateRad;
 			}
-			//90åº¦ä»¥ä¸Šã¯å›žè»¢ã•ã›ãªã„
+			//90“xˆÈã‚Í‰ñ“]‚³‚¹‚È‚¢
 			if (m_RotateRad >= XM_PIDIV2) rotateAmount = 0;
 
 			rot = XMMatrixRotationAxis(side, rotateAmount);
@@ -127,6 +124,10 @@ namespace basecross{
 		}
 		m_IsBeforeEffecting = m_IsEffecting;
 		SetPosition(position);
+		if (!CheckArea()) {
+			Destroy();
+		}
+
 	}
 	bool MoveCube::CheckArea() {
 		Vec3 position = GetPosition();
@@ -150,7 +151,7 @@ namespace basecross{
 	}
 
 	float MoveCube::CalcRotatingCenterY(float rot) {
-		//å›žè»¢ã‚’0ï½ž90åº¦ã«
+		//‰ñ“]‚ð0`90“x‚É
 		while (rot > XM_PIDIV2) {
 			rot -= XM_PIDIV2;
 		}
