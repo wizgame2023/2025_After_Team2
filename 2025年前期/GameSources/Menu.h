@@ -22,7 +22,7 @@ namespace basecross{
 		bool m_IsCursor;
 
 		map<GimmickObjects, wstring> m_GimmickTextures;
-		shared_ptr<Stage> m_MenuStage;
+		shared_ptr<Stage> m_Stage;
 		shared_ptr<Cursor> m_Cursor;
 		shared_ptr<Sprite> m_CurrentLine;
 
@@ -60,7 +60,7 @@ namespace basecross{
 			: Object(ptr),
 			m_ColorTexture(colorTex),m_BackGroundTexture(backGroundTex),m_MainViewPort(mainViewport), 
 			m_ConnectOffsetX(0),
-			m_MenuStage(ptr), m_ColorHandle(-1),m_GimmickHandle(-1), m_IsCursor(true){}
+			m_Stage(ptr), m_ColorHandle(-1),m_GimmickHandle(-1), m_IsCursor(true){}
 		virtual ~GameMenu(){}
 
 		virtual void OnCreate()override;
@@ -100,16 +100,17 @@ namespace basecross{
 
 	class PoseMenu : public Object {
 		shared_ptr<GameMenu> m_GameMenu;
-		shared_ptr<Stage> m_MenuStage;
+		shared_ptr<Sprite> m_BackGround;
 		shared_ptr<ExplainMenu> m_ExplainMenu;
 		shared_ptr<SoundMenu> m_SoundMenu;
 
 		Vec3 m_TopLeftPosition;
+		Vec2 m_MenuSize;
 		Vec2 m_ButtonSize;
 	public:
-		PoseMenu(const shared_ptr<Stage>& ptr,const shared_ptr<GameMenu>& menu,Vec3 topLeft,Vec2 size):Object(ptr),
-			m_MenuStage(ptr),m_GameMenu(menu),
-			m_TopLeftPosition(topLeft),m_ButtonSize(size){}
+		PoseMenu(const shared_ptr<Stage>& ptr,const shared_ptr<GameMenu>& menu,Vec3 topLeft,Vec2 menuSize,Vec2 buttonSize):Object(ptr),
+			m_GameMenu(menu),
+			m_TopLeftPosition(topLeft),m_MenuSize(menuSize), m_ButtonSize(buttonSize) { }
 
 		virtual void OnCreate()override;
 
@@ -139,13 +140,12 @@ namespace basecross{
 		shared_ptr<Sprite> m_BackGround;
 		shared_ptr<Sprite> m_ExplainStr;
 		shared_ptr<MovieWindow> m_ExplainMovie;
-		shared_ptr<Stage> m_MenuStage;
 
 		vector<ExplainData> m_ExplainDatas;
 
 		void CreateExplain();
 	public:
-		ExplainMenu(const shared_ptr<Stage>& ptr) :m_MenuStage(ptr), Object(ptr){}
+		ExplainMenu(const shared_ptr<Stage>& ptr) :Object(ptr){}
 		virtual ~ExplainMenu(){}
 
 		virtual void OnCreate();
@@ -162,14 +162,13 @@ namespace basecross{
 		shared_ptr<Sprite> m_SoundMenu;
 		array<shared_ptr<Sprite>, 2> m_SoundBars;
 		array<shared_ptr<Sprite>, 2> m_SoundBarFrames;
-		shared_ptr<Stage> m_MenuStage;
 
 		Vec2 m_MenuSize;
 		Vec3 m_MenuPosition;
 
 		Vec2 m_BarSize;
 	public:
-		SoundMenu(const shared_ptr<Stage>& ptr,Vec3 menuPosition,Vec2 menuSize) :m_MenuStage(ptr),
+		SoundMenu(const shared_ptr<Stage>& ptr,Vec3 menuPosition,Vec2 menuSize) :
 			m_MenuPosition(menuPosition),m_MenuSize(menuSize), m_BarSize(1,1), Object(ptr) {}
 
 		virtual void OnCreate();
@@ -186,7 +185,6 @@ namespace basecross{
 	class Cursor : public Object {
 		shared_ptr<Sprite> m_Cursor;
 		CoursorMode m_Mode;
-		shared_ptr<Stage> m_MenuStage;
 
 		wstring m_CoursorTexture;
 
@@ -194,7 +192,7 @@ namespace basecross{
 		float m_MoveSpeed;
 	public:
 		Cursor(const shared_ptr<Stage>& ptr,const wstring& coursorTex) : 
-			Object(ptr),m_MenuStage(ptr), m_Mode(CoursorMode::Stick),m_CoursorTexture(coursorTex){}
+			Object(ptr), m_Mode(CoursorMode::Stick),m_CoursorTexture(coursorTex){}
 
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
@@ -236,8 +234,8 @@ namespace basecross{
 		}
 
 		void Destroy() {
-			m_MenuStage->RemoveGameObject<Sprite>(m_Cursor);
-			m_MenuStage->RemoveGameObject<Cursor>(GetThis<Cursor>());
+			m_Stage->RemoveGameObject<Sprite>(m_Cursor);
+			m_Stage->RemoveGameObject<Cursor>(GetThis<Cursor>());
 		}
 	};
 

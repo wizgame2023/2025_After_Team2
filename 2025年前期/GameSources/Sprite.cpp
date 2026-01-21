@@ -389,7 +389,7 @@ namespace basecross {
 	shared_ptr<Sprite> ButtonManager::Create(shared_ptr<Stage>& stage, const wstring& group, const wstring& defaultTex, const wstring& selectedTex, Col4 selectedColor, Vec3 pos, Vec2 size, const shared_ptr<ObjectInterface>& object, function<void(shared_ptr<ObjectInterface>&)> func) {
 		auto sprite = stage->AddGameObject<Sprite>(defaultTex, pos, size, Anchor::TopLeft);
 		sprite->AddTag(L"Button");
-		sprite->SetLayer(10);
+		sprite->SetLayer(11);
 		shared_ptr<SpriteButton> button = nullptr;
 
 		if (selectedTex != L"") {

@@ -299,6 +299,8 @@ namespace basecross{
 						[&](shared_ptr<ObjectInterface>& object) {
 							m_Stage->PostEvent(0.0f, nullptr, App::GetApp()->GetScene<Scene>(), L"ToSelectStage");
 						});
+
+
 					ButtonManager::instance->SetInput(L"RESULT", InputData(XINPUT_GAMEPAD_DPAD_UP, -1));
 					ButtonManager::instance->SetInput(L"RESULT", InputData(XINPUT_GAMEPAD_DPAD_DOWN, 1));
 					ButtonManager::instance->SetInput(L"RESULT", InputData(StickMode::LY, 1, 0.1f));
@@ -309,7 +311,7 @@ namespace basecross{
 
 
 					shared_ptr<Sprite> numbers[2];
-					Vec3 numberPos = Vec3(-150,-100,0.0f);
+					Vec3 numberPos = Vec3(-160,-90,0.0f);
 					float numberSize = 300;
 
 					auto scene = App::GetApp()->GetScene<Scene>();
@@ -320,7 +322,7 @@ namespace basecross{
 					wstring maxCountKey = L"ICON_" + to_wstring(maxCount);
 					wstring currentCountKey = L"ICON_" + to_wstring(currentCount);
 					numbers[0] = menu->AddGameObject<Sprite>(maxCountKey, numberPos, Vec2(numberSize), Anchor::Center);
-					numbers[1] = menu->AddGameObject<Sprite>(currentCountKey, numberPos + Vec3(-numberSize / 2.0f, numberSize / 2.0f,0.0f), Vec2(numberSize), Anchor::Center);
+					numbers[1] = menu->AddGameObject<Sprite>(currentCountKey, numberPos + Vec3(-numberSize, numberSize,0.0f) * 0.4f, Vec2(numberSize), Anchor::Center);
 					numbers[0]->SetLayer(10);
 					numbers[1]->SetLayer(10);
 
