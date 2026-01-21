@@ -58,7 +58,8 @@
     "Icons/Icon_Upper.png": "ICON_UPPER",
     "Icons/Icon_Lower.png": "ICON_LOWER",
 
-    "Menu.png": "MENU",
+    "GameMenu.png": "MENU",
+    "PoseMenu.png": "POSE_MENU",
     "Menu_Explain.png": "MENU_EXPLAIN",
     "TutorialBackBord.png": "MENU_GIMMICK",
     "SoundMenu.png": "SOUND_MENU",

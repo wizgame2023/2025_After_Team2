@@ -46,17 +46,13 @@ namespace basecross{
 		}
 		if (!m_Board) return;
 
-		if (m_Value.lengthSqr() == 0) {
-			
-		}
-
 		m_Board->GetTrans()->SetPosition(GetPosition() + Vec3(0, 0.75f, 0));
 	}
 
 	void Gimmicks::Begin()
 	{
-		if(m_Board)
-			m_Board->SetDrawActive(false);
+		//if(m_Board)
+			//m_Board->SetDrawActive(false);
 	}
 	void Gimmicks::Update()
 	{
