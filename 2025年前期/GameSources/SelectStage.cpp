@@ -35,10 +35,20 @@ namespace basecross {
 		ResourceManager::RegisterTexture(L"UI");
 	}
 
+	void SelectStage::CreateButton(wstring wss)
+	{
+		ButtonManager::instance->SetInput(wss, InputData(XINPUT_GAMEPAD_DPAD_UP, -3));
+		ButtonManager::instance->SetInput(wss, InputData(XINPUT_GAMEPAD_DPAD_DOWN, 3));
+		ButtonManager::instance->SetInput(wss, InputData(XINPUT_GAMEPAD_DPAD_LEFT, -1));
+		ButtonManager::instance->SetInput(wss, InputData(XINPUT_GAMEPAD_DPAD_RIGHT, 1));
+		ButtonManager::instance->SetInput(wss, InputData(StickMode::LY, -3, 0.8f));
+		ButtonManager::instance->SetInput(wss, InputData(StickMode::LX, 1, 0.8f));
+		ButtonManager::instance->AddAcceptButton(wss, XINPUT_GAMEPAD_A);
+
+	}
+
 	void SelectStage::SpriteCreate()
 	{
-		Json();
-
 		auto backBoardSp = AddGameObject<Sprite>(L"SelectBackGround", Vec3(0.0f), Vec2(1280, 800), Anchor::Center);
 		auto selectSp = AddGameObject<Sprite>(L"SelectUI", Vec3(-640.0f, 400.0f, 0.0f), Vec2(256, 64), Anchor::TopLeft);
 
@@ -46,49 +56,85 @@ namespace basecross {
 		m_BackBoardSp->SetDiffuse(Col4(0.0f, 0.0f, 0.0f, 0.0f));
 		m_BackBoardSp->SetLayer(3);
 
-		m_RollSpRight = AddGameObject<Sprite>(L"RollUI", Vec3(600.0f, 600.0f, 0.0f), Vec2(900, 900), Anchor::Center);
-		m_RollSpLeft = AddGameObject<Sprite>(L"RollUI", Vec3(-700.0f, -560.0f, 0.0f), Vec2(900, 900), Anchor::Center);
+		m_RollSpRight = AddGameObject<Sprite>(L"RollUI", Vec3(650.0f, 650.0f, 0.0f), Vec2(900, 900), Anchor::Center);
+		m_RollSpLeft = AddGameObject<Sprite>(L"RollUI", Vec3(-750.0f, -610.0f, 0.0f), Vec2(900, 900), Anchor::Center);
 		m_RollSpRight->VectorToward(Vec2(cos(m_Angle100), sin(XM_PI + (m_Angle100))));
 
-		m_StageNum = 10;        // 表示する数字の数
-		int maxPerRow = 5;         // 1行に表示する最大数
-		float baseWidth = 100.0f;
-		float spacing = 100.0f;
-		float baseHeight = 100.0f;
-		float rowSpacing = 200.0f;
+		m_StageNum = 18;        // 表示する数字の数
 
-		for (int i = 0; i < m_StageNum; i++)
-		{
-			int row = i / maxPerRow;
-			int col = i % maxPerRow;
-
-			float totalWidth = maxPerRow * baseWidth + (maxPerRow - 1) * spacing;
-			float startX = -totalWidth / 2.0f;
-
-			float offsetX = (baseWidth + spacing) * col;
-			float offsetY = -(baseHeight + rowSpacing) * row;
-
-			Vec3 position = Vec3(startX + offsetX, 200 + offsetY, 0.0f);
-			m_NumPositions.push_back(position);  // 位置を保存
-			Vec2 size = Vec2(100, 100);
-
-			int digit = (i + 1 >= 10) ? 2 : 1;
-
-			// SpriteCreate 内
-			auto numSp = AddGameObject<NumberSprite>(L"NumUI", position, size, digit);
-			numSp->UpdateNumber(i + 1);
-			// リストに追加
-			m_NumSpList.push_back(numSp);
-
-			if (m_BackSp == nullptr)
-			{
-				m_BackSp = AddGameObject<Sprite>(L"SelectCursorUI", position + m_OffsetPos, size * 1.6f, Anchor::Center);
-				m_BackSp->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, 10.0f));
-			}
-
-		}
+		NumSpriteCreate(2, 3, 100, 100, -250, 200);
 	}
 
+	void SelectStage::NumSpriteCreate(int pageNum,int maxRow,float width, float Height,float x,float y)
+	{
+		AddGameObject<ButtonManager>();
+
+		int maxPerRow = maxRow;         // 1行に表示する最大数
+		float baseWidth = width;
+		float baseHeight = Height;
+		float spacing = 70.0f;
+		float rowSpacing = 70.0f;
+		float centerX = x;
+		float centerY = y;
+		float totalWidth = maxPerRow * baseWidth + (maxPerRow - 1) * spacing;
+		float startX = centerX - totalWidth / 2.0f;
+
+		for (int page = 0; page < pageNum; page++)
+		{
+			wstring groupName = L"SELECT" + to_wstring(page);
+
+			CreateButton(groupName);
+
+			for (int i = 0; i < m_StageNum/ pageNum; i++)
+			{
+				int row = i / maxPerRow;
+				int col = i % maxPerRow;
+
+				float offsetX = (baseWidth + spacing) * col;
+				float offsetY = -(baseHeight + rowSpacing) * row;
+
+				Vec3 position = Vec3(startX + offsetX, centerY + offsetY, 0.0f);
+				m_NumPositions.push_back(position);  // 位置を保存
+				Vec2 size = Vec2(130, 130);
+
+				ButtonManager::Create(GetThis<Stage>(), groupName, L"SelectCursorUI", Col4(1, 1, 1, 1), position+m_OffsetPos, size * 1.4,
+					[i](shared_ptr<ObjectInterface>& object) {
+						//i番目のステージに飛ぶ
+						auto selectStage = static_pointer_cast<SelectStage>(object);
+						selectStage->NextStage(i);
+					});
+				
+
+				int digit = (i + 1 + (9 * page) >= 10) ? 2 : 1;
+
+				// SpriteCreate
+				auto numSp = AddGameObject<NumberSprite>(L"NumUI", position, size, digit);
+				numSp->SetUpdateActive(false);
+				numSp->UpdateNumber(i + 1 + (9 * page));
+				auto sprites = numSp->GetNumberSprites();
+
+				auto underline = AddGameObject<Sprite>
+					(
+						L"Underline",
+						static_cast<Vec3>(numSp->GetNumberSprites()[0]->GetAnchorPosition(Anchor::Bottom) + Vec2(45.0f* page, 30.0f)),
+						size, Anchor::Center
+					);
+
+
+				for (auto& sprite : sprites)
+				{
+					ButtonManager::instance->AddFrontSprite(groupName, i, sprite);
+					ButtonManager::instance->AddFrontSprite(groupName, i, underline);
+				}
+				// リストに追加
+				m_NumSpList.push_back(numSp);
+
+			}
+		}
+		ButtonManager::instance->CloseAll();
+		m_Page = 0;
+		ButtonManager::instance->OpenAndUse(L"SELECT" + to_wstring(m_Page));
+	}
 
 
 	void SelectStage::OnCreate()
@@ -97,9 +143,8 @@ namespace basecross {
 
 			//ビューとライトの作成
 			CreateViewLight();
-
+			Json();
 			SpriteCreate();
-
 			SoundManager::GetInstance().PlayBGM(L"SelectBGM", 2.0f);
 
 		}
@@ -139,13 +184,7 @@ namespace basecross {
 		}
 
 
-		if (input->GetDownButton(L"A") && !m_IsButton)
-		{
-			m_StartSE = SoundManager::GetInstance().PlaySE(L"selectDecision");
-			m_IsButton = true;
-			StartFade();
-		}
-		else if (input->GetDownButton(L"B") && !m_IsButton)
+		if (input->GetDownButton(L"B") && !m_IsButton)
 		{
 			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToTitleStage");
 		}
@@ -153,7 +192,6 @@ namespace basecross {
 		{
 			m_IsButton = false;
 		}
-
 		if (m_StartSE != nullptr)
 		{
 			if (m_BackBoardSp->GetComponent<SpriteFade>()->IsFinish())
@@ -164,44 +202,56 @@ namespace basecross {
 		}
 
 
-		if (input->GetLStick().x == 0.0f) {
-			m_IsStick = false;
-		}
-
-		if (fabs(input->GetLStick().x) > 0.2f)
+		if (input->GetDownButton(L"R") && m_Page < 1)
 		{
-			m_StickHoldTime += App::GetApp()->GetElapsedTime();
-			if (!m_IsStick || m_StickHoldTime > 0.3f)
-			{
-				if (input->GetLStick().x > 0.2f)
-				{
-					m_Count++;
-				}
-				else {
-					m_Count--;
-				}
-
-				// 範囲チェック
-				if (m_Count < 0) m_Count = m_StageNum - 1;
-				if (m_Count >= m_StageNum) m_Count = 0;
-
-				auto targetPos = m_NumPositions[m_Count];
-				m_BackSp->SetPosition(targetPos+ m_OffsetPos);
-
-
-				m_IsStick = true;
-				m_StickHoldTime = 0.0f; // 次の移動までの待ち時間
-			}
+			m_Page++;
+			ButtonManager::instance->CloseAll();
+			ButtonManager::instance->OpenAndUse(L"SELECT" + to_wstring(m_Page));
 		}
-		else 
+		else if (input->GetDownButton(L"L") && m_Page > 0)
 		{
-			m_IsStick = false;
-			m_StickHoldTime = 0.0f;
+			m_Page--;
+			ButtonManager::instance->CloseAll();
+			ButtonManager::instance->OpenAndUse(L"SELECT" + to_wstring(m_Page));
 		}
 
+		//auto scene = App::GetApp()->GetScene<Scene>();
+
+		//if (!m_IsAnser)
+		//{
+		//	shared_ptr<Sprite> numbers[2];
+		//	Vec3 cursorPos = m_BackSp->GetPosition();
+		//	Vec3 numberPos = cursorPos + Vec3(0.0f, -120, 0.0f);
+		//	float numberSize = 70;
+		//	int maxCount = scene->GetAnserCount(m_Count);
+		//	int currentCount = scene->GetClearPath(m_Count).size();
+
+		//	wstring maxCountKey = L"ICON_" + to_wstring(maxCount);
+		//	wstring currentCountKey = L"ICON_" + to_wstring(currentCount);
+
+		//	numbers[0] = AddGameObject<Sprite>(maxCountKey, numberPos, Vec2(numberSize), Anchor::Center);
+		//	numbers[1] = AddGameObject<Sprite>(currentCountKey, numberPos + Vec3(-numberSize / 2.0f, numberSize / 2.0f, 0.0f), Vec2(numberSize), Anchor::Center);
+		//	auto stick = AddGameObject<Sprite>(L"ICON_Stick", numberPos, Vec2(numberSize), Anchor::Center);
+
+		//	numbers[0]->SetLayer(10);
+		//	numbers[1]->SetLayer(10);
+
+
+
+
+		//	m_IsAnser = true;
+		//}
 
 	}
 
+	void SelectStage::NextStage(int num)
+	{
+		m_Count = num;
+		m_StartSE = SoundManager::GetInstance().PlaySE(L"selectDecision");
+		m_IsButton = true;
+		m_IsNextStage = true;
+		StartFade();
+	}
 	void SelectStage::StartFade()
 	{
 		m_BackBoardSp->AddComponent<SpriteFade>(0.7f);
