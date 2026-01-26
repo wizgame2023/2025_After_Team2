@@ -364,12 +364,10 @@ namespace basecross{
 		bool isStepped = CheckCount();
 		if (isStepped && !m_WasStepped)
 		{
-			// ?????u?????????
 			Vec3 pos = m_Transform->GetPosition();
 			m_Cube->SetDrawActive(false);
-			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cube????P????????????OK
+			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f);
 
-			// ?G?t?F?N?g?J?n
 			m_TeleportFastEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickFastEffect.efk", m_Cube->GetPosition());
 			m_TeleportFastEffect->SetEffectSize(Vec3(0.5f));
 			m_TeleportFastEffect->SetEffectSpeed(1.7f);
