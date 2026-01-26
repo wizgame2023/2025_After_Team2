@@ -28,7 +28,7 @@ namespace basecross
 		GimmickData();
 		GimmickData(const shared_ptr<Gimmicks>& gimmick);
 
-		bool operator==(GimmickData& other) {
+		bool operator==(const GimmickData& other)const {
 			return this->m_Type == other.m_Type && this->m_Direction == other.m_Direction;
 		}
 	};
@@ -133,17 +133,18 @@ namespace basecross
 		@brief リセット
 		@return なし
 		*/
-		virtual void Reset()
-		{
-			m_Count = m_MaxCount;
-			GetComponent<SmBaseDraw>()->SetDrawActive(true);
-			SetUpdateActive(true);
-		}
+		virtual void Reset();
 		/*!
 		@brief 自身をプレイヤーのパスに追加
 		@return なし
 		*/
 		void AddPlayerPath();
+
+		/*!
+		@brief 自身をプレイヤーのパスに追加
+		@return なし
+		*/
+		void RotateDirection();
 	protected:
 		bool CheckCount()
 		{
@@ -159,6 +160,8 @@ namespace basecross
 	
 			return false;
 		}
+
+		void CreateBoard(const wstring& key);
 	};
 
 	/*!

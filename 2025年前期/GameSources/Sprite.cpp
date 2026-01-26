@@ -389,6 +389,7 @@ namespace basecross {
 	shared_ptr<Sprite> ButtonManager::Create(shared_ptr<Stage>& stage, const wstring& group, const wstring& defaultTex, const wstring& selectedTex, Col4 selectedColor, Vec3 pos, Vec2 size, const shared_ptr<ObjectInterface>& object, function<void(shared_ptr<ObjectInterface>&)> func) {
 		auto sprite = stage->AddGameObject<Sprite>(defaultTex, pos, size, Anchor::TopLeft);
 		sprite->AddTag(L"Button");
+		sprite->SetLayer(11);
 		shared_ptr<SpriteButton> button = nullptr;
 
 		if (selectedTex != L"") {
@@ -433,7 +434,7 @@ namespace basecross {
 			LimitIndex(checkButton);
 			if (m_ButtonGroup[m_UsingGroup][checkButton]->GetActive()) {
 				if (m_SelectSound != L"") {
-					//SoundManager::GetInstance().PlaySE(m_SelectSound);
+					SoundManager::GetInstance().PlaySE(m_SelectSound);
 				}
 				selectIndex = checkButton;
 			}
@@ -451,7 +452,7 @@ namespace basecross {
 		//決定
 		if (PressAccept(m_UsingGroup, m_PressedAccept[m_UsingGroup])) {
 			if (m_ClickSound != L"") {
-				//SoundManager::GetInstance().PlaySE(m_ClickSound);
+				SoundManager::GetInstance().PlaySE(m_ClickSound);
 			}
 			m_ButtonGroup[m_UsingGroup][m_SelectIndexes[m_UsingGroup]]->Func();
 		}
@@ -528,17 +529,33 @@ namespace basecross {
 		}
 	}
 	void Board::OnCreate() {
-		m_Draw = AddComponent<PNTStaticDraw>();
+		m_Draw = AddComponent<PTStaticDraw>();
 		m_Draw->SetDepthStencilState(DepthStencilState::Read);
 		m_Draw->SetOriginalMeshUse(true);
 		m_Draw->SetModelDiffusePriority(true);
+		
 
 		m_Draw->SetDiffuse(Col4(1, 1, 1, 1));
 		m_Draw->SetEmissive(Col4(1, 1, 1, 1));
 		m_Draw->SetSpecular(Col4(1, 1, 1, 1));
 
 		vector<uint16_t> indices = {};
-		MeshUtill::CreateSquare(1.0f, m_Vertices, indices);
+		//MeshUtill::CreateSquare(1.0f, m_Vertices, indices);
+
+		float HelfSize = 0.5f;
+		//頂点配列
+		m_Vertices.push_back(VertexPositionTexture(bsm::Vec3(-HelfSize, HelfSize, 0), bsm::Vec2(0.0f, 0.0f)));
+		m_Vertices.push_back(VertexPositionTexture(bsm::Vec3(HelfSize, HelfSize, 0),  bsm::Vec2(1.0f, 0.0f)));
+		m_Vertices.push_back(VertexPositionTexture(bsm::Vec3(-HelfSize, -HelfSize, 0), bsm::Vec2(0.0f, 1.0f)));
+		m_Vertices.push_back(VertexPositionTexture(bsm::Vec3(HelfSize, -HelfSize, 0),  bsm::Vec2(1.0f, 1.0f)));
+		//インデックスを作成するための配列
+		indices.push_back((uint16_t)0);
+		indices.push_back((uint16_t)1);
+		indices.push_back((uint16_t)2);
+		indices.push_back((uint16_t)1);
+		indices.push_back((uint16_t)3);
+		indices.push_back((uint16_t)2);
+
 		m_Draw->CreateOriginalMesh(m_Vertices, indices);
 		if (m_TexKey != L"") {
 			m_Draw->SetTextureResource(m_TexKey);

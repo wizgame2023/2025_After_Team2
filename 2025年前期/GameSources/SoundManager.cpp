@@ -68,13 +68,21 @@ namespace basecross {
 		if (m_Bgm != nullptr) {
 			m_Audio->Stop(m_Bgm);
 			m_Bgm = nullptr;
-		}
 	}
+		}
 	void SoundManager::StopAll() {
 		StopBGM();
 		for (auto se : m_PlayingSE) {
 			m_Audio->Stop(se.second);
 		}
 		m_PlayingSE.clear();
+	}
+	bool SoundManager::IsSoundRunning(const shared_ptr<SoundItem>& soundItem) {
+		if (soundItem->m_SourceVoice) {
+			XAUDIO2_VOICE_STATE state;
+			soundItem->m_SourceVoice->GetState(&state);
+			return (state.BuffersQueued > 0) != 0;
+		}
+		return false;
 	}
 }

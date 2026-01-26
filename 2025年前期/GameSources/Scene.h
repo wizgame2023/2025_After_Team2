@@ -7,7 +7,7 @@
 #include "stdafx.h"
 #include "Json.h"
 namespace basecross{
-
+	struct GimmickData;
 	//--------------------------------------------------------------------------------------
 	///	ÉQÅ[ÉÄÉVÅ[Éì
 	//--------------------------------------------------------------------------------------
@@ -16,6 +16,10 @@ namespace basecross{
 		Viewport m_GameViewport;
 
 		Json m_StageFile;
+
+		vector<int> m_MaxAnserCounts;
+		vector<vector<vector<GimmickData>>> m_ClearPath;
+		void LoadStageData();
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -46,7 +50,13 @@ namespace basecross{
 		//--------------------------------------------------------------------------------------
 		virtual void OnEvent(const shared_ptr<Event>& event) override;
 
-
+		void AddClearPath(int stage,const vector<GimmickData>& data) {
+			if (m_ClearPath[stage].size() >= m_MaxAnserCounts[stage]) return;
+			m_ClearPath[stage].push_back(data);
+		}
+		bool CheckClearPath(int stage, const vector<GimmickData>& data);
+		vector<vector<GimmickData>>& GetClearPath(int stage) { return m_ClearPath[stage]; }
+		int GetAnserCount(int stage) { return m_MaxAnserCounts[stage]; }
 
 		void SetViewport(Viewport& viewport) {
 			m_GameViewport = viewport;

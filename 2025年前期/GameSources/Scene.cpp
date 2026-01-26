@@ -35,8 +35,9 @@ namespace basecross{
 			//これにより各ステージやオブジェクトがCreate時にシーンにアクセスできる
 			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToTitleStage");
 
+			LoadStageData();
 
-			m_StageFile = Json(L"Json/stage.json");
+			CardFactory::CreateSample();
 		}
 		catch (...) {
 			throw;
@@ -58,8 +59,11 @@ namespace basecross{
 			auto info = static_pointer_cast<int>(event->m_Info).get();
 			int index = *(info);
 			auto dataArray = m_StageFile.At<JsonArray>(L"tutorial");
-
-			auto data = dataArray->GetObjectArray()[index];
+			auto objectArray = dataArray->GetObjectArray();
+			if (index >= objectArray.size()) {
+				ResetActiveStage<SelectStage>();
+			}
+			auto data = objectArray[index];
 			
 			ResetActiveStage<GameStage>(data);
 		}
@@ -75,5 +79,23 @@ namespace basecross{
 		}
 	}
 
+	void Scene::LoadStageData() {
+		m_StageFile = Json(L"Json/stage.json");
+
+		auto dataArray = m_StageFile.At<JsonArray>(L"tutorial")->GetObjectArray();
+		for (int i = 0; i < dataArray.size(); i++) {
+			m_ClearPath.push_back({});
+			int anserCount = dataArray[i]->At<JsonNumber>(L"anser")->GetIntValue();
+			m_MaxAnserCounts.push_back(anserCount);
+		}
+	}
+	bool Scene::CheckClearPath(int stage, const vector<GimmickData>& data) {
+		for (auto& clearPath : m_ClearPath[stage]) {
+			if (data == clearPath) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
 //end basecross

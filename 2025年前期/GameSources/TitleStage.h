@@ -1,6 +1,6 @@
 /*!
 @file TitleStage.h
-@brief �^�C�g���X�e�[�W
+@brief タイトルステージ
 */
 #pragma once
 #include "stdafx.h"
@@ -12,6 +12,7 @@ namespace basecross
     class TitleStage : public Stage 
     {
         void CreateViewLight();
+        shared_ptr<SoundItem> m_StartSE;
 
         shared_ptr<Sprite> m_StartSprite;
         shared_ptr<Sprite> m_Cursor;
@@ -25,9 +26,13 @@ namespace basecross
 		shared_ptr<Sprite> m_FadeStarBlueSp;
 		shared_ptr<Sprite> m_FadeStarYellowSp;
 
+        shared_ptr<Sprite> m_BackBoardSp;
+
 
         vector<shared_ptr<Sprite>> m_ColorPalettes;
         vector<shared_ptr<Sprite>> m_Handlers;
+
+
 
         Vec3 m_StartPos;
 
@@ -39,16 +44,20 @@ namespace basecross
         float m_RollSpEnd = XM_PI;
         float m_Angle160 = XMConvertToRadians(160);
         float m_Angle270 = XM_PI + (XM_PI * 0.5f);
-        bool m_IsBlinking = true; // �X�^�[�g�����_�Ő���
+        float m_BlinkingTime = 0.0f; // スタート文字点滅制御
+        float m_Blinking = 0.0f; // スタート文字点滅制御
 		bool m_IsAPushed = false;
         bool m_IsConfirmed = false;
 
+        bool m_IsSE = false;
 
     public:
         TitleStage() :Stage() {}
         virtual ~TitleStage() {}
         virtual void OnCreate()override;
         virtual void OnUpdate()override;
+        virtual void OnDestroy()override;
+
 
     private:
         void SpriteCreate();
@@ -66,6 +75,6 @@ namespace basecross
         void UpdateLine();
         void HandleAReleased();
         void UpdateStartSpriteBlink();
-
+        void StartFade();
     };
 }

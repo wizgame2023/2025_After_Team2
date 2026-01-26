@@ -7,6 +7,7 @@ namespace basecross {
 		void CreateViewLight();
 		void CreateResorce();
 		shared_ptr<GameMenu> m_Menu;
+		shared_ptr<SpriteFade> m_StageFade;
 	public:
 		//ç\ízÇ∆îjä¸
 		MenuStage() :Stage() {}
@@ -15,6 +16,8 @@ namespace basecross {
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 
+		void StartFadeIn(float time);
+		void StartFadeOut(float time);
 	};
 
 }

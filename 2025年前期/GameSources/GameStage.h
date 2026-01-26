@@ -10,7 +10,7 @@ namespace basecross {
 	//--------------------------------------------------------------------------------------
 	//	ゲームステージクラス
 	//--------------------------------------------------------------------------------------
-
+	class SpriteFade;
 	class GameStage : public Stage {
 		//ビューの作成
 		void CreateViewLight();
@@ -25,6 +25,7 @@ namespace basecross {
 		virtual void OnCreate()override;
 		virtual void OnUpdate()override;
 		virtual void OnDestroy()override;
+
 	};
 
 

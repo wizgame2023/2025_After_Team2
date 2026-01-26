@@ -9,7 +9,8 @@
 namespace basecross{
 	MoveCube::MoveCube(const shared_ptr<Stage>& ptr) : Object(ptr), 
 		m_IsEffecting(false), m_IsBeforeEffecting(false),
-		m_MoveSpeed(0.0f){}
+		m_MoveVelocityAngleSpeed(3.1415f),
+		m_MoveSpeed(0.0f), m_VelocitySlerpFactor(0.0f){}
 
 	void MoveCube::OnCreate() {
 		Object::OnCreate();
@@ -55,11 +56,9 @@ namespace basecross{
 			Vec3 moveAmount = move.normalize() * elapsed * m_MoveSpeed;
 			//à⁄ìÆó Ç™ñ⁄ïWÇ‹Ç≈ÇÃãóó£ÇÊÇËëÂÇ´Ç¢(ñ⁄ïWínì_Çí«Ç¢âzÇ∑)èÍçáÇÕà⁄ìÆó Çãóó£ï™Ç…éwíË
 			if (moveAmount.length() > distance) {
-				moveAmount = move.normalize() * distance;
+				position = m_Target;
 				m_IsEffecting = false;
-				if (!CheckArea()) {
-					Destroy();
-				}
+				break;
 			}
 			float rotateAmount = m_RotateSpeed * elapsed;
 			if (rotateAmount >= XM_PIDIV2 - m_RotateRad) {
@@ -95,41 +94,53 @@ namespace basecross{
 			}
 			break;
 		}
-		//ax * sin(0) - ay * cos(0),ax * cos(0) + ay * sin(0);
 		case MoveState::ChangeVelocity: {
 			if (!m_MoveVelocityAngleSpeed) {
 				m_IsEffecting = false;
 				break;
 			}
-			Vec3 currentCross = cross(m_Velocity, m_TargetVelocity);
-			currentCross.normalize();
-			if (currentCross.length() == 0) {
-				currentCross = Vec3(0, 1, 0);
-				m_MoveVelocityAngleSpeed *= -1;
-			}
-			float sita = elapsed * m_MoveVelocityAngleSpeed;
-			m_Velocity = XMVector3Rotate(m_Velocity, XMQuaternionRotationAxis(currentCross, sita));
-			Vec3 afterCross = cross(m_Velocity, m_TargetVelocity);
-			afterCross.normalize();
-			if (afterCross != currentCross) {
+			Vec3 current = m_Velocity.normalize();
+			Vec3 target = m_TargetVelocity.normalize();
+
+			float dot = current.dot(target);
+			dot = max(dot, 0.0f);
+			dot = min(dot, 1.0f);
+			float angle = acos(dot);
+
+			// Ç‡Ç§è\ï™ãﬂÇ¢
+			if (angle < 0.001f) {
 				m_Velocity = m_TargetVelocity;
 				m_IsEffecting = false;
 			}
+
+			// âÒì]é≤
+			Vec3 axis = Vec3(0, 1, 0);
+
+			// ç°âÒâÒÇπÇÈäpìx
+			float maxStep = m_MoveVelocityAngleSpeed * elapsed;
+			float step = min(maxStep, angle);
+
+			// âÒì]
+			m_Velocity = XMVector3Rotate(current, XMQuaternionRotationAxis(axis, step));
 			break;
 		}
 		}
 		if (m_IsBeforeEffecting && !m_IsEffecting) {
 			auto mapData = GameManager::GetInstance().GetLevelManager()->GetMap()
-				->GetMapData(Vec2(static_cast<int>(position.x), static_cast<int>(-position.z)));
+				->GetMapData(Vec2(static_cast<int>(round(position.x)), static_cast<int>(round(-position.z))));
 			if (mapData.m_Gimmick) {
 				mapData.m_Gimmick->End();
 			}
 		}
 		m_IsBeforeEffecting = m_IsEffecting;
 		SetPosition(position);
+		if (!CheckArea()) {
+			Destroy();
+		}
+
 	}
 	bool MoveCube::CheckArea() {
-		Vec3 position = GetPosition() + m_Velocity.normalize();
+		Vec3 position = GetPosition();
 		if (position.x > m_MoveArea.m_Max.x || position.x < m_MoveArea.m_Min.x) {
 			return false;
 		}
@@ -139,7 +150,13 @@ namespace basecross{
 		if (position.z > m_MoveArea.m_Max.z || position.z < m_MoveArea.m_Min.z) {
 			return false;
 		}
+		Vec3 currentPosition = GetPosition();
+		auto& level = GameManager::GetInstance().GetLevelManager();
+		auto mapData = level->GetMap()->GetMapData(Vec2(currentPosition.x, -currentPosition.z));
 
+		if (mapData.m_ColorStr == L"black") {
+			return false;
+		}
 		return true;
 	}
 
@@ -158,10 +175,6 @@ namespace basecross{
 
 		m_State = MoveState::ChangeVelocity;
 		m_TargetVelocity = velocity;
-
-		float angle1 = atan2f(m_Velocity.z, m_Velocity.x);
-		float angle2 = atan2f(m_TargetVelocity.z, m_TargetVelocity.x);
-		m_MoveVelocityAngleSpeed = (angle1 - angle2) / GameManager::GetInstance().GetFlowManager()->GetGameTick();
 	}
 	void MoveCube::Move() {
 		if (m_IsEffecting) return;

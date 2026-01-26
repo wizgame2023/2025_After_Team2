@@ -8,8 +8,7 @@
 		{"pos":[6,2],"color":"blue"},
 		{"pos":[0,4],"color":"yellow"},
 		{"pos":[4,4],"color":"magenta"},
-		{"pos":[6,4],"color":"blue"},
-		{"pos": [ 6, 1 ],"color": "black"}
+		{"pos":[6,4],"color":"blue"}
 	],
 	"items" : [
 		{"id":"player","direction":"east","value":0,"count":1},

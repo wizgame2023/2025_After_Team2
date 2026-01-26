@@ -31,6 +31,7 @@ namespace basecross {
 	{
 		ResourceManager::Load(L"selectResource.json");
 
+		ResourceManager::RegisterWav(L"Sound");
 		ResourceManager::RegisterTexture(L"UI");
 	}
 
@@ -40,6 +41,10 @@ namespace basecross {
 
 		auto backBoardSp = AddGameObject<Sprite>(L"SelectBackGround", Vec3(0.0f), Vec2(1280, 800), Anchor::Center);
 		auto selectSp = AddGameObject<Sprite>(L"SelectUI", Vec3(-640.0f, 400.0f, 0.0f), Vec2(256, 64), Anchor::TopLeft);
+
+		m_BackBoardSp = AddGameObject<Sprite>(L"BackBoardUI", Vec3(0.0f), Vec2(1280, 800), Anchor::Center);
+		m_BackBoardSp->SetDiffuse(Col4(0.0f, 0.0f, 0.0f, 0.0f));
+		m_BackBoardSp->SetLayer(3);
 
 		m_RollSpRight = AddGameObject<Sprite>(L"RollUI", Vec3(600.0f, 600.0f, 0.0f), Vec2(900, 900), Anchor::Center);
 		m_RollSpLeft = AddGameObject<Sprite>(L"RollUI", Vec3(-700.0f, -560.0f, 0.0f), Vec2(900, 900), Anchor::Center);
@@ -94,6 +99,9 @@ namespace basecross {
 			CreateViewLight();
 
 			SpriteCreate();
+
+			SoundManager::GetInstance().PlayBGM(L"SelectBGM", 2.0f);
+
 		}
 		catch (...) {
 			throw;
@@ -133,8 +141,9 @@ namespace basecross {
 
 		if (input->GetDownButton(L"A") && !m_IsButton)
 		{
-			shared_ptr<int> index = make_shared<int>(m_Count);
-			PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage",index);
+			m_StartSE = SoundManager::GetInstance().PlaySE(L"selectDecision");
+			m_IsButton = true;
+			StartFade();
 		}
 		else if (input->GetDownButton(L"B") && !m_IsButton)
 		{
@@ -144,6 +153,16 @@ namespace basecross {
 		{
 			m_IsButton = false;
 		}
+
+		if (m_StartSE != nullptr)
+		{
+			if (m_BackBoardSp->GetComponent<SpriteFade>()->IsFinish())
+			{
+				shared_ptr<int> index = make_shared<int>(m_Count);
+				PostEvent(0.0f, GetThis<ObjectInterface>(), App::GetApp()->GetScene<Scene>(), L"ToGameStage", index);
+			}
+		}
+
 
 		if (input->GetLStick().x == 0.0f) {
 			m_IsStick = false;
@@ -181,6 +200,12 @@ namespace basecross {
 		}
 
 
+	}
+
+	void SelectStage::StartFade()
+	{
+		m_BackBoardSp->AddComponent<SpriteFade>(0.7f);
+		m_BackBoardSp->GetComponent<SpriteFade>()->StartFade(FadeState::Out);
 	}
 
 }

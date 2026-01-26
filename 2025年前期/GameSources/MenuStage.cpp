@@ -35,6 +35,8 @@ namespace basecross {
 
 			auto viewport = App::GetApp()->GetScene<Scene>()->GetViewport();
 			m_Menu = AddGameObject<GameMenu>(L"TEMP_COLOR_PALETTE", L"MENU", viewport);
+
+			StartFadeIn(0.75f);
 		}
 		catch (...) {
 			throw;
@@ -43,4 +45,27 @@ namespace basecross {
 	void MenuStage::OnUpdate() {
 
 	}
+
+	void MenuStage::StartFadeIn(float time) {
+		if (!m_StageFade) {
+			auto sprite = AddGameObject<Sprite>(L"MENU", Vec3(), Vec2(), Anchor::Center);
+			sprite->MatchToScreenSize();
+			sprite->SetDiffuse(Col4(0, 0, 0, 1));
+			sprite->SetLayer(11);
+			m_StageFade = sprite->AddComponent<SpriteFade>(time);
+		}
+		m_StageFade->StartFade(FadeState::In);
+	}
+	void MenuStage::StartFadeOut(float time) {
+		if (!m_StageFade) {
+			auto sprite = AddGameObject<Sprite>(L"MENU", Vec3(), Vec2(), Anchor::Center);
+			sprite->MatchToScreenSize();
+			sprite->SetDiffuse(Col4(0, 0, 0, 1));
+			sprite->SetLayer(11);
+			m_StageFade = sprite->AddComponent<SpriteFade>(time);
+		}
+		m_StageFade->StartFade(FadeState::Out);
+
+	}
+
 }
