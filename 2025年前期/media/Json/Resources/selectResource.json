@@ -14,6 +14,36 @@
     "SelectLogo.png": "SelectUI",
     "Number.png": "NumUI",
     "SelectBackGround.png": "SelectBackGround",
-    "Cursor.png": "SelectCursorUI"
+    "Cursor.png": "SelectCursorUI",
+    "BackBoard.png": "BackBoardUI",
+    "Underline.png": "Underline",
+    "anser.png": "anserUI",
+    "L.png": "L",
+    "R.png": "R",
+
+    "Icons/Icon_Explain_0.png": "ICON_0",
+    "Icons/Icon_Explain_1.png": "ICON_1",
+    "Icons/Icon_Explain_2.png": "ICON_2",
+    "Icons/Icon_Explain_3.png": "ICON_3",
+    "Icons/Icon_Explain_4.png": "ICON_4",
+    "Icons/Icon_Explain_5.png": "ICON_5",
+    "Icons/Icon_Explain_6.png": "ICON_6",
+    "Icons/Icon_Explain_7.png": "ICON_7",
+    "Icons/Icon_Explain_8.png": "ICON_8",
+    "Icons/Icon_Explain_9.png": "ICON_9",
+    "Icons/Icon_Explain_Stick.png": "ICON_Stick",
+
+    "Stage/Stage1.png": "Stage1",
+    "Stage/Stage2.png": "Stage2",
+    "Stage/Stage3.png": "Stage3",
+    "Stage/Stage4.png": "Stage4",
+    "Stage/Stage5.png": "Stage5",
+    "Stage/Stage6.png": "Stage6",
+    "Stage/Stage7.png": "Stage7",
+    "Stage/Stage8.png": "Stage8",
+    "Stage/Stage9.png": "Stage9",
+    "Stage/Stage10.png": "Stage10"
+
+
   }
 }
