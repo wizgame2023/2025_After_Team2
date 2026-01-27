@@ -150,7 +150,7 @@ namespace basecross{
 		}
 		Vec3 currentPosition = GetPosition();
 		auto& level = GameManager::GetInstance().GetLevelManager();
-		auto mapData = level->GetMap()->GetMapData(Vec2(currentPosition.x, -currentPosition.z));
+		auto mapData = level->GetMap()->GetMapData(Vec2(round(currentPosition.x), round(-currentPosition.z)));
 
 		if (mapData.m_ColorStr == L"black") {
 			return false;
