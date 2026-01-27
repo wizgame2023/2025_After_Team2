@@ -20,6 +20,7 @@ namespace basecross {
         int m_StageNum = 1;
         int m_Count = 0;
         int m_Page = 0;
+		int m_TotalPage = 0;
 
         bool m_IsStick = false;
         bool m_IsButton = true;
@@ -38,12 +39,16 @@ namespace basecross {
 
         vector<Vec3> m_NumPositions;
         vector<shared_ptr<NumberSprite>> m_NumSpList; // 数字スプライトリスト
+        vector<shared_ptr<Sprite>> m_StageSp;
+		vector<shared_ptr<Sprite>> m_stickSp;
+        vector<vector<shared_ptr<Sprite>>> m_AnserSp;
 
         shared_ptr<Sprite> m_BackSp;
         shared_ptr<Sprite> m_RollSpRight;
         shared_ptr<Sprite> m_RollSpLeft;
         shared_ptr<SoundItem> m_StartSE;
         shared_ptr<Sprite> m_BackBoardSp;
+
 
         // スティック押しっぱなし対応
         float m_StickHoldTime = 0.0f;
@@ -61,13 +66,14 @@ namespace basecross {
 
     private:
         void SpriteCreate();
-        void Json();
+        void CreateJson();
         void StartFade();
 		void NextStage(int num);
         void CreateButton(wstring wss);
-
+        void StageSp();
+        void AnserSp();
         /*!
-        @brief エフェクトの位置を設定する関数
+        @brief 数字の位置を設定する関数
         @param[in] pageNum ページ数
 		@param[in] maxRow 一行に表示する最大数
         @param[in] width X軸の幅間隔

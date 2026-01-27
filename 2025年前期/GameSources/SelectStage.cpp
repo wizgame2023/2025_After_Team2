@@ -27,7 +27,7 @@ namespace basecross {
 		PtrMultiLight->SetDefaultLighting();
 	}
 
-	void SelectStage::Json()
+	void SelectStage::CreateJson()
 	{
 		ResourceManager::Load(L"selectResource.json");
 
@@ -60,10 +60,22 @@ namespace basecross {
 		m_RollSpLeft = AddGameObject<Sprite>(L"RollUI", Vec3(-750.0f, -610.0f, 0.0f), Vec2(900, 900), Anchor::Center);
 		m_RollSpRight->VectorToward(Vec2(cos(m_Angle100), sin(XM_PI + (m_Angle100))));
 
-		m_StageNum = 18;        // 表示する数字の数
+		auto L = AddGameObject<Sprite>(L"L", Vec3(-565.0f, -40.0f, 0.0f), Vec2(65), Anchor::Center);
+		auto R = AddGameObject<Sprite>(L"R", Vec3(15.0f, -40.0f, 0.0f), Vec2(65), Anchor::Center);
+		L->SetDiffuse(Col4(0.0f));
+		m_stickSp.push_back(L);
+		m_stickSp.push_back(R);
 
-		NumSpriteCreate(2, 3, 100, 100, -250, 200);
+		auto stageJson = Json(L"Json/stage.json");
+		auto dataArray = stageJson.At<JsonArray>(L"tutorial")->GetObjectArray();
+
+		m_StageNum = dataArray.size();        // 表示する数字の数
+
+		NumSpriteCreate(9, 3, 100, 100, -300, 200);
+		StageSp();
+		AnserSp();
 	}
+
 
 	void SelectStage::NumSpriteCreate(int pageNum,int maxRow,float width, float Height,float x,float y)
 	{
@@ -79,14 +91,25 @@ namespace basecross {
 		float totalWidth = maxPerRow * baseWidth + (maxPerRow - 1) * spacing;
 		float startX = centerX - totalWidth / 2.0f;
 
-		for (int page = 0; page < pageNum; page++)
+		m_TotalPage = m_StageNum / pageNum;
+
+		if (m_StageNum % pageNum > 0)
+		{
+			m_TotalPage++;
+		}
+
+		for (int page = 0; page < m_TotalPage; page++)
 		{
 			wstring groupName = L"SELECT" + to_wstring(page);
 
 			CreateButton(groupName);
 
-			for (int i = 0; i < m_StageNum/ pageNum; i++)
+			for (int i = 0; i < pageNum; i++)
 			{
+				int num = i + 1 + (pageNum * page);
+
+				if (num > m_StageNum) break;
+
 				int row = i / maxPerRow;
 				int col = i % maxPerRow;
 
@@ -97,26 +120,29 @@ namespace basecross {
 				m_NumPositions.push_back(position);  // 位置を保存
 				Vec2 size = Vec2(130, 130);
 
-				ButtonManager::Create(GetThis<Stage>(), groupName, L"SelectCursorUI", Col4(1, 1, 1, 1), position+m_OffsetPos, size * 1.4,
-					[i](shared_ptr<ObjectInterface>& object) {
+
+				ButtonManager::Create(GetThis<Stage>(), groupName, L"SelectCursorUI", Col4(1, 1, 1, 1), position + m_OffsetPos, size * 1.4,
+					[num](shared_ptr<ObjectInterface>& object)
+					{
 						//i番目のステージに飛ぶ
 						auto selectStage = static_pointer_cast<SelectStage>(object);
-						selectStage->NextStage(i);
+						selectStage->NextStage(num - 1);
 					});
 				
 
-				int digit = (i + 1 + (9 * page) >= 10) ? 2 : 1;
+				int digit = (num >= 10) ? 2 : 1;
+				int set = (num >= 10) ? 1 : 0;
 
 				// SpriteCreate
 				auto numSp = AddGameObject<NumberSprite>(L"NumUI", position, size, digit);
 				numSp->SetUpdateActive(false);
-				numSp->UpdateNumber(i + 1 + (9 * page));
+				numSp->UpdateNumber(num);
 				auto sprites = numSp->GetNumberSprites();
 
 				auto underline = AddGameObject<Sprite>
 					(
 						L"Underline",
-						static_cast<Vec3>(numSp->GetNumberSprites()[0]->GetAnchorPosition(Anchor::Bottom) + Vec2(45.0f* page, 30.0f)),
+						static_cast<Vec3>(numSp->GetNumberSprites()[0]->GetAnchorPosition(Anchor::Bottom) + Vec2(45.0f * set, 30.0f)),
 						size, Anchor::Center
 					);
 
@@ -135,7 +161,49 @@ namespace basecross {
 		m_Page = 0;
 		ButtonManager::instance->OpenAndUse(L"SELECT" + to_wstring(m_Page));
 	}
+	void SelectStage::StageSp()
+	{
 
+		auto stageJson = Json(L"Json/stage.json");
+
+		auto dataArray = stageJson.At<JsonArray>(L"tutorial")->GetObjectArray();
+
+		for (int i = 0; i < dataArray.size(); i++)
+		{
+			auto data = dataArray[i];
+			wstring key = data->At<JsonString>(L"texture")->GetValue();
+			auto stageSp = AddGameObject<Sprite>(key, Vec3(325.0f, 75.0f, 0.0f), Vec2(580 * 0.65f, 335 * 0.75), Anchor::Center);
+			m_StageSp.push_back(stageSp);
+		}
+
+	}
+
+	void SelectStage::AnserSp()
+	{
+		auto scene = App::GetApp()->GetScene<Scene>();
+		Vec3 numberPos = Vec3(420.0f, -200, 0.0f);
+		float numberSize = 150;
+
+		for (int i = 0; i < m_StageNum; i++)
+		{
+			vector <shared_ptr<Sprite>> numbers;
+			int maxCount = scene->GetAnserCount(i);
+			int currentCount = scene->GetClearPath(i).size();
+			wstring maxCountKey = L"ICON_" + to_wstring(maxCount);
+			wstring currentCountKey = L"ICON_" + to_wstring(currentCount);
+
+			auto num = AddGameObject<Sprite>(maxCountKey, numberPos, Vec2(numberSize), Anchor::Center);
+			auto numMax = AddGameObject<Sprite>(currentCountKey, numberPos + Vec3(-numberSize / 2.0f, numberSize / 2.0f, 0.0f), Vec2(numberSize), Anchor::Center);
+
+			numbers.push_back(num);
+			numbers.push_back(numMax);
+			m_AnserSp.push_back(numbers);
+
+		}
+		auto stick = AddGameObject<Sprite>(L"ICON_Stick", numberPos, Vec2(numberSize), Anchor::Center);
+		auto anser = AddGameObject<Sprite>(L"anserUI", Vec3(200, -130, 0.0f), Vec2(150, 50), Anchor::Center);
+
+	}
 
 	void SelectStage::OnCreate()
 	{
@@ -143,7 +211,7 @@ namespace basecross {
 
 			//ビューとライトの作成
 			CreateViewLight();
-			Json();
+			CreateJson();
 			SpriteCreate();
 			SoundManager::GetInstance().PlayBGM(L"SelectBGM", 2.0f);
 
@@ -202,45 +270,44 @@ namespace basecross {
 		}
 
 
-		if (input->GetDownButton(L"R") && m_Page < 1)
+		if (input->GetDownButton(L"R") && m_Page < m_TotalPage - 1)
 		{
 			m_Page++;
+
+			m_stickSp[0]->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, 1.0f));
+			if (m_Page == m_TotalPage - 1)
+			{
+				m_stickSp[1]->SetDiffuse(Col4(0.0f, 0.0f, 0.0f, 0.0f));
+			}
+
 			ButtonManager::instance->CloseAll();
 			ButtonManager::instance->OpenAndUse(L"SELECT" + to_wstring(m_Page));
 		}
 		else if (input->GetDownButton(L"L") && m_Page > 0)
 		{
 			m_Page--;
+
+			m_stickSp[1]->SetDiffuse(Col4(1.0f, 1.0f, 1.0f, 1.0f));
+			if (m_Page == 0)
+			{
+				m_stickSp[0]->SetDiffuse(Col4(0.0f, 0.0f, 0.0f, 0.0f));
+			}
+
 			ButtonManager::instance->CloseAll();
 			ButtonManager::instance->OpenAndUse(L"SELECT" + to_wstring(m_Page));
 		}
 
-		//auto scene = App::GetApp()->GetScene<Scene>();
+		auto index = ButtonManager::instance->GetSelectIndex(L"SELECT" + to_wstring(m_Page));
+		index = index + (m_Page * 9);
+		for (int i = 0; i < m_StageSp.size(); i++)
+		{
+			m_StageSp[i]->SetDrawActive(index == i);
+			for (int j = 0; j < 2; j++)
+			{
+				m_AnserSp[i][j]->SetDrawActive(index == i);
+			}
+		}
 
-		//if (!m_IsAnser)
-		//{
-		//	shared_ptr<Sprite> numbers[2];
-		//	Vec3 cursorPos = m_BackSp->GetPosition();
-		//	Vec3 numberPos = cursorPos + Vec3(0.0f, -120, 0.0f);
-		//	float numberSize = 70;
-		//	int maxCount = scene->GetAnserCount(m_Count);
-		//	int currentCount = scene->GetClearPath(m_Count).size();
-
-		//	wstring maxCountKey = L"ICON_" + to_wstring(maxCount);
-		//	wstring currentCountKey = L"ICON_" + to_wstring(currentCount);
-
-		//	numbers[0] = AddGameObject<Sprite>(maxCountKey, numberPos, Vec2(numberSize), Anchor::Center);
-		//	numbers[1] = AddGameObject<Sprite>(currentCountKey, numberPos + Vec3(-numberSize / 2.0f, numberSize / 2.0f, 0.0f), Vec2(numberSize), Anchor::Center);
-		//	auto stick = AddGameObject<Sprite>(L"ICON_Stick", numberPos, Vec2(numberSize), Anchor::Center);
-
-		//	numbers[0]->SetLayer(10);
-		//	numbers[1]->SetLayer(10);
-
-
-
-
-		//	m_IsAnser = true;
-		//}
 
 	}
 
