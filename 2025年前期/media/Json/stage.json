@@ -10,6 +10,7 @@
         {"number":8,"file":"Stage8","anser": 1,"texture" :  "Stage8"},
         {"number":9,"file":"Stage8","anser": 1,"texture" :  "Stage9"},
         {"number":10,"file":"Stage10","anser": 1,"texture" :  "Stage10"}
+
     ],
     "easy":[
         {"number":1,"file":"TestMap","anser": 1},

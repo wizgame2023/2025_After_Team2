@@ -22,15 +22,15 @@ float4 main(PSPCTInput input) : SV_TARGET
 {
 	float4 Light = (saturate(input.color) * Diffuse) + Emissive;
 	Light.a = Diffuse.a;
-	Light = g_texture.Sample(g_sampler, input.tex) * Light;
+	float4 finalColor = g_texture.Sample(g_sampler, input.tex) * Light;
     for (int i = 0; i < count; i++)
     {
-        float4 color = g_textures[i].Sample(g_sampler, input.tex);
+        float4 color = g_textures[i].Sample(g_sampler, input.tex) * Light;
         if (color.a > 0.5f)
         {
-            Light.rgb = color.rgb;
+            finalColor = color;
         }
     }
-    return Light;
+    return finalColor;
 }
 

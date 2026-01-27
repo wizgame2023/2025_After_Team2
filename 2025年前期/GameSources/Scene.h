@@ -51,6 +51,7 @@ namespace basecross{
 		virtual void OnEvent(const shared_ptr<Event>& event) override;
 
 		void AddClearPath(int stage,const vector<GimmickData>& data) {
+			if (m_ClearPath[stage].size() >= m_MaxAnserCounts[stage]) return;
 			m_ClearPath[stage].push_back(data);
 		}
 		bool CheckClearPath(int stage, const vector<GimmickData>& data);

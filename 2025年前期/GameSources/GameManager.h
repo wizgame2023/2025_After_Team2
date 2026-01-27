@@ -26,6 +26,7 @@ namespace basecross{
 		vector<shared_ptr<MoveCube>> GetPlayers() { return m_Players; }
 
 		void DestroyPlayer(shared_ptr<MoveCube>& player);
+		void DestroyAllPlayer();
 	};
 
 

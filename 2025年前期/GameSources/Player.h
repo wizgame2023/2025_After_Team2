@@ -20,7 +20,10 @@ namespace basecross{
 		bool m_IsBeforeEffecting;//前フレームの演出状態
 		bool m_IsDead;			//死亡判定
 		Vec3 m_TelepoteTarget;	//テレポート先
+
+		Vec3 m_StartVelocity;	//移動方向の変更開始地点
 		Vec3 m_TargetVelocity;	//移動方向の変更時の値
+		float m_VelocitySlerpFactor;
 		float m_MoveVelocityAngleSpeed;	//移動方向の変更速度
 		Vec3 m_Velocity;		//移動方向
 		Vec3 m_Target;			//通常移動先

@@ -46,15 +46,13 @@ namespace basecross{
 		}
 		if (!m_Board) return;
 
-		if (m_Value.lengthSqr() == 0) {
-			
-		}
-
 		m_Board->GetTrans()->SetPosition(GetPosition() + Vec3(0, 0.75f, 0));
 	}
 
 	void Gimmicks::Begin()
 	{
+		//if(m_Board)
+			//m_Board->SetDrawActive(false);
 	}
 	void Gimmicks::Update()
 	{
@@ -103,6 +101,14 @@ namespace basecross{
 			m_Stage->RemoveGameObject<Board>(m_Board);
 		}
 		m_Stage->RemoveGameObject<Gimmicks>(GetThis<Gimmicks>());
+	}
+	void Gimmicks::Reset()
+	{
+		m_Count = m_MaxCount;
+		GetComponent<SmBaseDraw>()->SetDrawActive(true);
+		SetUpdateActive(true);
+		if(m_Board)
+			m_Board->SetDrawActive(true);
 	}
 	void Gimmicks::AddPlayerPath() {
 		if (!m_Cube) return;
@@ -200,10 +206,9 @@ namespace basecross{
 					auto path = m_Cube->GetGimmickPath();
 					auto scene = App::GetApp()->GetScene<Scene>();
 					int stage = GameManager::GetInstance().GetLevelManager()->GetStageNumber();
-					scene->AddClearPath(stage, path);
-					/*if (scene->CheckClearPath(stage,path)) {
+					if (scene->CheckClearPath(stage,path)) {
 						scene->AddClearPath(stage, path);
-					}*/
+					}
 					m_Cube = nullptr;
 				}
 				else
@@ -359,12 +364,10 @@ namespace basecross{
 		bool isStepped = CheckCount();
 		if (isStepped && !m_WasStepped)
 		{
-			// ?????u?????????
 			Vec3 pos = m_Transform->GetPosition();
 			m_Cube->SetDrawActive(false);
-			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f); // Cube????P????????????OK
+			m_Cube->Telepote(pos + m_Value, 0.7f, 0.3f);
 
-			// ?G?t?F?N?g?J?n
 			m_TeleportFastEffect = m_Stage->AddGameObject<Effect>(L"TeleportGimmickFastEffect.efk", m_Cube->GetPosition());
 			m_TeleportFastEffect->SetEffectSize(Vec3(0.5f));
 			m_TeleportFastEffect->SetEffectSpeed(1.7f);
