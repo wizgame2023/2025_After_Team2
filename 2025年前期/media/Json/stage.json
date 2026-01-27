@@ -1,15 +1,16 @@
 {
     "tutorial":[
-        {"number":1,"file":"Stage1","anser": 1},
-        {"number":2,"file":"Stage2","anser": 1},
-        {"number":3,"file":"Stage3","anser": 1},
-        {"number":4,"file":"Stage4","anser": 1},
-        {"number":5,"file":"Stage5","anser": 1},
-        {"number":6,"file":"Stage6","anser": 1},
-        {"number":7,"file":"Stage7","anser": 1},
-        {"number":8,"file":"Stage8","anser": 1},
-        {"number":9,"file":"Stage9","anser": 1},
-        {"number":10,"file":"Stage10","anser": 1}
+        {"number":1,"file":"Stage1","anser": 9,"texture" :  "Stage1"},
+        {"number":2,"file":"Stage2","anser": 1,"texture" :  "Stage2"},
+        {"number":3,"file":"Stage3","anser": 1,"texture" :  "Stage3"},
+        {"number":4,"file":"Stage4","anser": 1,"texture" :  "Stage4"},
+        {"number":5,"file":"Stage5","anser": 1,"texture" :  "Stage5"},
+        {"number":6,"file":"Stage6","anser": 1,"texture" :  "Stage6"},
+        {"number":7,"file":"Stage7","anser": 1,"texture" :  "Stage7"},
+        {"number":8,"file":"Stage8","anser": 1,"texture" :  "Stage8"},
+        {"number":9,"file":"Stage8","anser": 1,"texture" :  "Stage9"},
+        {"number":10,"file":"Stage10","anser": 1,"texture" :  "Stage10"}
+
     ],
     "easy":[
         {"number":1,"file":"TestMap","anser": 1},
