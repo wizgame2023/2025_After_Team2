@@ -29,8 +29,6 @@ namespace basecross{
 
 		SetMoveSec(0.5f);
 		GameManager::GetInstance().GetEntityManager()->AddPlayer(GetThis<MoveCube>());
-
-
 	}
 	void MoveCube::OnUpdate() {
 		//‰ñ“]Ž²
