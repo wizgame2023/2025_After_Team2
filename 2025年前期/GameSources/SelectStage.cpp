@@ -54,7 +54,7 @@ namespace basecross {
 
 		m_BackBoardSp = AddGameObject<Sprite>(L"BackBoardUI", Vec3(0.0f), Vec2(1280, 800), Anchor::Center);
 		m_BackBoardSp->SetDiffuse(Col4(0.0f, 0.0f, 0.0f, 0.0f));
-		m_BackBoardSp->SetLayer(3);
+		m_BackBoardSp->SetLayer(15);
 
 		m_RollSpRight = AddGameObject<Sprite>(L"RollUI", Vec3(650.0f, 650.0f, 0.0f), Vec2(900, 900), Anchor::Center);
 		m_RollSpLeft = AddGameObject<Sprite>(L"RollUI", Vec3(-750.0f, -610.0f, 0.0f), Vec2(900, 900), Anchor::Center);
