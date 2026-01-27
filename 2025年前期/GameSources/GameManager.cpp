@@ -316,8 +316,8 @@ namespace basecross{
 
 					auto scene = App::GetApp()->GetScene<Scene>();
 
-					int maxCount = 25;//scene->GetAnserCount(m_LevelManager->GetStageNumber());
-					int currentCount = 25;// scene->GetClearPath(m_LevelManager->GetStageNumber()).size();
+					int maxCount = scene->GetAnserCount(m_LevelManager->GetStageNumber());
+					int currentCount = scene->GetClearPath(m_LevelManager->GetStageNumber()).size();
 
 					wstring maxCountKey = L"ICON_" + to_wstring(maxCount);
 					wstring currentCountKey = L"ICON_" + to_wstring(currentCount);
