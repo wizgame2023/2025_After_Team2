@@ -126,7 +126,7 @@ namespace basecross{
 		auto& input = InputManager::GetInputManager();
 		auto& gameManager = GameManager::GetInstance();
 
-		if (gameManager.GetFlowManager()->IsPut()) {
+		if (gameManager.GetFlowManager()->IsPut() && !m_PoseMenu->IsOpen()) {
 			m_Cursor->SetUpdateActive(true);
 		}
 		else {
@@ -135,39 +135,37 @@ namespace basecross{
 		}
 		if (TutorialManager::GetInstance().IsActive()) return;
 		
-		if (!m_PoseMenu->IsOpen()) {
-			if (input->GetDownButton(gameManager.GetKeyConfig(L"undo")) && m_Lines.size() > 0) {
-				auto line = m_Lines.back();
-				m_Lines.pop_back();
-				m_Stage->RemoveGameObject<Sprite>(line.m_Line);
-				gameManager.GetLevelManager()->RemovePair(line.m_PairHandle);
-			}
-			if (input->GetDownButton(gameManager.GetKeyConfig(L"putGimmick"))) {
-				UpdateOnCoursorHandle();
-			}
-			if (input->GetDownButton(gameManager.GetKeyConfig(L"openPose"))) {
-				SetDrawActive(false);
-			}
-			if (input->GetLStick().lengthSqr() > 0.01f) {
-				m_IsCursor = true;
-			}
+		if (input->GetDownButton(gameManager.GetKeyConfig(L"undo")) && m_Lines.size() > 0) {
+			auto line = m_Lines.back();
+			m_Lines.pop_back();
+			m_Stage->RemoveGameObject<Sprite>(line.m_Line);
+			gameManager.GetLevelManager()->RemovePair(line.m_PairHandle);
+		}
+		if (input->GetDownButton(gameManager.GetKeyConfig(L"putGimmick"))) {
+			UpdateOnCoursorHandle();
+		}
+		if (input->GetDownButton(gameManager.GetKeyConfig(L"openPose"))) {
+			SetDrawActive(false);
+		}
+		if (input->GetLStick().lengthSqr() > 0.01f) {
+			m_IsCursor = true;
+		}
 
-			if (input->GetDownButton(L"DUp")) {
-				m_IsCursor = false;
-				if(m_CursorHandle > 0) m_CursorHandle--;
-			}
-			if (input->GetDownButton(L"DDown")) {
-				m_IsCursor = false;
-				if(m_CursorHandle < m_ColorPalette.size() * 2 - 1) m_CursorHandle++;
-			}
-			if (input->GetDownButton(L"DRight")) {
-				m_IsCursor = false;
-				if(m_CursorHandle < m_ColorPalette.size()) m_CursorHandle += m_ColorPalette.size();
-			}
-			if (input->GetDownButton(L"DLeft")) {
-				m_IsCursor = false;
-				if(m_CursorHandle > m_ColorPalette.size() - 1) m_CursorHandle -= m_ColorPalette.size();
-			}
+		if (input->GetDownButton(L"DUp")) {
+			m_IsCursor = false;
+			if (m_CursorHandle > 0) m_CursorHandle--;
+		}
+		if (input->GetDownButton(L"DDown")) {
+			m_IsCursor = false;
+			if (m_CursorHandle < m_ColorPalette.size() * 2 - 1) m_CursorHandle++;
+		}
+		if (input->GetDownButton(L"DRight")) {
+			m_IsCursor = false;
+			if (m_CursorHandle < m_ColorPalette.size()) m_CursorHandle += m_ColorPalette.size();
+		}
+		if (input->GetDownButton(L"DLeft")) {
+			m_IsCursor = false;
+			if (m_CursorHandle > m_ColorPalette.size() - 1) m_CursorHandle -= m_ColorPalette.size();
 		}
 		if (!m_IsCursor) {
 			int index = m_CursorHandle % m_ColorPalette.size();
@@ -511,7 +509,7 @@ namespace basecross{
 	}
 
 	void ExplainMenu::OnCreate(){
-		m_ExplainStr = m_Stage->AddGameObject<Sprite>(L"", Vec3(-120,-100,0), Vec2(300, 300), Anchor::Center);
+		m_ExplainStr = m_Stage->AddGameObject<Sprite>(L"", Vec3(-120,-100,0), Vec2(450, 225), Anchor::Center);
 		m_BackGround = m_Stage->AddGameObject<Sprite>(L"MENU_GIMMICK", Vec3(-640,400,0), Vec2(800, 800), Anchor::TopLeft);
 		m_BackGround->SetLayer(-1);
 

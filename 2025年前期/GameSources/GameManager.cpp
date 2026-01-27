@@ -325,6 +325,8 @@ namespace basecross{
 					numbers[1] = menu->AddGameObject<Sprite>(currentCountKey, numberPos + Vec3(-numberSize, numberSize,0.0f) * 0.4f, Vec2(numberSize), Anchor::Center);
 					numbers[0]->SetLayer(10);
 					numbers[1]->SetLayer(10);
+					numbers[0]->SetDiffuse(Col4(0, 0, 0, 1));
+					numbers[1]->SetDiffuse(Col4(0, 0, 0, 1));
 
 					m_EffectSprite.push_back(backBoardUI);
 					m_EffectSprite.push_back(numbers[0]);
