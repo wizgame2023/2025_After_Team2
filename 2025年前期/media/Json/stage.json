@@ -14,6 +14,6 @@
         {"number":12,"file":"Stage12","anser": 1,"texture" :  "Stage10"},
         {"number":13,"file":"Stage13","anser": 1,"texture" :  "Stage10"},
         {"number":14,"file":"Stage14","anser": 1,"texture" :  "Stage10"},
-        {"number":15,"file":"Stage15","anser": 1,"texture" :  "Stage10"}
+        {"number":15,"file":"Stage15","anser": 25,"texture" :  "Stage10"}
     ]
 }
