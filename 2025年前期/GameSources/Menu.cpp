@@ -39,7 +39,7 @@ namespace basecross{
 
 		m_OperateInfo = m_Stage->AddGameObject<Sprite>(L"OPERATE_INFO", Vec3(), Vec2(fullMenuSize.y * 0.3f, fullMenuSize.y * 0.3f) * 0.9f, Anchor::Center);
 		m_OperateInfo->SetAnchorPosition(static_cast<Vec3>(m_BackGround->GetAnchorPosition(Anchor::TopLeft)) - Vec3(20.0f,10.0f,0.0f), Anchor::TopRight);
-
+		
 		auto& gameManager = GameManager::GetInstance();
 
 		auto colorTable = gameManager.GetLevelManager()->GetMap()->GetColorTable();
@@ -123,6 +123,7 @@ namespace basecross{
 		m_PoseMenu->Close();
 	}
 	void GameMenu::OnUpdate() {
+		m_OperateInfo->SetDrawActive(false);
 		auto& input = InputManager::GetInputManager();
 		auto& gameManager = GameManager::GetInstance();
 

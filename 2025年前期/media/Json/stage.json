@@ -10,10 +10,10 @@
         {"number":8,"file":"Stage8","anser": 1,"texture" :  "Stage8"},
         {"number":9,"file":"Stage8","anser": 1,"texture" :  "Stage9"},
         {"number":10,"file":"Stage10","anser": 1,"texture" :  "Stage10"},
-        {"number":11,"file":"Stage11","anser": 1,"texture" :  "Stage10"},
-        {"number":12,"file":"Stage12","anser": 1,"texture" :  "Stage10"},
-        {"number":13,"file":"Stage13","anser": 1,"texture" :  "Stage10"},
-        {"number":14,"file":"Stage14","anser": 1,"texture" :  "Stage10"},
-        {"number":15,"file":"Stage15","anser": 25,"texture" :  "Stage10"}
+        {"number":11,"file":"Stage11","anser": 1,"texture" :  "Stage11"},
+        {"number":12,"file":"Stage12","anser": 1,"texture" :  "Stage12"},
+        {"number":13,"file":"Stage13","anser": 1,"texture" :  "Stage13"},
+        {"number":14,"file":"Stage14","anser": 1,"texture" :  "Stage14"},
+        {"number":15,"file":"Stage15","anser": 25,"texture" :  "Stage15"}
     ]
 }
