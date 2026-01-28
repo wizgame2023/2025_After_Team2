@@ -311,8 +311,8 @@ namespace basecross{
 
 
 					shared_ptr<Sprite> numbers[2];
-					Vec3 numberPos = Vec3(-160,-90,0.0f);
-					float numberSize = 300;
+					Vec3 numberPos = Vec3(-140,-100,0.0f);
+					float numberSize = 200;
 
 					auto scene = App::GetApp()->GetScene<Scene>();
 
@@ -327,6 +327,12 @@ namespace basecross{
 					numbers[1]->SetLayer(10);
 					numbers[0]->SetDiffuse(Col4(0, 0, 0, 1));
 					numbers[1]->SetDiffuse(Col4(0, 0, 0, 1));
+					if (maxCount > 9) {
+						numbers[0]->SetSize(Vec2(numberSize) * 0.7f);
+					}
+					if (currentCount > 9) {
+						numbers[1]->SetSize(Vec2(numberSize) * 0.7f);
+					}
 
 					m_EffectSprite.push_back(backBoardUI);
 					m_EffectSprite.push_back(numbers[0]);

@@ -192,7 +192,7 @@ namespace basecross {
 			wstring maxCountKey = L"ICON_" + to_wstring(maxCount);
 			wstring currentCountKey = L"ICON_" + to_wstring(currentCount);
 
-			auto num = AddGameObject<Sprite>(maxCountKey, numberPos, Vec2(numberSize), Anchor::Center);
+			auto num = AddGameObject<Sprite>(maxCountKey, numberPos + Vec3(20.0f,0.0f,0.0f), Vec2(numberSize), Anchor::Center);
 			auto numMax = AddGameObject<Sprite>(currentCountKey, numberPos + Vec3(-numberSize / 2.0f, numberSize / 2.0f, 0.0f), Vec2(numberSize), Anchor::Center);
 
 			numbers.push_back(num);
