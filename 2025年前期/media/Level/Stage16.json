@@ -1,0 +1,29 @@
+{
+	"mapSize":[9,9],
+	"grid":
+	[
+		{"pos":[7,0],"color":"red"},
+		{"pos":[1,1],"color":"green"},
+		{"pos":[4,4],"color":"green"},
+		{"pos":[4,7],"color":"blue"},
+		{"pos":[6,8],"color":"yellow"},
+		{"pos":[7,7],"color":"magenta"},
+		{"pos":[6,1],"color":"cyan"},
+		{"pos":[1,4],"color":"cyan"},
+		{"pos":[7,5],"color":"cyan"},
+		{"pos":[6,7],"color":"cyan"},
+		{"pos":[7,1],"color":"orange"},
+		{"pos":[6,5],"color":"orange"},
+		{"pos":[1,5],"color":"purple"}
+	],
+	"items" : [
+		{"id":"player","direction":"east","value":0,"count":1},
+		{"id":"player","direction":"north","value":0,"count":1},
+		{"id":"goal","direction":"north","value":0,"count":1},
+		{"id":"arrow","direction":"west","value":0,"count":1},
+		{"id":"arrow","direction":"south","value":0,"count":1},
+		{"id":"teleporter","direction":"west","value":1,"count":1},
+		{"id":"teleporter","direction":"south","value":7,"count":1},
+		{"id":"inverter","direction":"south","value":2,"count":1}
+	]
+}
