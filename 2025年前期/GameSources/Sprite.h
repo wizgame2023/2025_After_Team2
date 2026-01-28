@@ -501,6 +501,10 @@ namespace basecross{
 				number->SetDrawActive(flag);
 			}
 		}
+
+		vector<shared_ptr<Sprite>>& GetNumberSprites() {
+			return m_Numbers;
+		}
 		void Destroy();
 	};
 
@@ -732,9 +736,15 @@ namespace basecross{
 		void Open() {
 			SetUpdateActive(true);
 			m_SpriteDraw->SetDrawActive(true);
+			for (auto& sprite : m_FrontSprite) {
+				sprite->SetDrawActive(true);
+			}
 		}
 		void Close() {
 			SetUpdateActive(false);
+			for (auto& sprite : m_FrontSprite) {
+				sprite->SetDrawActive(false);
+			}
 			m_SpriteDraw->SetDrawActive(false);
 			UnSelect();
 		}
