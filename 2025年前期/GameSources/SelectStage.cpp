@@ -50,7 +50,7 @@ namespace basecross {
 	void SelectStage::SpriteCreate()
 	{
 		auto backBoardSp = AddGameObject<Sprite>(L"SelectBackGround", Vec3(0.0f), Vec2(1280, 800), Anchor::Center);
-		auto selectSp = AddGameObject<Sprite>(L"SelectUI", Vec3(-640.0f, 400.0f, 0.0f), Vec2(256, 64), Anchor::TopLeft);
+		auto selectSp = AddGameObject<Sprite>(L"SelectUI", Vec3(-620.0f, 380.0f, 0.0f), Vec2(256, 64), Anchor::TopLeft);
 
 		m_BackBoardSp = AddGameObject<Sprite>(L"BackBoardUI", Vec3(0.0f), Vec2(1280, 800), Anchor::Center);
 		m_BackBoardSp->SetDiffuse(Col4(0.0f, 0.0f, 0.0f, 0.0f));
@@ -130,11 +130,11 @@ namespace basecross {
 					});
 				
 
-				int digit = (num >= 10) ? 2 : 1;
+				//int digit = (num >= 10) ? 2 : 1;
 				int set = (num >= 10) ? 1 : 0;
 
 				// SpriteCreate
-				auto numSp = AddGameObject<NumberSprite>(L"NumUI", position, size, digit);
+				auto numSp = AddGameObject<NumberSprite>(L"NumUI", position, size, 2);
 				numSp->SetUpdateActive(false);
 				numSp->UpdateNumber(num);
 				auto sprites = numSp->GetNumberSprites();
@@ -142,7 +142,7 @@ namespace basecross {
 				auto underline = AddGameObject<Sprite>
 					(
 						L"Underline",
-						static_cast<Vec3>(numSp->GetNumberSprites()[0]->GetAnchorPosition(Anchor::Bottom) + Vec2(45.0f * set, 30.0f)),
+						static_cast<Vec3>(numSp->GetNumberSprites()[0]->GetAnchorPosition(Anchor::Bottom) + Vec2(45.0f, 30.0f)),
 						size, Anchor::Center
 					);
 
