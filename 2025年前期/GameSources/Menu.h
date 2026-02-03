@@ -139,6 +139,7 @@ namespace basecross{
 	class ExplainMenu : public Object{
 		shared_ptr<Sprite> m_BackGround;
 		shared_ptr<Sprite> m_ExplainStr;
+		vector<shared_ptr<Sprite>> m_Icons;
 		shared_ptr<MovieWindow> m_ExplainMovie;
 
 		vector<ExplainData> m_ExplainDatas;
