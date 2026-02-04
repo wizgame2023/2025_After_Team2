@@ -1,0 +1,20 @@
+{
+	"mapSize":[5,5],
+	"grid":
+	[
+		{"pos":[0,0],"color":"red"},
+		{"pos":[4,2],"color":"green"},
+		{"pos":[1,2],"color":"blue"},
+		{"pos":[4,0],"color":"yellow"},
+		{"pos":[1,4],"color":"magenta"},
+		{"pos":[4,4],"color":"cyan"}
+	],
+	"items" : [
+		{"id":"player","direction":"west","value":0,"count":1},
+		{"id":"goal","direction":"east","value":0,"count":1},
+		{"id":"arrow","direction":"east","value":1,"count":1},
+		{"id":"arrow","direction":"west","value":0,"count":1},
+		{"id":"arrow","direction":"north","value":0,"count":1},
+		{"id":"teleporter","direction":"south","value":2,"count":1}
+	]
+}
