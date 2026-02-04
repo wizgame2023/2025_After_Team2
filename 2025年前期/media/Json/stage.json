@@ -14,6 +14,8 @@
         {"number":12,"file":"Stage12","anser": 1,"texture" :  "Stage12"},
         {"number":13,"file":"Stage13","anser": 1,"texture" :  "Stage13"},
         {"number":14,"file":"Stage14","anser": 1,"texture" :  "Stage14"},
-        {"number":15,"file":"Stage15","anser": 25,"texture" :  "Stage15"}
+        {"number":15,"file":"Stage15","anser": 25,"texture" :  "Stage15"},
+        {"number":16,"file":"Stage07","anser": 1,"texture" :  "Stage15"},
+        {"number":17,"file":"Stage08","anser": 1,"texture" :  "Stage15"}
     ]
 }
