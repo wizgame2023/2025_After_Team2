@@ -569,15 +569,16 @@ namespace basecross {
 	void Board::OnUpdate() {
 		if (!m_IsBillBoard) return;
 
-		Vec3 defUp = Vec3(0, 1, 0);
-		auto camera = OnGetDrawCamera();
+		auto camera = static_pointer_cast<MainCamera>(OnGetDrawCamera());
+		Vec3 defUp = camera->GetUp();
+		
 		Vec3 eye = camera->GetEye();
 		Vec3 at = camera->GetAt();
 
 		Vec3 temp = at - eye;
 		Vec2 tempVec2(temp.x, temp.z);
 		if (length(tempVec2) < 0.1f) {
-			defUp = bsm::Vec3(0, 0, 1.0f);
+			defUp = -camera->GetCameraDirection();
 		}
 		temp.normalize();
 		Mat4x4 rotMatrix = static_cast<Mat4x4>(XMMatrixLookAtLH(Vec3(0, 0, 0), temp, defUp));

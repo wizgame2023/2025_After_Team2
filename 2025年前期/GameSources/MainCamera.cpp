@@ -97,5 +97,27 @@ namespace basecross{
 		SetEye(CalcPosition(m_Angle.y, m_Angle.x));
 		SetAt(center);
 	}
+
+	Vec3 MainCamera::GetCameraDirection() {
+		int degree = abs(round(XMConvertToDegrees(m_Angle.x)));
+		int mod = (degree / 90) % 4;
+		
+		switch (mod)
+		{
+		case 0:
+			return Vec3(1, 0, 0);
+			break;
+		case 1:
+			return Vec3(0, 0, 1);
+			break;
+		case 2:
+			return Vec3(-1, 0, 0);
+			break;
+		case 3:
+			return Vec3(0, 0, -1);
+			break;
+		}
+		return Vec3();
+	}
 }
 //end basecross
