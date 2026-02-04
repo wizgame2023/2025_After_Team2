@@ -123,7 +123,7 @@ namespace basecross{
 		m_PoseMenu->Close();
 	}
 	void GameMenu::OnUpdate() {
-		m_OperateInfo->SetDrawActive(false);
+		//m_OperateInfo->SetDrawActive(false);
 		auto& input = InputManager::GetInputManager();
 		auto& gameManager = GameManager::GetInstance();
 
