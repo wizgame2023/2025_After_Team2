@@ -34,6 +34,8 @@ namespace basecross{
 		virtual void OnUpdate()override;
 
 		void SetFixedPoint(shared_ptr<Map> map);
+
+		Vec3 GetCameraDirection();
 	};
 }
 //end basecross
