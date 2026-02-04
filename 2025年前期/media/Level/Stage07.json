@@ -1,0 +1,75 @@
+{
+    "mapSize": [
+        5,
+        5
+    ],
+    "grid": [
+        {
+            "pos": [
+                0,
+                1
+            ],
+            "color": "red"
+        },
+        {
+            "pos": [
+                3,
+                1
+            ],
+            "color": "green"
+        },
+        {
+            "pos": [
+                3,
+                3
+            ],
+            "color": "cyan"
+        },
+        {
+            "pos": [
+                0,
+                4
+            ],
+            "color": "magenta"
+        },
+        {
+            "pos": [
+                3,
+                4
+            ],
+            "color": "yellow"
+        }
+    ],
+    "items": [
+        {
+            "id": "player",
+            "direction": "east",
+            "value": 0,
+            "count": 1
+        },
+        {
+            "id": "roll",
+            "direction": "none",
+            "value": 1,
+            "count": 1
+        },
+        {
+            "id": "inverter",
+            "direction": "none",
+            "value": 1,
+            "count": 1
+        },
+        {
+            "id": "arrow",
+            "direction": "east",
+            "value": 1,
+            "count": 1
+        },
+        {
+            "id": "goal",
+            "direction": "east",
+            "value": 1,
+            "count": 1
+        }
+    ]
+}

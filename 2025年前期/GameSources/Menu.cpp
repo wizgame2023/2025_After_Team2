@@ -123,7 +123,6 @@ namespace basecross{
 		m_PoseMenu->Close();
 	}
 	void GameMenu::OnUpdate() {
-		m_OperateInfo->SetDrawActive(false);
 		auto& input = InputManager::GetInputManager();
 		auto& gameManager = GameManager::GetInstance();
 
@@ -525,9 +524,13 @@ namespace basecross{
 	}
 	void ExplainMenu::CreateExplain() {
 		Vec2 explainTabSize = Vec2(100, 100);
-		Vec3 topLeft = static_cast<Vec3>(m_BackGround->GetAnchorPosition(Anchor::TopLeft) + Vec3(100,-50,0));
+		Vec3 topLeft = static_cast<Vec3>(m_BackGround->GetAnchorPosition(Anchor::TopLeft) + Vec3(120,-50,0));
 		for (int i = 0; i < m_ExplainDatas.size(); i++) {
-			ButtonManager::Create(m_Stage, L"EXPLAIN", m_ExplainDatas[i].m_MenuIconKey, L"ICON_EXPLAIN_FRAME", topLeft - Vec3(0, explainTabSize.y, 0) * i, explainTabSize,
+			Vec3 position = topLeft - Vec3(0, explainTabSize.y, 0) * i;
+			Vec2 selectSize = explainTabSize * 0.5f;
+			auto sprite = m_Stage->AddGameObject<Sprite>(m_ExplainDatas[i].m_MenuIconKey, position, explainTabSize);
+			m_Icons.push_back(sprite);
+			ButtonManager::Create(m_Stage, L"EXPLAIN", L"SELECT_TRIANGLE", Col4(1.0f, 1.0f, 1.0f, 1.0f), position + Vec3(-selectSize.x, 0.0f, 0.0f), selectSize,
 				[](shared_ptr<ObjectInterface>& object) {
 				});
 		}
@@ -555,12 +558,18 @@ namespace basecross{
 		m_BackGround->SetDrawActive(true);
 		m_ExplainStr->SetDrawActive(true);
 		ButtonManager::instance->OpenAndUse(L"EXPLAIN");
+		for (auto& icon : m_Icons) {
+			icon->SetDrawActive(true);
+		}
 	}
 	void ExplainMenu::Close() {
 		m_BackGround->SetDrawActive(false);
 		m_ExplainStr->SetDrawActive(false);
 		ButtonManager::instance->Close(L"EXPLAIN");
 		ButtonManager::instance->OpenAndUse(L"POSE");
+		for (auto& icon : m_Icons) {
+			icon->SetDrawActive(false);
+		}
 	}
 
 
