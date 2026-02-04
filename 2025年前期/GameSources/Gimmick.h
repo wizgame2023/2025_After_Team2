@@ -25,11 +25,12 @@ namespace basecross
 	struct GimmickData {
 		GimmickObjects m_Type;
 		Vec3 m_Direction;
+		Vec2 m_Cell;
 		GimmickData();
 		GimmickData(const shared_ptr<Gimmicks>& gimmick);
 
 		bool operator==(const GimmickData& other)const {
-			return this->m_Type == other.m_Type && this->m_Direction == other.m_Direction;
+			return this->m_Type == other.m_Type && this->m_Direction == other.m_Direction && this->m_Cell == other.m_Cell;
 		}
 	};
 

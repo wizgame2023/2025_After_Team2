@@ -11,6 +11,8 @@ namespace basecross{
 	GimmickData::GimmickData(const shared_ptr<Gimmicks>& gimmick) {
 		m_Type = gimmick->GetGimmickType();
 		m_Direction = gimmick->GetValue();
+		Vec3 position = gimmick->GetPosition();
+		m_Cell = Vec2(static_cast<int>(round(position.x)), static_cast<int>(round(-position.z)));
 	}
 
 	Gimmicks::Gimmicks(const shared_ptr<Stage>& ptrStage) :
