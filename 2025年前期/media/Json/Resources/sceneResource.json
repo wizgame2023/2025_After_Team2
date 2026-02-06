@@ -34,6 +34,9 @@
 
   },
   "UI": {
+    "Expains/Tutorial/Explain_Dire.png": "TUTORIAL_INFO_1",
+    "Expains/Tutorial/Explain_Number.png": "TUTORIAL_INFO_2",
+
     "Number.png": "NumUI",
     "ResultBackBoard.png": "ResultBackBoardUI",
     "StarCover.png": "StarCoverUI",
