@@ -14,6 +14,7 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	void Scene::OnCreate(){
 		try {
+
 			InputManager::CreateInputManager();
 
 			Json::SetDefaultFilePath(App::GetApp()->GetDataDirWString());
