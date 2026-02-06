@@ -1,0 +1,22 @@
+{
+	"mapSize":[5,5],
+	"grid":
+	[
+		{"pos":[1,0],"color":"red"},
+		{"pos":[4,0],"color":"green"},
+		{"pos":[1,4],"color":"green"},
+		{"pos":[2,2],"color":"blue"},
+		{"pos":[0,0],"color":"yellow"},
+		{"pos":[0,4],"color":"magenta"},
+		{"pos":[4,4],"color":"magenta"},
+		{"pos":[2,4],"color":"cyan"}
+	],
+	"items" : [
+		{"id":"player","direction":"south","value":0,"count":1},
+		{"id":"goal","direction":"south","value":0,"count":1},
+		{"id":"arrow","direction":"east","value":0,"count":1},
+		{"id":"arrow","direction":"west","value":0,"count":1},
+		{"id":"arrow","direction":"south","value":0,"count":1},
+		{"id":"arrow","direction":"north","value":0,"count":1}
+	]
+}

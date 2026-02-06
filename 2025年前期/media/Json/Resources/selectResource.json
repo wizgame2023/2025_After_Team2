@@ -51,6 +51,7 @@
     "Icons/Icon_Explain_27.png": "ICON_27",
     "Icons/Icon_Explain_28.png": "ICON_28",
     "Icons/Icon_Explain_29.png": "ICON_29",
+    "Icons/Icon_Explain_30.png": "ICON_30",
     "Icons/Icon_Explain_Stick.png": "ICON_Stick",
 
     "Stage/Stage1.png": "Stage1",
@@ -67,7 +68,13 @@
     "Stage/Stage12.png": "Stage12",
     "Stage/Stage13.png": "Stage13",
     "Stage/Stage14.png": "Stage14",
-    "Stage/Stage15.png": "Stage15"
+    "Stage/Stage15.png": "Stage15",
+    "Stage/Stage07.png": "Stage07",
+    "Stage/Stage08.png": "Stage08",
+    "Stage/Stage09.png": "Stage09",
+    "Stage/Stage16.png": "Stage16",
+    "Stage/Stage17.png": "Stage17",
+    "Stage/Stage18.png": "Stage18"
 
 
   }
