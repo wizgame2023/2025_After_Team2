@@ -24,7 +24,6 @@ namespace basecross {
 		wstring texPath = path + L"Texture/";
 	
 		app->RegisterTexture(L"TEMP_COLOR_PALETTE", uiPath + L"tempColorPalette.png");
-
 	}
 
 	void MenuStage::OnCreate() {
@@ -36,6 +35,11 @@ namespace basecross {
 			auto viewport = App::GetApp()->GetScene<Scene>()->GetViewport();
 			m_Menu = AddGameObject<GameMenu>(L"TEMP_COLOR_PALETTE", L"MENU", viewport);
 
+			auto step = TutorialStep(GetThis<Stage>(), { L"TUTORIAL_INFO_1",L"TUTORIAL_INFO_2" }, Vec3(-100.0f, 200.0f, 0.0f), 600, 300);
+			TutorialManager::GetInstance().RegisterStep(L"GAME_START",make_shared<TutorialStep>(step));
+
+
+			TutorialManager::GetInstance().Start(L"GAME_START");
 			StartFadeIn(0.75f);
 		}
 		catch (...) {

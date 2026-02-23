@@ -73,7 +73,7 @@ namespace basecross{
 		float m_Timer;
 	public:
 		PutGimmickTutorial(const shared_ptr<Stage>& ptr,const array<shared_ptr<Sprite>, 2>& array, float loop, float reset = 0.5f) :
-			TutorialStep(ptr, { L"TUTORIAL_PUT",L"TUTORIAL_INFO"}, Vec3(-100.0f, 200.0f, 0.0f), 600, 300),
+			TutorialStep(ptr, { L"TUTORIAL_INFO_1",L"TUTORIAL_INFO_2"}, Vec3(-100.0f, 200.0f, 0.0f), 600, 300),
 			m_Sprites(array),
 			m_Timer(0.0f), m_ResetTime(reset),m_LoopTime(loop)
 		{ }

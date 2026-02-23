@@ -207,17 +207,16 @@ namespace basecross{
 
 			if (input->GetUpButton(gameManager.GetKeyConfig(L"putGimmick"))) {
 				if (UpdateOnCoursorHandle() && m_ColorHandle != -1 && m_GimmickHandle != -1) {
-					stack<vector<Line>::iterator> eraseIteraters;
-					for (auto it = m_Lines.begin(); it != m_Lines.end(); it++) {
-						auto& pair = (*it).m_PairHandle;
-						if (pair.first == m_ColorHandle || pair.second == m_GimmickHandle) {
-							m_Stage->RemoveGameObject<Sprite>((*it).m_Line);
-							eraseIteraters.push(it);
-						}
+					int eraseIndex = -1;
+					if ((eraseIndex = FindColorHandleIndex(m_ColorHandle)) != -1) {
+						m_Stage->RemoveGameObject<Sprite>(m_Lines[eraseIndex].m_Line);
+						m_Lines.erase(m_Lines.begin() + eraseIndex);
 					}
-					while (!eraseIteraters.empty()) {
-						m_Lines.erase(eraseIteraters.top());
-						eraseIteraters.pop();
+					eraseIndex = -1;
+
+					if ((eraseIndex = FindGimmickHandleIndex(m_GimmickHandle)) != -1) {
+						m_Stage->RemoveGameObject<Sprite>(m_Lines[eraseIndex].m_Line);
+						m_Lines.erase(m_Lines.begin() + eraseIndex);
 					}
 					gameManager.GetLevelManager()->AddPair(pair<int, int>{m_ColorHandle, m_GimmickHandle});
 					m_Lines.push_back({ m_CurrentLine,pair<int,int>{m_ColorHandle,m_GimmickHandle} });
@@ -248,7 +247,22 @@ namespace basecross{
 		if (colorHandle == -1 && gimmickHandle == -1) return false;
 
 		if (!m_CurrentLine) {
-			m_CurrentLine = m_Stage->AddGameObject<Sprite>(m_ColorTexture, m_Cursor->GetPosition(), Vec2(10, 10), Anchor::Center);
+			int currentIndex = -1;
+			if ((currentIndex = FindColorHandleIndex(colorHandle)) != -1) {
+				m_CurrentLine = m_Lines[currentIndex].m_Line;
+				m_GimmickHandle = m_Lines[currentIndex].m_PairHandle.second;
+				m_Lines.erase(m_Lines.begin() + currentIndex);
+				return true;
+			}
+			else if ((currentIndex = FindGimmickHandleIndex(gimmickHandle)) != -1) {
+				m_CurrentLine = m_Lines[currentIndex].m_Line;
+				m_ColorHandle = m_Lines[currentIndex].m_PairHandle.first;
+				m_Lines.erase(m_Lines.begin() + currentIndex);
+				return true;
+			}
+			else {
+				m_CurrentLine = m_Stage->AddGameObject<Sprite>(m_ColorTexture, m_Cursor->GetPosition(), Vec2(10, 10), Anchor::Center);
+			}
 			m_CurrentLine->SetLayer(1);
 		}
 
@@ -303,6 +317,25 @@ namespace basecross{
 		}
 		return p;
 	}
+	int GameMenu::FindColorHandleIndex(int colorHandle) {
+		for (int i = 0; i < m_Lines.size(); i++) {
+			auto& pair = m_Lines[i].m_PairHandle;
+			if (pair.first == colorHandle) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	int GameMenu::FindGimmickHandleIndex(int gimmickHandle) {
+		for (int i = 0; i < m_Lines.size(); i++) {
+			auto& pair = m_Lines[i].m_PairHandle;
+			if (pair.second == gimmickHandle) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
 	void GameMenu::DrawLine(Vec3 start, Vec3 end) {
 
 		Vec3 direction = end - start;
