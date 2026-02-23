@@ -53,6 +53,8 @@ namespace basecross{
 
 		bool UpdateOnCoursorHandle();
 		vector<pair<int, int>> ConvertColorGimmickHandles(vector<Line>& lines);
+		int FindColorHandleIndex(int colorHandle);
+		int FindGimmickHandleIndex(int gimmickHandle);
 		void DrawLine(Vec3 start, Vec3 end);
 		void DrawExpain();
 	public:
