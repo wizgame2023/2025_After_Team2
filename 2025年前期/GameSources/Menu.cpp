@@ -231,13 +231,13 @@ namespace basecross{
 		}
 
 		DrawExpain();
-		if (input->GetDownButton(L"Y"))
-		{
-			if (m_HintStartPos.empty()) {
-				LoadHintData();
-			}
-			HintCreate(); // 描画とインデックス進行を内部で処理
-		}
+		//if (input->GetDownButton(L"Y"))
+		//{
+		//	if (m_HintStartPos.empty()) {
+		//		LoadHintData();
+		//	}
+		//	HintCreate(); // 描画とインデックス進行を内部で処理
+		//}
 	}
 
 	bool GameMenu::UpdateOnCoursorHandle() {
